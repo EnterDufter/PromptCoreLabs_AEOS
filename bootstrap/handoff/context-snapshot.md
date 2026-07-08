@@ -4,14 +4,14 @@ OBJETIVO
 
 Registrar o estado atual de todo o ecossistema PromptCoreLabs_AEOS.
 
-Este é o Context Snapshot consolidado da versão v1.0.
+Este é o Context Snapshot consolidado após a reorganização taxonômica da v1.0.
 
 ==================================================
 IDENTIFICAÇÃO DO SNAPSHOT
 ==================================================
 
 Data e hora:
-2026-07-08 — 12h38 (horário de Brasília / UTC-3)
+2026-07-08 — 15h50 (horário de Brasília / UTC-3)
 
 Responsável pelo snapshot:
 Antigravity (Google DeepMind) — em colaboração com o usuário
@@ -21,13 +21,13 @@ ESTADO DO ECOSSISTEMA — VISÃO GERAL
 ==================================================
 
 Fase atual do AEOS:
-Versão v1.0 estável e consolidada no Git.
+Estrutura de repositório 100% reorganizada conforme taxonomia definitiva do AEOS.
 
 Status geral:
-Aguardando definição de evolução.
+Aguardando definição de nova fase.
 
 Última missão executada:
-Opção B — Formalização de ADRs estruturais e primeiro commit de versionamento.
+Reorganização física/lógica e push dos arquivos organizados para o GitHub.
 
 ==================================================
 ESTADO DOS MÓDULOS
@@ -41,7 +41,15 @@ ESTADO DOS MÓDULOS
 • agents/ ──────────────► ✅ v1.0 (Planner, Builder, QA, Auditor)
 • templates/ ───────────► ✅ v1.0 (scaffolding de documentos)
 • integrations/ ────────► ✅ v1.0 (GitHub, NotebookLM, Tailscale)
-• examples/ ────────────► ⬜ não iniciado
+
+==================================================
+ESTADO DA TAXONOMIA DO REPOSITÓRIO
+==================================================
+
+• projects/ ────────────► ✅ Ativos: crialli/, PromptCoreLabs_Landing_Page/
+• tools/ ───────────────► ✅ notebooklm-mcp-antigravity/ (MCP) e tools/
+• external-references/ ──► ✅ README.md com links externos
+• legacy/ ──────────────► ✅ NextGenSports/ (com Jornadas/), projeto_project_OS/, scratch/
 
 ==================================================
 ESTADO DO REPOSITÓRIO GIT
@@ -49,30 +57,20 @@ ESTADO DO REPOSITÓRIO GIT
 
 • Branch ativa: master
 • Remoto: https://github.com/EnterDufter/PromptCoreLabs_AEOS (privado)
-• Hash do commit v1.0: 114b3f255ec07b836822c3df887b9ad565b49c44
-• Mensagem de commit: chore(repo): initialize git and commit AEOS v1.0 specifications and modules
+• Hash do commit pós-reorganização: f1abffae8ef589af48102d96c80277df1f2fde0e
 • Status de arquivos modificados: 0 (todos commitados e limpos e sincronizados)
-
-
-==================================================
-DECISÕES ARQUITETURAIS REGISTRADAS (ADRs)
-==================================================
-
-• ADR-0001: Memory Module Segregation (Accepted).
-• ADR-0002: Bootstrap Entry Point (Accepted).
-• ADR-0003: Foundation Hygiene (Accepted).
-• ADR-0004: Knowledge + Runtime Concurrency (Accepted).
 
 ==================================================
 PENDÊNCIAS GLOBAIS
 ==================================================
 
-• Definição da próxima etapa ( evolução de RAG ou projeto piloto ).
+• Definição da próxima etapa ( evolução de RAG ou novo projeto piloto sob `/projects/` ).
 
 ==================================================
 REFERÊNCIAS OBRIGATÓRIAS
 ==================================================
 
+README.md (master do root)
 bootstrap/handoff/mission-handoff.md
 foundation/FOUNDATION.md
 architecture/decisions/README.md
