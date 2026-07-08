@@ -44,15 +44,52 @@ templates/
 COMO USAR OS TEMPLATES
 ==================================================
 
-Passo 1 — Copie o template para a pasta do seu projeto:
+Passo 1 — Copie o template para a pasta de especificações do seu projeto:
 
-  .specs/projects/[nome-do-projeto]/[nome-do-artefato].md
+  projects/[nome-do-projeto]/.specs/[nome-do-artefato].md
 
 Passo 2 — Preencha os campos marcados entre colchetes [ ].
 
 Passo 3 — Remova as instruções de uso do próprio template ao finalizar.
 
 Passo 4 — Solicite a aprovação do gate correspondente antes de avançar de etapa.
+
+==================================================
+DIAGRAMA DE FLUXO: CICLO DE VIDA DO TEMPLATE
+==================================================
+
+O fluxo de instanciação de artefatos de engenharia segue o ciclo:
+
+```mermaid
+graph TD
+    T[Template Selecionado] -->|Cópia física| P[Destino: projects/nome-do-projeto/.specs/]
+    P -->|Edição / Preenchimento| E[Campos [PREENCHER]]
+    E -->|Remoção| D[Remover cabeçalho de Instruções]
+    D -->|Validação| G{Gate de Aprovação?}
+    G -->|Reprovado| E
+    G -->|Aprovado| A[Artefato Consolidado e Versionado]
+```
+
+==================================================
+GUIA QUICKSTART: COMANDOS DE INSTANCIAÇÃO
+==================================================
+
+### Exemplo 1 — Inicializar Especificação (Specify) para o Projeto "Alpha"
+Para criar o arquivo inicial de especificações funcionais de um novo projeto:
+```bash
+# Crie o diretório de especificações do projeto
+mkdir -p projects/Alpha/.specs
+
+# Copie o template
+cp templates/tlc/specify-template.md projects/Alpha/.specs/specify.md
+```
+
+### Exemplo 2 — Inicializar Novo ADR de Decisão Técnica
+Para propor uma nova decisão de arquitetura na governança:
+```bash
+# Copie o template renomeando com ID de 4 dígitos
+cp templates/governance/adr-template.md architecture/decisions/ADR-0005-nova-decisao.md
+```
 
 ==================================================
 REGRA DE IMUTABILIDADE
@@ -71,3 +108,4 @@ knowledge/patterns/tlc-spec-driven.md
 knowledge/patterns/adr-pattern.md
 
 governance/stage-gates.md
+

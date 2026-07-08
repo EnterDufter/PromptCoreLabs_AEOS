@@ -54,6 +54,69 @@ PRINCÍPIOS DA MEMÓRIA
    Cada elemento indexado na memória vetorial deve apontar de volta para o arquivo fonte original do repositório, garantindo que o agente possa auditar a fonte primária.
 
 ==================================================
+DIAGRAMA DE FLUXO: PIPELINE DE RAG LOCAL
+==================================================
+
+Processamento de documentos e busca semântica na infraestrutura local do Harness:
+
+```mermaid
+graph LR
+    A[Módulos Core .md] --> B[Segmentação / Chunking]
+    B --> C[Ollama / nomic-embed-text]
+    C -->|Vetor de 768 dim| D[PGVector / pcl-db]
+    
+    E[Prompt do Agente] --> F[Busca Cosseno Similaridade]
+    D --> F
+    F -->|Contexto Extraído| G[Prompt Enriquecido]
+    G --> H[OmniRoute / LLM]
+```
+
+==================================================
+DIAGRAMA ERD: METADADOS DE VETORES E LOGS
+==================================================
+
+Modelagem lógica das estruturas armazenadas na memória persistente:
+
+```mermaid
+erDiagram
+    document_chunks {
+        uuid id PK
+        varchar source_file
+        varchar section
+        timestamp last_modified
+        vector embedding
+    }
+    agent_execution_logs {
+        uuid execution_id PK
+        uuid session_id
+        timestamp timestamp
+        varchar agent_role
+        varchar status
+        jsonb metrics
+    }
+```
+
+==================================================
+GUIA QUICKSTART: DIAGNÓSTICO DO BANCO VETORIAL
+==================================================
+
+### Passo 1 — Verificar se a Extensão pgvector está Habilitada
+Para garantir que o `pcl-db` está pronto para busca vetorial, execute no terminal do host (ou dentro do container):
+```bash
+# Conecte ao banco de dados do contêiner:
+docker exec -it pcl-db psql -U paperclip -d paperclip -c "SELECT extname FROM pg_extension WHERE extname = 'vector';"
+```
+
+### Passo 2 — Testar Embedding via Ollama Local
+Para testar a conversão de um texto em representação vetorial utilizando a API do Ollama local:
+```bash
+curl http://localhost:11434/api/embeddings -d '{
+  "model": "nomic-embed-text",
+  "prompt": "Princípios fundamentais do ecossistema AEOS"
+}'
+```
+
+==================================================
 FONTES DE REFERÊNCIA
 ==================================================
 
@@ -62,3 +125,4 @@ foundation/FOUNDATION.md
 architecture/modules.md
 
 architecture/principles.md
+

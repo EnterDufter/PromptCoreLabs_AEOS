@@ -52,6 +52,44 @@ PRINCÍPIOS DE INTEGRAÇÃO
 3. Credenciais e chaves de API referenciadas nas integrações devem ser gerenciadas via variáveis de ambiente nos containers Docker.
 
 ==================================================
+DIAGRAMA DE FLUXO: ARQUITETURA DE INTEGRAÇÃO
+==================================================
+
+Como as conexões e pontes externas interagem com a rede local:
+
+```mermaid
+graph TD
+    EP[Execution Provider / IDE] -->|Rede Tailscale| TS((VPN Tailscale))
+    TS -->|Mapeamento de API| OR[pcl-omniroute]
+    OR -->|OAuth / HTTPS| GH[GitHub API]
+    OR -->|OAuth / HTTPS| NL[NotebookLM MCP]
+    OR -->|Autenticação local| LM[LM Studio / Ollama]
+```
+
+==================================================
+GUIA QUICKSTART: VERIFICAÇÃO DE INTEGRAÇÕES
+==================================================
+
+### Passo 1 — Testar Conexão Tailscale
+Para verificar se o seu nó local do Tailscale está ativo e enxergando os demais dispositivos da rede privada:
+```bash
+tailscale status
+```
+
+### Passo 2 — Diagnóstico de Conexão com o GitHub
+Verifique se a sua conta está devidamente autenticada e conectada ao GitHub via CLI:
+```bash
+# Executa do diretório root
+.\tools\gh\bin\gh.exe auth status
+```
+
+### Passo 3 — Verificar API do OmniRoute
+Testar se o proxy está interceptando e autenticando requisições no endpoint de saúde:
+```bash
+curl http://localhost:20130/health
+```
+
+==================================================
 FONTES DE REFERÊNCIA
 ==================================================
 
@@ -60,3 +98,4 @@ foundation/FOUNDATION.md
 architecture/modules.md
 
 runtime/README.md
+

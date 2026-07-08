@@ -60,6 +60,45 @@ Princípio 3 — Atualização disciplinada
 Qualquer alteração em padrões ou playbooks deve ser validada e aprovada pelo arquiteto responsável.
 
 ==================================================
+DIAGRAMA DE RELACIONAMENTO: ESTRUTURA DO KNOWLEDGE
+==================================================
+
+As três ramificações do conhecimento cooperam para dar suporte operacional aos agentes:
+
+```mermaid
+graph TD
+    K[Módulo Knowledge] --> P[Playbooks]
+    K --> PA[Patterns]
+    K --> C[Catalog]
+    
+    P -->|Descrevem| P1[Como Fazer: Execução de Processos]
+    PA -->|Descrevem| PA1[Como Formatar: Scaffolding de Documentos]
+    C -->|Descrevem| C1[O Que Usar: Inventário Tecnológico]
+    
+    P1 & PA1 & C1 ──► |Injetados via Contexto/RAG| AG[Agentes especializados]
+```
+
+==================================================
+GUIA QUICKSTART: CONSULTA E EVOLUÇÃO
+==================================================
+
+### Passo 1 — Consulta Rápida por Humanos
+Para saber como conduzir uma operação (ex: criar projetos), consulte a subpasta correspondente:
+```bash
+# Para guias passo a passo de processos:
+cat knowledge/playbooks/new-project-playbook.md
+
+# Para convenções de formato e templates:
+cat knowledge/patterns/adr-pattern.md
+```
+
+### Passo 2 — Registrar Novo Padrão (Pattern)
+Quando uma estrutura documental repetir-se mais de duas vezes, registre-a como padrão:
+1. Crie o arquivo `.md` em `knowledge/patterns/`.
+2. Siga o formato padrão de delimitadores `===` para facilitar o parsing de IA.
+3. Adicione a referência ao novo arquivo na seção "LISTA DE PADRÕES ATIVOS" do `knowledge/patterns/README.md`.
+
+==================================================
 FONTES DE VERDADE
 ==================================================
 
@@ -68,3 +107,4 @@ foundation/FOUNDATION.md
 architecture/modules.md
 
 architecture/principles.md
+

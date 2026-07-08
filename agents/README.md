@@ -58,6 +58,68 @@ PRINCÍPIOS OPERACIONAIS DOS AGENTES
    Nenhum agente executa código ou altera Stage Gates sem aprovação final explícita do operador humano (Human-in-the-loop).
 
 ==================================================
+DIAGRAMA DE DEPENDÊNCIAS DO SQUAD DE IA
+==================================================
+
+A hierarquia lógica de especialidades da squad:
+
+```mermaid
+graph TD
+    P[Planner] -->|Gera backlog| B[Builder]
+    B -->|Envia código| Q[Reviewer/QA]
+    Q -->|Valida especificações| A[Auditor]
+    A -->|Audita conformidade| H[Operador Humano]
+    
+    style P fill:#2d3748,stroke:#4a5568,color:#fff
+    style B fill:#2b6cb0,stroke:#3182ce,color:#fff
+    style H fill:#1a365d,stroke:#2b6cb0,color:#fff
+```
+
+==================================================
+UML DE SEQUÊNCIA: TRANSIÇÃO DE CONTROLE
+==================================================
+
+Fluxo de comunicação e transições de estado de arquivos no ecossistema:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    PL as Agente Planner
+    BU as Agente Builder
+    QA as Agente QA/Reviewer
+    AU as Agente Auditor
+    
+    PL->>BU: Entrega tasks.md
+    BU->>BU: Escreve código/testes
+    BU->>QA: Solicita verificação
+    QA->>QA: roda testes unitários
+    alt Sucesso
+        QA->>AU: Solicita Auditoria
+        AU->>AU: Verifica standards
+        AU-->>QA: Retorna validate.md assinado
+    else Falha
+        QA-->>BU: Devolve controle (REJECT)
+    end
+```
+
+==================================================
+GUIA QUICKSTART: CONFIGURAÇÃO DE SQUADS
+==================================================
+
+### Passo 1 — Configurar System Prompt do Agente
+Para configurar os prompts de sistema recomendados de cada agente na sua aplicação de orquestração (PaperClip ou customizada), copie o conteúdo da seção `PROMPT DE SISTEMA RECOMENDADO` dos arquivos individuais:
+```bash
+# Exemplo para o Builder:
+cat agents/definitions/builder.md
+```
+
+### Passo 2 — Verificar Protocolo de Mensagens
+Quando os agentes precisam trocar contexto, certifique-se de que o payload respeita o formato estabelecido:
+```bash
+cat agents/collaboration/communication-protocols.md
+```
+
+==================================================
 FONTES DE VERDADE
 ==================================================
 
@@ -68,3 +130,4 @@ architecture/modules.md
 governance/roles.md
 
 governance/decision-authority.md
+

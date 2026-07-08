@@ -93,6 +93,60 @@ O Bootstrap não é opcional.
 É o ponto de entrada oficial do ecossistema.
 
 ==================================================
+DIAGRAMA DE FLUXO: PROCESSO DE BOOTSTRAP
+==================================================
+
+O processo de inicialização de qualquer entidade ou sessão de trabalho segue a sequência:
+
+```mermaid
+graph TD
+    A[Perfil Identificado] --> B{Tipo de Entidade?}
+    B -->|Humano| C[onboarding/human.md]
+    B -->|Execution Provider| D[onboarding/execution-provider.md]
+    B -->|Agente de IA| E[onboarding/agent.md]
+    
+    C & D & E --> F[environment/setup.md]
+    F --> G[environment/checklist.md]
+    G -->|Aprovado| H[Iniciar Sessão de Trabalho]
+    G -->|Reprovado| F
+    
+    H --> I[Executar Tarefas]
+    I --> J[Preencher handoff/mission-handoff.md]
+    J --> K[Preencher handoff/context-snapshot.md]
+    K --> L[Sessão Encerrada / Handoff Completo]
+```
+
+==================================================
+GUIA QUICKSTART: INICIALIZAÇÃO E ENCERRAMENTO
+==================================================
+
+### Passo 1 — Verificação do Ambiente
+Antes de rodar qualquer pipeline, valide seu ambiente técnico contra o checklist obrigatório:
+```bash
+# Navegue até a pasta de checklists
+# E marque como verificado os blocos correspondentes no arquivo
+# bootstrap/environment/checklist.md
+```
+
+### Passo 2 — Consumir o Último Handoff
+Sempre leia o estado final deixado pela sessão anterior antes de iniciar seu trabalho:
+```bash
+# Verifique o snapshot do ecossistema:
+cat bootstrap/handoff/context-snapshot.md
+
+# Leia o handoff de missão:
+cat bootstrap/handoff/mission-handoff.md
+```
+
+### Passo 3 — Encerrar e Atualizar Estado
+Ao final de sua sessão, preencha e commite os arquivos de handoff atualizados:
+```bash
+# Copie do template ou atualize diretamente no repositório:
+# 1. bootstrap/handoff/mission-handoff.md
+# 2. bootstrap/handoff/context-snapshot.md
+```
+
+==================================================
 FONTE DE VERDADE
 ==================================================
 
