@@ -19,7 +19,10 @@ Este documento descreve a organização arquitetural do PromptCoreLabs_AEOS em a
 
 Seu propósito é demonstrar como os diferentes domínios da plataforma se relacionam, quais dependências são permitidas e como o conhecimento percorre toda a arquitetura.
 
+Para uma representação gráfica e mapeamento de processos segundo o padrão de arquitetura corporativa, consulte [C4 Model Architecture](file:///c:/PromptCore_Labs/architecture/c4-model.md).
+
 Este documento deverá ser utilizado como referência para qualquer evolução estrutural da plataforma.
+
 
 ---
 

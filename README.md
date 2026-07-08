@@ -8,7 +8,10 @@ O **PromptCoreLabs_AEOS** é um Sistema Operacional de Engenharia Assistida por 
 
 Este repositório consolidado serve como a **Única Fonte de Verdade (Single Source of Truth)** para a plataforma, organizando de forma rigorosa as regras de governança, o conhecimento, a memória persistente e os projetos de engenharia.
 
+Para uma visão aprofundada da arquitetura do sistema e da topologia de contêineres do Harness físico, consulte os diagramas da [Arquitetura Corporativa C4 Model](file:///c:/PromptCore_Labs/architecture/c4-model.md).
+
 ---
+
 
 ==================================================
 MAPA DE ARQUITETURA LÓGICA (FLUXO DO CONHECIMENTO)
