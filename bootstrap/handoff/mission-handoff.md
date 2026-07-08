@@ -2,14 +2,14 @@
 OBJETIVO
 ==================================================
 
-Registrar o estado da missão ao final da reorganização do repositório físico local e remoto do PromptCoreLabs_AEOS v1.0.
+Registrar o estado da missão ao final do enriquecimento de READMEs e criação dos diagramas de arquitetura corporativa C4 Model no PromptCoreLabs_AEOS v1.0.
 
 ==================================================
 IDENTIFICAÇÃO DO HANDOFF
 ==================================================
 
 Data:
-2026-07-08 — 15h50 (horário de Brasília / UTC-3)
+2026-07-08 — 18h19 (horário de Brasília / UTC-3)
 
 Execution Provider que entrega:
 Antigravity (Google DeepMind)
@@ -18,56 +18,42 @@ Execution Provider que recebe:
 Próximo disponível
 
 Modelo LLM utilizado:
-Gemini 3.5 Flash (Medium) -> Claude Sonnet 4.6 (Thinking) — sessão atual
+Claude Sonnet 4.6 (Thinking) — sessão atual
 
 ==================================================
 CONTEXTO DA MISSÃO
 ==================================================
 
 Fases concluídas:
-• Fases 1 a 5 — Consolidação e escrita dos módulos do AEOS v1.0.
-• Reorganização Completa — Reestruturação da taxonomia de diretórios (projects, tools, legacy, external-references).
-
-Objetivo geral da missão:
-Limpar a raiz do repositório, realocando projetos ativos para `/projects/`, ferramentas para `/tools/`, referências para `/external-references/` e itens legados para `/legacy/`, criando o README master estruturado com diagramas Mermaid.
+• Fases 1 a 5 — Reorganização e estruturação taxonômica da v1.0.
+• Enriquecimento de READMEs — 7 READMEs principais polidos com Mermaid e Quickstarts.
+• C4 Model Architecture — Criação de diagramas de arquitetura corporativa (Nível 1, 2 e 3) e mapeamento físico/lógico do Harness.
 
 ==================================================
 O QUE FOI FEITO
 ==================================================
 
-• Criadas as pastas taxonômicas no root do workspace.
-• Deletada a pasta local `TLC_Spec_Driven_v3/` por ser redundante.
-• Movidos os projetos ativos `crialli/` e `PromptCoreLabs_Landing_Page/` para `/projects/`.
-• Movida a ferramenta `notebooklm-mcp-antigravity/` para `/tools/`.
-• Movidos os legados `NextGenSports/` (com `docs/Jornadas/`), `projeto_project_OS/` e `error.log` para `/legacy/`.
-• Criado o `/external-references/README.md` com links originais do GitHub.
-• Criado o `README.md` master na raiz com diagramas Mermaid de fluxo do AEOS, UML sequencial de agentes e ERD de memória.
-• Staging, commit (`chore(repo): reorganize repository structure according to AEOS taxonomy`) e push para o repositório remoto privado no GitHub.
-
-==================================================
-DECISÕES TOMADAS
-==================================================
-
-• DEC-005: Deletar a pasta local redundante TLC_Spec_Driven_v3 e mantê-la apenas como link em external-references.
-• DEC-006: Manter PaperClip-Companies na raiz para evitar conflito com volumes Docker Compose.
-• DEC-007: Mover NextGenSports e projeto_project_OS para legacy/ para atuar apenas como referência limpa de código.
+• Resolvido os erros de parser de Mermaid nos 7 READMEs principais (como participantes de diagramas de sequência e aspas em colchetes de texto).
+• Criado o arquivo [c4-model.md](file:///c:/PromptCore_Labs/architecture/c4-model.md) sob a pasta `architecture/`.
+• Inserido C4 Nível 1 (System Context), C4 Nível 2 (Container Diagram) e C4 Nível 3 (Component Diagram) com detalhamento tecnológico e de fluxos de rede local.
+• Linkado o C4 Model no `README.md` master e em `architecture/architecture-map.md`.
+• Realizados os commits e pushs com sucesso para o repositório remoto privado no GitHub.
 
 ==================================================
 O QUE ESTÁ PENDENTE
 ==================================================
 
 Pendência 1:
-Definição de novo escopo de desenvolvimento (evolução de RAG em memory/ ou início de novo projeto do zero sob a estrutura /projects/).
+Definição do escopo da nova fase de desenvolvimento de projetos ou agentes sob a governança do AEOS.
 Prioridade: alta
 
 ==================================================
 PRÓXIMO PASSO
 ==================================================
 
-Retomar o trabalho a partir da definição da próxima missão de desenvolvimento ou da criação de um novo projeto usando a taxonomia limpa do AEOS.
+Iniciar novos projetos do zero na pasta `projects/` ou evoluir os contêineres e modelos de IA do Harness local a partir da base 100% documentada.
 
-Documentos que devem ser lidos antes de retomar:
+Documentos recomendados:
 • README.md (master do root)
-• bootstrap/onboarding/execution-provider.md
+• architecture/c4-model.md
 • bootstrap/handoff/context-snapshot.md
-• architecture/decisions/README.md
