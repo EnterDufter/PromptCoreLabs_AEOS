@@ -84,15 +84,15 @@ Fluxo de comunicação e transições de estado de arquivos no ecossistema:
 ```mermaid
 sequenceDiagram
     autonumber
-    PL as Agente Planner
-    BU as Agente Builder
-    QA as Agente QA/Reviewer
-    AU as Agente Auditor
-    
+    participant PL as Agente Planner
+    participant BU as Agente Builder
+    participant QA as Agente QA/Reviewer
+    participant AU as Agente Auditor
+
     PL->>BU: Entrega tasks.md
     BU->>BU: Escreve código/testes
     BU->>QA: Solicita verificação
-    QA->>QA: roda testes unitários
+    QA->>QA: Roda testes unitários
     alt Sucesso
         QA->>AU: Solicita Auditoria
         AU->>AU: Verifica standards

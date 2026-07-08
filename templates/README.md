@@ -63,7 +63,7 @@ O fluxo de instanciação de artefatos de engenharia segue o ciclo:
 ```mermaid
 graph TD
     T[Template Selecionado] -->|Cópia física| P[Destino: projects/nome-do-projeto/.specs/]
-    P -->|Edição / Preenchimento| E[Campos [PREENCHER]]
+    P -->|Edição / Preenchimento| E["Campos [PREENCHER]"]
     E -->|Remoção| D[Remover cabeçalho de Instruções]
     D -->|Validação| G{Gate de Aprovação?}
     G -->|Reprovado| E

@@ -70,12 +70,14 @@ graph TD
     K[Módulo Knowledge] --> P[Playbooks]
     K --> PA[Patterns]
     K --> C[Catalog]
-    
+
     P -->|Descrevem| P1[Como Fazer: Execução de Processos]
     PA -->|Descrevem| PA1[Como Formatar: Scaffolding de Documentos]
     C -->|Descrevem| C1[O Que Usar: Inventário Tecnológico]
-    
-    P1 & PA1 & C1 ──► |Injetados via Contexto/RAG| AG[Agentes especializados]
+
+    P1 -->|Injetados via Contexto/RAG| AG[Agentes especializados]
+    PA1 -->|Injetados via Contexto/RAG| AG
+    C1 -->|Injetados via Contexto/RAG| AG
 ```
 
 ==================================================
