@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: pcl-db
+    restart: always
+    environment:
+      POSTGRES_USER: paperclip
+      POSTGRES_PASSWORD: paperclip
+      POSTGRES_DB: paperclip
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  omniroute:
+    image: omniroute:cli
+    container_name: pcl-omniroute
+    restart: always
+    ports:
+      - "20130:20130"
+    env_file:
+      - ./OmniRoute/.env
+    environment:
+      - PORT=20130
+      - DATA_DIR=/var/lib/omniroute
+      - INITIAL_PASSWORD=admin
+      - AUTH_DISABLED=1
+      - SKIP_LOGIN=1
+      - REQUIRE_LOGIN=false
+    volumes:
+      - omniroute-data:/var/lib/omniroute
+
+  paperclip:
+    build: 
+      context: ./PaperClip
+      dockerfile: Dockerfile
+    container_name: pcl-paperclip
+    restart: always
+    ports:
+      - "3100:3100"
+    depends_on:
+      - db
+      - omniroute
+    env_file:
+      - ./PaperClip/.env
+    environment:
+      - DATABASE_URL=postgres://paperclip:paperclip@db:5432/paperclip
+      - OMNI_ROUTE_URL=http://omniroute:20130
+      - PCL_HOME=/app
+      - COMPANIES_DIR=/app/companies
+    volumes:
+      - paperclip-storage:/app/storage
+      - ./PaperClip-Companies:/app/companies
+
+volumes:
+  db-data:
+  omniroute-data:
+  paperclip-storage:

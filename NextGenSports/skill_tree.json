@@ -1,0 +1,70 @@
+{
+  "skill_tree": {
+    "categories": [
+      {
+        "name": "Técnica de Pista",
+        "levels": [
+          {
+            "id": "tecnica_1",
+            "title": "Fundamentos de Traçado",
+            "xp_required": 0,
+            "badge": "Iniciante de Pista",
+            "description": "Aprenda a linha ideal nas curvas básicas."
+          },
+          {
+            "id": "tecnica_2",
+            "title": "Consistência de Traçado",
+            "xp_required": 500,
+            "badge": "Piloto Consistente",
+            "description": "Mantenha desvio médio da linha ideal abaixo de 0,5s por volta.",
+            "validation": {
+              "type": "digital_twin",
+              "metric": "desvio_trajeto",
+              "threshold": 0.5,
+              "unit": "segundos",
+              "evaluation": "média das últimas 10 voltas"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Preparação Física",
+        "levels": [
+          {
+            "id": "fisico_1",
+            "title": "Condicionamento Básico",
+            "xp_required": 0,
+            "badge": "Iniciado Físico",
+            "description": "Rotina de alongamento e força core."
+          },
+          {
+            "id": "fisico_2",
+            "title": "Resistência de Corrida",
+            "xp_required": 400,
+            "badge": "Atleta de Resistência",
+            "description": "Capacidade de manter frequência cardíaca alvo por 30 minutos."
+          }
+        ]
+      },
+      {
+        "name": "Gestão de Carreira",
+        "levels": [
+          {
+            "id": "carreira_1",
+            "title": "Planejamento de Temporada",
+            "xp_required": 0,
+            "badge": "Planejador",
+            "description": "Crie um calendário de provas e treinos."
+          },
+          {
+            "id": "carreira_2",
+            "title": "Patrocínio e Marketing Pessoal",
+            "xp_required": 600,
+            "badge": "Embaixador",
+            "description": "Desenvolva proposta de valor para sponsors."
+          }
+        ]
+      }
+    ]
+  }
+}
