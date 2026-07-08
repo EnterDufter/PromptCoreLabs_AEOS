@@ -48,9 +48,11 @@ ESTADO DO REPOSITÓRIO GIT
 ==================================================
 
 • Branch ativa: master
+• Remoto: https://github.com/EnterDufter/PromptCoreLabs_AEOS (privado)
 • Hash do commit v1.0: 114b3f255ec07b836822c3df887b9ad565b49c44
 • Mensagem de commit: chore(repo): initialize git and commit AEOS v1.0 specifications and modules
-• Status de arquivos modificados: 0 (todos commitados e limpos)
+• Status de arquivos modificados: 0 (todos commitados e limpos e sincronizados)
+
 
 ==================================================
 DECISÕES ARQUITETURAIS REGISTRADAS (ADRs)
@@ -65,7 +67,6 @@ DECISÕES ARQUITETURAIS REGISTRADAS (ADRs)
 PENDÊNCIAS GLOBAIS
 ==================================================
 
-• Sincronização de branch remota (push) para o repositório GitHub privado.
 • Definição da próxima etapa ( evolução de RAG ou projeto piloto ).
 
 ==================================================

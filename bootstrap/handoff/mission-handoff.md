@@ -68,9 +68,6 @@ Pendência 1:
 Definição de novo escopo (Fase 6 ou primeiro projeto piloto usando o AEOS).
 Prioridade: alta
 
-Pendência 2:
-Sincronização dos arquivos commitados com a branch remota do repositório no GitHub (caso aplicável).
-Prioridade: média
 
 ==================================================
 PRÓXIMO PASSO
