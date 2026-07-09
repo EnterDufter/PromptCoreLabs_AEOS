@@ -18,7 +18,7 @@ As definições garantem que:
 • A camada de auditoria possa verificar se o agente operou fora de seus limites.
 
 ==================================================
-AGENTES DISPONÍVEIS
+AGENTES DISPONÍVEIS (SQUAD DE ENGENHARIA CORE)
 ==================================================
 
 • planner.md
@@ -32,6 +32,40 @@ AGENTES DISPONÍVEIS
 
 • auditor.md
   Responsável pela validação de compliance com a Foundation e as políticas da Governance.
+
+==================================================
+AGENTES LÍDERES DE DEPARTAMENTOS (PCL CORPORATIVO)
+==================================================
+
+• strategist-one.md
+  Líder do Departamento de Estratégia. Foca em planejamento estratégico, OKRs e North Star Metric.
+
+• revops-architect.md
+  Líder do Departamento de RevOps & Growth. Foca em funil GTM, CRM e conversão.
+
+• lead-tlc-engineer.md
+  Líder do Departamento de Engenharia de Sistemas. Foca em arquitetura de softwares e TLC Spec-Driven.
+
+• neuromarketing-strategist.md
+  Líder do Departamento de Percepção & Branding. Foca em storytelling, Sexy Canvas e percepção de valor.
+
+• ciso-security-agent.md
+  Líder do Departamento de DevOps & Infra. Foca em uptime, segurança de infraestrutura e LGPD.
+
+• bizops-controller.md
+  Líder do Departamento de BizOps & Agile. Foca em eficiência de processos, sprints e integração de equipes.
+
+• data-insight-agent.md
+  Líder do Departamento de Data Science & AI. Foca em analytics, machine learning e inteligência estatística.
+
+• compliance-steward.md
+  Líder do Departamento de LegalOps & Compliance. Foca em contratos, riscos regulatórios e proteção de PI.
+
+• skills-manager.md
+  Líder do Departamento de People Ops. Foca em competências, onboarding e curadoria do capital intelectual.
+
+• financial-advisor.md
+  Líder do Departamento de Back Office (FinOps). Foca em orçamento, controladoria e DRE real-time.
 
 ==================================================
 COMO ESCREVER UMA DEFINIÇÃO

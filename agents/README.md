@@ -38,7 +38,17 @@ agents/
 │   ├── planner.md                   ← especificações do agente Planner
 │   ├── builder.md                   ← especificações do agente Builder
 │   ├── reviewer-qa.md               ← especificações do Reviewer e QA
-│   └── auditor.md                   ← especificações do agente Auditor
+│   ├── auditor.md                   ← especificações do agente Auditor
+│   ├── strategist-one.md            ← líder de Estratégia
+│   ├── revops-architect.md          ← líder de RevOps & Growth
+│   ├── lead-tlc-engineer.md         ← líder de Engenharia de Sistemas
+│   ├── neuromarketing-strategist.md  ← líder de Percepção & Branding
+│   ├── ciso-security-agent.md       ← líder de DevOps & Infra
+│   ├── bizops-controller.md         ← líder de BizOps & Agile
+│   ├── data-insight-agent.md        ← líder de Data Science & AI
+│   ├── compliance-steward.md        ← líder de LegalOps & Compliance
+│   ├── skills-manager.md            ← líder de People Ops
+│   └── financial-advisor.md         ← líder de FinOps & Back Office
 │
 └── collaboration/
     ├── README.md                    ← visão da colaboração de agentes

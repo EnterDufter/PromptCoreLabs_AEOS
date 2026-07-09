@@ -32,6 +32,34 @@ Os playbooks ativos estão organizados neste diretório:
 • debugging-playbook.md
   Guia de resolução e rastreamento de problemas técnicos no Harness (Docker, Tailscale, redes).
 
+• methodologies/okr-strategic-planning.md
+  Metodologia de OKRs e planejamento estratégico sob a autoridade do Strategist_One.
+
+• methodologies/revops-bowtie-spiced.md
+  Frameworks Bowtie (Winning by Design) e qualificação SPICED coordenados pelo RevOps_Architect.
+
+• methodologies/neuromarketing-perception-branding.md
+  StoryBrand, Sexy Canvas e psicologia comportamental no design de marca do Neuromarketing_Strategist.
+
+• methodologies/security-secops.md
+  Gestão de infraestrutura estável, compliance LGPD e planos preventivos do CISO_Security_Agent.
+
+• methodologies/agile-ops-bizops.md
+  Business Operations, sprints de 15 dias e remoção de desperdícios sob o BizOps_Controller.
+
+• methodologies/data-intelligence-analytics.md
+  Processamento de dados, testes estatísticos A/B e modelos do Data_Insight_Agent.
+
+• methodologies/compliance-risk-management.md
+  Minutas contratuais, NDAs e proteção de PI liderados pelo Compliance_Steward.
+
+• methodologies/knowledge-curation-learning.md
+  Preservação e curadoria do capital intelectual pelo Skills_Manager.
+
+• methodologies/finops-budget-control.md
+  EBITDA Shield (proteção de custos de tokens) e controladoria do Financial_Advisor.
+
+
 ==================================================
 COMO ESCREVER UM PLAYBOOK
 ==================================================
