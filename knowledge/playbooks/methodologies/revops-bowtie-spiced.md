@@ -23,14 +23,14 @@ O modelo Bowtie (Gravata Borboleta) da Winning by Design substitui o funil de ve
 
 ```mermaid
 graph LR
-    subgraph Aquisição (Esquerda)
+    subgraph A1["Aquisição (Esquerda)"]
         Aware[Consciência] --> Interest[Interesse]
         Interest --> Select[Seleção]
         Select --> Commit[Compromisso]
     end
-    subgraph Expansão (Direita)
+    subgraph A2["Expansão (Direita)"]
         Onboard[Onboarding] --> Realize[Realização de Valor]
-        Realize --> Adop[Adopção/Retenção]
+        Realize --> Adop[Adoção/Retenção]
         Adop --> Expand[Expansão/Indicação]
     end
     Commit --> Onboard
