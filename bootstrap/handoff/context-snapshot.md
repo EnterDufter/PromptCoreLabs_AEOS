@@ -4,14 +4,14 @@ OBJETIVO
 
 Registrar o estado atual de todo o ecossistema PromptCoreLabs_AEOS.
 
-Este é o Context Snapshot consolidado após a estruturação documental dos 10 departamentos corporativos.
+Este é o Context Snapshot consolidado após a estruturação documental e o import físico dos 10 departamentos corporativos.
 
 ==================================================
 IDENTIFICAÇÃO DO SNAPSHOT
 ==================================================
 
 Data e hora:
-2026-07-09 — 20h31 (horário de Brasília / UTC-3)
+2026-07-09 — 21h01 (horário de Brasília / UTC-3)
 
 Responsável pelo snapshot:
 Antigravity (Google DeepMind) — em colaboração com o usuário
@@ -21,13 +21,13 @@ ESTADO DO ECOSSISTEMA — VISÃO GERAL
 ==================================================
 
 Fase atual do AEOS:
-Especificações lógicas dos 10 agentes líderes e 9 playbooks de metodologias corporativas integrados no GitHub.
+Empresa PromptCore Labs com seus 12 agentes e 69 skills 100% importados e conectados por hierarquia operacional no PaperClip local.
 
 Status geral:
-Aguardando aprovação do usuário para o import físico no PaperClip.
+Operação corporativa e orquestração de squads prontas para uso.
 
 Última missão executada:
-Fase 6 — Definição dos 10 departamentos, líderes e metodologias corporativas no repositório.
+Fase 6 — Import físico e patching de relacionamento (reports_to) dos agentes no banco Postgres.
 
 ==================================================
 ESTADO DOS MÓDULOS
@@ -38,7 +38,7 @@ ESTADO DOS MÓDULOS
 • bootstrap/ ───────────► ✅ v1.0 (onboardings e handoffs)
 • knowledge/ ───────────► ✅ v1.1 (playbooks, patterns, C4, metodologias corporativas)
 • memory/ ──────────────► ✅ v1.0 (pgvector e contexto)
-• agents/ ──────────────► ✅ v1.1 (Planner, Builder, QA, Auditor + 10 Líderes Corporativos)
+• agents/ ──────────────► ✅ v1.1 (Planner, Builder, QA, Auditor + 12 Agentes Ativos)
 • templates/ ───────────► ✅ v1.0 (scaffolding de documentos)
 • integrations/ ────────► ✅ v1.0 (GitHub, NotebookLM, Tailscale)
 
@@ -57,15 +57,14 @@ ESTADO DO REPOSITÓRIO GIT
 
 • Branch ativa: master
 • Remoto: https://github.com/EnterDufter/PromptCoreLabs_AEOS (privado)
-• Hash do commit pós-Agentes: 0bc34e38ce713a0058b87435f4b5f4c56db3f83c (aproximado)
+• Hash do commit: 4d3a75cbd941865ceb52bf46fa59b12879685a21 (aproximado)
 • Status de arquivos modificados: 0 (todos commitados e limpos e sincronizados)
 
 ==================================================
 PENDÊNCIAS GLOBAIS
 ==================================================
 
-• Aprovação das especificações dos agentes e playbooks.
-• Execução do comando do CLI para importar a empresa PromptCore Labs no PaperClip.
+• Nenhuma pendência estrutural imediata. Próxima etapa operacional a ser definida pelo fundador.
 
 ==================================================
 REFERÊNCIAS OBRIGATÓRIAS
