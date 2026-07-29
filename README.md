@@ -44,7 +44,7 @@ TAXONOMIA E ESTRUTURA DO REPOSITÓRIO
 | `foundation/` | Diretrizes fundamentais e constitucionais do ecossistema. | Core AEOS |
 | `governance/` | Regras operacionais, papéis de tomada de decisão e Stage Gates. | Core AEOS |
 | `bootstrap/` | Protocolos de onboarding e handoffs de sessões. | Core AEOS |
-| `knowledge/` | Playbooks operacionais, padrões (TLC/ADR) e catálogos de ferramentas. | Core AEOS |
+| `knowledge/` | Playbooks operacionais, padrões (PCL Cortex/TLC/ADR) e catálogos. | Core AEOS |
 | `memory/` | RAG, PGVector local, índices e histórico de Execution Cells. | Core AEOS |
 | `agents/` | Especificações e System Prompts dos agentes da squad de IA. | Core AEOS |
 | `runtime/` | Infraestrutura local de contêineres e logs de execução. | Core AEOS |
@@ -61,7 +61,7 @@ TAXONOMIA E ESTRUTURA DO REPOSITÓRIO
 UML DE SEQUÊNCIA: FLUXO DE DESENVOLVIMENTO AGENTES
 ==================================================
 
-O ciclo de vida das tarefas (TLC Spec-Driven v3) e a colaboração entre os agentes do PaperClip segue o protocolo de mensagens:
+O ciclo de vida das tarefas (TLC Spec-Driven v3 e PCL Cortex Micro-Loop) e a colaboração entre os agentes do PaperClip segue o protocolo de mensagens:
 
 ```mermaid
 sequenceDiagram
@@ -74,13 +74,13 @@ sequenceDiagram
     
     Humano->>PL: Aprova specify.md (Gate 1)
     PL->>BL: Cria e entrega tasks.md (Backlog)
-    BL->>BL: Implementa código e testes unitários
-    BL->>QA: Solicita validação (envia código)
-    QA->>QA: Executa testes unitários e de integração
-    alt Testes Falham
-        QA-->>BL: Emite REJECT_TASK com logs de erro
-    else Testes Passam
-        QA->>AD: Solicita auditoria de compliance
+    BL->>BL: Executa edições cirúrgicas (máx 3 retentativas)
+    BL->>QA: Solicita validação (envia código e diffs)
+    QA->>QA: Executa auditoria adversária e testes por observação
+    alt Testes Falham / Adulteração Detectada
+        QA-->>BL: Emite REFUTED com logs de erro
+    else Testes e Diffs Aprovados
+        QA->>AD: Solicita auditoria de compliance (VERIFIED)
         AD->>AD: Verifica padrões e vazamento de chaves
         AD-->>Humano: Entrega validate.md e relatório de compliance
         Humano->>Humano: Assina e aprova Stage Gate (STATE.md)
@@ -143,13 +143,16 @@ docker compose down
 ---
 
 ==================================================
-INTEGRAÇÃO DE MODELOS LLM
+INTEGRAÇÃO DE MODELOS LLM & PCL CORTEX MICRO-LOOP
 ==================================================
 
-*   **TIER-1 & TIER-2 (Cloud):** Roteados via OmniRoute (porta `20130`) aplicando o EBITDA Shield para conter gastos com APIs comerciais (Claude e Gemini).
-*   **TIER-3 (Local - RTX GPU):**
-    *   **LM Studio:** Executa o modelo `Qwen3-Coder-30B` na porta host `1234` (`http://host.docker.internal:1234` dentro dos contêineres).
-    *   **Ollama:** Executa o modelo `Gemma 3 4B` na porta host `11434` (`http://host.docker.internal:11434`).
+*   **TIER-1 (High Logic - Cloud):** Roteado via OmniRoute (porta `20130`) aplicando o EBITDA Shield para análises de arquitetura e especificações (`specify.md`) utilizando Claude 3.5 Sonnet e Gemini 3.1 Pro.
+*   **TIER-2 (Fast Execution - Cloud):** Roteado para escrita rápida de código pelo Builder (Gemini 3 Flash / GPT-4o-mini).
+*   **TIER-3 (Local Zero Cost / Cloud Fast Fallback):** Roteado para triagem de tarefas triviais (Trivial Gate), coleta de evidências e auditoria adversária do agente QA.
+    *   **LM Studio / Ollama:** Quando ativos na GPU local, executam `Qwen3-Coder-30B` e `Gemma 3 4B`.
+    *   **Cloud Fast Fallback:** Quando os modelos locais estiverem inativos, redireciona automaticamente para Gemini 3 Flash / GPT-4o-mini, garantindo altíssima velocidade e baixo consumo de tokens.
+
+Para mais detalhes da disciplina de micro-execução dos agentes, consulte [knowledge/patterns/pcl-cortex-micro-loop.md](file:///c:/PromptCore_Labs/knowledge/patterns/pcl-cortex-micro-loop.md).
 
 ---
 *PromptCoreLabs_AEOS v1.0 — Todos os direitos reservados – 2026*

@@ -253,6 +253,21 @@ O AEOS não depende do TLC.
 O TLC passa a ser uma metodologia suportada pelo AEOS.
 
 =========================================================
+RELAÇÃO COM PCL CORTEX MICRO-LOOP
+=========================================================
+
+Explicar explicitamente que:
+
+O PCL Cortex Micro-Loop (knowledge/patterns/pcl-cortex-micro-loop.md) rege a micro-disciplina operacional dos agentes internamente à etapa de EXECUTE.
+
+Ele introduz:
+- Trivial Gate Bypass (triagem de baixo overhead para tarefas triviais de 1 arquivo e <10 linhas).
+- Bounded Retries (máximo de 3 retentativas de correção em testes antes de declarar bloqueio).
+- Auditoria Adversária pelo agente QA (inspeção por observação direta e prevenção de reward hacking).
+
+O Micro-Loop opera **dentro** da fase de execução. Ele prepara as evidências necessárias para apresentar ao Stage Gate formal do AEOS, mas **não substitui a autoridade humana de aprovação dos Stage Gates**.
+
+=========================================================
 OUTROS WORKFLOWS
 =========================================================
 
@@ -311,4 +326,3 @@ runtime/
 agents/
 
 knowledge/
-

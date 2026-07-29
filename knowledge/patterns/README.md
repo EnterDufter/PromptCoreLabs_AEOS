@@ -18,13 +18,16 @@ O uso de Patterns garante:
 
 • Consistência estrutural em toda a documentação.
 • Facilidade de parsing de documentos por agentes de IA.
-• Padronização de tomada de decisões.
+• Padronização de tomada de decisões e disciplina operacional dos agentes.
 
 ==================================================
 LISTA DE PADRÕES ATIVOS
 ==================================================
 
 Os padrões ativos neste diretório são:
+
+• pcl-cortex-micro-loop.md
+  Padrão de micro-execução e disciplina operacional do PCL Cortex (Trivial Gate, Bounded Retries, Surgical Edits, Auditoria Adversária).
 
 • tlc-spec-driven.md
   Anatomia, campos obrigatórios e estrutura de arquivos para a metodologia baseada em especificações.
