@@ -11,6 +11,15 @@
       },
       "disabled": false,
       "autoApprove": []
+    },
+    "gemini-notebooklm": {
+      "command": "node",
+      "args": [
+        "./mcp/gemini-notebooklm/src/index.js"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }

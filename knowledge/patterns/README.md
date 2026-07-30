@@ -32,6 +32,9 @@ Os padrões ativos neste diretório são:
 • mcp-server-architecture.md
   Padrão arquitetural de divisão e escopo de MCP Servers (Global IDE vs Workspace Repositório).
 
+• gemini-notebooklm-integration.md
+  Padrão de integração e síntese de conhecimento via Gemini NotebookLM no PCL AEOS.
+
 • tlc-spec-driven.md
   Anatomia, campos obrigatórios e estrutura de arquivos para a metodologia baseada em especificações.
 

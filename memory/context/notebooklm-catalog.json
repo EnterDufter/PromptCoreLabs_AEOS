@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEOS NotebookLM Catalog Index",
+  "description": "Local workspace index mapping active Gemini NotebookLM sources and notebooks",
+  "version": "1.0.0",
+  "notebooks": [
+    {
+      "id": "nb-strategy-01",
+      "title": "PromptCore Labs — Estratégia e Visão de Produto",
+      "category": "Estratégia",
+      "sourceCount": 3,
+      "createdAt": "2026-07-30T16:00:00Z"
+    },
+    {
+      "id": "nb-engineering-01",
+      "title": "PCL AEOS — Arquitetura TLC Spec-Driven & PCL Cortex",
+      "category": "Engenharia",
+      "sourceCount": 4,
+      "createdAt": "2026-07-30T16:00:00Z"
+    }
+  ],
+  "sources": [
+    {
+      "id": "src-01",
+      "notebookId": "nb-strategy-01",
+      "title": "COMPANY.md",
+      "path": "PaperClip-Companies/promptcore-labs/COMPANY.md",
+      "summary": "Visão geral da PromptCore Labs, 9 squads e metas estratégicas de negócios.",
+      "syncedAt": "2026-07-30T16:00:00Z",
+      "status": "SYNCED"
+    },
+    {
+      "id": "src-02",
+      "notebookId": "nb-engineering-01",
+      "title": "pcl-cortex-micro-loop.md",
+      "path": "knowledge/patterns/pcl-cortex-micro-loop.md",
+      "summary": "Padrão de micro-execução em 6 estágios, Trivial Gate e auditoria adversária QA.",
+      "syncedAt": "2026-07-30T16:00:00Z",
+      "status": "SYNCED"
+    },
+    {
+      "id": "src-03",
+      "notebookId": "nb-engineering-01",
+      "title": "mcp-server-architecture.md",
+      "path": "knowledge/patterns/mcp-server-architecture.md",
+      "summary": "Diretrizes de divisão arquitetural de MCP Servers (Global IDE vs Workspace Repositório).",
+      "syncedAt": "2026-07-30T16:00:00Z",
+      "status": "SYNCED"
+    }
+  ]
+}

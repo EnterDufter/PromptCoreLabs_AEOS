@@ -1,0 +1,21 @@
+{
+  "name": "@promptcore-labs/mcp-gemini-notebooklm",
+  "version": "1.0.0",
+  "description": "Workspace MCP Server for Gemini NotebookLM integration in PromptCore Labs AEOS",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --eval \"console.log('mcp-gemini-notebooklm syntax ok')\""
+  },
+  "keywords": [
+    "mcp",
+    "notebooklm",
+    "gemini",
+    "rag",
+    "aeos",
+    "promptcore-labs"
+  ],
+  "author": "Eduardo (PromptCore Labs)",
+  "license": "MIT"
+}
