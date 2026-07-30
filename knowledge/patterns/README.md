@@ -29,6 +29,9 @@ Os padrões ativos neste diretório são:
 • pcl-cortex-micro-loop.md
   Padrão de micro-execução e disciplina operacional do PCL Cortex (Trivial Gate, Bounded Retries, Surgical Edits, Auditoria Adversária).
 
+• mcp-server-architecture.md
+  Padrão arquitetural de divisão e escopo de MCP Servers (Global IDE vs Workspace Repositório).
+
 • tlc-spec-driven.md
   Anatomia, campos obrigatórios e estrutura de arquivos para a metodologia baseada em especificações.
 

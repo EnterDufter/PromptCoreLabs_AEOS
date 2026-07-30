@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/mcp-config.json",
+  "mcpServers": {
+    "pcl-cortex": {
+      "command": "node",
+      "args": [
+        "./mcp/pcl-cortex/src/index.js"
+      ],
+      "env": {
+        "OMNI_ROUTE_URL": "http://localhost:20130"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

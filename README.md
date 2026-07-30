@@ -50,6 +50,7 @@ TAXONOMIA E ESTRUTURA DO REPOSITÓRIO
 | `runtime/` | Infraestrutura local de contêineres e logs de execução. | Core AEOS |
 | `templates/` | Scaffolding de documentos em branco (specify, design, adr). | Core AEOS |
 | `integrations/` | Conexões com GitHub, Tailscale e Model Context Protocol (MCP). | Core AEOS |
+| `mcp/` | Servidores MCP locais do repositório (`pcl-cortex`) e manifesto `mcp.config.json`. | Core AEOS |
 | `projects/` | Projetos ativos em desenvolvimento assistido por IA. | Taxonomia |
 | `tools/` | Utilitários locais e servidores MCP customizados. | Taxonomia |
 | `external-references/` | Referências e links aos repositórios originais externos. | Taxonomia |

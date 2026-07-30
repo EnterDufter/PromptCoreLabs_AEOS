@@ -1,0 +1,19 @@
+{
+  "name": "@promptcore-labs/mcp-pcl-cortex",
+  "version": "1.0.0",
+  "description": "Workspace MCP Server for PromptCore Labs AEOS (PCL Cortex Micro-Loop & OmniRoute Health)",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --eval \"console.log('mcp-pcl-cortex syntax ok')\""
+  },
+  "keywords": [
+    "mcp",
+    "pcl-cortex",
+    "aeos",
+    "promptcore-labs"
+  ],
+  "author": "Eduardo (PromptCore Labs)",
+  "license": "MIT"
+}
