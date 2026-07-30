@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Fluxo de Execução PCL AEOS",
+    "subtitle": "Workflow automatizado de especificação SDD, validação e execução de código em Português",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "interface", "label": "Interface do Operador" },
+    { "id": "agentes", "label": "Squad de Agentes PROAA" },
+    { "id": "qualidade", "label": "Governança & QA" }
+  ],
+  "phases": [
+    { "id": "especificacao", "label": "Fase 1: Especificação SDD", "fromCol": 0, "toCol": 1 },
+    { "id": "aprovacao", "label": "Fase 2: Validação & Gate", "fromCol": 2, "toCol": 3 }
+  ],
+  "mainPath": ["operador", "lider", "gate", "builder"],
+  "nodes": [
+    { "id": "operador", "lane": "interface", "col": 0, "type": "frontend", "label": "Operador", "sublabel": "PaperClip Dashboard" },
+    { "id": "lider", "lane": "agentes", "col": 1, "type": "backend", "label": "Líder", "sublabel": "Elabora specify.md" },
+    { "id": "gate", "lane": "qualidade", "col": 2, "type": "security", "label": "Gate SDD", "sublabel": "Aprovação Humana" },
+    { "id": "builder", "lane": "agentes", "col": 3, "type": "backend", "label": "Builder", "sublabel": "Escrita Cirúrgica" }
+  ],
+  "edges": [
+    { "from": "operador", "to": "lider", "label": "Atribuir Tarefa" },
+    { "from": "lider", "to": "gate", "label": "Solicitar Gate", "fromSide": "bottom", "toSide": "left" },
+    { "from": "gate", "to": "builder", "label": "Aprovado", "fromSide": "right", "toSide": "bottom" }
+  ]
+}
