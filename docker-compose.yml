@@ -13,6 +13,9 @@ services:
       - db-data:/var/lib/postgresql/data
 
   omniroute:
+    build:
+      context: ./OmniRoute
+      dockerfile: Dockerfile
     image: omniroute:cli
     container_name: pcl-omniroute
     restart: always
