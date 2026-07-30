@@ -1,14 +1,14 @@
 ---
-name: archify
-description: Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable standalone HTML with inline SVG, dark/light themes, optional trace motion, and PNG/JPEG/WebP/SVG/WebM export. Accept plain-language requirements or pasted Mermaid flowchart, sequenceDiagram, and stateDiagram input; inspect repository evidence when the diagram must reflect real code. Use when the user asks to visualize system architecture, infrastructure, cloud/security/network topology, technical workflows, API call sequences, request lifecycles, data pipelines, ETL/ELT, data lineage, state machines, or to convert/beautify Mermaid.
+name: cortex
+description: Persona de Inteligência e Visualização de Arquitetura do PCL AEOS. Invocada quando o usuário solicita ao "Cortex" para criar, visualizar ou documentar diagramas de arquitetura, fluxos de trabalho (workflow), sequências de chamadas de API, pipelines de dados (data-flow) ou ciclos de vida de estado em HTML interativo com animação de sinal e exportação em Português (Brasil).
 license: MIT
 metadata:
   version: "2.12"
-  author: tt-a1i
-  based_on: Cocoon-AI/architecture-diagram-generator (MIT, v1.0)
+  author: PromptCore Labs
+  based_on: archify (tt-a1i / MIT)
 ---
 
-# Archify
+# Cortex (Visualização e Diagramação PCL AEOS)
 
 Create a self-contained, interactive HTML diagram from a small typed JSON specification. Static output is the default; enable motion only when the user asks for a demo or presentation.
 
