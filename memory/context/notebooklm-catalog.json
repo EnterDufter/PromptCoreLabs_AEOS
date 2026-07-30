@@ -1,49 +1,122 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "AEOS NotebookLM Catalog Index",
-  "description": "Local workspace index mapping active Gemini NotebookLM sources and notebooks",
+  "description": "Local workspace index mapping active Gemini NotebookLM sources and notebooks synced from notebooklm.google.com",
   "version": "1.0.0",
   "notebooks": [
     {
-      "id": "nb-strategy-01",
-      "title": "PromptCore Labs — Estratégia e Visão de Produto",
-      "category": "Estratégia",
-      "sourceCount": 3,
-      "createdAt": "2026-07-30T16:00:00Z"
+      "id": "nb-web-02",
+      "title": "Integração do Google Workspace e NotebookLM via MCP no Antigravity",
+      "category": "Integração & MCP",
+      "sourceCount": 8,
+      "createdAt": "2026-07-30T00:00:00Z",
+      "owner": "Eduardo Machado"
     },
     {
-      "id": "nb-engineering-01",
-      "title": "PCL AEOS — Arquitetura TLC Spec-Driven & PCL Cortex",
-      "category": "Engenharia",
+      "id": "nb-web-01",
+      "title": "O Resgate dos Otimistas: O Caminho da Permissão e Prosperidade",
+      "category": "Filosofia & Desenvolvimento",
       "sourceCount": 4,
-      "createdAt": "2026-07-30T16:00:00Z"
+      "createdAt": "2026-07-29T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-05",
+      "title": "Ikigai: A Arte de Viver com Propósito e Potencial Humano",
+      "category": "Desenvolvimento Pessoal",
+      "sourceCount": 1,
+      "createdAt": "2026-07-21T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-08",
+      "title": "Soluções Jurídico-Estratégicas para Conflitos no Franchising Brasileiro",
+      "category": "Jurídico & Franchising",
+      "sourceCount": 19,
+      "createdAt": "2026-07-21T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-09",
+      "title": "Gestão e Modernização de Franquias: Justiça e Tecnologia no Varejo",
+      "category": "Jurídico & Franchising",
+      "sourceCount": 17,
+      "createdAt": "2026-07-21T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-10",
+      "title": "Guia Estratégico de Conteúdo: Podcast, Videocast e SEO de Vídeo",
+      "category": "Marketing & Conteúdo",
+      "sourceCount": 10,
+      "createdAt": "2026-07-21T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-06",
+      "title": "Currículo Eduardo Machado: Especialista em CRM e Automação de IA",
+      "category": "Perfil Profissional",
+      "sourceCount": 43,
+      "createdAt": "2026-06-12T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-04",
+      "title": "Benchmarking - Editus (IA para Gestão de Licitações Públicas)",
+      "category": "Benchmarking & IA",
+      "sourceCount": 23,
+      "createdAt": "2026-05-28T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-07",
+      "title": "001 - Fábrica de Conteúdo - SELETOR DE TÓPICOS",
+      "category": "Fábrica de Conteúdo",
+      "sourceCount": 14,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-11",
+      "title": "PromptCore Labs 001 - Creative Flow (Gemini + NotebookLM)",
+      "category": "PromptCore Labs Core",
+      "sourceCount": 103,
+      "createdAt": "2026-03-13T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-03",
+      "title": "Projeto Vora NextGen Sports - V1",
+      "category": "Projetos & Sports",
+      "sourceCount": 44,
+      "createdAt": "2026-02-06T00:00:00Z",
+      "owner": "Eduardo Machado"
+    },
+    {
+      "id": "nb-web-12",
+      "title": "IA Generativa e o Rigor nas Revisões de Literatura",
+      "category": "Pesquisa Acadêmica",
+      "sourceCount": 2,
+      "createdAt": "2026-07-03T00:00:00Z",
+      "owner": "Eduardo Machado"
     }
   ],
   "sources": [
     {
-      "id": "src-01",
-      "notebookId": "nb-strategy-01",
-      "title": "COMPANY.md",
-      "path": "PaperClip-Companies/promptcore-labs/COMPANY.md",
-      "summary": "Visão geral da PromptCore Labs, 9 squads e metas estratégicas de negócios.",
+      "id": "src-web-01",
+      "notebookId": "nb-web-11",
+      "title": "PromptCore Labs 001 - Creative Flow (Gemini + NotebookLM)",
+      "path": "notebooklm.google.com",
+      "summary": "Acervo principal com 103 fontes de pesquisa sobre o ecossistema PromptCore Labs e fluxos criativos com Gemini.",
       "syncedAt": "2026-07-30T16:00:00Z",
       "status": "SYNCED"
     },
     {
-      "id": "src-02",
-      "notebookId": "nb-engineering-01",
-      "title": "pcl-cortex-micro-loop.md",
-      "path": "knowledge/patterns/pcl-cortex-micro-loop.md",
-      "summary": "Padrão de micro-execução em 6 estágios, Trivial Gate e auditoria adversária QA.",
-      "syncedAt": "2026-07-30T16:00:00Z",
-      "status": "SYNCED"
-    },
-    {
-      "id": "src-03",
-      "notebookId": "nb-engineering-01",
-      "title": "mcp-server-architecture.md",
-      "path": "knowledge/patterns/mcp-server-architecture.md",
-      "summary": "Diretrizes de divisão arquitetural de MCP Servers (Global IDE vs Workspace Repositório).",
+      "id": "src-web-02",
+      "notebookId": "nb-web-02",
+      "title": "Integração do Google Workspace e NotebookLM via MCP no Antigravity",
+      "path": "notebooklm.google.com",
+      "summary": "8 fontes sobre integração MCP, Google Workspace e Antigravity IDE.",
       "syncedAt": "2026-07-30T16:00:00Z",
       "status": "SYNCED"
     }
