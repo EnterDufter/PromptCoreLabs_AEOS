@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Marked.js para compilar Markdown em HTML estilizado instantaneamente -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <style>
     :root {
       --bg-dark: #0b0f19;
@@ -72,7 +76,7 @@
       font-family: 'JetBrains Mono', monospace;
     }
     
-    /* NAVBAR FLUTUANTE COMPACTA (Sticky 50px) */
+    /* NAVBAR FLUTUANTE COMPACTA (Sticky 52px) */
     .navbar-sticky {
       position: sticky;
       top: 0;
@@ -293,6 +297,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
+      cursor: pointer;
     }
     .btn-primary:hover {
       box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
@@ -306,6 +311,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
+      cursor: pointer;
     }
     .link-doc:hover {
       color: var(--accent-cyan);
@@ -352,6 +358,119 @@
       background: rgba(15, 23, 42, 0.4);
     }
 
+    /* ================================================== */
+    /* MODAL READER OVERLAY (PAINEL SUSPENSO ESTILIZADO) */
+    /* ================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 17, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-container {
+      background: #0d1322;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 960px;
+      height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.1);
+      transform: translateY(24px) scale(0.98);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .modal-overlay.active .modal-container {
+      transform: translateY(0) scale(1);
+    }
+    .modal-header {
+      background: #131c31;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .modal-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+      transform: rotate(90deg);
+    }
+    .modal-body {
+      padding: 2.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      color: #cbd5e1;
+      font-size: 0.98rem;
+      line-height: 1.8;
+    }
+
+    /* ESTILIZAÇÃO COMPLETA DO CONTEÚDO MARKDOWN DENTRO DO MODAL */
+    .modal-body h1 { font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    .modal-body h2 { font-size: 1.4rem; color: var(--accent-blue); margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+    .modal-body h3 { font-size: 1.15rem; color: var(--accent-indigo); margin: 1.4rem 0 0.6rem 0; }
+    .modal-body p { margin-bottom: 1.2rem; }
+    .modal-body ul, .modal-body ol { margin: 0 0 1.2rem 1.5rem; }
+    .modal-body li { margin-bottom: 0.4rem; }
+    .modal-body code { background: #080c14; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.88rem; border: 1px solid var(--border-color); }
+    .modal-body pre { background: #070a12; border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5rem; }
+    .modal-body pre code { background: transparent; padding: 0; border: none; }
+    .modal-body blockquote { background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.2rem; color: #7dd3fc; }
+    .modal-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .modal-body th, .modal-body td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
+    .modal-body th { background: #131c31; color: var(--accent-cyan); }
+    .modal-body a { color: var(--accent-cyan); text-decoration: none; }
+    .modal-body a:hover { text-decoration: underline; }
+
     footer {
       text-align: center;
       margin-top: 4rem;
@@ -376,7 +495,7 @@
     </div>
   </header>
 
-  <!-- NAVBAR FLUTUANTE COMPACTA (Sticky 50px) -->
+  <!-- NAVBAR FLUTUANTE COMPACTA (Sticky 52px) -->
   <nav class="navbar-sticky">
     <a href="#" class="nav-brand">⚡ PromptCoreLabs_AEOS</a>
     <div class="nav-phases">
@@ -391,7 +510,7 @@
 
     <div class="hero-banner">
       <h2>🗺️ Trilho de Aprendizado Arquitetural & Living Architecture</h2>
-      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos no menu flutuante acima. Clique em qualquer card para **abrir uma nova aba no navegador** com a aplicação gráfica interativa do Cortex Archify Engine.</p>
+      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo</strong> para explorar o diagrama em tela cheia.</p>
     </div>
 
     <!-- ================================================== -->
@@ -443,7 +562,7 @@ graph TD
             <h4 class="card-exp-title">System Context Diagram</h4>
             <p class="card-exp-desc">Mapeia o operador humano, a fronteira local protegida por VPN Mesh Tailscale, as conexões de inferência na nuvem e o repositório remoto GitHub.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="link-doc">📖 Ler Artigo de Estratégia ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="link-doc" data-doc-title="Estratégia & Visão Corporativa">📖 Ler Artigo de Estratégia ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -462,7 +581,7 @@ graph TD
             <h4 class="card-exp-title">Harness Container Topology</h4>
             <p class="card-exp-desc">Detalha os 3 contêineres Docker principais: <code>pcl-db</code> (PostgreSQL + PGVector), <code>pcl-omniroute</code> (Proxy de Inferência) e <code>pcl-paperclip</code> (Dashboard de Orquestração).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc">📖 Ler Artigo de Infraestrutura ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc" data-doc-title="Infraestrutura & Docker Harness">📖 Ler Artigo de Infraestrutura ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -481,7 +600,7 @@ graph TD
             <h4 class="card-exp-title">Repository Component Breakdown</h4>
             <p class="card-exp-desc">Exibe a decomposição dos 14 diretórios chave do repositório consolidado e o fluxo de dados entre governança, memória e execução.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="link-doc">📖 Ler Artigo do Modelo C4 ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="link-doc" data-doc-title="Modelo C4 & Especificação">📖 Ler Artigo do Modelo C4 ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -500,7 +619,7 @@ graph TD
             <h4 class="card-exp-title">Projects Taxonomy & Isolation</h4>
             <p class="card-exp-desc">Demonstra as regras de isolamento soberano dos projetos contidos no diretório <code>projects/</code> (como a Living Architecture e o Crialli).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="link-doc">📖 Ler Glossário Oficial ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="link-doc" data-doc-title="Glossário Oficial & Taxonomia">📖 Ler Glossário Oficial ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -567,7 +686,7 @@ sequenceDiagram
             <h4 class="card-exp-title">Squad Orchestration & Roles</h4>
             <p class="card-exp-desc">Mapeia os 15 agentes organizados nas 4 camadas: Estratégia/Negócios, Engenharia/Especificação, Execução de Código e Qualidade/Segurança.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc">📖 Manual dos 15 Agentes ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Manual dos 15 Agentes Inteligentes">📖 Manual dos 15 Agentes ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -586,7 +705,7 @@ sequenceDiagram
             <h4 class="card-exp-title">PCL Cortex Micro-Loop Lifecycle</h4>
             <p class="card-exp-desc">Máquina de estados de micro-execução que governa as retentativas do agente Builder e as transições de status (IDLE, PLANNING, WORKING, QA_REVIEW).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc">📖 Ver Matriz RACI da Squad ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Matriz RACI dos Agentes">📖 Ver Matriz RACI da Squad ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -605,7 +724,7 @@ sequenceDiagram
             <h4 class="card-exp-title">Developer Experience & IDE Loop</h4>
             <p class="card-exp-desc">Sequência de interação contínua entre o desenvolvedor humano, a IDE assistida por IA, os servidores MCP locais e os relatórios de validação.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc">📖 Ler Artigo de Integrações MCP ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Integrações & Servidores MCP">📖 Ler Artigo de Integrações MCP ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -624,7 +743,7 @@ sequenceDiagram
             <h4 class="card-exp-title">Bootstrap & Onboarding Pipeline</h4>
             <p class="card-exp-desc">Pipeline de inicialização de novas sessões de IA e transmissão soberana de contexto entre tarefas (Handoff Protocol).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ver Guia de Onboarding ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança & Onboarding">📖 Ver Guia de Onboarding ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -689,7 +808,7 @@ erDiagram
             <h4 class="card-exp-title">RAG & Memory Data Lineage</h4>
             <p class="card-exp-desc">Linhagem completa dos dados: da varredura de arquivos locais Markdown/JSON até a vetorização, busca por similaridade de cosseno e injeção de contexto no prompt.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc">📖 Ler Artigo RAG Vetorial ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc" data-doc-title="Memória & RAG Vetorial PGVector">📖 Ler Artigo RAG Vetorial ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -708,7 +827,7 @@ erDiagram
             <h4 class="card-exp-title">Legacy Migration Dataflow</h4>
             <p class="card-exp-desc">Dataflow de sanitização, extração e migração do acervo de dados legados do diretório <code>legacy/</code> para o novo padrão de memória vetorial.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc">📖 Ver Regras de Indexação ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc" data-doc-title="Regras de Indexação RAG">📖 Ver Regras de Indexação ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -727,7 +846,7 @@ erDiagram
             <h4 class="card-exp-title">Observability & Audit Trail</h4>
             <p class="card-exp-desc">Trilha imutável de auditoria gravada na tabela <code>agent_execution_logs</code>, garantindo rastreabilidade de cada decisão tomada pela IA.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc">📖 Ler Guia de Compliance ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Segurança & Compliance Zero Trust">📖 Ler Guia de Compliance ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -746,7 +865,7 @@ erDiagram
             <h4 class="card-exp-title">MCP Server Interconnection Map</h4>
             <p class="card-exp-desc">Mapa de integração via Model Context Protocol (MCP) conectando a IDE aos servidores <code>pcl-cortex</code> e <code>gemini-notebooklm</code>.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc">📖 Ler Protocolo MCP ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Protocolo MCP & Ferramentas">📖 Ler Protocolo MCP ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -797,7 +916,7 @@ erDiagram
             <h4 class="card-exp-title">TLC Spec-Driven Execution Loop</h4>
             <p class="card-exp-desc">Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ler Matriz de Stage Gates ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança TLC v3 & Stage Gates">📖 Ler Matriz de Stage Gates ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -816,7 +935,7 @@ erDiagram
             <h4 class="card-exp-title">OmniRoute LLM Request Lifecycle</h4>
             <p class="card-exp-desc">Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc">📖 Ler Artigo de Runtime ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc" data-doc-title="Runtime & OmniRoute AI Gateway">📖 Ler Artigo de Runtime ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -835,7 +954,7 @@ erDiagram
             <h4 class="card-exp-title">Network & Security Topology</h4>
             <p class="card-exp-desc">Topologia de rede física: isolamento de contêineres na sub-rede Docker <code>pcl-network</code> e malha de criptografia perimetral via Tailscale VPN Mesh.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc">📖 Ler Topologia de Rede ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc" data-doc-title="Topologia de Rede & Criptografia">📖 Ler Topologia de Rede ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -854,7 +973,7 @@ erDiagram
             <h4 class="card-exp-title">Governance & Stage Gates Matrix</h4>
             <p class="card-exp-desc">Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ver Regras de Stage Gate ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Regras e Validação de Stage Gates">📖 Ver Regras de Stage Gate ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -873,7 +992,7 @@ erDiagram
             <h4 class="card-exp-title">Secret Management & Zero Trust</h4>
             <p class="card-exp-desc">Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no <code>.env</code> e auditoria de código.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc">📖 Ler Política Zero Trust ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Política de Segurança Zero Trust">📖 Ler Política Zero Trust ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -892,7 +1011,7 @@ erDiagram
             <h4 class="card-exp-title">Code-Level Class & Interface Specs</h4>
             <p class="card-exp-desc">Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos <code>deliver</code>, <code>validate</code>, <code>render</code>).</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="link-doc">📖 Ler Registros ADR ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="link-doc" data-doc-title="ADRs & Decisões Arquiteturais">📖 Ler Registros ADR ↗</a>
               <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
             </div>
           </div>
@@ -925,13 +1044,31 @@ erDiagram
           <tr><td><code>mcp/</code></td><td>Servidores MCP locais do repositório (<code>pcl-cortex</code>) e manifesto.</td><td>Core AEOS</td></tr>
           <tr><td><code>projects/</code></td><td>Projetos ativos em desenvolvimento assistido por IA (ex: Living Architecture).</td><td>Taxonomia</td></tr>
           <tr><td><code>tools/</code></td><td>Utilitários locais e servidores MCP customizados.</td><td>Taxonomia</td></tr>
-          <tr><td><code>external-references/</code></td><td>Referencias e links aos repositórios originais externos.</td><td>Taxonomia</td></tr>
+          <tr><td><code>external-references/</code></td><td>Referências e links aos repositórios originais externos.</td><td>Taxonomia</td></tr>
           <tr><td><code>legacy/</code></td><td>Histórico, diagramas e códigos antigos mantidos para referência.</td><td>Taxonomia</td></tr>
         </tbody>
       </table>
     </section>
 
   </main>
+
+  <!-- ================================================== -->
+  <!-- MODAL OVERLAY COMPONENT (PAINEL SUSPENSO ESTILIZADO) -->
+  <!-- ================================================== -->
+  <div id="doc-modal-overlay" class="modal-overlay" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge">DOC READER</span>
+          <h3 id="modal-doc-title" class="modal-title">Documento</h3>
+        </div>
+        <button id="modal-close-btn" class="modal-close-btn" title="Fechar (ESC)">✕</button>
+      </div>
+      <div id="modal-doc-body" class="modal-body">
+        <!-- O conteúdo HTML renderizado do Markdown entra aqui dinamicamente -->
+      </div>
+    </div>
+  </div>
 
   <footer>
     <p>PromptCoreLabs_AEOS v1.0 Sovereign — Todos os direitos reservados – 2026</p>
@@ -940,6 +1077,95 @@ erDiagram
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+
+    // SCRIPT DO LEITOR MODAL INTERATIVO
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalOverlay = document.getElementById('doc-modal-overlay');
+      const modalTitle = document.getElementById('modal-doc-title');
+      const modalBody = document.getElementById('modal-doc-body');
+      const closeBtn = document.getElementById('modal-close-btn');
+
+      // Função para abrir o modal com documento renderizado
+      async function openDocModal(url, title) {
+        modalTitle.textContent = title || 'Carregando documento...';
+        modalBody.innerHTML = `
+          <div style="text-align:center; padding: 4rem 1rem; color: var(--accent-cyan);">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+            <p>Carregando documentação soberana...</p>
+          </div>
+        `;
+        
+        modalOverlay.classList.add('active');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden'; // Impede rolagem no fundo
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Status ${response.status}`);
+          const rawText = await response.text();
+
+          // Renderizar Markdown com Marked.js ou HTML puro
+          if (url.endsWith('.md')) {
+            modalBody.innerHTML = marked.parse(rawText);
+          } else {
+            modalBody.innerHTML = rawText;
+          }
+
+          // Ativar Mermaid se houver blocos de diagrama dentro do modal
+          const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
+          if (mermaidBlocks.length > 0) {
+            mermaidBlocks.forEach((block, idx) => {
+              const div = document.createElement('div');
+              div.className = 'mermaid';
+              div.textContent = block.textContent;
+              block.parentNode.replaceWith(div);
+            });
+            await mermaid.run({ nodes: modalBody.querySelectorAll('.mermaid') });
+          }
+
+        } catch (err) {
+          modalBody.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 1.5rem; border-radius: 8px;">
+              <h3>⚠️ Não foi possível carregar este artigo no painel modal</h3>
+              <p style="margin-top:0.5rem;">Causa técnica: ${err.message}</p>
+              <p style="margin-top:1rem;"><a href="${url}" target="_blank" style="color:#38bdf8;">Clique aqui para abrir diretamente o arquivo em nova aba ↗</a></p>
+            </div>
+          `;
+        }
+      }
+
+      // Função para fechar o modal
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        modalOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      // Interceptar cliques em todos os links `.link-doc`
+      document.querySelectorAll('.link-doc').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = link.getAttribute('href');
+          const title = link.getAttribute('data-doc-title') || link.textContent;
+          openDocModal(url, title);
+        });
+      });
+
+      // Fechar no botão X
+      closeBtn.addEventListener('click', closeModal);
+
+      // Fechar ao clicar fora da caixa do modal (no overlay escurecido)
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      // Fechar com a tecla ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
+    });
   </script>
 </body>
 </html>
