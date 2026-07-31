@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptCoreLabs_AEOS — Living Architecture Portal</title>
-  <meta name="description" content="AI Engineering Operating System — Living Architecture Portal & Cortex Archify Engine Showcase">
+  <title>PromptCoreLabs_AEOS — Trilho de Aprendizado & Living Architecture</title>
+  <meta name="description" content="AI Engineering Operating System — Portal de Arquitetura Viva e Guia Narrativo de Aprendizado">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     :root {
       --bg-dark: #0b0f19;
       --bg-card: #131b2e;
-      --bg-card-hover: #1a2642;
+      --bg-card-hover: #1a2744;
       --border-color: #1e293b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
@@ -26,22 +26,26 @@
       --tag-p3-bg: #3b0764; --tag-p3-text: #c084fc; --tag-p3-border: #6b21a8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
-      line-height: 1.6;
-      padding-bottom: 4rem;
+      line-height: 1.7;
+      padding-bottom: 5rem;
     }
     .header {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(11, 15, 25, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.98) 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 1.5rem 2rem 1.5rem;
       text-align: center;
       backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .header h1 {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
@@ -51,196 +55,256 @@
     .header p {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 800px;
-      margin: 0 auto 1.2rem auto;
+      max-width: 850px;
+      margin: 0 auto 1.5rem auto;
     }
-    .badge-bar {
+    
+    /* NAV NARRATIVA BAR */
+    .nav-phases {
       display: flex;
       justify-content: center;
       gap: 0.8rem;
       flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto;
     }
-    .badge {
+    .phase-tab {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 0.35rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      color: var(--accent-cyan);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 2.5rem 0 1.2rem 0;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.5rem;
-    }
-    .notice-banner {
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
       border-radius: 8px;
-      padding: 1rem 1.2rem;
-      margin-bottom: 2rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-      color: #7dd3fc;
-      font-size: 0.95rem;
+      gap: 0.5rem;
     }
-    .grid {
+    .phase-tab:hover {
+      border-color: var(--accent-cyan);
+      background: var(--bg-card-hover);
+      color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+    .phase-num {
+      background: var(--accent-cyan);
+      color: #0b0f19;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    .hero-banner h2 {
+      font-size: 1.4rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.8rem;
+    }
+    .hero-banner p {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-bottom: 1rem;
+    }
+
+    /* FASES SEÇÕES */
+    .phase-section {
+      background: rgba(19, 27, 46, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 3.5rem;
+    }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+    .phase-badge-title {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      color: #0b0f19;
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .phase-title-text {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .phase-intro {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      background: rgba(11, 15, 25, 0.6);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 1rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* GRID EXPANDIDO 2 COLUNAS */
+    .grid-expanded {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
-    .card {
+
+    .card-exp {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       overflow: hidden;
-      transition: all 0.25s ease-in-out;
       display: flex;
       flex-direction: column;
+      transition: all 0.25s ease;
     }
-    .card:hover {
-      transform: translateY(-4px);
+    .card-exp:hover {
       border-color: var(--accent-cyan);
-      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.12);
     }
-    .card-img-wrapper {
+    .card-exp-img {
       width: 100%;
-      height: 210px;
-      background: #070a12;
+      height: 280px;
+      background: #060911;
+      border-bottom: 1px solid var(--border-color);
       overflow: hidden;
       position: relative;
-      border-bottom: 1px solid var(--border-color);
     }
-    .card-img-wrapper img {
+    .card-exp-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.3s ease;
     }
-    .card:hover .card-img-wrapper img {
-      transform: scale(1.04);
+    .card-exp:hover .card-exp-img img {
+      transform: scale(1.03);
     }
-    .card-body {
-      padding: 1.2rem;
+    .card-exp-content {
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
-    .card-header {
+    .card-exp-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
-    .card-id {
+    .card-exp-id {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--accent-cyan);
     }
-    .priority-tag {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    .p0 { background: var(--tag-p0-bg); color: var(--tag-p0-text); border: 1px solid var(--tag-p0-border); }
-    .p1 { background: var(--tag-p1-bg); color: var(--tag-p1-text); border: 1px solid var(--tag-p1-border); }
-    .p2 { background: var(--tag-p2-bg); color: var(--tag-p2-text); border: 1px solid var(--tag-p2-border); }
-    .p3 { background: var(--tag-p3-bg); color: var(--tag-p3-text); border: 1px solid var(--tag-p3-border); }
-    
-    .card-title {
-      font-size: 1.1rem;
+    .card-exp-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      margin-bottom: 0.3rem;
       color: var(--text-main);
+      margin-bottom: 0.5rem;
     }
-    .card-desc {
-      font-size: 0.88rem;
+    .card-exp-desc {
+      font-size: 0.92rem;
       color: var(--text-muted);
       margin-bottom: 1.2rem;
       flex-grow: 1;
+      line-height: 1.6;
     }
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: #7dd3fc;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .btn-action:hover {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-      color: #0b0f19;
-      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
-    }
-    .docs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.2rem;
-      margin-bottom: 3rem;
-    }
-    .doc-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1.2rem;
-      text-decoration: none;
-      color: var(--text-main);
-      transition: all 0.2s ease;
-    }
-    .doc-card:hover {
-      border-color: var(--accent-indigo);
-      transform: translateY(-2px);
-      background: var(--bg-card-hover);
-    }
-    .doc-card h3 {
-      font-size: 1rem;
-      color: var(--accent-blue);
-      margin-bottom: 0.4rem;
+    .card-exp-footer {
       display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      margin-top: auto;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 100%);
+      color: #0b0f19;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
       align-items: center;
       gap: 0.4rem;
     }
-    .doc-card p {
+    .btn-primary:hover {
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+      transform: scale(1.02);
+    }
+    .link-doc {
+      color: var(--accent-indigo);
       font-size: 0.85rem;
-      color: var(--text-muted);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
-    .historical-section {
-      margin-top: 4rem;
-      background: #090d16;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 2rem;
+    .link-doc:hover {
+      color: var(--accent-cyan);
+      text-decoration: underline;
     }
+
     .mermaid-box {
-      background: #0f172a;
+      background: #080c14;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 1.5rem;
       margin: 1.5rem 0;
       overflow-x: auto;
     }
+
+    .taxonomy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+    .taxonomy-table th, .taxonomy-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .taxonomy-table th {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--accent-cyan);
+    }
+    .taxonomy-table tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+
     footer {
       text-align: center;
       margin-top: 4rem;
@@ -255,380 +319,40 @@
 
   <header class="header">
     <h1>PromptCoreLabs_AEOS</h1>
-    <p>AI Engineering Operating System — Living Architecture Portal & Cortex Archify Engine Showcase</p>
-    <div class="badge-bar">
-      <span class="badge">v1.0 Sovereign</span>
-      <span class="badge">18 Diagramas Interativos</span>
-      <span class="badge">TLC Spec-Driven v3</span>
-      <span class="badge">100% Zero Trust</span>
-    </div>
+    <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
+    
+    <!-- TRILHO DE APRENDIZADO NARRATIVO -->
+    <nav class="nav-phases">
+      <a href="#fase-1" class="phase-tab"><span class="phase-num">1</span> Visão Macro & Fundação</a>
+      <a href="#fase-2" class="phase-tab"><span class="phase-num">2</span> Squad de IA & Agentes</a>
+      <a href="#fase-3" class="phase-tab"><span class="phase-num">3</span> Conhecimento & RAG</a>
+      <a href="#fase-4" class="phase-tab"><span class="phase-num">4</span> Infra, Runtime & Governança</a>
+    </nav>
   </header>
 
   <main class="container">
 
-    <div class="notice-banner">
-      <span style="font-size:1.3rem;">💡</span>
-      <div>
-        <strong>Navegação Interativa:</strong> Clique sobre qualquer card visual ou botão abaixo para <strong>abrir uma nova aba no seu navegador</strong> com a aplicação gráfica interativa do <strong>Cortex Archify Engine</strong> (com animações, filtros e exportação).
-      </div>
+    <div class="hero-banner">
+      <h2>🗺️ Trilho de Aprendizado Arquitetural & Living Architecture</h2>
+      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos abaixo. Clique em qualquer card para **abrir uma nova aba no navegador** com a aplicação gráfica interativa do Cortex Archify Engine.</p>
     </div>
 
-    <!-- SEÇÃO 1: CATÁLOGO DE DIAGRAMAS VISUAIS -->
-    <h2 class="section-title">📊 Galeria Visual de Diagramas Interativos (Cortex Archify Engine)</h2>
-    
-    <div class="grid">
-
-      <!-- DIAG-C4-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" alt="DIAG-C4-01 System Context Diagram">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-C4-01 • C4 L1 Context</span>
-            <span class="priority-tag p0">P0 Crítico</span>
-          </div>
-          <h3 class="card-title">System Context Diagram</h3>
-          <p class="card-desc">Visão Macro do PromptCoreLabs_AEOS com Atores e Serviços de Nuvem.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
+    <!-- ================================================== -->
+    <!-- FASE 1: VISÃO MACRO & FUNDAÇÃO -->
+    <!-- ================================================== -->
+    <section id="fase-1" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 1 de 4</span>
+        <h2 class="phase-title-text"> Visão Macro & Fundação do Sistema</h2>
       </div>
 
-      <!-- DIAG-C4-02 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" alt="DIAG-C4-02 Harness Container Topology">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-C4-02 • C4 L2 Containers</span>
-            <span class="priority-tag p0">P0 Crítico</span>
-          </div>
-          <h3 class="card-title">Harness Container Topology</h3>
-          <p class="card-desc">Topologia de Contêineres Docker do Harness (Database, OmniRoute, PaperClip).</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O <em>PromptCoreLabs_AEOS</em> é um sistema operacional soberano concebido para governar o desenvolvimento assistido por IA. Nesta primeira fase, você entenderá o contexto do sistema (atores e fronteira local/nuvem) e a topologia de contêineres do Harness físico.
       </div>
 
-      <!-- DIAG-C4-03 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" alt="DIAG-C4-03 Repository Component Breakdown">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-C4-03 • C4 L3 Components</span>
-            <span class="priority-tag p0">P0 Crítico</span>
-          </div>
-          <h3 class="card-title">Repository Component Breakdown</h3>
-          <p class="card-desc">Detalhamento dos Componentes do Repositório (Foundation, Memory, Squads).</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-SEQ-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" alt="DIAG-SEQ-01 TLC Spec-Driven Execution Loop">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-SEQ-01 • Sequence</span>
-            <span class="priority-tag p0">P0 Crítico</span>
-          </div>
-          <h3 class="card-title">TLC Spec-Driven Execution Loop</h3>
-          <p class="card-desc">Ciclo de Execução TLC v3 e Validação Atômica por Stage Gates.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-SEQ-02 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" alt="DIAG-SEQ-02 OmniRoute LLM Request Lifecycle">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-SEQ-02 • Sequence</span>
-            <span class="priority-tag p1">P1 Alto</span>
-          </div>
-          <h3 class="card-title">OmniRoute LLM Request Lifecycle</h3>
-          <p class="card-desc">Roteamento Inteligente de Inferência com EBITDA Shield e Fallback.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-DAT-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory.png" alt="DIAG-DAT-01 RAG & Memory Data Lineage">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-DAT-01 • Dataflow</span>
-            <span class="priority-tag p1">P1 Alto</span>
-          </div>
-          <h3 class="card-title">RAG & Memory Data Lineage</h3>
-          <p class="card-desc">Fluxo de Ingestão de Dados, Chunking, Embeddings e PGVector.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-LIF-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" alt="DIAG-LIF-01 PCL Cortex Micro-Loop Lifecycle">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-LIF-01 • Lifecycle</span>
-            <span class="priority-tag p1">P1 Alto</span>
-          </div>
-          <h3 class="card-title">PCL Cortex Micro-Loop Lifecycle</h3>
-          <p class="card-desc">Máquina de Estados de Micro-Execução dos Agentes.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-INF-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" alt="DIAG-INF-01 Network & Security Topology">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-INF-01 • Infrastructure</span>
-            <span class="priority-tag p1">P1 Alto</span>
-          </div>
-          <h3 class="card-title">Network & Security Topology</h3>
-          <p class="card-desc">Rede Perimetral, Tunelamento Tailscale VPN e Segurança Zero Trust.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-AGT-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" alt="DIAG-AGT-01 Squad Orchestration & Roles">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-AGT-01 • Component</span>
-            <span class="priority-tag p1">P1 Alto</span>
-          </div>
-          <h3 class="card-title">Squad Orchestration & Roles</h3>
-          <p class="card-desc">Orquestração dos 15 Agentes da Squad por Camadas Executivas.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-MCP-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" alt="DIAG-MCP-01 MCP Server Interconnection Map">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-MCP-01 • Dataflow</span>
-            <span class="priority-tag p2">P2 Médio</span>
-          </div>
-          <h3 class="card-title">MCP Server Interconnection Map</h3>
-          <p class="card-desc">Mapa de Interconexão dos Servidores MCP (`pcl-cortex` e `notebooklm`).</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-BS-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/workflow-bootstrap-onboarding.png" alt="DIAG-BS-01 Bootstrap & Onboarding Pipeline">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-BS-01 • Workflow</span>
-            <span class="priority-tag p2">P2 Médio</span>
-          </div>
-          <h3 class="card-title">Bootstrap & Onboarding Pipeline</h3>
-          <p class="card-desc">Fluxo de Onboarding e Protocolo de Handoff de Sessões.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-GOV-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" alt="DIAG-GOV-01 Governance & Stage Gates Matrix">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-GOV-01 • Workflow</span>
-            <span class="priority-tag p2">P2 Médio</span>
-          </div>
-          <h3 class="card-title">Governance & Stage Gates Matrix</h3>
-          <p class="card-desc">Matriz de Aprovação dos 5 Stage Gates Sequenciais.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-DEV-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" alt="DIAG-DEV-01 Developer Experience & IDE Loop">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-DEV-01 • Sequence</span>
-            <span class="priority-tag p2">P2 Médio</span>
-          </div>
-          <h3 class="card-title">Developer Experience & IDE Loop</h3>
-          <p class="card-desc">Loop de Experiência do Desenvolvedor e Integração com IDEs.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-LEG-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" alt="DIAG-LEG-01 Legacy Migration Dataflow">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-LEG-01 • Dataflow</span>
-            <span class="priority-tag p2">P2 Médio</span>
-          </div>
-          <h3 class="card-title">Legacy Migration Dataflow</h3>
-          <p class="card-desc">Estratégia de Ingestão e Migração do Acervo Legado.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-PRJ-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" alt="DIAG-PRJ-01 Projects Taxonomy & Isolation">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-PRJ-01 • Component</span>
-            <span class="priority-tag p3">P3 Evolutivo</span>
-          </div>
-          <h3 class="card-title">Projects Taxonomy & Isolation</h3>
-          <p class="card-desc">Taxonomia e Isolamento do Ambiente de Projetos.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-SEC-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" alt="DIAG-SEC-01 Secret Management & Zero Trust">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-SEC-01 • Security</span>
-            <span class="priority-tag p3">P3 Evolutivo</span>
-          </div>
-          <h3 class="card-title">Secret Management & Zero Trust</h3>
-          <p class="card-desc">Gestão Sobrevivente de Segredos e Varredura de Vulnerabilidades.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-OBS-01 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/obs-audit-trail.png" alt="DIAG-OBS-01 Observability & Audit Trail">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-OBS-01 • Dataflow</span>
-            <span class="priority-tag p3">P3 Evolutivo</span>
-          </div>
-          <h3 class="card-title">Observability & Audit Trail</h3>
-          <p class="card-desc">Trilha Imutável de Auditoria e Observabilidade de Execuções.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-      <!-- DIAG-C4-04 -->
-      <div class="card">
-        <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="card-img-wrapper">
-          <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" alt="DIAG-C4-04 Code-Level Class & Interface Specs">
-        </a>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-id">DIAG-C4-04 • C4 L4 Code</span>
-            <span class="priority-tag p3">P3 Evolutivo</span>
-          </div>
-          <h3 class="card-title">Code-Level Class & Interface Specs</h3>
-          <p class="card-desc">Especificação de Classes e Interfaces do Motor Cortex Archify.</p>
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="btn-action">🌐 Abrir Diagrama Interativo ↗</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- SEÇÃO 2: ÍNDICE DE DRILL-DOWN -->
-    <h2 class="section-title">📚 Módulos de Documentação & Suíte Spec-Driven</h2>
-    
-    <div class="docs-grid">
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="doc-card">
-        <h3>🎯 Estratégia & Visão</h3>
-        <p>Visão corporativa, OKRs, North Star Metric e os 4 princípios fundacionais.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="doc-card">
-        <h3>📐 Modelo C4 & Diagramas</h3>
-        <p>Níveis C4 (Contexto, Contêineres, Componentes, Código) e o catálogo de 18 diagramas.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="doc-card">
-        <h3>🤖 Agents & Squads</h3>
-        <p>Manual dos 15 Agentes inteligentes, papéis executivos e matriz RACI.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="doc-card">
-        <h3>🧠 Memory & RAG Vetorial</h3>
-        <p>Ingestão RAG, chunking inteligente, embeddings 768D e PGVector PostgreSQL 17.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="doc-card">
-        <h3>🐳 Infraestrutura & Docker</h3>
-        <p>Contêineres Docker, GPUs locais e tunelamento seguro Tailscale VPN.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="doc-card">
-        <h3>⚡ Runtime & OmniRoute</h3>
-        <p>Proxy de inferência (:20130), EBITDA Shield e PaperClip Dashboard (:3100).</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="doc-card">
-        <h3>🛡️ Governança TLC v3</h3>
-        <p>Matriz dos 5 Stage Gates sequenciais e regras de aprovação atômica.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="doc-card">
-        <h3>🔌 Integrações & MCP</h3>
-        <p>Servidores MCP (`pcl-cortex`, `notebooklm`) e ferramentas stdio.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="doc-card">
-        <h3>🔒 Segurança Zero Trust</h3>
-        <p>Diretriz Zero Secret Leak, varreduras do CISO Agent e isolamento perimetral.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="doc-card">
-        <h3>📜 ADRs & Decisões</h3>
-        <p>Registros imutáveis das decisões arquiteturais históricas (ADR-0001 a ADR-0007).</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="doc-card">
-        <h3>📖 Glossário & Taxonomia</h3>
-        <p>Dicionário oficial de termos e conceitos da plataforma PCL AEOS.</p>
-      </a>
-      <a href="projects/Living%20Architecture%20PCL%20AEOS/.specs/specify.md" class="doc-card">
-        <h3>📄 Spec-Driven: specify.md</h3>
-        <p>Especificação constitucional de requisitos funcionais e não-funcionais.</p>
-      </a>
-    </div>
-
-    <!-- SEÇÃO HISTÓRICA PRESERVADA INTEGRALMENTE -->
-    <div class="historical-section">
-      <h2 style="color: var(--accent-cyan); margin-bottom: 1rem;">📜 Documentação e Estrutura Histórica do Repositório</h2>
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Fluxo do Conhecimento no AEOS</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">O conhecimento nasce nas diretrizes constitucionais e flui rigorosamente até os projetos ativos:</p>
       
-      <p style="margin-bottom: 1rem;">O <strong>PromptCoreLabs_AEOS</strong> é um Sistema Operacional de Engenharia Assistida por Inteligência Artificial concebido para governar, estruturar e gerenciar o desenvolvimento de software e a orquestração de squads de agentes inteligentes com total soberania de dados.</p>
-
-      <h3 style="color: var(--accent-blue); margin: 1.5rem 0 0.5rem 0;">Mapa de Arquitetura Lógica (Fluxo do Conhecimento)</h3>
       <div class="mermaid-box">
         <pre class="mermaid">
 graph TD
@@ -645,7 +369,104 @@ graph TD
         </pre>
       </div>
 
-      <h3 style="color: var(--accent-blue); margin: 1.5rem 0 0.5rem 0;">UML de Sequência: Fluxo de Desenvolvimento de Agentes</h3>
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas Fundacionais (Níveis C4 L1 e L2)</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-C4-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" alt="DIAG-C4-01 System Context Diagram">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-01 • C4 Level 1</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">System Context Diagram</h4>
+            <p class="card-exp-desc">Mapeia o operador humano, a fronteira local protegida por VPN Mesh Tailscale, as conexões de inferência na nuvem e o repositório remoto GitHub.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="link-doc">📖 Ler Artigo de Estratégia ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-C4-02 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" alt="DIAG-C4-02 Harness Container Topology">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-02 • C4 Level 2</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Harness Container Topology</h4>
+            <p class="card-exp-desc">Detalha os 3 contêineres Docker principais: <code>pcl-db</code> (PostgreSQL + PGVector), <code>pcl-omniroute</code> (Proxy de Inferência) e <code>pcl-paperclip</code> (Dashboard de Orquestração).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc">📖 Ler Artigo de Infraestrutura ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-C4-03 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" alt="DIAG-C4-03 Repository Component Breakdown">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-03 • C4 Level 3</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Repository Component Breakdown</h4>
+            <p class="card-exp-desc">Exibe a decomposição dos 14 diretórios chave do repositório consolidado e o fluxo de dados entre governança, memória e execução.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="link-doc">📖 Ler Artigo do Modelo C4 ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-PRJ-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" alt="DIAG-PRJ-01 Projects Taxonomy">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-PRJ-01 • Component Isolation</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Projects Taxonomy & Isolation</h4>
+            <p class="card-exp-desc">Demonstra as regras de isolamento soberano dos projetos contidos no diretório <code>projects/</code> (como a Living Architecture e o Crialli).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="link-doc">📖 Ler Glossário Oficial ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 2: SQUAD DE IA & AGENTES -->
+    <!-- ================================================== -->
+    <section id="fase-2" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 2 de 4</span>
+        <h2 class="phase-title-text">🤖 Squad de IA & Agentes Inteligentes</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O ecossistema PCL AEOS orquestra uma squad com <strong>15 Agentes Inteligentes especialistas</strong>. Nesta etapa, você verá como o Planner, Builder, QA e Auditor colaboram no protocolo de mensagens e na governança do PaperClip.
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">UML de Sequência: Colaboração Atômica entre Agentes</h3>
+      
       <div class="mermaid-box">
         <pre class="mermaid">
 sequenceDiagram
@@ -672,7 +493,104 @@ sequenceDiagram
         </pre>
       </div>
 
-      <h3 style="color: var(--accent-blue); margin: 1.5rem 0 0.5rem 0;">Modelo de Dados da Memória Vetorial (ERD)</h3>
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas da Squad e Ciclo de Vida dos Agentes</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-AGT-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" alt="DIAG-AGT-01 Squad Orchestration & Roles">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-AGT-01 • Component / Squad</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">Squad Orchestration & Roles</h4>
+            <p class="card-exp-desc">Mapeia os 15 agentes organizados nas 4 camadas: Estratégia/Negócios, Engenharia/Especificação, Execução de Código e Qualidade/Segurança.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc">📖 Manual dos 15 Agentes ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-LIF-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" alt="DIAG-LIF-01 PCL Cortex Micro-Loop Lifecycle">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-LIF-01 • State Machine</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">PCL Cortex Micro-Loop Lifecycle</h4>
+            <p class="card-exp-desc">Máquina de estados de micro-execução que governa as retentativas do agente Builder e as transições de status (IDLE, PLANNING, WORKING, QA_REVIEW).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc">📖 Ver Matriz RACI da Squad ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-DEV-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" alt="DIAG-DEV-01 Developer Experience & IDE Loop">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-DEV-01 • Sequence Diagram</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Developer Experience & IDE Loop</h4>
+            <p class="card-exp-desc">Sequência de interação contínua entre o desenvolvedor humano, a IDE assistida por IA, os servidores MCP locais e os relatórios de validação.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc">📖 Ler Artigo de Integrações MCP ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-BS-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/workflow-bootstrap-onboarding.png" alt="DIAG-BS-01 Bootstrap & Onboarding Pipeline">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-BS-01 • Workflow</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Bootstrap & Onboarding Pipeline</h4>
+            <p class="card-exp-desc">Pipeline de inicialização de novas sessões de IA e transmissão soberana de contexto entre tarefas (Handoff Protocol).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ver Guia de Onboarding ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 3: CONHECIMENTO & RAG VETORIAL -->
+    <!-- ================================================== -->
+    <section id="fase-3" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 3 de 4</span>
+        <h2 class="phase-title-text">🧠 Conhecimento & Memória Persistente (RAG)</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O AEOS possui uma memória vetorial local relacional baseada em PostgreSQL 17 + PGVector. Esta fase cobre como os documentos são fragmentados em chunks, indexados em vetores de 768 dimensões e recuperados no RAG.
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Modelo de Dados da Memória Vetorial (ERD PGVector)</h3>
+      
       <div class="mermaid-box">
         <pre class="mermaid">
 erDiagram
@@ -696,7 +614,265 @@ erDiagram
     document_chunks ||--o{ agent_execution_logs : references
         </pre>
       </div>
-    </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas de Linhagem de Dados e Recuperação Vetorial</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-DAT-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory.png" alt="DIAG-DAT-01 RAG & Memory Data Lineage">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-DAT-01 • Dataflow</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">RAG & Memory Data Lineage</h4>
+            <p class="card-exp-desc">Linhagem completa dos dados: da varredura de arquivos locais Markdown/JSON até a vetorização, busca por similaridade de cosseno e injeção de contexto no prompt.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc">📖 Ler Artigo RAG Vetorial ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-LEG-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" alt="DIAG-LEG-01 Legacy Migration Dataflow">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-LEG-01 • Dataflow</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Legacy Migration Dataflow</h4>
+            <p class="card-exp-desc">Dataflow de sanitização, extração e migração do acervo de dados legados do diretório <code>legacy/</code> para o novo padrão de memória vetorial.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc">📖 Ver Regras de Indexação ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-OBS-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/obs-audit-trail.png" alt="DIAG-OBS-01 Observability & Audit Trail">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-OBS-01 • Observability</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Observability & Audit Trail</h4>
+            <p class="card-exp-desc">Trilha imutável de auditoria gravada na tabela <code>agent_execution_logs</code>, garantindo rastreabilidade de cada decisão tomada pela IA.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc">📖 Ler Guia de Compliance ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-MCP-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" alt="DIAG-MCP-01 MCP Server Interconnection Map">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-MCP-01 • MCP Server Map</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">MCP Server Interconnection Map</h4>
+            <p class="card-exp-desc">Mapa de integração via Model Context Protocol (MCP) conectando a IDE aos servidores <code>pcl-cortex</code> e <code>gemini-notebooklm</code>.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc">📖 Ler Protocolo MCP ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 4: INFRAESTRUTURA, RUNTIME E GOVERNANÇA -->
+    <!-- ================================================== -->
+    <section id="fase-4" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 4 de 4</span>
+        <h2 class="phase-title-text">🛡️ Infraestrutura, Runtime & Governança</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do Harness Local (Docker)</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Comandos para inicialização dos contêineres <code>pcl-db</code>, <code>pcl-omniroute</code> e <code>pcl-paperclip</code>:</p>
+
+      <div class="mermaid-box" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #38bdf8;">
+        # Inicializar todos os serviços localmente<br>
+        docker compose up -d<br><br>
+        # Acompanhar logs de inferência e governança<br>
+        docker compose logs -f<br><br>
+        # Parar contêineres preservando volumes persistentes<br>
+        docker compose down
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas de Operação, Segurança e Stage Gates</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-SEQ-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" alt="DIAG-SEQ-01 TLC Spec-Driven Execution Loop">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEQ-01 • Sequence</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">TLC Spec-Driven Execution Loop</h4>
+            <p class="card-exp-desc">Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ler Matriz de Stage Gates ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-SEQ-02 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" alt="DIAG-SEQ-02 OmniRoute LLM Request Lifecycle">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEQ-02 • Sequence</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">OmniRoute LLM Request Lifecycle</h4>
+            <p class="card-exp-desc">Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc">📖 Ler Artigo de Runtime ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-INF-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" alt="DIAG-INF-01 Network & Security Topology">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-INF-01 • Infrastructure</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">Network & Security Topology</h4>
+            <p class="card-exp-desc">Topologia de rede física: isolamento de contêineres na sub-rede Docker <code>pcl-network</code> e malha de criptografia perimetral via Tailscale VPN Mesh.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc">📖 Ler Topologia de Rede ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-GOV-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" alt="DIAG-GOV-01 Governance & Stage Gates Matrix">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-GOV-01 • Governance Matrix</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Governance & Stage Gates Matrix</h4>
+            <p class="card-exp-desc">Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc">📖 Ver Regras de Stage Gate ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-SEC-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" alt="DIAG-SEC-01 Secret Management & Zero Trust">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEC-01 • Security / Zero Trust</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Secret Management & Zero Trust</h4>
+            <p class="card-exp-desc">Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no <code>.env</code> e auditoria de código.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc">📖 Ler Política Zero Trust ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-C4-04 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" alt="DIAG-C4-04 Code-Level Class & Interface Specs">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-04 • C4 Level 4</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Code-Level Class & Interface Specs</h4>
+            <p class="card-exp-desc">Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos <code>deliver</code>, <code>validate</code>, <code>render</code>).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="link-doc">📖 Ler Registros ADR ↗</a>
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO DE TAXONOMIA COMPLETA DO REPOSITÓRIO -->
+    <section style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-top: 3rem;">
+      <h3 style="color: var(--accent-cyan); margin-bottom: 1rem;">📑 Taxonomia Completa do Repositório (14 Diretórios)</h3>
+      <table class="taxonomy-table">
+        <thead>
+          <tr>
+            <th>Diretório</th>
+            <th>Responsabilidade Arquitetural</th>
+            <th>Tipo / Escopo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>foundation/</code></td><td>Diretrizes fundamentais e constitucionais do ecossistema.</td><td>Core AEOS</td></tr>
+          <tr><td><code>governance/</code></td><td>Regras operacionais, papéis de tomada de decisão e Stage Gates.</td><td>Core AEOS</td></tr>
+          <tr><td><code>bootstrap/</code></td><td>Protocolos de onboarding e handoffs de sessões.</td><td>Core AEOS</td></tr>
+          <tr><td><code>knowledge/</code></td><td>Playbooks operacionais, padrões (PCL Cortex/TLC/ADR) e catálogos.</td><td>Core AEOS</td></tr>
+          <tr><td><code>memory/</code></td><td>RAG, PGVector local, índices e histórico de Execution Cells.</td><td>Core AEOS</td></tr>
+          <tr><td><code>agents/</code></td><td>Especificações e System Prompts dos agentes da squad de IA.</td><td>Core AEOS</td></tr>
+          <tr><td><code>runtime/</code></td><td>Infraestrutura local de contêineres e logs de execução.</td><td>Core AEOS</td></tr>
+          <tr><td><code>templates/</code></td><td>Scaffolding de documentos em branco (specify, design, adr).</td><td>Core AEOS</td></tr>
+          <tr><td><code>integrations/</code></td><td>Conexões com GitHub, Tailscale e Model Context Protocol (MCP).</td><td>Core AEOS</td></tr>
+          <tr><td><code>mcp/</code></td><td>Servidores MCP locais do repositório (<code>pcl-cortex</code>) e manifesto.</td><td>Core AEOS</td></tr>
+          <tr><td><code>projects/</code></td><td>Projetos ativos em desenvolvimento assistido por IA (ex: Living Architecture).</td><td>Taxonomia</td></tr>
+          <tr><td><code>tools/</code></td><td>Utilitários locais e servidores MCP customizados.</td><td>Taxonomia</td></tr>
+          <tr><td><code>external-references/</code></td><td>Referências e links aos repositórios originais externos.</td><td>Taxonomia</td></tr>
+          <tr><td><code>legacy/</code></td><td>Histórico, diagramas e códigos antigos mantidos para referência.</td><td>Taxonomia</td></tr>
+        </tbody>
+      </table>
+    </section>
 
   </main>
 

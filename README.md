@@ -1,103 +1,29 @@
 # PromptCoreLabs_AEOS (AI Engineering Operating System)
 
 ==================================================
-🌟 DESTAQUE PRINCIPAL: LIVING ARCHITECTURE PCL AEOS
+🌟 TRILHO DE APRENDIZADO ARQUITETURAL & LIVING ARCHITECTURE
 ==================================================
 
 Este portal é a **Única Fonte de Verdade (Single Source of Truth)** e a **Living Documentation (Documentação Viva e Dinâmica)** para o ecossistema **PromptCoreLabs_AEOS** (AI Engineering Operating System), conduzido pela inteligência arquitetural **Cortex**.
 
-> 💡 **Dica de Navegação**: Clique sobre qualquer imagem miniatura ou título de card abaixo para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **Cortex Archify Engine** (com animações de sinal, alternância entre modo escuro/claro, filtros de visões e exportação em alta resolução).
+> 💡 **Guia Narrativo**: Para navegar intuitivamente pela plataforma, siga os **4 Passos Sequenciais** abaixo. Clique sobre qualquer card visual para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **Cortex Archify Engine**.
 
 ---
 
-## 📊 Galeria Visual de Diagramas Interativos (Cortex Archify Engine)
+## 🧭 Trilho de Aprendizado Arquitetural em 4 Fases
 
-### 🔴 Diagramas Críticos (P0)
-
-| Pré-Visualização (Thumbnail PNG) | Diagrama & ID | Nível C4 / Dimensão | Aplicação Interativa (Nova Aba) |
-|:---:|---|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" width="300" alt="DIAG-C4-01"></a> | **DIAG-C4-01**<br>System Context Diagram | C4 Level 1 (Context) | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" width="300" alt="DIAG-C4-02"></a> | **DIAG-C4-02**<br>Harness Container Topology | C4 Level 2 (Containers) | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" width="300" alt="DIAG-C4-03"></a> | **DIAG-C4-03**<br>Repository Component Breakdown | C4 Level 3 (Components) | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" width="300" alt="DIAG-SEQ-01"></a> | **DIAG-SEQ-01**<br>TLC Spec-Driven Execution Loop | Sequence / Workflow | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
+1. **[Passo 1: Visão Macro & Fundação](#passo-1-visão-macro--fundação-do-sistema)** — Conceito geral, Fronteiras C4 L1 e Contêineres Docker C4 L2.
+2. **[Passo 2: Squad de IA & Agentes](#passo-2-squad-de-ia--agentes-inteligentes)** — Manual dos 15 Agentes, Micro-Loop Cortex e Sequência DevEx.
+3. **[Passo 3: Conhecimento & RAG Vetorial](#passo-3-conhecimento--memória-persistente-rag)** — Ingestão RAG, Embeddings 768D e ERD PGVector.
+4. **[Passo 4: Infra, Runtime & Governança](#passo-4-infraestrutura-runtime--governança)** — AI Gateway OmniRoute, Tailscale e os 5 Stage Gates TLC v3.
 
 ---
 
-### 🟡 Diagramas de Alta Prioridade (P1)
+### PASSO 1: VISÃO MACRO & FUNDAÇÃO DO SISTEMA
 
-| Pré-Visualização (Thumbnail PNG) | Diagrama & ID | Nível C4 / Dimensão | Aplicação Interativa (Nova Aba) |
-|:---:|---|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="DIAG-SEQ-02"></a> | **DIAG-SEQ-02**<br>OmniRoute LLM Request Lifecycle | Sequence Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory.png" width="300" alt="DIAG-DAT-01"></a> | **DIAG-DAT-01**<br>RAG & Memory Data Lineage | Dataflow Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" width="300" alt="DIAG-LIF-01"></a> | **DIAG-LIF-01**<br>PCL Cortex Micro-Loop Lifecycle | State Machine / Lifecycle | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="DIAG-INF-01"></a> | **DIAG-INF-01**<br>Network & Security Topology | Infrastructure | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" width="300" alt="DIAG-AGT-01"></a> | **DIAG-AGT-01**<br>Squad Orchestration & Roles | Component / Workflow | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
+> **O que você vai aprender aqui:** O *PromptCoreLabs_AEOS* é um sistema operacional soberano concebido para governar o desenvolvimento assistido por IA. Nesta primeira fase, você entenderá o contexto do sistema (atores e fronteira local/nuvem) e a topologia de contêineres do Harness físico.
 
----
-
-### 🔵 Diagramas de Subsistemas & Operação (P2)
-
-| Pré-Visualização (Thumbnail PNG) | Diagrama & ID | Nível C4 / Dimensão | Aplicação Interativa (Nova Aba) |
-|:---:|---|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" width="300" alt="DIAG-MCP-01"></a> | **DIAG-MCP-01**<br>MCP Server Interconnection Map | Component / Dataflow | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/workflow-bootstrap-onboarding.png" width="300" alt="DIAG-BS-01"></a> | **DIAG-BS-01**<br>Bootstrap & Onboarding Pipeline | Workflow Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="DIAG-GOV-01"></a> | **DIAG-GOV-01**<br>Governance & Stage Gates Matrix | Workflow Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" width="300" alt="DIAG-DEV-01"></a> | **DIAG-DEV-01**<br>Developer Experience & IDE Loop | Sequence Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" width="300" alt="DIAG-LEG-01"></a> | **DIAG-LEG-01**<br>Legacy Migration Dataflow | Dataflow Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-
----
-
-### 💜 Diagramas Evolutivos & Deep-Dive (P3)
-
-| Pré-Visualização (Thumbnail PNG) | Diagrama & ID | Nível C4 / Dimensão | Aplicação Interativa (Nova Aba) |
-|:---:|---|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" width="300" alt="DIAG-PRJ-01"></a> | **DIAG-PRJ-01**<br>Projects Taxonomy & Isolation | Component Diagram | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="DIAG-SEC-01"></a> | **DIAG-SEC-01**<br>Secret Management & Zero Trust | Infrastructure / Security | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/obs-audit-trail.png" width="300" alt="DIAG-OBS-01"></a> | **DIAG-OBS-01**<br>Observability & Audit Trail | Dataflow / Lifecycle | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" width="300" alt="DIAG-C4-04"></a> | **DIAG-C4-04**<br>Code-Level Class & Interface Specs | C4 Level 4 (Code) | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Diagrama Interativo**</a> |
-
----
-
-## 📚 ÍNDICE DE MÓDULOS & DRILL-DOWN PARA O REPOSITÓRIO
-
-### 🏛️ Módulos de Documentação de Domínio (`projects/Living Architecture PCL AEOS/docs/`)
-- 🎯 **[Estratégia & Visão](projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md)** — Visão corporativa, OKRs e North Star Metric.
-- 📐 **[Modelo C4 & Diagramas](projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md)** — Navegação C4 (L1 Contexto, L2 Contêineres, L3 Componentes, L4 Código).
-- 🤖 **[Agents & Squads](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)** — Especificação detalhada dos 15 Agentes e matriz RACI.
-- 🧠 **[Memory & RAG Vetorial](projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)** — Pipeline RAG, embeddings 768D e PGVector no PostgreSQL 17.
-- 🐳 **[Infraestrutura & Docker Harness](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md)** — Contêineres Docker, GPUs locais e Tailscale.
-- ⚡ **[Runtime & AI Gateway OmniRoute](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md)** — Roteamento de inferência e EBITDA Shield.
-- 🛡️ **[Governança TLC Spec-Driven v3](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md)** — Matriz dos 5 Stage Gates sequenciais.
-- 🔌 **[Integrações & Protocolo MCP](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md)** — Servidores MCP (`pcl-cortex`, `gemini-notebooklm`).
-- 🔒 **[Segurança & Compliance Zero Trust](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md)** — Diretriz Zero Secret Leak e varredura CISO.
-- 📜 **[ADRs & Decisões Arquiteturais](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md)** — Registros imutáveis de decisões (ADR-0001 a ADR-0007).
-- 📖 **[Glossário & Taxonomia Oficial](projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md)** — Dicionário completo de termos da plataforma.
-
-### 📜 Suíte de Governança do Projeto (`.specs/`)
-- 📄 **[specify.md](projects/Living%20Architecture%20PCL%20AEOS/.specs/specify.md)** — Requisitos Funcionais (FR) e Não Funcionais (NFR).
-- 📄 **[design.md](projects/Living%20Architecture%20PCL%20AEOS/.specs/design.md)** — Especificação visual de layout, paleta de cores e matriz de rastreabilidade.
-- 📄 **[tasks.md](projects/Living%20Architecture%20PCL%20AEOS/.specs/tasks.md)** — Backlog atômico de tarefas concluídas (16/16).
-- 📄 **[validate.md](projects/Living%20Architecture%20PCL%20AEOS/.specs/validate.md)** — Relatório final de conformidade de QA e selo de aprovação.
-
----
-
-==================================================
-DOCUMENTAÇÃO E ESTRUTURA HISTÓRICA DO REPOSITÓRIO
-==================================================
-
-### APRESENTAÇÃO
-
-O **PromptCoreLabs_AEOS** é um Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System) concebido para governar, estruturar e gerenciar o desenvolvimento de software e a orquestração de squads de agentes inteligentes com total soberania de dados.
-
-Este repositório consolidado serve como a **Única Fonte de Verdade (Single Source of Truth)** para a plataforma, organizando de forma rigorosa as regras de governança, o conhecimento, a memória persistente e os projetos de engenharia.
-
-Para uma visão aprofundada da arquitetura do sistema e da topologia de contêineres do Harness físico, consulte os diagramas da [Arquitetura Corporativa C4 Model](architecture/c4-model.md).
-
----
-
-### MAPA DE ARQUITETURA LÓGICA (FLUXO DO CONHECIMENTO)
-
-O conhecimento no AEOS nasce nos fundamentos e diretrizes e é materializado através do Runtime no mundo externo:
+#### Fluxo do Conhecimento no AEOS
 
 ```mermaid
 graph TD
@@ -113,32 +39,22 @@ graph TD
     style G fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff
 ```
 
----
+#### Diagramas Fundacionais (Níveis C4 L1 e L2)
 
-### TAXONOMIA E ESTRUTURA DO REPOSITÓRIO
-
-| Diretório | Responsabilidade Arquitetural | Tipo |
-|---|---|---|
-| `foundation/` | Diretrizes fundamentais e constitucionais do ecossistema. | Core AEOS |
-| `governance/` | Regras operacionais, papéis de tomada de decisão e Stage Gates. | Core AEOS |
-| `bootstrap/` | Protocolos de onboarding e handoffs de sessões. | Core AEOS |
-| `knowledge/` | Playbooks operacionais, padrões (PCL Cortex/TLC/ADR) e catálogos. | Core AEOS |
-| `memory/` | RAG, PGVector local, índices e histórico de Execution Cells. | Core AEOS |
-| `agents/` | Especificações e System Prompts dos agentes da squad de IA. | Core AEOS |
-| `runtime/` | Infraestrutura local de contêineres e logs de execução. | Core AEOS |
-| `templates/` | Scaffolding de documentos em branco (specify, design, adr). | Core AEOS |
-| `integrations/` | Conexões com GitHub, Tailscale e Model Context Protocol (MCP). | Core AEOS |
-| `mcp/` | Servidores MCP locais do repositório (`pcl-cortex`) e manifesto `mcp.config.json`. | Core AEOS |
-| `projects/` | Projetos ativos em desenvolvimento assistido por IA. | Taxonomia |
-| `tools/` | Utilitários locais e servidores MCP customizados. | Taxonomia |
-| `external-references/` | Referências e links aos repositórios originais externos. | Taxonomia |
-| `legacy/` | Histórico, diagramas e códigos antigos mantidos para referência. | Taxonomia |
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" width="300" alt="DIAG-C4-01"></a> | **DIAG-C4-01 • System Context Diagram**<br>Mapeia o operador humano, a fronteira local protegida por VPN Mesh Tailscale, as conexões de inferência na nuvem e o repositório remoto GitHub. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo de Estratégia](projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" width="300" alt="DIAG-C4-02"></a> | **DIAG-C4-02 • Harness Container Topology**<br>Detalha os 3 contêineres Docker principais: `pcl-db` (PostgreSQL + PGVector), `pcl-omniroute` (Proxy de Inferência) e `pcl-paperclip` (Dashboard de Orquestração). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo de Infraestrutura](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" width="300" alt="DIAG-C4-03"></a> | **DIAG-C4-03 • Repository Component Breakdown**<br>Exibe a decomposição dos 14 diretórios chave do repositório consolidado e o fluxo de dados entre governança, memória e execução. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo do Modelo C4](projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" width="300" alt="DIAG-PRJ-01"></a> | **DIAG-PRJ-01 • Projects Taxonomy & Isolation**<br>Demonstra as regras de isolamento soberano dos projetos contidos no diretório `projects/` (como a Living Architecture e o Crialli). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Glossário Oficial](projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md) |
 
 ---
 
-### UML DE SEQUÊNCIA: FLUXO DE DESENVOLVIMENTO AGENTES
+### PASSO 2: SQUAD DE IA & AGENTES INTELIGENTES
 
-O ciclo de vida das tarefas (TLC Spec-Driven v3 e PCL Cortex Micro-Loop) e a colaboração entre os agentes do PaperClip segue o protocolo de mensagens:
+> **O que você vai aprender aqui:** O ecossistema PCL AEOS orquestra uma squad com **15 Agentes Inteligentes especialistas**. Nesta etapa, você verá como o Planner, Builder, QA e Auditor colaboram no protocolo de mensagens e na governança do PaperClip.
+
+#### UML de Sequência: Colaboração Atômica entre Agentes
 
 ```mermaid
 sequenceDiagram
@@ -164,11 +80,22 @@ sequenceDiagram
     end
 ```
 
+#### Diagramas da Squad e Ciclo de Vida dos Agentes
+
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" width="300" alt="DIAG-AGT-01"></a> | **DIAG-AGT-01 • Squad Orchestration & Roles**<br>Mapeia os 15 agentes organizados nas 4 camadas: Estratégia/Negócios, Engenharia/Especificação, Execução de Código e Qualidade/Segurança. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Manual dos 15 Agentes](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" width="300" alt="DIAG-LIF-01"></a> | **DIAG-LIF-01 • PCL Cortex Micro-Loop Lifecycle**<br>Máquina de estados de micro-execução que governa as retentativas do agente Builder e as transições de status (IDLE, PLANNING, WORKING, QA_REVIEW). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Matriz RACI da Squad](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" width="300" alt="DIAG-DEV-01"></a> | **DIAG-DEV-01 • Developer Experience & IDE Loop**<br>Sequência de interação contínua entre o desenvolvedor humano, a IDE assistida por IA, os servidores MCP locais e os relatórios de validação. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Integrações MCP](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/workflow-bootstrap-onboarding.png" width="300" alt="DIAG-BS-01"></a> | **DIAG-BS-01 • Bootstrap & Onboarding Pipeline**<br>Pipeline de inicialização de novas sessões de IA e transmissão soberana de contexto entre tarefas (Handoff Protocol). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Onboarding](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+
 ---
 
-### MODELO DE DADOS DA MEMÓRIA VETORIAL (ERD)
+### PASSO 3: CONHECIMENTO & MEMÓRIA PERSISTENTE (RAG)
 
-Estrutura relacional do PGVector no contêiner `pcl-db` para suporte ao RAG e ao histórico de contexto dos agentes:
+> **O que você vai aprender aqui:** O AEOS possui uma memória vetorial local relacional baseada em PostgreSQL 17 + PGVector. Esta fase cobre como os documentos são fragmentados em chunks, indexados em vetores de 768 dimensões e recuperados no RAG.
+
+#### Modelo de Dados da Memória Vetorial (ERD PGVector)
 
 ```mermaid
 erDiagram
@@ -192,41 +119,68 @@ erDiagram
     document_chunks ||--o{ agent_execution_logs : references
 ```
 
+#### Diagramas de Linhagem de Dados e Recuperação Vetorial
+
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory.png" width="300" alt="DIAG-DAT-01"></a> | **DIAG-DAT-01 • RAG & Memory Data Lineage**<br>Linhagem completa dos dados: da varredura de arquivos locais Markdown/JSON até a vetorização, busca por similaridade de cosseno e injeção de contexto no prompt. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo RAG Vetorial](projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" width="300" alt="DIAG-LEG-01"></a> | **DIAG-LEG-01 • Legacy Migration Dataflow**<br>Dataflow de sanitização, extração e migração do acervo de dados legados do diretório `legacy/` para o novo padrão de memória vetorial. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Regras de Indexação](projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/obs-audit-trail.png" width="300" alt="DIAG-OBS-01"></a> | **DIAG-OBS-01 • Observability & Audit Trail**<br>Trilha imutável de auditoria gravada na tabela `agent_execution_logs`, garantindo rastreabilidade de cada decisão tomada pela IA. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Compliance](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" width="300" alt="DIAG-MCP-01"></a> | **DIAG-MCP-01 • MCP Server Interconnection Map**<br>Mapa de integração via Model Context Protocol (MCP) conectando a IDE aos servidores `pcl-cortex` e `gemini-notebooklm`. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Protocolo MCP](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md) |
+
 ---
 
-### QUICKSTART: HARNESS LOCAL (DOCKER)
+### PASSO 4: INFRAESTRUTURA, RUNTIME & GOVERNANÇA
 
-O Harness local é gerido por meio do Docker Compose no root do projeto.
+> **O que você vai aprender aqui:** A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
 
-#### Inicializar todos os serviços (PaperClip, OmniRoute, Postgres):
+#### Quickstart: Comandos do Harness Local (Docker)
+
 ```bash
+# Inicializar todos os serviços localmente
 docker compose up -d
-```
 
-#### Visualizar logs em tempo real:
-```bash
+# Acompanhar logs de inferência e governança em tempo real
 docker compose logs -f
-```
 
-#### Parar serviços preservando volumes persistentes:
-```bash
+# Parar contêineres preservando volumes persistentes
 docker compose down
 ```
 
+#### Diagramas de Operação, Segurança e Stage Gates
+
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" width="300" alt="DIAG-SEQ-01"></a> | **DIAG-SEQ-01 • TLC Spec-Driven Execution Loop**<br>Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Matriz de Stage Gates](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="DIAG-SEQ-02"></a> | **DIAG-SEQ-02 • OmniRoute LLM Request Lifecycle**<br>Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo de Runtime](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="DIAG-INF-01"></a> | **DIAG-INF-01 • Network & Security Topology**<br>Topologia de rede física: isolamento de contêineres na sub-rede Docker `pcl-network` e malha de criptografia perimetral via Tailscale VPN Mesh. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Topologia de Rede](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="DIAG-GOV-01"></a> | **DIAG-GOV-01 • Governance & Stage Gates Matrix**<br>Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Regras de Stage Gate](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="DIAG-SEC-01"></a> | **DIAG-SEC-01 • Secret Management & Zero Trust**<br>Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no `.env` e auditoria de código. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Política Zero Trust](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" width="300" alt="DIAG-C4-04"></a> | **DIAG-C4-04 • Code-Level Class & Interface Specs**<br>Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos `deliver`, `validate`, `render`). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registros ADR](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md) |
+
 ---
 
-### INTEGRAÇÃO DE MODELOS LLM & PCL CORTEX MICRO-LOOP
+### 📑 TAXONOMIA E ESTRUTURA DO REPOSITÓRIO (14 DIRETÓRIOS)
 
-*   **TIER-1 (High Logic - Cloud):** Roteado via OmniRoute (porta `20130`) aplicando o EBITDA Shield para análises de arquitetura e especificações (`specify.md`) utilizando Claude 3.5 Sonnet e Gemini 3.1 Pro.
-*   **TIER-2 (Fast Execution - Cloud):** Roteado para escrita rápida de código pelo Builder (Gemini 3 Flash / GPT-4o-mini).
-*   **TIER-3 (Local Zero Cost / Cloud Fast Fallback):** Roteado para triagem de tarefas triviais (Trivial Gate), coleta de evidências e auditoria adversária do agente QA.
-    *   **LM Studio / Ollama:** Quando ativos na GPU local, executam `Qwen3-Coder-30B` e `Gemma 3 4B`.
-    *   **Cloud Fast Fallback:** Quando os modelos locais estiverem inativos, redireciona automaticamente para Gemini 3 Flash / GPT-4o-mini, garantindo altíssima velocidade e baixo consumo de tokens.
-
-Para mais detalhes da disciplina de micro-execução dos agentes, consulte [knowledge/patterns/pcl-cortex-micro-loop.md](knowledge/patterns/pcl-cortex-micro-loop.md).
+| Diretório | Responsabilidade Arquitetural | Tipo |
+|---|---|---|
+| `foundation/` | Diretrizes fundamentais e constitucionais do ecossistema. | Core AEOS |
+| `governance/` | Regras operacionais, papéis de tomada de decisão e Stage Gates. | Core AEOS |
+| `bootstrap/` | Protocolos de onboarding e handoffs de sessões. | Core AEOS |
+| `knowledge/` | Playbooks operacionais, padrões (PCL Cortex/TLC/ADR) e catálogos. | Core AEOS |
+| `memory/` | RAG, PGVector local, índices e histórico de Execution Cells. | Core AEOS |
+| `agents/` | Especificações e System Prompts dos agentes da squad de IA. | Core AEOS |
+| `runtime/` | Infraestrutura local de contêineres e logs de execução. | Core AEOS |
+| `templates/` | Scaffolding de documentos em branco (specify, design, adr). | Core AEOS |
+| `integrations/` | Conexões com GitHub, Tailscale e Model Context Protocol (MCP). | Core AEOS |
+| `mcp/` | Servidores MCP locais do repositório (`pcl-cortex`) e manifesto `mcp.config.json`. | Core AEOS |
+| `projects/` | Projetos ativos em desenvolvimento assistido por IA. | Taxonomia |
+| `tools/` | Utilitários locais e servidores MCP customizados. | Taxonomia |
+| `external-references/` | Referências e links aos repositórios originais externos. | Taxonomia |
+| `legacy/` | Histórico, diagramas e códigos antigos mantidos para referência. | Taxonomia |
 
 ---
-*PromptCoreLabs_AEOS v1.0 — Todos os direitos reservados – 2026*
+*PromptCoreLabs_AEOS v1.0 Sovereign — Todos os direitos reservados – 2026*
 
 <!-- Mermaid Auto-Renderer Script for GitHub Pages -->
 <script type="module">
