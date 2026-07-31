@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">C4 Nível 2 — Contêineres do System Harness (Container Diagram)</title>
+        <desc id="archify-diagram-description">Topologia de Contêineres Docker, Banco de Dados, AI Gateway e Rede Mesh</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="230" y="210" width="450" height="290" rx="12" class="c-region" stroke-width="1"/>
+        <text x="238" y="228" class="t-cloud" font-size="9" font-weight="600">Docker Compose Bridge Network (pcl-net)</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="security-group" data-composition-frame-id="1" x="20" y="70" width="900" height="370" rx="8" class="c-security-group" stroke-width="1"/>
+        <text x="28" y="88" class="t-security" font-size="9" font-weight="600">Host Process &amp; Inference Layer</text>
+
+        <!-- Connection paths (before components for correct z-order) -->
+        <path data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Lê/Grava Specs" data-edge-key="0" data-edge-id="paperclip-workspace" data-composition-points="260,263;225,263;225,130;190,130" d="M 260 263 L 233 263 Q 225 263 225 255 L 225 138 Q 225 130 217 130 L 190 130" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="paperclip" data-edge-to="db" data-edge-label="Persiste Estados" data-edge-key="1" data-edge-id="paperclip-db" data-composition-points="330,300;330,420" d="M 330 300 L 330 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute" data-composition-points="400,270;500,270" d="M 400 270 L 500 270" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência Local" data-edge-key="3" data-edge-id="omniroute-local" data-composition-points="650,263;695,263;695,150;740,150" d="M 650 263 L 687 263 Q 695 263 695 255 L 695 158 Q 695 150 703 150 L 740 150" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="omniroute" data-edge-to="cloud_apis" data-edge-label="Fallback Cloud" data-edge-key="4" data-edge-id="omniroute-cloud" data-composition-points="650,277;695,277;695,390;740,390" d="M 650 277 L 687 277 Q 695 277 695 285 L 695 382 Q 695 390 703 390 L 740 390" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="5" data-edge-id="tailscale-host" data-composition-points="190,390;225,390;225,277;260,277" d="M 190 390 L 217 390 Q 225 390 225 382 L 225 285 Q 225 277 233 277 L 260 277" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+
+        <!-- Components -->
+        <g id="node-workspace" data-node-id="workspace" data-node-label="Workspace Git" tabindex="0" role="button" aria-label="Focus Workspace Git, Código &amp; Specs, Host Process &amp; Inference Layer" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Código &amp; Specs" data-node-context="Host Process &amp; Inference Layer">
+          <title>Workspace Git · Código &amp; Specs · Host Process &amp; Inference Layer</title>
+          <rect x="50" y="100" width="140" height="60" rx="6" class="c-mask"/>
+          <rect x="50" y="100" width="140" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(56 106) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="120" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Workspace Git</text>
+        <text data-detail="context" x="120" y="144" class="t-muted" font-size="9" text-anchor="middle">Código &amp; Specs</text>
+        </g>
+
+        <g id="node-paperclip" data-node-id="paperclip" data-node-label="PaperClip UI" tabindex="0" role="button" aria-label="Focus PaperClip UI, Node.js :3100, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Node.js :3100" data-node-tag="Squad Dashboard" data-node-context="Docker Compose Bridge Network (pcl-net)">
+          <title>PaperClip UI · Node.js :3100 · Docker Compose Bridge Network (pcl-net) · Squad Dashboard</title>
+          <rect x="260" y="240" width="140" height="60" rx="6" class="c-mask"/>
+          <rect x="260" y="240" width="140" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(266 246) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="330" y="268" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PaperClip UI</text>
+        <text data-detail="context" x="330" y="284" class="t-muted" font-size="9" text-anchor="middle">Node.js :3100</text>
+        <text data-detail="fine" x="330" y="292" class="t-backend" font-size="7" text-anchor="middle">Squad Dashboard</text>
+        </g>
+
+        <g id="node-omniroute" data-node-id="omniroute" data-node-label="OmniRoute Gateway" tabindex="0" role="button" aria-label="Focus OmniRoute Gateway, AI Proxy :20130, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="AI Proxy :20130" data-node-tag="EBITDA Shield" data-node-context="Docker Compose Bridge Network (pcl-net)">
+          <title>OmniRoute Gateway · AI Proxy :20130 · Docker Compose Bridge Network (pcl-net) · EBITDA Shield</title>
+          <rect x="500" y="240" width="150" height="60" rx="6" class="c-mask"/>
+          <rect x="500" y="240" width="150" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(506 246) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="575" y="268" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OmniRoute Gateway</text>
+        <text data-detail="context" x="575" y="284" class="t-muted" font-size="9" text-anchor="middle">AI Proxy :20130</text>
+        <text data-detail="fine" x="575" y="292" class="t-backend" font-size="7" text-anchor="middle">EBITDA Shield</text>
+        </g>
+
+        <g id="node-db" data-node-id="db" data-node-label="pcl-db" tabindex="0" role="button" aria-label="Focus pcl-db, PostgreSQL 17 :5432, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="database" data-node-sublabel="PostgreSQL 17 :5432" data-node-tag="PGVector RAG" data-node-context="Docker Compose Bridge Network (pcl-net)">
+          <title>pcl-db · PostgreSQL 17 :5432 · Docker Compose Bridge Network (pcl-net) · PGVector RAG</title>
+          <rect x="260" y="420" width="140" height="60" rx="6" class="c-mask"/>
+          <rect x="260" y="420" width="140" height="60" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(266 426) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-detail-anchor x="330" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">pcl-db</text>
+        <text data-detail="context" x="330" y="464" class="t-muted" font-size="9" text-anchor="middle">PostgreSQL 17 :5432</text>
+        <text data-detail="fine" x="330" y="472" class="t-database" font-size="7" text-anchor="middle">PGVector RAG</text>
+        </g>
+
+        <g id="node-local_gpu" data-node-id="local_gpu" data-node-label="Local GPU Models" tabindex="0" role="button" aria-label="Focus Local GPU Models, Ollama / LM Studio, Host Process &amp; Inference Layer" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Ollama / LM Studio" data-node-context="Host Process &amp; Inference Layer">
+          <title>Local GPU Models · Ollama / LM Studio · Host Process &amp; Inference Layer</title>
+          <rect x="740" y="120" width="150" height="60" rx="6" class="c-mask"/>
+          <rect x="740" y="120" width="150" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(746 126) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="815" y="148" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Local GPU Models</text>
+        <text data-detail="context" x="815" y="164" class="t-muted" font-size="9" text-anchor="middle">Ollama / LM Studio</text>
+        </g>
+
+        <g id="node-cloud_apis" data-node-id="cloud_apis" data-node-label="Cloud LLM APIs" tabindex="0" role="button" aria-label="Focus Cloud LLM APIs, Gemini / Claude API, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Gemini / Claude API" data-node-context="Architecture component">
+          <title>Cloud LLM APIs · Gemini / Claude API · Architecture component</title>
+          <rect x="740" y="360" width="150" height="60" rx="6" class="c-mask"/>
+          <rect x="740" y="360" width="150" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(746 366) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="815" y="388" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloud LLM APIs</text>
+        <text data-detail="context" x="815" y="404" class="t-muted" font-size="9" text-anchor="middle">Gemini / Claude API</text>
+        </g>
+
+        <g id="node-tailscale" data-node-id="tailscale" data-node-label="Tailscale VPN" tabindex="0" role="button" aria-label="Focus Tailscale VPN, Mesh Network, Host Process &amp; Inference Layer" aria-pressed="false" data-node-kind="security" data-node-sublabel="Mesh Network" data-node-context="Host Process &amp; Inference Layer">
+          <title>Tailscale VPN · Mesh Network · Host Process &amp; Inference Layer</title>
+          <rect x="50" y="360" width="140" height="60" rx="6" class="c-mask"/>
+          <rect x="50" y="360" width="140" height="60" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(56 366) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="120" y="388" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Tailscale VPN</text>
+        <text data-detail="context" x="120" y="404" class="t-muted" font-size="9" text-anchor="middle">Mesh Network</text>
+        </g>
+
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Lê/Grava Specs" data-edge-key="0" data-edge-id="paperclip-workspace">
+          <rect x="186.4" y="176.5" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="225" y="186.5" class="t-messagebus" font-size="8" text-anchor="middle">Lê/Grava Specs</text>
+        </g>
+        <g data-detail="context" data-edge-from="paperclip" data-edge-to="db" data-edge-label="Persiste Estados" data-edge-key="1" data-edge-id="paperclip-db">
+          <rect x="286.6" y="310" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="330" y="320" class="t-muted" font-size="8" text-anchor="middle">Persiste Estados</text>
+        </g>
+        <g data-detail="context" data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute">
+          <rect x="401.8" y="250" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="450" y="260" class="t-backend" font-size="8" text-anchor="middle">Reqs de Inferência</text>
+        </g>
+        <g data-detail="context" data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência Local" data-edge-key="3" data-edge-id="omniroute-local">
+          <rect x="651.6" y="186.5" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="695" y="196.5" class="t-messagebus" font-size="8" text-anchor="middle">Inferência Local</text>
+        </g>
+        <g data-detail="context" data-edge-from="omniroute" data-edge-to="cloud_apis" data-edge-label="Fallback Cloud" data-edge-key="4" data-edge-id="omniroute-cloud">
+          <rect x="656.4" y="313.5" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="695" y="323.5" class="t-backend" font-size="8" text-anchor="middle">Fallback Cloud</text>
+        </g>
+        <g data-detail="context" data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="5" data-edge-id="tailscale-host">
+          <rect x="191.2" y="313.5" width="67.6" height="14" rx="3" class="c-mask"/>
+          <text x="225" y="323.5" class="t-security" font-size="8" text-anchor="middle">Túnel Seguro</text>
+        </g>
+
+        <!-- Legend -->
+        <g data-legend-bridge>
+          <text x="40" y="539" class="t-primary" font-size="9" font-weight="600">Legend</text>
+          <g data-legend-kind="cloud">
+            <rect x="40" y="544" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
+            <text x="60" y="552" class="t-muted" font-size="8">Cloud</text>
+          </g>
+          <g data-legend-kind="backend">
+            <rect x="129" y="544" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="149" y="552" class="t-muted" font-size="8">Backend</text>
+          </g>
+          <g data-legend-kind="database">
+            <rect x="228" y="544" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="248" y="552" class="t-muted" font-size="8">Database</text>
+          </g>
+          <g data-legend-kind="security">
+            <rect x="332" y="544" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="352" y="552" class="t-muted" font-size="8">Security</text>
+          </g>
+        </g>
+      </svg>

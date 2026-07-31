@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 880" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">OmniRoute LLM Request Lifecycle &amp; EBITDA Shield</title>
+        <desc id="archify-diagram-description">Proxy de Inferência, Cache de Prompts e Fallback Dinâmico Cloud / GPU Local</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Time Segments -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="150" width="704" height="160" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="330" width="704" height="210" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="560" width="704" height="220" rx="10" class="c-lane" stroke-width="1"/>
+
+        <!-- Lifelines -->
+        <path d="M 62 142 L 62 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 170 142 L 170 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 278 142 L 278 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 386 142 L 386 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 494 142 L 494 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+
+        <!-- Activations -->
+        <rect x="165" y="170" width="10" height="580" rx="3" class="c-mask"/>
+        <rect x="165" y="170" width="10" height="580" rx="3" class="c-backend" stroke-width="1"/>
+        <rect x="273" y="220" width="10" height="70" rx="3" class="c-mask"/>
+        <rect x="273" y="220" width="10" height="70" rx="3" class="c-database" stroke-width="1"/>
+        <rect x="381" y="350" width="10" height="100" rx="3" class="c-mask"/>
+        <rect x="381" y="350" width="10" height="100" rx="3" class="c-cloud" stroke-width="1"/>
+        <rect x="489" y="580" width="10" height="100" rx="3" class="c-mask"/>
+        <rect x="489" y="580" width="10" height="100" rx="3" class="c-cloud" stroke-width="1"/>
+
+        <!-- Messages -->
+        <g data-edge-from="client" data-edge-to="omniroute" data-edge-label="POST /v1/chat/completions" data-edge-key="0">
+          <path data-composition-edge-from="client" data-composition-edge-to="omniroute" data-composition-points="69,180;163,180" d="M 69 180 L 163 180" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="45" y="160" width="142" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="170" class="t-backend" font-size="9" text-anchor="middle">POST /v1/chat/completions</text>
+        </g>
+        </g>
+
+        <g data-edge-from="omniroute" data-edge-to="cache" data-edge-label="Lookup Hash no Prompt Cache" data-edge-key="1">
+          <path data-composition-edge-from="omniroute" data-composition-edge-to="cache" data-composition-points="177,230;271,230" d="M 177 230 L 271 230" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="147.8" y="210" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="220" class="t-backend" font-size="9" text-anchor="middle">Lookup Hash no Prompt Cache</text>
+        </g>
+        </g>
+
+        <g data-edge-from="cache" data-edge-to="omniroute" data-edge-label="Cache Miss / Hit Result" data-edge-key="2">
+          <path data-composition-edge-from="cache" data-composition-edge-to="omniroute" data-composition-points="271,280;177,280" d="M 271 280 L 177 280" class="a-default" data-animate="edge" style="--step:2" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="158.2" y="260" width="131.60000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="270" class="t-muted" font-size="9" text-anchor="middle">Cache Miss / Hit Result</text>
+        </g>
+        </g>
+
+        <g data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Trivial Gate -&gt; Qwen3 / Gemma 3" data-edge-key="3">
+          <path data-composition-edge-from="omniroute" data-composition-edge-to="local_gpu" data-composition-points="177,360;379,360" d="M 177 360 L 379 360" class="a-dashed" data-animate="edge" style="--step:3" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <g data-detail="context">
+          <rect x="191.39999999999998" y="340" width="173.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="350" class="t-messagebus" font-size="9" text-anchor="middle">Trivial Gate -&gt; Qwen3 / Gemma 3</text>
+        </g>
+        </g>
+
+        <g data-edge-from="local_gpu" data-edge-to="omniroute" data-edge-label="Resposta ou GPU Unavailable" data-edge-key="4">
+          <path data-composition-edge-from="local_gpu" data-composition-edge-to="omniroute" data-composition-points="379,440;177,440" d="M 379 440 L 177 440" class="a-default" data-animate="edge" style="--step:4" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="201.8" y="420" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="430" class="t-muted" font-size="9" text-anchor="middle">Resposta ou GPU Unavailable</text>
+        </g>
+        </g>
+
+        <g data-edge-from="omniroute" data-edge-to="cloud_llm" data-edge-label="Fallback -&gt; Gemini 3.1 Pro / Claude 3.5" data-edge-key="5">
+          <path data-composition-edge-from="omniroute" data-composition-edge-to="cloud_llm" data-composition-points="177,590;487,590" d="M 177 590 L 487 590" class="a-emphasis" data-animate="edge" style="--step:5" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="224.6" y="570" width="214.8" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="580" class="t-backend" font-size="9" text-anchor="middle">Fallback -&gt; Gemini 3.1 Pro / Claude 3.5</text>
+        </g>
+        </g>
+
+        <g data-edge-from="cloud_llm" data-edge-to="omniroute" data-edge-label="Token Stream + Meta Metrics" data-edge-key="6">
+          <path data-composition-edge-from="cloud_llm" data-composition-edge-to="omniroute" data-composition-points="487,670;177,670" d="M 487 670 L 177 670" class="a-default" data-animate="edge" style="--step:6" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="255.8" y="650" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="660" class="t-muted" font-size="9" text-anchor="middle">Token Stream + Meta Metrics</text>
+        </g>
+        </g>
+
+        <g data-edge-from="omniroute" data-edge-to="client" data-edge-label="HTTP 200 OK + Completion Data" data-edge-key="7">
+          <path data-composition-edge-from="omniroute" data-composition-edge-to="client" data-composition-points="163,740;69,740" d="M 163 740 L 69 740" class="a-default" data-animate="edge" style="--step:7" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="34.599999999999994" y="720" width="162.8" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="730" class="t-muted" font-size="9" text-anchor="middle">HTTP 200 OK + Completion Data</text>
+        </g>
+        </g>
+
+        <!-- Segment Labels -->
+        <g data-graph-role="segment-label" data-segment-id="0">
+          <rect x="56" y="128" width="170" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="141" class="t-dim" font-size="9" font-weight="600">Verificação de Cache &amp; Triagem</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="1">
+          <rect x="56" y="308" width="175.20000000000002" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="321" class="t-dim" font-size="9" font-weight="600">Roteamento Primário (GPU Local)</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="2">
+          <rect x="56" y="538" width="175.20000000000002" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="551" class="t-dim" font-size="9" font-weight="600">Fallback High Logic (Cloud LLM)</text>
+        </g>
+
+        <!-- Participants -->
+        <g id="node-client" data-node-id="client" data-node-label="Cliente" tabindex="0" role="button" aria-label="Focus Cliente, PaperClip / IDE, Sequence participant" aria-pressed="false" data-node-kind="external" data-node-sublabel="PaperClip / IDE" data-node-context="Sequence participant">
+          <title>Cliente · PaperClip / IDE · Sequence participant</title>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-external" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(25 78) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="62" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cliente</text>
+          <text data-detail="context" x="62" y="111" class="t-muted" font-size="7" text-anchor="middle">PaperClip / IDE</text>
+        </g>
+
+        <g id="node-omniroute" data-node-id="omniroute" data-node-label="OmniRoute" tabindex="0" role="button" aria-label="Focus OmniRoute, AI Gateway :20130, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="AI Gateway :20130" data-node-context="Sequence participant">
+          <title>OmniRoute · AI Gateway :20130 · Sequence participant</title>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(133 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="170" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OmniRoute</text>
+          <text data-detail="context" x="170" y="111" class="t-muted" font-size="7" text-anchor="middle">AI Gateway :20130</text>
+        </g>
+
+        <g id="node-cache" data-node-id="cache" data-node-label="Cache EBITDA" tabindex="0" role="button" aria-label="Focus Cache EBITDA, Prompt Cache, Sequence participant" aria-pressed="false" data-node-kind="database" data-node-sublabel="Prompt Cache" data-node-context="Sequence participant">
+          <title>Cache EBITDA · Prompt Cache · Sequence participant</title>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-database" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(241 78) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-detail-anchor x="278" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cache EBITDA</text>
+          <text data-detail="context" x="278" y="111" class="t-muted" font-size="7" text-anchor="middle">Prompt Cache</text>
+        </g>
+
+        <g id="node-local_gpu" data-node-id="local_gpu" data-node-label="GPU Local" tabindex="0" role="button" aria-label="Focus GPU Local, Ollama / LM Studio, Sequence participant" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Ollama / LM Studio" data-node-context="Sequence participant">
+          <title>GPU Local · Ollama / LM Studio · Sequence participant</title>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-cloud" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(349 78) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="386" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">GPU Local</text>
+          <text data-detail="context" x="386" y="111" class="t-muted" font-size="7" text-anchor="middle">Ollama / LM Studio</text>
+        </g>
+
+        <g id="node-cloud_llm" data-node-id="cloud_llm" data-node-label="Cloud LLM" tabindex="0" role="button" aria-label="Focus Cloud LLM, Gemini / Claude API, Sequence participant" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Gemini / Claude API" data-node-context="Sequence participant">
+          <title>Cloud LLM · Gemini / Claude API · Sequence participant</title>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-cloud" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(457 78) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="494" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloud LLM</text>
+          <text data-detail="context" x="494" y="111" class="t-muted" font-size="7" text-anchor="middle">Gemini / Claude API</text>
+        </g>
+
+        <!-- Legend -->
+        <text x="150" y="806" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 150 826 L 184 826" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="193" y="829" class="t-muted" font-size="8">request</text>
+        <path d="M 270 826 L 304 826" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <text x="313" y="829" class="t-muted" font-size="8">return</text>
+        <path d="M 385 826 L 419 826" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="428" y="829" class="t-muted" font-size="8">security</text>
+        <path d="M 530 826 L 564 826" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="573" y="829" class="t-muted" font-size="8">async trace</text>
+      </svg>

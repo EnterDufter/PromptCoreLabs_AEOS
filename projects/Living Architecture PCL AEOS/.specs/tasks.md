@@ -4,9 +4,9 @@ METADADOS DE TAREFAS (TASKS)
 
 Tipo: Backlog de Tarefas Atômicas da Living Architecture
 Escopo: Living Architecture PCL AEOS
-Status: TASKS IN PROGRESS
-Data: 2026-07-30
-Versão: v1.0
+Status: TASKS COMPLETED (100%)
+Data: 2026-07-31
+Versão: v1.1
 Autor: Cortex / PromptCore Labs
 
 ==================================================
@@ -15,7 +15,7 @@ Autor: Cortex / PromptCore Labs
 
 | Tarefas Totais | Concluídas | Em Progresso | Pendentes |
 |---|---|---|---|
-| 15 | 14 | 1 | 0 |
+| 16 | 16 | 0 | 0 |
 
 ==================================================
 2. LISTA DE TAREFAS ATÔMICAS POR FASE
@@ -43,6 +43,7 @@ Autor: Cortex / PromptCore Labs
 - [x] [LARCH-FR-004] Compilar o diagrama **DIAG-LIF-01: PCL Cortex Micro-Loop Lifecycle** (`life-cortex-micro-loop.html`).
 - [x] [LARCH-FR-004] Compilar o diagrama **DIAG-INF-01: Network & Security Topology** (`infra-network-security.html`).
 
-### FASE 5: AUDITORIA QA E FECHAMENTO
-- [x] [LARCH-NFR-002] Executar auditoria QA adversária de validação de qualidade `showcase` em todos os entregáveis.
-- [ ] [LARCH-FR-005] Finalizar e assinar o documento `validate.md` selando o Stage Gate.
+### FASE 5: DEPLOYMENT VISUAL E GITHUB PAGES
+- [x] [LARCH-FR-006] Gerar os 18 arquivos de imagem SVG miniaturas (`diagrams/assets/*.svg`) para pré-visualização no portal.
+- [x] [LARCH-FR-007] Reestruturar a Landing Page da raiz (`PromptCore_Labs/README.md`) e do projeto (`Living Architecture PCL AEOS/README.md`) com a galeria visual de miniaturas superiores, abertura de links em nova aba (`target="_blank"`) e preservação integral de 100% do conteúdo original inferior.
+- [x] [LARCH-FR-005] Finalizar e assinar o documento `validate.md` selando a publicação oficial do projeto no GitHub Pages.

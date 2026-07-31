@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 880" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Developer Experience &amp; IDE Execution Loop</title>
+        <desc id="archify-diagram-description">Ciclo de Interação entre Operador Humano, Antigravity IDE, Agente LLM e Harness</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Time Segments -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="150" width="704" height="140" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="310" width="704" height="230" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="560" width="704" height="200" rx="10" class="c-lane" stroke-width="1"/>
+
+        <!-- Lifelines -->
+        <path d="M 62 142 L 62 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 170 142 L 170 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 278 142 L 278 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 386 142 L 386 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+
+        <!-- Activations -->
+        <rect x="165" y="170" width="10" height="520" rx="3" class="c-mask"/>
+        <rect x="165" y="170" width="10" height="520" rx="3" class="c-frontend" stroke-width="1"/>
+        <rect x="273" y="230" width="10" height="370" rx="3" class="c-mask"/>
+        <rect x="273" y="230" width="10" height="370" rx="3" class="c-backend" stroke-width="1"/>
+        <rect x="381" y="340" width="10" height="110" rx="3" class="c-mask"/>
+        <rect x="381" y="340" width="10" height="110" rx="3" class="c-cloud" stroke-width="1"/>
+
+        <!-- Messages -->
+        <g data-edge-from="dev" data-edge-to="ide" data-edge-label="Prompt em Linguagem Natural" data-edge-key="0">
+          <path data-composition-edge-from="dev" data-composition-edge-to="ide" data-composition-points="69,180;163,180" d="M 69 180 L 163 180" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="39.8" y="160" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="170" class="t-backend" font-size="9" text-anchor="middle">Prompt em Linguagem Natural</text>
+        </g>
+        </g>
+
+        <g data-edge-from="ide" data-edge-to="agent" data-edge-label="Invoca Agente via MCP / Gateway" data-edge-key="1">
+          <path data-composition-edge-from="ide" data-composition-edge-to="agent" data-composition-points="177,240;271,240" d="M 177 240 L 271 240" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="137.39999999999998" y="220" width="173.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="230" class="t-backend" font-size="9" text-anchor="middle">Invoca Agente via MCP / Gateway</text>
+        </g>
+        </g>
+
+        <g data-edge-from="agent" data-edge-to="harness" data-edge-label="Executa Ferramentas (read/write/run)" data-edge-key="2">
+          <path data-composition-edge-from="agent" data-composition-edge-to="harness" data-composition-points="285,350;379,350" d="M 285 350 L 379 350" class="a-emphasis" data-animate="edge" style="--step:2" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="232.39999999999998" y="330" width="199.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="340" class="t-backend" font-size="9" text-anchor="middle">Executa Ferramentas (read/write/run)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="harness" data-edge-to="agent" data-edge-label="Retorna Logs e Status de Saída" data-edge-key="3">
+          <path data-composition-edge-from="harness" data-composition-edge-to="agent" data-composition-points="379,440;285,440" d="M 379 440 L 285 440" class="a-default" data-animate="edge" style="--step:3" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="248" y="420" width="168" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="430" class="t-muted" font-size="9" text-anchor="middle">Retorna Logs e Status de Saída</text>
+        </g>
+        </g>
+
+        <g data-edge-from="agent" data-edge-to="ide" data-edge-label="Entrega Diffs e Relatório Markdown" data-edge-key="4">
+          <path data-composition-edge-from="agent" data-composition-edge-to="ide" data-composition-points="271,590;177,590" d="M 271 590 L 177 590" class="a-default" data-animate="edge" style="--step:4" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="129.6" y="570" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="580" class="t-muted" font-size="9" text-anchor="middle">Entrega Diffs e Relatório Markdown</text>
+        </g>
+        </g>
+
+        <g data-edge-from="ide" data-edge-to="dev" data-edge-label="Exibe Artefatos &amp; Solicita Gate" data-edge-key="5">
+          <path data-composition-edge-from="ide" data-composition-edge-to="dev" data-composition-points="163,680;69,680" d="M 163 680 L 69 680" class="a-default" data-animate="edge" style="--step:5" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="29.39999999999999" y="660" width="173.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="670" class="t-muted" font-size="9" text-anchor="middle">Exibe Artefatos &amp; Solicita Gate</text>
+        </g>
+        </g>
+
+        <!-- Segment Labels -->
+        <g data-graph-role="segment-label" data-segment-id="0">
+          <rect x="56" y="128" width="133.60000000000002" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="141" class="t-dim" font-size="9" font-weight="600">Prompt &amp; Roteamento MCP</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="1">
+          <rect x="56" y="288" width="128.4" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="301" class="t-dim" font-size="9" font-weight="600">Execução &amp; Ferramentas</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="2">
+          <rect x="56" y="538" width="206.4" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="551" class="t-dim" font-size="9" font-weight="600">Retorno &amp; Aprovação Human-in-the-Loop</text>
+        </g>
+
+        <!-- Participants -->
+        <g id="node-dev" data-node-id="dev" data-node-label="Operador" tabindex="0" role="button" aria-label="Focus Operador, Dev / Engenheiro, Sequence participant" aria-pressed="false" data-node-kind="external" data-node-sublabel="Dev / Engenheiro" data-node-context="Sequence participant">
+          <title>Operador · Dev / Engenheiro · Sequence participant</title>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-external" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(25 78) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="62" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Operador</text>
+          <text data-detail="context" x="62" y="111" class="t-muted" font-size="7" text-anchor="middle">Dev / Engenheiro</text>
+        </g>
+
+        <g id="node-ide" data-node-id="ide" data-node-label="IDE Local" tabindex="0" role="button" aria-label="Focus IDE Local, Antigravity UI, Sequence participant" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="Antigravity UI" data-node-context="Sequence participant">
+          <title>IDE Local · Antigravity UI · Sequence participant</title>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-frontend" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(133 78) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-detail-anchor x="170" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">IDE Local</text>
+          <text data-detail="context" x="170" y="111" class="t-muted" font-size="7" text-anchor="middle">Antigravity UI</text>
+        </g>
+
+        <g id="node-agent" data-node-id="agent" data-node-label="Agente IA" tabindex="0" role="button" aria-label="Focus Agente IA, Cortex / Builder, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Cortex / Builder" data-node-context="Sequence participant">
+          <title>Agente IA · Cortex / Builder · Sequence participant</title>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(241 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="278" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Agente IA</text>
+          <text data-detail="context" x="278" y="111" class="t-muted" font-size="7" text-anchor="middle">Cortex / Builder</text>
+        </g>
+
+        <g id="node-harness" data-node-id="harness" data-node-label="PCL Harness" tabindex="0" role="button" aria-label="Focus PCL Harness, Docker &amp; Workspace, Sequence participant" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Docker &amp; Workspace" data-node-context="Sequence participant">
+          <title>PCL Harness · Docker &amp; Workspace · Sequence participant</title>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-cloud" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(349 78) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="386" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PCL Harness</text>
+          <text data-detail="context" x="386" y="111" class="t-muted" font-size="7" text-anchor="middle">Docker &amp; Workspace</text>
+        </g>
+
+        <!-- Legend -->
+        <text x="150" y="806" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 150 826 L 184 826" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="193" y="829" class="t-muted" font-size="8">request</text>
+        <path d="M 270 826 L 304 826" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <text x="313" y="829" class="t-muted" font-size="8">return</text>
+        <path d="M 385 826 L 419 826" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="428" y="829" class="t-muted" font-size="8">security</text>
+        <path d="M 530 826 L 564 826" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="573" y="829" class="t-muted" font-size="8">async trace</text>
+      </svg>

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 720" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Legacy Migration Dataflow (Extração &amp; Modernização)</title>
+        <desc id="archify-diagram-description">Fluxo de Ingestão de Projetos Legados, Extração de Contexto e Migração TLC Spec-Driven</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Data Stages -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="stage" data-composition-frame-id="0" x="16" y="46" width="168" height="600" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="100" y="68" class="t-dim" font-size="9" font-weight="600" text-anchor="middle">01 / Legado</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="stage" data-composition-frame-id="1" x="231" y="46" width="168" height="600" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="315" y="68" class="t-dim" font-size="9" font-weight="600" text-anchor="middle">02 / Extração</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="stage" data-composition-frame-id="2" x="446" y="46" width="168" height="600" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="530" y="68" class="t-dim" font-size="9" font-weight="600" text-anchor="middle">03 / Refatoração</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="stage" data-composition-frame-id="3" x="661" y="46" width="168" height="600" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="745" y="68" class="t-dim" font-size="9" font-weight="600" text-anchor="middle">04 / Armazenamento</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="stage" data-composition-frame-id="4" x="876" y="46" width="168" height="600" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="960" y="68" class="t-dim" font-size="9" font-weight="600" text-anchor="middle">05 / Integração</text>
+
+        <!-- Flow paths -->
+        <path data-edge-from="legacy_code" data-edge-to="parser" data-edge-label="extrai arquivos" data-edge-key="0" data-edge-id="legacy-parser" data-composition-points="156,271;259,271" d="M 156 271 L 259 271" class="a-default" data-animate="edge" style="--step:0" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="parser" data-edge-to="tlc_refactor" data-edge-label="AST + contexto" data-edge-key="1" data-edge-id="parser-refactor" data-composition-points="371,271;474,271" d="M 371 271 L 474 271" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="tlc_refactor" data-edge-to="aeos_repo" data-edge-label="gera .specs/" data-edge-key="2" data-edge-id="refactor-repo" data-composition-points="586,271;689,271" d="M 586 271 L 689 271" class="a-emphasis" data-animate="edge" style="--step:2" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="aeos_repo" data-edge-to="active_app" data-edge-label="executa no Harness" data-edge-key="3" data-edge-id="repo-app" data-composition-points="801,271;904,271" d="M 801 271 L 904 271" class="a-security" data-animate="edge" style="--step:3" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+
+        <!-- Nodes -->
+        <g id="node-legacy_code" data-node-id="legacy_code" data-node-label="Projetos Legados" tabindex="0" role="button" aria-label="Focus Projetos Legados, diretório legacy/, 01 / Legado" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="diretório legacy/" data-node-tag="código antigo" data-node-context="01 / Legado">
+          <title>Projetos Legados · diretório legacy/ · 01 / Legado · código antigo</title>
+          <rect x="44" y="242" width="112" height="58" rx="6" class="c-mask"/>
+          <rect x="44" y="242" width="112" height="58" rx="6" class="c-frontend" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(50 248) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-detail-anchor x="100" y="263" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Projetos Legados</text>
+          <text data-detail="context" x="100" y="279" class="t-muted" font-size="7" text-anchor="middle">diretório legacy/</text>
+        <text data-detail="fine" x="100" y="289" class="t-frontend" font-size="7" text-anchor="middle">código antigo</text>
+        </g>
+
+        <g id="node-parser" data-node-id="parser" data-node-label="Context Parser" tabindex="0" role="button" aria-label="Focus Context Parser, extração de AST, 02 / Extração" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="extração de AST" data-node-tag="parsing" data-node-context="02 / Extração">
+          <title>Context Parser · extração de AST · 02 / Extração · parsing</title>
+          <rect x="259" y="242" width="112" height="58" rx="6" class="c-mask"/>
+          <rect x="259" y="242" width="112" height="58" rx="6" class="c-cloud" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(265 248) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-detail-anchor x="315" y="263" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Context Parser</text>
+          <text data-detail="context" x="315" y="279" class="t-muted" font-size="7" text-anchor="middle">extração de AST</text>
+        <text data-detail="fine" x="315" y="289" class="t-cloud" font-size="7" text-anchor="middle">parsing</text>
+        </g>
+
+        <g id="node-tlc_refactor" data-node-id="tlc_refactor" data-node-label="TLC Refactor" tabindex="0" role="button" aria-label="Focus TLC Refactor, mapeamento Spec, 03 / Refatoração" aria-pressed="false" data-node-kind="backend" data-node-sublabel="mapeamento Spec" data-node-tag="padronização" data-node-context="03 / Refatoração">
+          <title>TLC Refactor · mapeamento Spec · 03 / Refatoração · padronização</title>
+          <rect x="474" y="242" width="112" height="58" rx="6" class="c-mask"/>
+          <rect x="474" y="242" width="112" height="58" rx="6" class="c-backend" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(480 248) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="530" y="263" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">TLC Refactor</text>
+          <text data-detail="context" x="530" y="279" class="t-muted" font-size="7" text-anchor="middle">mapeamento Spec</text>
+        <text data-detail="fine" x="530" y="289" class="t-backend" font-size="7" text-anchor="middle">padronização</text>
+        </g>
+
+        <g id="node-aeos_repo" data-node-id="aeos_repo" data-node-label="Git Repo AEOS" tabindex="0" role="button" aria-label="Focus Git Repo AEOS, pasta projects/, 04 / Armazenamento" aria-pressed="false" data-node-kind="database" data-node-sublabel="pasta projects/" data-node-tag="novo projeto" data-node-context="04 / Armazenamento">
+          <title>Git Repo AEOS · pasta projects/ · 04 / Armazenamento · novo projeto</title>
+          <rect x="689" y="242" width="112" height="58" rx="6" class="c-mask"/>
+          <rect x="689" y="242" width="112" height="58" rx="6" class="c-database" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(695 248) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-detail-anchor x="745" y="263" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Git Repo AEOS</text>
+          <text data-detail="context" x="745" y="279" class="t-muted" font-size="7" text-anchor="middle">pasta projects/</text>
+        <text data-detail="fine" x="745" y="289" class="t-database" font-size="7" text-anchor="middle">novo projeto</text>
+        </g>
+
+        <g id="node-active_app" data-node-id="active_app" data-node-label="Aplicação Ativa" tabindex="0" role="button" aria-label="Focus Aplicação Ativa, AEOS Governed, 05 / Integração" aria-pressed="false" data-node-kind="security" data-node-sublabel="AEOS Governed" data-node-tag="produção" data-node-context="05 / Integração">
+          <title>Aplicação Ativa · AEOS Governed · 05 / Integração · produção</title>
+          <rect x="904" y="242" width="112" height="58" rx="6" class="c-mask"/>
+          <rect x="904" y="242" width="112" height="58" rx="6" class="c-security" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(910 248) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="960" y="263" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Aplicação Ativa</text>
+          <text data-detail="context" x="960" y="279" class="t-muted" font-size="7" text-anchor="middle">AEOS Governed</text>
+        <text data-detail="fine" x="960" y="289" class="t-security" font-size="7" text-anchor="middle">produção</text>
+        </g>
+
+        <!-- Flow labels -->
+        <g data-detail="context" data-edge-from="legacy_code" data-edge-to="parser" data-edge-label="extrai arquivos" data-edge-key="0" data-edge-id="legacy-parser">
+          <rect x="164.75" y="250" width="85.5" height="27" rx="4" class="c-mask"/>
+          <text x="207.5" y="261" class="t-muted" font-size="8" text-anchor="middle">extrai arquivos</text>
+        <text data-detail="fine" x="207.5" y="272" class="t-dim" font-size="7" text-anchor="middle">código-fonte</text>
+        </g>
+        <g data-detail="context" data-edge-from="parser" data-edge-to="tlc_refactor" data-edge-label="AST + contexto" data-edge-key="1" data-edge-id="parser-refactor">
+          <rect x="382.2" y="250" width="80.6" height="27" rx="4" class="c-mask"/>
+          <text x="422.5" y="261" class="t-backend" font-size="8" text-anchor="middle">AST + contexto</text>
+        <text data-detail="fine" x="422.5" y="272" class="t-dim" font-size="7" text-anchor="middle">metadados</text>
+        </g>
+        <g data-detail="context" data-edge-from="tlc_refactor" data-edge-to="aeos_repo" data-edge-label="gera .specs/" data-edge-key="2" data-edge-id="refactor-repo">
+          <rect x="599.65" y="230" width="75.7" height="27" rx="4" class="c-mask"/>
+          <text x="637.5" y="241" class="t-backend" font-size="8" text-anchor="middle">gera .specs/</text>
+        <text data-detail="fine" x="637.5" y="252" class="t-dim" font-size="7" text-anchor="middle">artefatos TLC</text>
+        </g>
+        <g data-detail="context" data-edge-from="aeos_repo" data-edge-to="active_app" data-edge-label="executa no Harness" data-edge-key="3" data-edge-id="repo-app">
+          <rect x="802.4" y="250" width="100.2" height="27" rx="4" class="c-mask"/>
+          <text x="852.5" y="261" class="t-security" font-size="8" text-anchor="middle">executa no Harness</text>
+        <text data-detail="fine" x="852.5" y="272" class="t-dim" font-size="7" text-anchor="middle">runtime</text>
+        </g>
+
+        <!-- Legend -->
+        <text x="214" y="664" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 214 684 L 248 684" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="257" y="687" class="t-muted" font-size="8">primary data</text>
+        <path d="M 340 684 L 374 684" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="383" y="687" class="t-muted" font-size="8">policy / PII</text>
+        <path d="M 480 684 L 514 684" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="523" y="687" class="t-muted" font-size="8">async batch</text>
+        <rect x="625" y="676" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+        <text x="646" y="684" class="t-muted" font-size="8">data store</text>
+      </svg>

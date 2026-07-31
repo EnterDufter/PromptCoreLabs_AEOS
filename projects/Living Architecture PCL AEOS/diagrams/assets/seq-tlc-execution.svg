@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 880" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">TLC Spec-Driven Execution Loop (Metodologia v3)</title>
+        <desc id="archify-diagram-description">Ciclo de Validação e Orquestração entre Operador, Planner, Builder, QA e Auditor</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Time Segments -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="150" width="704" height="130" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="300" width="704" height="250" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="570" width="704" height="210" rx="10" class="c-lane" stroke-width="1"/>
+
+        <!-- Lifelines -->
+        <path d="M 62 142 L 62 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 170 142 L 170 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 278 142 L 278 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 386 142 L 386 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 494 142 L 494 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+
+        <!-- Activations -->
+        <rect x="165" y="170" width="10" height="80" rx="3" class="c-mask"/>
+        <rect x="165" y="170" width="10" height="80" rx="3" class="c-backend" stroke-width="1"/>
+        <rect x="273" y="230" width="10" height="190" rx="3" class="c-mask"/>
+        <rect x="273" y="230" width="10" height="190" rx="3" class="c-backend" stroke-width="1"/>
+        <rect x="381" y="320" width="10" height="190" rx="3" class="c-mask"/>
+        <rect x="381" y="320" width="10" height="190" rx="3" class="c-security" stroke-width="1"/>
+        <rect x="489" y="490" width="10" height="140" rx="3" class="c-mask"/>
+        <rect x="489" y="490" width="10" height="140" rx="3" class="c-security" stroke-width="1"/>
+
+        <!-- Messages -->
+        <g data-edge-from="operador" data-edge-to="planner" data-edge-label="Aprova specify.md (Gate 1)" data-edge-key="0">
+          <path data-composition-edge-from="operador" data-composition-edge-to="planner" data-composition-points="69,180;163,180" d="M 69 180 L 163 180" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="42.39999999999999" y="160" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="170" class="t-backend" font-size="9" text-anchor="middle">Aprova specify.md (Gate 1)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="planner" data-edge-to="builder" data-edge-label="Entrega tasks.md (Backlog Atômico)" data-edge-key="1">
+          <path data-composition-edge-from="planner" data-composition-edge-to="builder" data-composition-points="177,240;271,240" d="M 177 240 L 271 240" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="129.6" y="220" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="230" class="t-backend" font-size="9" text-anchor="middle">Entrega tasks.md (Backlog Atômico)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="builder" data-edge-to="qa" data-edge-label="Solicita Validação de Diffs" data-edge-key="2">
+          <path data-composition-edge-from="builder" data-composition-edge-to="qa" data-composition-points="285,330;379,330" d="M 285 330 L 379 330" class="a-emphasis" data-animate="edge" style="--step:2" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="255.8" y="310" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="320" class="t-backend" font-size="9" text-anchor="middle">Solicita Validação de Diffs</text>
+        </g>
+        </g>
+
+        <g data-edge-from="qa" data-edge-to="builder" data-edge-label="REFUTED se testes falham" data-edge-key="3">
+          <path data-composition-edge-from="qa" data-composition-edge-to="builder" data-composition-points="379,410;285,410" d="M 379 410 L 285 410" class="a-dashed" data-animate="edge" style="--step:3" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <g data-detail="context">
+          <rect x="263.6" y="390" width="136.8" height="16" rx="3" class="c-mask"/>
+          <text x="332" y="400" class="t-messagebus" font-size="9" text-anchor="middle">REFUTED se testes falham</text>
+        </g>
+        </g>
+
+        <g data-edge-from="qa" data-edge-to="auditor" data-edge-label="VERIFIED (Código e Diffs Ok)" data-edge-key="4">
+          <path data-composition-edge-from="qa" data-composition-edge-to="auditor" data-composition-points="393,500;487,500" d="M 393 500 L 487 500" class="a-emphasis" data-animate="edge" style="--step:4" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="361.2" y="480" width="157.6" height="16" rx="3" class="c-mask"/>
+          <text x="440" y="490" class="t-backend" font-size="9" text-anchor="middle">VERIFIED (Código e Diffs Ok)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="auditor" data-edge-to="operador" data-edge-label="Entrega validate.md e Relatório" data-edge-key="5">
+          <path data-composition-edge-from="auditor" data-composition-edge-to="operador" data-composition-points="487,620;69,620" d="M 487 620 L 69 620" class="a-default" data-animate="edge" style="--step:5" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="191.39999999999998" y="600" width="173.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="610" class="t-muted" font-size="9" text-anchor="middle">Entrega validate.md e Relatório</text>
+        </g>
+        </g>
+
+        <g data-edge-from="operador" data-edge-to="planner" data-edge-label="Assina Gate no STATE.md" data-edge-key="6">
+          <path data-composition-edge-from="operador" data-composition-edge-to="planner" data-composition-points="69,720;163,720" d="M 69 720 L 163 720" class="a-emphasis" data-animate="edge" style="--step:6" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="50.19999999999999" y="700" width="131.60000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="710" class="t-backend" font-size="9" text-anchor="middle">Assina Gate no STATE.md</text>
+        </g>
+        </g>
+
+        <!-- Segment Labels -->
+        <g data-graph-role="segment-label" data-segment-id="0">
+          <rect x="56" y="128" width="159.6" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="141" class="t-dim" font-size="9" font-weight="600">Etapa 1 &amp; 2: Specify &amp; Tasks</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="1">
+          <rect x="56" y="278" width="170" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="291" class="t-dim" font-size="9" font-weight="600">Etapa 3 &amp; 4: Execute &amp; QA Loop</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="2">
+          <rect x="56" y="548" width="138.8" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="561" class="t-dim" font-size="9" font-weight="600">Etapa 5: Audit &amp; Signoff</text>
+        </g>
+
+        <!-- Participants -->
+        <g id="node-operador" data-node-id="operador" data-node-label="Operador" tabindex="0" role="button" aria-label="Focus Operador, Humano / Dev, Sequence participant" aria-pressed="false" data-node-kind="external" data-node-sublabel="Humano / Dev" data-node-context="Sequence participant">
+          <title>Operador · Humano / Dev · Sequence participant</title>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-external" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(25 78) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="62" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Operador</text>
+          <text data-detail="context" x="62" y="111" class="t-muted" font-size="7" text-anchor="middle">Humano / Dev</text>
+        </g>
+
+        <g id="node-planner" data-node-id="planner" data-node-label="Planner" tabindex="0" role="button" aria-label="Focus Planner, Lead Engineer, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Lead Engineer" data-node-context="Sequence participant">
+          <title>Planner · Lead Engineer · Sequence participant</title>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(133 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="170" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Planner</text>
+          <text data-detail="context" x="170" y="111" class="t-muted" font-size="7" text-anchor="middle">Lead Engineer</text>
+        </g>
+
+        <g id="node-builder" data-node-id="builder" data-node-label="Builder" tabindex="0" role="button" aria-label="Focus Builder, Fast Executor, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Fast Executor" data-node-context="Sequence participant">
+          <title>Builder · Fast Executor · Sequence participant</title>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(241 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="278" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Builder</text>
+          <text data-detail="context" x="278" y="111" class="t-muted" font-size="7" text-anchor="middle">Fast Executor</text>
+        </g>
+
+        <g id="node-qa" data-node-id="qa" data-node-label="QA Reviewer" tabindex="0" role="button" aria-label="Focus QA Reviewer, QA Adversário, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="QA Adversário" data-node-context="Sequence participant">
+          <title>QA Reviewer · QA Adversário · Sequence participant</title>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(349 78) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="386" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">QA Reviewer</text>
+          <text data-detail="context" x="386" y="111" class="t-muted" font-size="7" text-anchor="middle">QA Adversário</text>
+        </g>
+
+        <g id="node-auditor" data-node-id="auditor" data-node-label="Auditor" tabindex="0" role="button" aria-label="Focus Auditor, Compliance, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="Compliance" data-node-context="Sequence participant">
+          <title>Auditor · Compliance · Sequence participant</title>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(457 78) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="494" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Auditor</text>
+          <text data-detail="context" x="494" y="111" class="t-muted" font-size="7" text-anchor="middle">Compliance</text>
+        </g>
+
+        <!-- Legend -->
+        <text x="150" y="806" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 150 826 L 184 826" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="193" y="829" class="t-muted" font-size="8">request</text>
+        <path d="M 270 826 L 304 826" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <text x="313" y="829" class="t-muted" font-size="8">return</text>
+        <path d="M 385 826 L 419 826" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="428" y="829" class="t-muted" font-size="8">security</text>
+        <path d="M 530 826 L 564 826" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="573" y="829" class="t-muted" font-size="8">async trace</text>
+      </svg>

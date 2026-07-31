@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">PCL Cortex Micro-Loop Lifecycle</title>
+        <desc id="archify-diagram-description">Máquina de Estados: Triagem Trivial, Edição Cirúrgica, Retentativas e Auditoria QA</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Lifecycle bands -->
+        <path d="M 72 112 L 908 112" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
+        <text x="72" y="100" class="t-dim" font-size="10" font-weight="600">01 / Fases Principais</text>
+        <path d="M 72 264 L 908 264" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
+        <text x="72" y="252" class="t-dim" font-size="10" font-weight="600">02 / Gates &amp; Interrupções + Alça de Retentativa</text>
+        <path d="M 72 436 L 908 436" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
+        <text x="72" y="424" class="t-dim" font-size="10" font-weight="600">03 / Saídas Finais</text>
+
+        <!-- Primary lifecycle rail -->
+        <path d="M 154 157 L 748 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
+
+        <!-- Transition paths -->
+        <path data-edge-from="qa_review" data-edge-to="qa_failed" data-edge-key="0" data-edge-id="qa-refuted" data-composition-points="556,188;556,272;556,272;556,356" d="M 556 188 L 556 272 L 556 272 L 556 356" class="a-security" data-animate="edge" style="--step:0" stroke-width="1.1" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="qa_failed" data-edge-to="building" data-edge-key="1" data-edge-id="retry-building" data-composition-points="493,385;20,385;20,80;402,80;402,126" d="M 493 385 L 30 385 Q 20 385 20 375 L 20 90 Q 20 80 30 80 L 392 80 Q 402 80 402 90 L 402 126" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="2" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="qa_failed" data-edge-to="rejected" data-edge-key="2" data-edge-id="max-retries-exceeded" data-composition-points="556,414;556,450" d="M 556 414 L 556 450" class="a-security" data-animate="edge" style="--step:2" stroke-width="1.1" marker-end="url(#arrowhead-security)"/>
+
+        <!-- States -->
+        <g id="node-spec_ready" data-node-id="spec_ready" data-node-label="Spec Approved" tabindex="0" role="button" aria-label="Focus Spec Approved, Gate Tasks Ok, Fases Principais" aria-pressed="false" data-node-kind="start" data-node-sublabel="Gate Tasks Ok" data-node-tag="start" data-node-context="Fases Principais">
+          <title>Spec Approved · Gate Tasks Ok · Fases Principais · start</title>
+          <rect x="35" y="126" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="35" y="126" width="118" height="62" rx="7" class="c-frontend" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="start" class="semantic-sigil s-frontend" transform="translate(136 132) scale(0.6875)">
+            <circle cx="8" cy="8" r="5"/>
+            <path d="m7 5.4 3.6 2.6L7 10.6Z" class="sigil-fill"/>
+          </g>
+        <text data-detail="fine" x="45" y="140" class="t-frontend" font-size="7" font-weight="700">01</text>
+          <text data-detail-anchor x="94" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Spec Approved</text>
+          <text data-detail="context" x="94" y="163" class="t-muted" font-size="7" text-anchor="middle">Gate Tasks Ok</text>
+        <text data-detail="fine" x="94" y="177" class="t-frontend" font-size="7" text-anchor="middle">start</text>
+        </g>
+
+        <g id="node-trivial_gate" data-node-id="trivial_gate" data-node-label="Trivial Gate" tabindex="0" role="button" aria-label="Focus Trivial Gate, Triagem Tier-3, Fases Principais" aria-pressed="false" data-node-kind="decision" data-node-sublabel="Triagem Tier-3" data-node-tag="triage" data-node-context="Fases Principais">
+          <title>Trivial Gate · Triagem Tier-3 · Fases Principais · triage</title>
+          <rect x="189" y="126" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="189" y="126" width="118" height="62" rx="7" class="c-security" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(290 132) scale(0.6875)">
+            <rect x="3" y="3" width="10" height="10" rx="2"/>
+            <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
+          </g>
+        <text data-detail="fine" x="199" y="140" class="t-security" font-size="7" font-weight="700">02</text>
+          <text data-detail-anchor x="248" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Trivial Gate</text>
+          <text data-detail="context" x="248" y="163" class="t-muted" font-size="7" text-anchor="middle">Triagem Tier-3</text>
+        <text data-detail="fine" x="248" y="177" class="t-security" font-size="7" text-anchor="middle">triage</text>
+        </g>
+
+        <g id="node-building" data-node-id="building" data-node-label="Building" tabindex="0" role="button" aria-label="Focus Building, Edição Cirúrgica, Fases Principais" aria-pressed="false" data-node-kind="active" data-node-sublabel="Edição Cirúrgica" data-node-tag="code" data-node-context="Fases Principais">
+          <title>Building · Edição Cirúrgica · Fases Principais · code</title>
+          <rect x="343" y="126" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="343" y="126" width="118" height="62" rx="7" class="c-backend" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="active" class="semantic-sigil s-backend" transform="translate(444 132) scale(0.6875)">
+            <path d="M2 8h3l1.5-3.5L9 12l1.6-4H14"/>
+          </g>
+        <text data-detail="fine" x="353" y="140" class="t-backend" font-size="7" font-weight="700">03</text>
+          <text data-detail-anchor x="402" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Building</text>
+          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">Edição Cirúrgica</text>
+        <text data-detail="fine" x="402" y="177" class="t-backend" font-size="7" text-anchor="middle">code</text>
+        </g>
+
+        <g id="node-qa_review" data-node-id="qa_review" data-node-label="QA Review" tabindex="0" role="button" aria-label="Focus QA Review, Testes Observação, Fases Principais" aria-pressed="false" data-node-kind="decision" data-node-sublabel="Testes Observação" data-node-tag="audit" data-node-context="Fases Principais">
+          <title>QA Review · Testes Observação · Fases Principais · audit</title>
+          <rect x="497" y="126" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="497" y="126" width="118" height="62" rx="7" class="c-security" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(598 132) scale(0.6875)">
+            <rect x="3" y="3" width="10" height="10" rx="2"/>
+            <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
+          </g>
+        <text data-detail="fine" x="507" y="140" class="t-security" font-size="7" font-weight="700">04</text>
+          <text data-detail-anchor x="556" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">QA Review</text>
+          <text data-detail="context" x="556" y="163" class="t-muted" font-size="7" text-anchor="middle">Testes Observação</text>
+        <text data-detail="fine" x="556" y="177" class="t-security" font-size="7" text-anchor="middle">audit</text>
+        </g>
+
+        <g id="node-completed" data-node-id="completed" data-node-label="Approved" tabindex="0" role="button" aria-label="Focus Approved, Assinado STATE.md, Fases Principais" aria-pressed="false" data-node-kind="success" data-node-sublabel="Assinado STATE.md" data-node-tag="done" data-node-context="Fases Principais">
+          <title>Approved · Assinado STATE.md · Fases Principais · done</title>
+          <rect x="651" y="126" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="651" y="126" width="118" height="62" rx="7" class="c-database" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="success" class="semantic-sigil s-database" transform="translate(752 132) scale(0.6875)">
+            <circle cx="8" cy="8" r="5.3"/>
+            <path d="m5.2 8 1.8 1.8 3.8-4"/>
+          </g>
+        <text data-detail="fine" x="661" y="140" class="t-database" font-size="7" font-weight="700">05</text>
+          <text data-detail-anchor x="710" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Approved</text>
+          <text data-detail="context" x="710" y="163" class="t-muted" font-size="7" text-anchor="middle">Assinado STATE.md</text>
+        <text data-detail="fine" x="710" y="177" class="t-database" font-size="7" text-anchor="middle">done</text>
+        </g>
+
+        <g id="node-qa_failed" data-node-id="qa_failed" data-node-label="REFUTED" tabindex="0" role="button" aria-label="Focus REFUTED, Retentativa (máx 3), Alça de Retentativa" aria-pressed="false" data-node-kind="failure" data-node-sublabel="Retentativa (máx 3)" data-node-tag="retry" data-node-context="Alça de Retentativa">
+          <title>REFUTED · Retentativa (máx 3) · Alça de Retentativa · retry</title>
+          <rect x="493" y="356" width="126" height="58" rx="7" class="c-mask"/>
+          <rect x="493" y="356" width="126" height="58" rx="7" class="c-security" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="failure" class="semantic-sigil s-security" transform="translate(602 362) scale(0.6875)">
+            <circle cx="8" cy="8" r="5.3"/>
+            <path d="m5.7 5.7 4.6 4.6m0-4.6-4.6 4.6"/>
+          </g>
+          <text data-detail-anchor x="556" y="377" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">REFUTED</text>
+          <text data-detail="context" x="556" y="393" class="t-muted" font-size="7" text-anchor="middle">Retentativa (máx 3)</text>
+        <text data-detail="fine" x="556" y="403" class="t-security" font-size="7" text-anchor="middle">retry</text>
+        </g>
+
+        <g id="node-rejected" data-node-id="rejected" data-node-label="REJECTED" tabindex="0" role="button" aria-label="Focus REJECTED, Excesso de Falhas, Saídas Finais" aria-pressed="false" data-node-kind="failure" data-node-sublabel="Excesso de Falhas" data-node-tag="terminal" data-node-context="Saídas Finais">
+          <title>REJECTED · Excesso de Falhas · Saídas Finais · terminal</title>
+          <rect x="497" y="450" width="118" height="58" rx="7" class="c-mask"/>
+          <rect x="497" y="450" width="118" height="58" rx="7" class="c-security" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="failure" class="semantic-sigil s-security" transform="translate(598 456) scale(0.6875)">
+            <circle cx="8" cy="8" r="5.3"/>
+            <path d="m5.7 5.7 4.6 4.6m0-4.6-4.6 4.6"/>
+          </g>
+          <text data-detail-anchor x="556" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">REJECTED</text>
+          <text data-detail="context" x="556" y="487" class="t-muted" font-size="7" text-anchor="middle">Excesso de Falhas</text>
+        <text data-detail="fine" x="556" y="497" class="t-security" font-size="7" text-anchor="middle">terminal</text>
+        </g>
+
+        <!-- Transition labels -->
+
+
+
+
+        <!-- Legend -->
+        <g data-legend-bridge>
+          <text x="220" y="542" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <g data-legend-kind="active">
+          <rect x="220" y="554" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+          <text x="240" y="562" class="t-muted" font-size="7">active state</text>
+        </g>
+        <g data-legend-kind="waiting">
+          <rect x="325" y="554" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
+          <text x="345" y="562" class="t-muted" font-size="7">waiting</text>
+        </g>
+        <g data-legend-kind="success">
+          <rect x="415" y="554" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+          <text x="435" y="562" class="t-muted" font-size="7">terminal success</text>
+        </g>
+        <g data-legend-kind="failure">
+          <rect x="560" y="554" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+          <text x="580" y="562" class="t-muted" font-size="7">failure / exit</text>
+        </g>
+        </g>
+      </svg>

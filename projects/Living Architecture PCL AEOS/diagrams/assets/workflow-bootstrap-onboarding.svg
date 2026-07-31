@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 652" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Bootstrap &amp; Onboarding Pipeline</title>
+        <desc id="archify-diagram-description">Fluxo de Onboarding de Agentes, Leitura Constitucional e Instanciação de Projetos</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="640" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Onboarding &amp; Regras</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="640" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Setup de Ambiente</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="640" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Instanciação Spec-Driven</text>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="640" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Handoff &amp; Prontidão</text>
+
+        <!-- Phase headers -->
+        <line x1="42" y1="35" x2="266" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="42" y="27" width="224" height="16" rx="4" class="c-mask"/>
+        <text x="154" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Inicialização</text>
+        <line x1="254" y1="35" x2="476" y2="35" class="a-emphasis" stroke-width="1.1"/>
+        <rect x="254" y="27" width="222" height="16" rx="4" class="c-mask"/>
+        <text x="365" y="39" class="t-backend" font-size="8" font-weight="600" text-anchor="middle">Scaffolding</text>
+        <line x1="454" y1="35" x2="546" y2="35" class="a-dashed" stroke-width="1.1"/>
+        <rect x="454" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="500" y="39" class="t-messagebus" font-size="8" font-weight="600" text-anchor="middle">Prontidão</text>
+
+        <!-- Workflow groups -->
+
+
+        <!-- Edge paths -->
+        <path data-edge-from="read_foundation" data-edge-to="env_check" data-edge-key="0" data-composition-points="88,145;88,166;220,166;220,217" d="M 88 145 L 88 166 L 220 166 L 220 217" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="env_check" data-edge-to="copy_templates" data-edge-key="1" data-composition-points="220,269;220,290;300,290;300,341" d="M 220 269 L 220 290 L 300 290 L 300 341" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="copy_templates" data-edge-to="init_specs" data-edge-key="2" data-composition-points="346,367;384,367" d="M 346 367 L 384 367" class="a-emphasis" data-animate="edge" style="--step:2" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="init_specs" data-edge-to="session_handoff" data-edge-key="3" data-composition-points="430,393;430,414;500,414;500,465" d="M 430 393 L 430 414 L 500 414 L 500 465" class="a-security" data-animate="edge" style="--step:3" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+
+        <!-- Nodes -->
+        <g id="node-read_foundation" data-node-id="read_foundation" data-node-label="Foundation" tabindex="0" role="button" aria-label="Focus Foundation, Leitura FOUNDATION.md, Onboarding &amp; Regras › Inicialização" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="Leitura FOUNDATION.md" data-node-context="Onboarding &amp; Regras › Inicialização">
+          <title>Foundation · Leitura FOUNDATION.md · Onboarding &amp; Regras › Inicialização</title>
+          <rect x="42" y="93" width="92" height="52" rx="6" class="c-mask"/>
+          <rect x="42" y="93" width="92" height="52" rx="6" class="c-frontend" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(48 99) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-detail-anchor x="88" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Foundation</text>
+          <text data-detail="context" x="88" y="131" class="t-muted" font-size="6.6" text-anchor="middle">Leitura FOUNDATION.md</text>
+        </g>
+
+        <g id="node-env_check" data-node-id="env_check" data-node-label="Env Check" tabindex="0" role="button" aria-label="Focus Env Check, Docker + Node.js, Setup de Ambiente › Inicialização" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Docker + Node.js" data-node-context="Setup de Ambiente › Inicialização">
+          <title>Env Check · Docker + Node.js · Setup de Ambiente › Inicialização</title>
+          <rect x="174" y="217" width="92" height="52" rx="6" class="c-mask"/>
+          <rect x="174" y="217" width="92" height="52" rx="6" class="c-backend" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(180 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="220" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Env Check</text>
+          <text data-detail="context" x="220" y="255" class="t-muted" font-size="8" text-anchor="middle">Docker + Node.js</text>
+        </g>
+
+        <g id="node-copy_templates" data-node-id="copy_templates" data-node-label="Copy Templates" tabindex="0" role="button" aria-label="Focus Copy Templates, templates/tlc/*, Instanciação Spec-Driven › Scaffolding" aria-pressed="false" data-node-kind="backend" data-node-sublabel="templates/tlc/*" data-node-context="Instanciação Spec-Driven › Scaffolding">
+          <title>Copy Templates · templates/tlc/* · Instanciação Spec-Driven › Scaffolding</title>
+          <rect x="254" y="341" width="92" height="52" rx="6" class="c-mask"/>
+          <rect x="254" y="341" width="92" height="52" rx="6" class="c-backend" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(260 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="300" y="362" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Copy Templates</text>
+          <text data-detail="context" x="300" y="379" class="t-muted" font-size="8" text-anchor="middle">templates/tlc/*</text>
+        </g>
+
+        <g id="node-init_specs" data-node-id="init_specs" data-node-label="Init Specs" tabindex="0" role="button" aria-label="Focus Init Specs, .specs/specify.md, Instanciação Spec-Driven › Scaffolding" aria-pressed="false" data-node-kind="security" data-node-sublabel=".specs/specify.md" data-node-context="Instanciação Spec-Driven › Scaffolding">
+          <title>Init Specs · .specs/specify.md · Instanciação Spec-Driven › Scaffolding</title>
+          <rect x="384" y="341" width="92" height="52" rx="6" class="c-mask"/>
+          <rect x="384" y="341" width="92" height="52" rx="6" class="c-security" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(390 347) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="430" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Init Specs</text>
+          <text data-detail="context" x="430" y="379" class="t-muted" font-size="8" text-anchor="middle">.specs/specify.md</text>
+        </g>
+
+        <g id="node-session_handoff" data-node-id="session_handoff" data-node-label="Handoff" tabindex="0" role="button" aria-label="Focus Handoff, Protocolo de Sessão, Handoff &amp; Prontidão › Prontidão" aria-pressed="false" data-node-kind="external" data-node-sublabel="Protocolo de Sessão" data-node-context="Handoff &amp; Prontidão › Prontidão">
+          <title>Handoff · Protocolo de Sessão · Handoff &amp; Prontidão › Prontidão</title>
+          <rect x="454" y="465" width="92" height="52" rx="6" class="c-mask"/>
+          <rect x="454" y="465" width="92" height="52" rx="6" class="c-external" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(460 471) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="500" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Handoff</text>
+          <text data-detail="context" x="500" y="503" class="t-muted" font-size="7.3" text-anchor="middle">Protocolo de Sessão</text>
+        </g>
+
+        <!-- Edge labels -->
+
+
+
+
+
+        <!-- Legend -->
+        <g data-legend-bridge>
+          <text x="175" y="552" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <g data-legend-kind="frontend">
+          <rect x="175" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+          <text x="195" y="572" class="t-muted" font-size="7">User UI</text>
+        </g>
+        <g data-legend-kind="backend">
+          <rect x="260" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+          <text x="280" y="572" class="t-muted" font-size="7">Agent logic</text>
+        </g>
+        <g data-legend-kind="security">
+          <rect x="370" y="564" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+          <text x="390" y="572" class="t-muted" font-size="7">Policy</text>
+        </g>
+        <g data-legend-kind="messagebus">
+          <rect x="455" y="564" width="14" height="9" rx="2" class="c-messagebus" stroke-width="1"/>
+          <text x="475" y="572" class="t-muted" font-size="7">Tool action</text>
+        </g>
+        <g data-legend-kind="database">
+          <rect x="565" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+          <text x="585" y="572" class="t-muted" font-size="7">Context / trace</text>
+        </g>
+        </g>
+      </svg>
