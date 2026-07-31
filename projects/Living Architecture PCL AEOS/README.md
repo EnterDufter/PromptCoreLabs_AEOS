@@ -78,8 +78,14 @@ O **Living Architecture PCL AEOS** é o projeto oficial de arquitetura viva do e
 
 - 📄 **[specify.md](.specs/specify.md)** — Requisitos Funcionais (FR), Não Funcionais (NFR) e Restrições Soberanas.
 - 📄 **[design.md](.specs/design.md)** — Especificação visual de layout, paleta de cores e matriz de rastreabilidade.
-- 📄 **[tasks.md](.specs/tasks.md)** — Backlog atômico de tarefas (15/15 concluídas).
+- 📄 **[tasks.md](.specs/tasks.md)** — Backlog atômico de tarefas (16/16 concluídas).
 - 📄 **[validate.md](.specs/validate.md)** — Relatório final de conformidade de QA e selo de aprovação.
 
 ---
 *Living Architecture PCL AEOS v1.0 — Todos os direitos reservados – 2026*
+
+<!-- Mermaid Auto-Renderer Script for GitHub Pages -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+</script>
