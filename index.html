@@ -538,30 +538,107 @@
       transform: rotate(90deg);
     }
     .modal-body {
-      padding: 2.5rem;
+      padding: 2.2rem;
       overflow-y: auto;
       flex-grow: 1;
       color: #cbd5e1;
-      font-size: 1rem;
-      line-height: 1.85;
+      font-size: 0.925rem;
+      line-height: 1.65;
     }
 
-    /* ESTILIZAÇÃO DO MARKDOWN DENTRO DO MODAL */
-    .modal-body h1 { font-size: 1.9rem; color: var(--accent-cyan); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-    .modal-body h2 { font-size: 1.45rem; color: var(--accent-blue); margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
-    .modal-body h3 { font-size: 1.2rem; color: var(--accent-indigo); margin: 1.4rem 0 0.6rem 0; }
-    .modal-body p { margin-bottom: 1.2rem; }
-    .modal-body ul, .modal-body ol { margin: 0 0 1.2rem 1.5rem; }
-    .modal-body li { margin-bottom: 0.4rem; }
-    .modal-body code { background: #080c14; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.88rem; border: 1px solid var(--border-color); }
-    .modal-body pre { background: #070a12; border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5rem; }
-    .modal-body pre code { background: transparent; padding: 0; border: none; }
-    .modal-body blockquote { background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.2rem; color: #7dd3fc; }
-    .modal-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-    .modal-body th, .modal-body td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
-    .modal-body th { background: #131c31; color: var(--accent-cyan); }
-    .modal-body a { color: var(--accent-cyan); text-decoration: none; }
-    .modal-body a:hover { text-decoration: underline; }
+    /* ESTILIZAÇÃO ENXUTA E LEGÍVEL DO MARKDOWN DENTRO DO MODAL */
+    .modal-body h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin: 0.5rem 0 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      letter-spacing: -0.3px;
+    }
+    .modal-body h2 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 1.4rem 0 0.6rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.35rem;
+    }
+    .modal-body h3 {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--accent-indigo);
+      margin: 1.1rem 0 0.4rem 0;
+    }
+    .modal-body h4 {
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      margin: 0.9rem 0 0.3rem 0;
+    }
+    .modal-body p {
+      margin-bottom: 0.75rem;
+    }
+    .modal-body ul, .modal-body ol {
+      margin: 0 0 0.85rem 1.4rem;
+    }
+    .modal-body li {
+      margin-bottom: 0.3rem;
+    }
+    .modal-body code {
+      background: #080c14;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      border: 1px solid var(--border-color);
+    }
+    .modal-body pre {
+      background: #070a12;
+      border: 1px solid var(--border-color);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .modal-body pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      font-size: 0.82rem;
+    }
+    .modal-body blockquote {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.85rem;
+      color: #7dd3fc;
+      font-size: 0.9rem;
+    }
+    .modal-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .modal-body th, .modal-body td {
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+    .modal-body th {
+      background: #131c31;
+      color: var(--accent-cyan);
+    }
+    .modal-body a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+    .modal-body a:hover {
+      text-decoration: underline;
+    }
 
     /* RESPONSIVIDADE MOBILE & REGRAS DE IMPRESSÃO */
     @media (max-width: 768px) {
@@ -602,7 +679,14 @@
       .phase-title-text { font-size: 1.25rem; }
 
       .modal-container { width: 96vw; height: 92vh; margin: 0; border-radius: 12px; }
-      .modal-body { padding: 1.2rem; font-size: 0.92rem; }
+      .modal-body { padding: 1.2rem 1rem; font-size: 0.875rem; line-height: 1.58; }
+      .modal-body h1 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+      .modal-body h2 { font-size: 1.05rem; margin: 1.1rem 0 0.5rem 0; }
+      .modal-body h3 { font-size: 0.95rem; margin: 0.9rem 0 0.35rem 0; }
+      .modal-body pre { padding: 0.6rem 0.8rem; font-size: 0.78rem; }
+      .modal-body code { font-size: 0.78rem; }
+      .modal-body table { font-size: 0.8rem; }
+      .modal-body th, .modal-body td { padding: 0.4rem 0.5rem; }
       .section-title-bar { flex-direction: column; align-items: flex-start; }
     }
 
@@ -646,23 +730,60 @@
       .modal-body {
         padding: 0 !important;
         overflow: visible !important;
-        color: #000000 !important;
-        font-size: 11pt !important;
-        line-height: 1.6 !important;
+        color: #1e293b !important;
+        font-size: 9.5pt !important;
+        line-height: 1.45 !important;
       }
-      .modal-body h1, .modal-body h2, .modal-body h3 {
+      .modal-body h1 {
+        font-size: 13pt !important;
         color: #0f172a !important;
-        border-color: #cbd5e1 !important;
+        border-bottom: 1pt solid #cbd5e1 !important;
+        margin: 0.5rem 0 0.5rem 0 !important;
+        padding-bottom: 0.2rem !important;
         page-break-after: avoid;
+      }
+      .modal-body h2 {
+        font-size: 11.5pt !important;
+        color: #0f172a !important;
+        border-bottom: 1pt solid #e2e8f0 !important;
+        margin: 0.8rem 0 0.4rem 0 !important;
+        padding-bottom: 0.2rem !important;
+        page-break-after: avoid;
+      }
+      .modal-body h3 {
+        font-size: 10pt !important;
+        color: #1e293b !important;
+        margin: 0.6rem 0 0.3rem 0 !important;
+        page-break-after: avoid;
+      }
+      .modal-body p, .modal-body li {
+        color: #1e293b !important;
+        margin-bottom: 0.4rem !important;
       }
       .modal-body code, .modal-body pre {
         background: #f8fafc !important;
         color: #0f172a !important;
         border: 1px solid #cbd5e1 !important;
+        font-size: 8.5pt !important;
         page-break-inside: avoid;
       }
+      .modal-body blockquote {
+        background: #f1f5f9 !important;
+        border-left: 3pt solid #0284c7 !important;
+        color: #0f172a !important;
+        font-size: 9pt !important;
+      }
       .modal-body table {
+        font-size: 8.5pt !important;
         page-break-inside: auto;
+      }
+      .modal-body th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+      }
+      .modal-body th, .modal-body td {
+        border: 1px solid #cbd5e1 !important;
+        padding: 0.35rem 0.5rem !important;
       }
       .modal-body tr {
         page-break-inside: avoid;
@@ -1340,7 +1461,7 @@ erDiagram
         modalContainer.style.maxWidth = '1260px';
         modalContainer.style.height = '90vh';
 
-        modalBody.style.padding = '2.5rem';
+        modalBody.style.padding = '2.2rem';
         modalBody.style.overflowY = 'auto';
 
         modalTitle.textContent = title || 'Carregando documento...';
