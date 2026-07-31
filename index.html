@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptCoreLabs_AEOS — Trilho de Aprendizado & Living Architecture</title>
+  <title>PromptCore Labs Architecture — Trilho de Aprendizado & Living Architecture</title>
   <meta name="description" content="AI Engineering Operating System — Portal de Arquitetura Viva e Guia Narrativo de Aprendizado">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,30 +39,48 @@
       padding-bottom: 5rem;
     }
 
-    /* HERO HEADER (Normal Scroll) */
+    /* HERO HEADER COM LOGO PCL E GLOW CYAN */
     .header-hero {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(11, 15, 25, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(11, 15, 25, 0.98) 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 3rem 1.5rem 2rem 1.5rem;
-      text-align: center;
+      padding: 3rem 1.5rem 2.5rem 1.5rem;
     }
-    .header-hero h1 {
-      font-size: 2.3rem;
+    .hero-brand-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-logo-img {
+      height: 120px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.55));
+      transition: transform 0.3s ease;
+    }
+    .hero-logo-img:hover {
+      transform: scale(1.04);
+    }
+    .hero-text-box {
+      text-align: left;
+    }
+    .hero-title-cyan {
+      font-size: 2.6rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.6rem;
+      color: #38bdf8;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.65), 0 0 40px rgba(56, 189, 248, 0.35);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
     }
-    .header-hero p {
+    .hero-text-box p {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 850px;
-      margin: 0 auto 1.5rem auto;
+      margin-bottom: 1.2rem;
     }
     .badge-bar {
       display: flex;
-      justify-content: center;
       gap: 0.8rem;
       flex-wrap: wrap;
     }
@@ -379,7 +397,6 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      /* Fundo translúcido sutil com névoa leve de vidro pedido pelo usuário */
       background: rgba(11, 15, 25, 0.45);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
@@ -397,7 +414,7 @@
       pointer-events: auto;
     }
     .modal-container {
-      background: rgba(13, 19, 34, 0.92); /* Glassmorphism translúcido */
+      background: rgba(13, 19, 34, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(56, 189, 248, 0.4);
@@ -516,13 +533,14 @@
     .modal-body a { color: var(--accent-cyan); text-decoration: none; }
     .modal-body a:hover { text-decoration: underline; }
 
-    /* ================================================== */
     /* RESPONSIVIDADE MOBILE & REGRAS DE IMPRESSÃO */
-    /* ================================================== */
     @media (max-width: 768px) {
       .header-hero { padding: 2rem 1rem 1.5rem 1rem; }
-      .header-hero h1 { font-size: 1.7rem; }
-      .header-hero p { font-size: 0.92rem; }
+      .hero-brand-layout { flex-direction: column; text-align: center; gap: 1rem; }
+      .hero-logo-img { height: 85px; }
+      .hero-title-cyan { font-size: 1.8rem; }
+      .hero-text-box p { font-size: 0.92rem; }
+      .badge-bar { justify-content: center; }
 
       .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
@@ -623,21 +641,27 @@
 </head>
 <body>
 
-  <!-- HERO HEADER (Scrolls Normally) -->
+  <!-- HERO HEADER COM LOGO PCL E GLOW CYAN -->
   <header class="header-hero">
-    <h1>PromptCoreLabs_AEOS</h1>
-    <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
-    <div class="badge-bar">
-      <span class="badge">v1.0 Sovereign</span>
-      <span class="badge">18 Diagramas Interativos</span>
-      <span class="badge">TLC Spec-Driven v3</span>
-      <span class="badge">100% Zero Trust</span>
+    <div class="hero-brand-layout">
+      <!-- LOGO PCL TRANSPARENTE LEVE E LEGÍVEL -->
+      <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/PCL_Logo_Transparente.png" alt="PCL Logo" class="hero-logo-img">
+      <div class="hero-text-box">
+        <h1 class="hero-title-cyan">PromptCore Labs Architecture</h1>
+        <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
+        <div class="badge-bar">
+          <span class="badge">v1.0 Sovereign</span>
+          <span class="badge">18 Diagramas Interativos</span>
+          <span class="badge">TLC Spec-Driven v3</span>
+          <span class="badge">100% Zero Trust</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- NAVBAR FLUTUANTE COMPACTA COM MENU MOBILE -->
+  <!-- NAVBAR FLUTUANTE COMPACTA COM "PromptCore Labs AEOS" -->
   <nav class="navbar-sticky">
-    <a href="#" class="nav-brand">⚡ PromptCoreLabs_AEOS</a>
+    <a href="#" class="nav-brand">⚡ PromptCore Labs AEOS</a>
     
     <!-- Botão Hamburguer Mobile -->
     <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir Menu">
