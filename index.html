@@ -651,22 +651,28 @@
 
       .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
+      /* MENU DROPDOWN MOBILE COM FADE E SUAVE DESLOCAMENTO */
       .nav-phases {
         position: fixed;
         top: 52px;
         left: 0; right: 0;
         background: rgba(11, 15, 25, 0.96);
         backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--border-color);
         flex-direction: column;
         padding: 1rem;
         gap: 0.8rem;
-        transform: translateY(-120%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 999;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
       }
       .nav-phases.active {
+        opacity: 1;
+        pointer-events: auto;
         transform: translateY(0);
       }
       .phase-tab { width: 100%; justify-content: flex-start; padding: 0.6rem 1rem; font-size: 0.9rem; }
@@ -1539,7 +1545,7 @@ erDiagram
         modalBody.innerHTML = ''; // Limpa iframe para economizar memória
       }
 
-      // Interceptar cliques em todos os links `.link-doc`
+      // Intercepta cliques em todos os links `.link-doc`
       document.querySelectorAll('.link-doc').forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
@@ -1549,7 +1555,7 @@ erDiagram
         });
       });
 
-      // Interceptar cliques em todos os botões `.btn-diagram-modal`
+      // Intercepta cliques em todos os botões `.btn-diagram-modal`
       document.querySelectorAll('.btn-diagram-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
