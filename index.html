@@ -43,11 +43,11 @@
     .header-hero {
       background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(11, 15, 25, 0.95) 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 3.5rem 1.5rem 2.5rem 1.5rem;
+      padding: 3rem 1.5rem 2rem 1.5rem;
       text-align: center;
     }
     .header-hero h1 {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 800;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
@@ -56,7 +56,7 @@
     }
     .header-hero p {
       color: var(--text-muted);
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       max-width: 850px;
       margin: 0 auto 1.5rem auto;
     }
@@ -137,6 +137,21 @@
       justify-content: center;
       font-size: 0.7rem;
       font-weight: 800;
+    }
+
+    /* BOTÃO MENU MOBILE (HAMBURGUER) */
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #e3e3e3;
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .mobile-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .container {
@@ -359,14 +374,15 @@
     }
 
     /* ================================================== */
-    /* MODAL READER OVERLAY (EXPANDIDO & DARK GLASSMORPHISM) */
+    /* MODAL OVERLAY (VIDRO TRANSLÚCIDO SUAVE & EXPANDIDO) */
     /* ================================================== */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 8, 17, 0.82); /* Mantido escuro e focado */
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      /* Fundo translúcido sutil com névoa leve de vidro pedido pelo usuário */
+      background: rgba(11, 15, 25, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
@@ -381,17 +397,17 @@
       pointer-events: auto;
     }
     .modal-container {
-      background: rgba(13, 19, 34, 0.88); /* Glassmorphism translúcido */
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(13, 19, 34, 0.92); /* Glassmorphism translúcido */
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(56, 189, 248, 0.4);
       border-radius: 16px;
-      width: 92%; /* Expansão de largura pedida pelo usuário */
-      max-width: 1240px; /* Largura expandida */
+      width: 94%;
+      max-width: 1260px;
       height: 90vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.18);
       transform: translateY(24px) scale(0.98);
       transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
@@ -400,7 +416,7 @@
       transform: translateY(0) scale(1);
     }
     .modal-header {
-      background: rgba(19, 28, 49, 0.9);
+      background: rgba(19, 28, 49, 0.92);
       border-bottom: 1px solid var(--border-color);
       padding: 1rem 1.5rem;
       display: flex;
@@ -434,7 +450,6 @@
       gap: 0.6rem;
     }
     
-    /* BOTÃO DE IMPRESSÃO (MATERIAL PRINT ICON) */
     .modal-action-btn {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-color);
@@ -484,7 +499,7 @@
       line-height: 1.85;
     }
 
-    /* ESTILIZAÇÃO COMPLETA DO CONTEÚDO MARKDOWN DENTRO DO MODAL */
+    /* ESTILIZAÇÃO DO MARKDOWN DENTRO DO MODAL */
     .modal-body h1 { font-size: 1.9rem; color: var(--accent-cyan); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
     .modal-body h2 { font-size: 1.45rem; color: var(--accent-blue); margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
     .modal-body h3 { font-size: 1.2rem; color: var(--accent-indigo); margin: 1.4rem 0 0.6rem 0; }
@@ -501,34 +516,108 @@
     .modal-body a { color: var(--accent-cyan); text-decoration: none; }
     .modal-body a:hover { text-decoration: underline; }
 
-    /* MEDIA PRINT RULES FOR CLEAN DOCUMENT PRINTING */
-    @media print {
-      body * { visibility: hidden; }
-      .modal-overlay.active, .modal-overlay.active * { visibility: visible; }
-      .modal-overlay {
-        position: absolute; left: 0; top: 0; width: 100%; height: auto;
-        background: #fff !important; backdrop-filter: none !important;
+    /* ================================================== */
+    /* RESPONSIVIDADE MOBILE & REGRAS DE IMPRESSÃO */
+    /* ================================================== */
+    @media (max-width: 768px) {
+      .header-hero { padding: 2rem 1rem 1.5rem 1rem; }
+      .header-hero h1 { font-size: 1.7rem; }
+      .header-hero p { font-size: 0.92rem; }
+
+      .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+
+      .nav-phases {
+        position: fixed;
+        top: 52px;
+        left: 0; right: 0;
+        background: rgba(11, 15, 25, 0.96);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.8rem;
+        transform: translateY(-120%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       }
-      .modal-container {
-        width: 100% !important; max-width: 100% !important; height: auto !important;
-        box-shadow: none !important; border: none !important; background: #fff !important; color: #000 !important;
+      .nav-phases.active {
+        transform: translateY(0);
       }
-      .modal-header, .modal-actions { display: none !important; }
-      .modal-body { color: #000 !important; padding: 0 !important; font-size: 11pt; }
-      .modal-body h1, .modal-body h2, .modal-body h3 { color: #0f172a !important; border-color: #cbd5e1 !important; }
-      .modal-body code, .modal-body pre { background: #f1f5f9 !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
-      .modal-body blockquote { background: #f0f9ff !important; border-left-color: #0284c7 !important; color: #0369a1 !important; }
-      .modal-body table th { background: #f1f5f9 !important; color: #0f172a !important; }
-      .modal-body table th, .modal-body table td { border-color: #cbd5e1 !important; }
+      .phase-tab { width: 100%; justify-content: flex-start; padding: 0.6rem 1rem; font-size: 0.9rem; }
+
+      .container { padding: 1.5rem 1rem; }
+      .grid-expanded { grid-template-columns: 1fr; gap: 1.2rem; }
+      .card-exp-img { height: 200px; }
+      .phase-section { padding: 1.5rem 1rem; }
+      .phase-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .phase-title-text { font-size: 1.25rem; }
+
+      .modal-container { width: 98%; height: 94vh; margin: 0; border-radius: 12px; }
+      .modal-body { padding: 1.2rem; font-size: 0.92rem; }
     }
 
-    footer {
-      text-align: center;
-      margin-top: 4rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--border-color);
-      padding-top: 2rem;
+    /* IMPRESSÃO PERFEITA SEM PÁGINAS PRETAS OU ADICIONAIS */
+    @media print {
+      @page { margin: 1.5cm; size: auto; }
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .header-hero, .navbar-sticky, main.container, footer {
+        display: none !important;
+      }
+      .modal-overlay {
+        position: static !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: block !important;
+      }
+      .modal-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+        transform: none !important;
+      }
+      .modal-header, .modal-actions {
+        display: none !important;
+      }
+      .modal-body {
+        padding: 0 !important;
+        overflow: visible !important;
+        color: #000000 !important;
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+      }
+      .modal-body h1, .modal-body h2, .modal-body h3 {
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+        page-break-after: avoid;
+      }
+      .modal-body code, .modal-body pre {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: avoid;
+      }
+      .modal-body table {
+        page-break-inside: auto;
+      }
+      .modal-body tr {
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
@@ -546,10 +635,21 @@
     </div>
   </header>
 
-  <!-- NAVBAR FLUTUANTE COMPACTA (Sticky 52px) -->
+  <!-- NAVBAR FLUTUANTE COMPACTA COM MENU MOBILE -->
   <nav class="navbar-sticky">
     <a href="#" class="nav-brand">⚡ PromptCoreLabs_AEOS</a>
-    <div class="nav-phases">
+    
+    <!-- Botão Hamburguer Mobile -->
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e3e3e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Lista de Fases do Trilho -->
+    <div id="nav-phases-menu" class="nav-phases">
       <a href="#fase-1" class="phase-tab"><span class="phase-num">1</span> Visão Macro</a>
       <a href="#fase-2" class="phase-tab"><span class="phase-num">2</span> Squad IA</a>
       <a href="#fase-3" class="phase-tab"><span class="phase-num">3</span> RAG Memória</a>
@@ -1104,7 +1204,7 @@ erDiagram
   </main>
 
   <!-- ================================================== -->
-  <!-- MODAL OVERLAY COMPONENT (EXPANDIDO & GLASSMORPHISM) -->
+  <!-- MODAL OVERLAY COMPONENT (VIDRO TRANSLÚCIDO SUAVE) -->
   <!-- ================================================== -->
   <div id="doc-modal-overlay" class="modal-overlay" aria-hidden="true">
     <div class="modal-container">
@@ -1139,13 +1239,28 @@ erDiagram
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true, theme: 'dark' });
 
-    // SCRIPT DO LEITOR MODAL INTERATIVO
+    // SCRIPT DO LEITOR MODAL INTERATIVO & MENU MOBILE
     document.addEventListener('DOMContentLoaded', () => {
       const modalOverlay = document.getElementById('doc-modal-overlay');
       const modalTitle = document.getElementById('modal-doc-title');
       const modalBody = document.getElementById('modal-doc-body');
       const closeBtn = document.getElementById('modal-close-btn');
       const printBtn = document.getElementById('modal-print-btn');
+
+      // LÓGICA DO MENU MOBILE (HAMBURGUER)
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const navPhasesMenu = document.getElementById('nav-phases-menu');
+
+      mobileMenuBtn.addEventListener('click', () => {
+        navPhasesMenu.classList.toggle('active');
+      });
+
+      // Fechar menu mobile ao clicar em qualquer item do menu
+      document.querySelectorAll('.phase-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          navPhasesMenu.classList.remove('active');
+        });
+      });
 
       // Função para abrir o modal com documento renderizado
       async function openDocModal(url, title) {
