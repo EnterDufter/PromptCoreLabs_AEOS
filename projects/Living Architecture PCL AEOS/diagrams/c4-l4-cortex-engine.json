@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "C4 Level 4: Cortex Archify CLI Engine Code Specs",
+    "subtitle": "Especificação Nível de Código dos Módulos Internos do Motor Cortex (archify.mjs)",
+    "output": "c4-l4-cortex-engine.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "validation-pipeline",
+        "label": "Pipeline de Validação",
+        "focus": ["cli_router", "modal_validator", "layout_engine"],
+        "note": "Roteamento de CLI e validação estrita de schemas e limites de composição."
+      },
+      {
+        "id": "rendering-pipeline",
+        "label": "Pipeline de Renderização",
+        "focus": ["layout_engine", "svg_renderer", "html_deliverer"],
+        "note": "Cálculo vetorial, geração do SVG inline e empacotamento do HTML interativo."
+      }
+    ]
+  },
+  "components": [
+    { "id": "cli_router", "type": "frontend", "label": "CLI Router", "sublabel": "archify.mjs", "pos": [50, 200], "size": [140, 60] },
+    { "id": "modal_validator", "type": "security", "label": "Modal Validator", "sublabel": "valida schemas", "pos": [260, 200], "size": [140, 60] },
+    { "id": "layout_engine", "type": "backend", "label": "Layout Engine", "sublabel": "ortogonal & ports", "pos": [470, 200], "size": [140, 60], "tag": "Geometria" },
+    { "id": "svg_renderer", "type": "cloud", "label": "SVG Renderer", "sublabel": "inline SVG vector", "pos": [680, 200], "size": [140, 60] },
+    { "id": "html_deliverer", "type": "database", "label": "HTML Deliverer", "sublabel": "standalone HTML", "pos": [890, 200], "size": [140, 60], "tag": "Artefato Final" }
+  ],
+  "boundaries": [
+    { "kind": "security-group", "label": "Cortex Archify Engine (Nível C4 Level 4 - Código)", "wraps": ["cli_router", "modal_validator", "layout_engine", "svg_renderer", "html_deliverer"] }
+  ],
+  "connections": [
+    { "id": "router-validator", "from": "cli_router", "to": "modal_validator", "label": "Valida Schema", "fromSide": "right", "toSide": "left", "labelDy": -35 },
+    { "id": "validator-layout", "from": "modal_validator", "to": "layout_engine", "label": "Gera Geometria", "variant": "emphasis", "fromSide": "right", "toSide": "left", "labelDy": -35 },
+    { "id": "layout-renderer", "from": "layout_engine", "to": "svg_renderer", "label": "Vetoriza SVG", "variant": "emphasis", "fromSide": "right", "toSide": "left", "labelDy": -35 },
+    { "id": "renderer-deliverer", "from": "svg_renderer", "to": "html_deliverer", "label": "Empacota HTML", "variant": "security", "fromSide": "right", "toSide": "left", "labelDy": -35 }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Invariantes de Código C4 Level 4", "items": ["9 verificações estritas de layout (ortogonalidade, ritmo de curvas, limpeza de rótulos)", "Garantia de saída autocontida com CSS/JS e suporte a exportação PNG/SVG/WebM"] },
+    { "dot": "emerald", "title": "Zero Dependências Externas", "items": ["Renderização 100% nativa via Node.js sem necessidade de serviços externos ou GPU", "Execução soberana garantida no ecossistema PCL AEOS"] }
+  ]
+}

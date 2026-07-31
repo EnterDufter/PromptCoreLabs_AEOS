@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "OmniRoute LLM Request Lifecycle & EBITDA Shield",
+    "subtitle": "Proxy de Inferência, Cache de Prompts e Fallback Dinâmico Cloud / GPU Local",
+    "output": "seq-omniroute-routing.html",
+    "viewBox": [800, 880],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "prompt-cache-hit",
+        "label": "Hit no EBITDA Shield Cache",
+        "focus": ["client", "omniroute", "cache"],
+        "note": "Resposta imediata sem consumo de tokens externos quando há cache hit."
+      },
+      {
+        "id": "local-gpu-routing",
+        "label": "Roteamento GPU Local (Custo Zero)",
+        "focus": ["omniroute", "local_gpu"],
+        "note": "Execução local via Ollama/LM Studio em tarefas triviais."
+      },
+      {
+        "id": "cloud-fallback",
+        "label": "Fallback Cloud LLM",
+        "focus": ["omniroute", "cloud_llm"],
+        "note": "Redirecionamento automático para Gemini/Claude em raciocínio denso."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "client", "type": "external", "label": "Cliente", "sublabel": "PaperClip / IDE" },
+    { "id": "omniroute", "type": "backend", "label": "OmniRoute", "sublabel": "AI Gateway :20130" },
+    { "id": "cache", "type": "database", "label": "Cache EBITDA", "sublabel": "Prompt Cache" },
+    { "id": "local_gpu", "type": "cloud", "label": "GPU Local", "sublabel": "Ollama / LM Studio" },
+    { "id": "cloud_llm", "type": "cloud", "label": "Cloud LLM", "sublabel": "Gemini / Claude API" }
+  ],
+  "segments": [
+    { "from": 150, "to": 310, "label": "Verificação de Cache & Triagem" },
+    { "from": 330, "to": 540, "label": "Roteamento Primário (GPU Local)" },
+    { "from": 560, "to": 780, "label": "Fallback High Logic (Cloud LLM)" }
+  ],
+  "messages": [
+    { "from": "client", "to": "omniroute", "y": 180, "label": "POST /v1/chat/completions", "variant": "emphasis" },
+    { "from": "omniroute", "to": "cache", "y": 230, "label": "Lookup Hash no Prompt Cache", "variant": "emphasis" },
+    { "from": "cache", "to": "omniroute", "y": 280, "label": "Cache Miss / Hit Result", "variant": "return" },
+    { "from": "omniroute", "to": "local_gpu", "y": 360, "label": "Trivial Gate -> Qwen3 / Gemma 3", "variant": "dashed" },
+    { "from": "local_gpu", "to": "omniroute", "y": 440, "label": "Resposta ou GPU Unavailable", "variant": "return" },
+    { "from": "omniroute", "to": "cloud_llm", "y": 590, "label": "Fallback -> Gemini 3.1 Pro / Claude 3.5", "variant": "emphasis" },
+    { "from": "cloud_llm", "to": "omniroute", "y": 670, "label": "Token Stream + Meta Metrics", "variant": "return" },
+    { "from": "omniroute", "to": "client", "y": 740, "label": "HTTP 200 OK + Completion Data", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "omniroute", "from": 170, "to": 750, "type": "backend" },
+    { "participant": "cache", "from": 220, "to": 290, "type": "database" },
+    { "participant": "local_gpu", "from": 350, "to": 450, "type": "cloud" },
+    { "participant": "cloud_llm", "from": 580, "to": 680, "type": "cloud" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "EBITDA Shield", "items": ["Minimiza custos de API interceptando chamadas idênticas", "Prompt caching inteligente reduz latência para milissegundos"] },
+    { "dot": "orange", "title": "Resiliência Multi-Tier", "items": ["Chaveamento transparente de Tier-3 (Local GPU) para Tier-1 (Cloud)", "Recuperação automática sem falhar a requisição do agente"] },
+    { "dot": "emerald", "title": "Métricas de Consumo", "items": ["Auditoria completa de tokens e custo estimado gravada em log", "Conexão de alta velocidade com o PaperClip Dashboard"] }
+  ]
+}

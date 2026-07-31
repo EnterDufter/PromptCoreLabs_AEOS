@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "RAG & Memory Data Lineage (pcl-db PGVector)",
+    "subtitle": "Linhagem de Ingestão de Documentos, Embeddings e Busca Semântica no PostgreSQL 17",
+    "output": "data-rag-memory.html",
+    "viewBox": [1120, 720],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ingestion-path",
+        "label": "Caminho de Ingestão",
+        "focus": ["docs", "logs", "chunker", "embedder"],
+        "note": "Processamento de markdown e logs para geração de chunks e embeddings."
+      },
+      {
+        "id": "storage-and-search",
+        "label": "Armazenamento & Busca Vetorial",
+        "focus": ["embedder", "pgvector", "rag_context"],
+        "note": "Persistência no PGVector e consulta semântica pelos agentes."
+      }
+    ]
+  },
+  "stages": [
+    { "label": "Fontes" },
+    { "label": "Ingestão" },
+    { "label": "Processamento" },
+    { "label": "Persistência" },
+    { "label": "Consumo RAG" }
+  ],
+  "nodes": [
+    { "id": "docs", "type": "frontend", "label": "Markdown & Specs", "sublabel": "repositório Git", "stage": 0, "row": 0, "tag": "textos" },
+    { "id": "logs", "type": "frontend", "label": "Logs Execução", "sublabel": "células de agente", "stage": 0, "row": 2, "tag": "traces" },
+    { "id": "chunker", "type": "cloud", "label": "Memory Chunker", "sublabel": "divisão de seções", "stage": 1, "row": 1, "tag": "chunks" },
+    { "id": "embedder", "type": "backend", "label": "Embedder Engine", "sublabel": "gerador vetorial", "stage": 2, "row": 1, "tag": "vectors" },
+    { "id": "pgvector", "type": "database", "label": "pcl-db PGVector", "sublabel": "PostgreSQL 17 :5432", "stage": 3, "row": 1, "tag": "embeddings" },
+    { "id": "rag_context", "type": "security", "label": "Context Provider", "sublabel": "busca semântica RAG", "stage": 4, "row": 1, "tag": "agentes" }
+  ],
+  "flows": [
+    { "id": "docs-ingest", "from": "docs", "to": "chunker", "label": "especificações", "classification": "texto markdown", "variant": "emphasis", "fromSide": "right", "toSide": "left", "via": [[195, 157], [195, 271]] },
+    { "id": "logs-ingest", "from": "logs", "to": "chunker", "label": "traces de execução", "classification": "logs json", "variant": "default", "fromSide": "right", "toSide": "left", "via": [[212, 385], [212, 271]] },
+    { "id": "chunk-process", "from": "chunker", "to": "embedder", "label": "chunks de texto", "classification": "seções 512t", "variant": "emphasis", "route": "straight" },
+    { "id": "vector-store", "from": "embedder", "to": "pgvector", "label": "vetores 768d/1536d", "classification": "embeddings float", "variant": "emphasis", "route": "straight" },
+    { "id": "semantic-search", "from": "pgvector", "to": "rag_context", "label": "busca por cosseno", "classification": "top-k resultados", "variant": "security", "route": "straight" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Indexação em Tempo Real", "items": ["Documentos e especificações são divididos em chunks semânticos", "Mapeamento bidirecional mantido com a fonte original"] },
+    { "dot": "emerald", "title": "PostgreSQL 17 + pgvector", "items": ["Indexação vetorial de altíssima performance no pcl-db", "Persistência relacional e vetorial unificada"] },
+    { "dot": "rose", "title": "Isolamento & Soberania", "items": ["Sem envio de dados confidenciais para indexadores externos", "RAG consumido exclusivamente pela squad de agentes local"] }
+  ]
+}

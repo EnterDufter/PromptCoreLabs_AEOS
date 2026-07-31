@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Model Context Protocol (MCP) Interconnection Map",
+    "subtitle": "Conexão de Servidores MCP Locais com a IDE do Agente e o Workspace",
+    "output": "mcp-interconnection.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "mcp-routing",
+        "label": "Roteamento MCP",
+        "focus": ["client", "cortex_mcp", "notebooklm_mcp"],
+        "note": "Agente invocando ferramentas lazy e eager dos servidores MCP."
+      },
+      {
+        "id": "filesystem-access",
+        "label": "Acesso ao Workspace",
+        "focus": ["cortex_mcp", "notebooklm_mcp", "workspace"],
+        "note": "Leitura de notas e geração de artefatos visuais no disco."
+      }
+    ]
+  },
+  "components": [
+    { "id": "client", "type": "external", "label": "Cliente Agente", "sublabel": "Antigravity IDE", "pos": [50, 250], "size": [150, 60] },
+    { "id": "mcp_config", "type": "cloud", "label": "mcp.config.json", "sublabel": "Manifesto MCP", "pos": [260, 110], "size": [150, 60] },
+    { "id": "cortex_mcp", "type": "backend", "label": "pcl-cortex MCP", "sublabel": "Diagramas & Archify", "pos": [480, 160], "size": [160, 60], "tag": "Visuais HTML" },
+    { "id": "notebooklm_mcp", "type": "backend", "label": "gemini-notebooklm", "sublabel": "Pesquisa & Notas", "pos": [480, 340], "size": [160, 60], "tag": "RAG Conhecimento" },
+    { "id": "workspace", "type": "database", "label": "Workspace Git", "sublabel": "Repositório PCL", "pos": [740, 250], "size": [150, 60] }
+  ],
+  "boundaries": [
+    { "kind": "security-group", "label": "Servidores MCP (Model Context Protocol)", "wraps": ["cortex_mcp", "notebooklm_mcp"] },
+    { "kind": "region", "label": "Host Storage & Configurações", "wraps": ["mcp_config", "workspace"] }
+  ],
+  "connections": [
+    { "id": "client-config", "from": "client", "to": "mcp_config", "label": "Lê Manifesto", "variant": "dashed", "fromSide": "top", "toSide": "left" },
+    { "id": "client-cortex", "from": "client", "to": "cortex_mcp", "label": "Gera Diagramas", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "client-notebooklm", "from": "client", "to": "notebooklm_mcp", "label": "Consulta Notas", "variant": "emphasis", "fromSide": "bottom", "toSide": "left" },
+    { "id": "cortex-workspace", "from": "cortex_mcp", "to": "workspace", "label": "Salva Artefatos", "fromSide": "right", "toSide": "top" },
+    { "id": "notebooklm-workspace", "from": "notebooklm_mcp", "to": "workspace", "label": "Leitura de Contexto", "fromSide": "right", "toSide": "bottom" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Protocolo Standard MCP", "items": ["Comunicação padronizada JSON-RPC via stdio com o cliente de IA", "Descoberta automática de ferramentas e schemas dinâmicos"] },
+    { "dot": "emerald", "title": "Servidor pcl-cortex", "items": ["Executa o motor Archify CLI de forma transparente", "Valida e compila diagramas interativos sem intervenção manual"] },
+    { "dot": "rose", "title": "Soberania & Segurança", "items": ["Ferramentas executadas estritamente nos diretórios autorizados do workspace", "Sem vazamento de variáveis ou chaves de API"] }
+  ]
+}

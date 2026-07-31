@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Governance & Stage Gates Matrix (TLC v3)",
+    "subtitle": "Matriz de 5 Stage Gates Sequenciais e Artefatos Obrigatórios da Governança",
+    "output": "gov-stage-gates-matrix.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "specification-gates",
+        "label": "Gates de Especificação",
+        "focus": ["specify_gate", "design_gate", "tasks_gate"],
+        "note": "Etapas de escopo, design arquitetural e planejamento de tarefas."
+      },
+      {
+        "id": "validation-gates",
+        "label": "Gates de Validação & Signoff",
+        "focus": ["qa_gate", "validate_gate"],
+        "note": "Auditoria adversária de QA e validação final pelo operador humano."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "gate1", "label": "Gate 1 — Specify" },
+    { "id": "gate2", "label": "Gate 2 — Design" },
+    { "id": "gate3", "label": "Gate 3 — Tasks" },
+    { "id": "gate4", "label": "Gate 4 — Execute & QA" },
+    { "id": "gate5", "label": "Gate 5 — Signoff" }
+  ],
+  "phases": [
+    { "id": "phase_def", "label": "Especificação & Design", "fromCol": 0, "toCol": 1 },
+    { "id": "phase_plan", "label": "Planejamento", "fromCol": 2, "toCol": 2, "variant": "emphasis" },
+    { "id": "phase_val", "label": "Execução & Signoff", "fromCol": 3, "toCol": 4, "variant": "dashed" }
+  ],
+  "mainPath": ["specify_gate", "design_gate", "tasks_gate", "qa_gate", "validate_gate"],
+  "nodes": [
+    { "id": "specify_gate", "lane": "gate1", "col": 0, "type": "frontend", "label": "Specify Gate", "sublabel": "specify.md" },
+    { "id": "design_gate", "lane": "gate2", "col": 1, "type": "backend", "label": "Design Gate", "sublabel": "design.md" },
+    { "id": "tasks_gate", "lane": "gate3", "col": 2, "type": "backend", "label": "Tasks Gate", "sublabel": "tasks.md" },
+    { "id": "qa_gate", "lane": "gate4", "col": 3, "type": "security", "label": "QA Gate", "sublabel": "execute / QA" },
+    { "id": "validate_gate", "lane": "gate5", "col": 4, "type": "security", "label": "Validate Gate", "sublabel": "validate.md" }
+  ],
+  "edges": [
+    { "from": "specify_gate", "to": "design_gate", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "design_gate", "to": "tasks_gate", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "tasks_gate", "to": "qa_gate", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "qa_gate", "to": "validate_gate", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Disciplinaridade TLC v3", "items": ["Nenhum código é escrito sem a aprovação do Tasks Gate", "Cada transição de gate exige assinatura ou autorização do operador humano"] },
+    { "dot": "emerald", "title": "Rastreabilidade e Compliance", "items": ["Mapeamento direto entre Requisitos Funcionais (FR) e testes no validate.md", "Auditoria de segurança garante 0 vazamento de segredos em todos os gates"] }
+  ]
+}

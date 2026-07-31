@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "PCL Cortex Micro-Loop Lifecycle",
+    "subtitle": "Máquina de Estados: Triagem Trivial, Edição Cirúrgica, Retentativas e Auditoria QA",
+    "output": "life-cortex-micro-loop.html",
+    "viewBox": [980, 660],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "main-micro-loop",
+        "label": "Ciclo Principal de Execução",
+        "focus": ["spec_ready", "trivial_gate", "building", "qa_review", "completed"],
+        "note": "Fluxo ordenado desde a especificação aprovada até a entrega final."
+      },
+      {
+        "id": "bounded-retries",
+        "label": "Retentativas Delimitadas (máx 3)",
+        "focus": ["building", "qa_review", "qa_failed"],
+        "note": "Rejeição QA (REFUTED) retornando para re-execução do Builder."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "Fases Principais" },
+    { "id": "waiting", "label": "Gates & Interrupções" },
+    { "id": "exceptions", "label": "Alça de Retentativa" },
+    { "id": "terminal", "label": "Saídas Finais" }
+  ],
+  "states": [
+    { "id": "spec_ready", "type": "start", "label": "Spec Approved", "sublabel": "Gate Tasks Ok", "lane": "main", "col": 0, "step": "01", "tag": "start" },
+    { "id": "trivial_gate", "type": "decision", "label": "Trivial Gate", "sublabel": "Triagem Tier-3", "lane": "main", "col": 1, "step": "02", "tag": "triage" },
+    { "id": "building", "type": "active", "label": "Building", "sublabel": "Edição Cirúrgica", "lane": "main", "col": 2, "step": "03", "tag": "code" },
+    { "id": "qa_review", "type": "decision", "label": "QA Review", "sublabel": "Testes Observação", "lane": "main", "col": 3, "step": "04", "tag": "audit" },
+    { "id": "completed", "type": "success", "label": "Approved", "sublabel": "Assinado STATE.md", "lane": "main", "col": 4, "step": "05", "tag": "done" },
+    { "id": "qa_failed", "type": "failure", "label": "REFUTED", "sublabel": "Retentativa (máx 3)", "lane": "exceptions", "col": 1, "yOffset": 78, "tag": "retry" },
+    { "id": "rejected", "type": "failure", "label": "REJECTED", "sublabel": "Excesso de Falhas", "lane": "terminal", "col": 1, "tag": "terminal" }
+  ],
+  "transitions": [
+    { "id": "qa-refuted", "from": "qa_review", "to": "qa_failed", "variant": "security", "route": "drop" },
+    { "id": "retry-building", "from": "qa_failed", "to": "building", "variant": "emphasis", "fromSide": "left", "toSide": "top", "via": [[20, 385], [20, 80], [402, 80]] },
+    { "id": "max-retries-exceeded", "from": "qa_failed", "to": "rejected", "variant": "security", "route": "straight" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Triagem Trivial Gate", "items": ["Classifica se a tarefa é trivial ou requer raciocínio denso", "Redireciona para o tier de execução apropriado (Local GPU ou Cloud)"] },
+    { "dot": "amber", "title": "Retentativa Delimitada (Bounded Retries)", "items": ["Builder recebe feedback detalhado do erro sem mascarar sintomas", "Limite máximo de 3 tentativas por tarefa antes do REJECTED"] },
+    { "dot": "rose", "title": "Aprovação Final QA", "items": ["Código e diffs aprovados com 0 inconformidades", "Mudanças consolidadas no relatório validate.md"] }
+  ]
+}

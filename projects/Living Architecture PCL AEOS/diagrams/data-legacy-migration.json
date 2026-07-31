@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Legacy Migration Dataflow (Extração & Modernização)",
+    "subtitle": "Fluxo de Ingestão de Projetos Legados, Extração de Contexto e Migração TLC Spec-Driven",
+    "output": "data-legacy-migration.html",
+    "viewBox": [1120, 720],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "extraction-path",
+        "label": "Caminho de Extração",
+        "focus": ["legacy_code", "parser", "tlc_refactor"],
+        "note": "Análise estática e extração de contexto de código antigo em legacy/."
+      },
+      {
+        "id": "modernization-path",
+        "label": "Modernização PCL AEOS",
+        "focus": ["tlc_refactor", "aeos_repo", "active_app"],
+        "note": "Geração da suíte .specs/ e migração para a nova taxonomia do AEOS."
+      }
+    ]
+  },
+  "stages": [
+    { "label": "Legado" },
+    { "label": "Extração" },
+    { "label": "Refatoração" },
+    { "label": "Armazenamento" },
+    { "label": "Integração" }
+  ],
+  "nodes": [
+    { "id": "legacy_code", "type": "frontend", "label": "Projetos Legados", "sublabel": "diretório legacy/", "stage": 0, "row": 1, "tag": "código antigo" },
+    { "id": "parser", "type": "cloud", "label": "Context Parser", "sublabel": "extração de AST", "stage": 1, "row": 1, "tag": "parsing" },
+    { "id": "tlc_refactor", "type": "backend", "label": "TLC Refactor", "sublabel": "mapeamento Spec", "stage": 2, "row": 1, "tag": "padronização" },
+    { "id": "aeos_repo", "type": "database", "label": "Git Repo AEOS", "sublabel": "pasta projects/", "stage": 3, "row": 1, "tag": "novo projeto" },
+    { "id": "active_app", "type": "security", "label": "Aplicação Ativa", "sublabel": "AEOS Governed", "stage": 4, "row": 1, "tag": "produção" }
+  ],
+  "flows": [
+    { "id": "legacy-parser", "from": "legacy_code", "to": "parser", "label": "extrai arquivos", "classification": "código-fonte", "variant": "default", "route": "straight" },
+    { "id": "parser-refactor", "from": "parser", "to": "tlc_refactor", "label": "AST + contexto", "classification": "metadados", "variant": "emphasis", "route": "straight" },
+    { "id": "refactor-repo", "from": "tlc_refactor", "to": "aeos_repo", "label": "gera .specs/", "classification": "artefatos TLC", "variant": "emphasis", "route": "straight", "labelDy": -20 },
+    { "id": "repo-app", "from": "aeos_repo", "to": "active_app", "label": "executa no Harness", "classification": "runtime", "variant": "security", "route": "straight" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Preservação de Conhecimento", "items": ["Código em legacy/ é mantido para referência histórica sem mutação direta", "Extração automatizada de regras de negócio e dependências"] },
+    { "dot": "emerald", "title": "Migração Gradual Spec-Driven", "items": ["Criação prévia de specify.md e design.md antes de reescrever o código", "Validação rigorosa de regressão pelos agentes de QA"] }
+  ]
+}

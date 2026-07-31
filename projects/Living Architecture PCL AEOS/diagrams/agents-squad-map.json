@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "PaperClip Squad Orchestration & Agent Roles",
+    "subtitle": "Orquestração de Papéis entre Estratégia, Planejamento, Construção e Qualidade",
+    "output": "agents-squad-map.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "strategy-and-planning",
+        "label": "Estratégia e Planejamento",
+        "focus": ["strategist", "planner"],
+        "note": "Alinhamento estratégico e especificação de tarefas."
+      },
+      {
+        "id": "build-and-qa",
+        "label": "Construção e Qualidade",
+        "focus": ["builder", "qa_reviewer", "ciso_agent"],
+        "note": "Desenvolvimento cirúrgico e checagens adversárias de segurança."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "strategy", "label": "Estratégia & Negócios" },
+    { "id": "planning", "label": "Engenharia & Especificação" },
+    { "id": "execution", "label": "Execução de Código" },
+    { "id": "quality", "label": "Qualidade & Segurança" }
+  ],
+  "phases": [
+    { "id": "phase_spec", "label": "Especificação", "fromCol": 0, "toCol": 1 },
+    { "id": "phase_build", "label": "Desenvolvimento", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "phase_gate", "label": "Auditoria & Gate", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["strategist", "planner", "builder", "qa_reviewer", "ciso_agent", "auditor_steward"],
+  "nodes": [
+    { "id": "strategist", "lane": "strategy", "col": 0, "type": "frontend", "label": "Strategist", "sublabel": "Visão & OKRs" },
+    { "id": "planner", "lane": "planning", "col": 1, "type": "backend", "label": "Planner", "sublabel": "Lead Engineer" },
+    { "id": "builder", "lane": "execution", "col": 2, "type": "backend", "label": "Builder", "sublabel": "Escrita Código" },
+    { "id": "qa_reviewer", "lane": "quality", "col": 3, "type": "security", "label": "QA Reviewer", "sublabel": "Testes Adversários" },
+    { "id": "ciso_agent", "lane": "strategy", "col": 4, "type": "security", "label": "CISO Agent", "sublabel": "Sanitização Keys" },
+    { "id": "auditor_steward", "lane": "quality", "col": 5, "type": "security", "label": "Auditor", "sublabel": "Compliance Gate" }
+  ],
+  "edges": [
+    { "from": "strategist", "to": "planner", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "planner", "to": "builder", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "builder", "to": "qa_reviewer", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "qa_reviewer", "to": "ciso_agent", "variant": "security", "route": "drop", "fromSide": "top", "toSide": "bottom" },
+    { "from": "ciso_agent", "to": "auditor_steward", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Divisão Estrita de Responsabilidade", "items": ["Nenhum agente sobrepõe as funções do outro", "Aprovação em cada nível é pré-requisito para avanço de fase"] },
+    { "dot": "emerald", "title": "PaperClip Dashboard", "items": ["Orquestração visual de todas as squads em tempo real", "Interface web integrada na porta :3100 com banco PostgreSQL"] }
+  ]
+}

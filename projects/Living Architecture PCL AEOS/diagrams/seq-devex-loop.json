@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Developer Experience & IDE Execution Loop",
+    "subtitle": "Ciclo de Interação entre Operador Humano, Antigravity IDE, Agente LLM e Harness",
+    "output": "seq-devex-loop.html",
+    "viewBox": [800, 880],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "prompt-to-agent",
+        "label": "Instrução & Roteamento",
+        "focus": ["dev", "ide", "agent"],
+        "note": "Interação inicial do desenvolvedor via linguagem natural na IDE."
+      },
+      {
+        "id": "harness-execution",
+        "label": "Execução Local no Harness",
+        "focus": ["agent", "harness"],
+        "note": "Agente executando ferramentas CLI e edições no workspace local."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "dev", "type": "external", "label": "Operador", "sublabel": "Dev / Engenheiro" },
+    { "id": "ide", "type": "frontend", "label": "IDE Local", "sublabel": "Antigravity UI" },
+    { "id": "agent", "type": "backend", "label": "Agente IA", "sublabel": "Cortex / Builder" },
+    { "id": "harness", "type": "cloud", "label": "PCL Harness", "sublabel": "Docker & Workspace" }
+  ],
+  "segments": [
+    { "from": 150, "to": 290, "label": "Prompt & Roteamento MCP" },
+    { "from": 310, "to": 540, "label": "Execução & Ferramentas" },
+    { "from": 560, "to": 760, "label": "Retorno & Aprovação Human-in-the-Loop" }
+  ],
+  "messages": [
+    { "from": "dev", "to": "ide", "y": 180, "label": "Prompt em Linguagem Natural", "variant": "emphasis" },
+    { "from": "ide", "to": "agent", "y": 240, "label": "Invoca Agente via MCP / Gateway", "variant": "emphasis" },
+    { "from": "agent", "to": "harness", "y": 350, "label": "Executa Ferramentas (read/write/run)", "variant": "emphasis" },
+    { "from": "harness", "to": "agent", "y": 440, "label": "Retorna Logs e Status de Saída", "variant": "return" },
+    { "from": "agent", "to": "ide", "y": 590, "label": "Entrega Diffs e Relatório Markdown", "variant": "return" },
+    { "from": "ide", "to": "dev", "y": 680, "label": "Exibe Artefatos & Solicita Gate", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "ide", "from": 170, "to": 690, "type": "frontend" },
+    { "participant": "agent", "from": 230, "to": 600, "type": "backend" },
+    { "participant": "harness", "from": 340, "to": 450, "type": "cloud" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Developer First Experience", "items": ["Comunicação natural sem necessidade de comandos complexos de terminal", "Interface de chat e visualização em tempo real dos artefatos produzidos"] },
+    { "dot": "emerald", "title": "Segurança e Human-in-the-Loop", "items": ["Nenhuma alteração permanente é feita sem validação explícita", "Total soberania local e rastreabilidade visual"] }
+  ]
+}

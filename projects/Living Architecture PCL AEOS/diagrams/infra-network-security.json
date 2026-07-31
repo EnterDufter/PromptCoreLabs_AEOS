@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Network & Security Infrastructure Topology",
+    "subtitle": "Isolamento de Rede, Tunelamento Criptografado Tailscale e Portas Docker",
+    "output": "infra-network-security.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "vpn-perimeter",
+        "label": "Perímetro VPN Tailscale",
+        "focus": ["host_nic", "tailscale_vpn", "firewall"],
+        "note": "Tráfego remoto restrito e tunelado via protocolo WireGuard."
+      },
+      {
+        "id": "docker-isolation",
+        "label": "Isolamento de Contêineres",
+        "focus": ["docker_bridge", "paperclip_container", "omniroute_container", "db_container"],
+        "note": "Rede interna Docker Bridge sem exposição desnecessária de portas."
+      }
+    ]
+  },
+  "components": [
+    { "id": "host_nic", "type": "external", "label": "Interface Host", "sublabel": "Ethernet / Wi-Fi", "pos": [50, 250], "size": [140, 60] },
+    { "id": "tailscale_vpn", "type": "security", "label": "Tailscale Node", "sublabel": "WireGuard TUN", "pos": [260, 150], "size": [150, 60], "tag": "VPN Mesh" },
+    { "id": "firewall", "type": "security", "label": "Host Firewall", "sublabel": "Filtro de Ingress", "pos": [260, 350], "size": [150, 60], "tag": "Zero Trust" },
+    { "id": "docker_bridge", "type": "cloud", "label": "Docker Bridge", "sublabel": "Rede pcl-net", "pos": [500, 250], "size": [150, 60] },
+    { "id": "paperclip_container", "type": "backend", "label": "PaperClip", "sublabel": "UI Porta :3100", "pos": [740, 120], "size": [150, 60] },
+    { "id": "omniroute_container", "type": "backend", "label": "OmniRoute", "sublabel": "Gateway Porta :20130", "pos": [740, 250], "size": [150, 60] },
+    { "id": "db_container", "type": "database", "label": "pcl-db", "sublabel": "Postgres Porta :5432", "pos": [740, 380], "size": [150, 60] }
+  ],
+  "boundaries": [
+    { "kind": "security-group", "label": "Perímetro de Segurança VPN Mesh", "wraps": ["tailscale_vpn", "firewall"] },
+    { "kind": "region", "label": "Rede Interna Docker Compose (pcl-net)", "wraps": ["paperclip_container", "omniroute_container", "db_container"] }
+  ],
+  "connections": [
+    { "id": "nic-vpn", "from": "host_nic", "to": "tailscale_vpn", "label": "UDP WireGuard", "variant": "emphasis" },
+    { "id": "nic-firewall", "from": "host_nic", "to": "firewall", "label": "Inspeciona Reqs", "variant": "dashed" },
+    { "id": "vpn-bridge", "from": "tailscale_vpn", "to": "docker_bridge", "label": "Túnel Seguro", "variant": "security", "fromSide": "right", "toSide": "top" },
+    { "id": "firewall-bridge", "from": "firewall", "to": "docker_bridge", "label": "Filtro Local", "fromSide": "right", "toSide": "left" },
+    { "id": "bridge-paperclip", "from": "docker_bridge", "to": "paperclip_container", "label": "Porta :3100", "fromSide": "top", "toSide": "left" },
+    { "id": "bridge-omniroute", "from": "docker_bridge", "to": "omniroute_container", "label": "Porta :20130", "fromSide": "right", "toSide": "left" },
+    { "id": "bridge-db", "from": "docker_bridge", "to": "db_container", "label": "Porta :5432", "fromSide": "bottom", "toSide": "left" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Segurança Perimetral", "items": ["Nenhum serviço exposto para a internet pública sem tunelamento", "Tailscale autoriza exclusivamente nós autenticados no Mesh"] },
+    { "dot": "cyan", "title": "Isolamento de Rede", "items": ["Contêineres operam na rede privada virtual pcl-net", "PostgreSQL aceita conexões restritas ao PaperClip e scripts autorizados"] },
+    { "dot": "emerald", "title": "Zero Trust Operations", "items": ["Todas as trocas de dados passam por validação e sanitização do CISO", "Auditoria de portas e escaneamento ativo de vulnerabilidades"] }
+  ]
+}

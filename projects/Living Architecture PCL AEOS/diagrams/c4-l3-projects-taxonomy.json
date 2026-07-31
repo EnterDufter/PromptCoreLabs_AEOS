@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Projects Taxonomy & Architectural Isolation",
+    "subtitle": "Isolamento Estrito entre a Plataforma AEOS Core e as Aplicações Clientes em projects/",
+    "output": "c4-l3-projects-taxonomy.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "core-platform-isolation",
+        "label": "Isolamento do Core",
+        "focus": ["aeos_core", "harness"],
+        "note": "A plataforma principal permanece imutável perante edições nos projetos."
+      },
+      {
+        "id": "project-apps",
+        "label": "Aplicações de Projetos",
+        "focus": ["landing_page", "crialli_app", "living_arch"],
+        "note": "Projetos utilizam o Harness como consumidores sem alterar as leis centrais."
+      }
+    ]
+  },
+  "components": [
+    { "id": "aeos_core", "type": "backend", "label": "AEOS Core Platform", "sublabel": "Governance & Rules", "pos": [60, 160], "size": [160, 60] },
+    { "id": "harness", "type": "cloud", "label": "PCL Harness", "sublabel": "Docker Compose", "pos": [60, 360], "size": [160, 60] },
+    { "id": "living_arch", "type": "backend", "label": "Living Architecture", "sublabel": "projects/Living_Arch", "pos": [340, 160], "size": [170, 60], "tag": "Documentação Viva" },
+    { "id": "landing_page", "type": "frontend", "label": "Landing Page App", "sublabel": "projects/Landing_Page", "pos": [600, 160], "size": [170, 60] },
+    { "id": "crialli_app", "type": "frontend", "label": "Crialli App", "sublabel": "projects/crialli", "pos": [600, 360], "size": [170, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Plataforma AEOS Core & Infraestrutura", "wraps": ["aeos_core", "harness"] },
+    { "kind": "security-group", "label": "Aplicações Clientes (projects/)", "wraps": ["landing_page", "crialli_app", "living_arch"] }
+  ],
+  "connections": [
+    { "id": "core-harness", "from": "aeos_core", "to": "harness", "label": "Orquestra Runtime", "fromSide": "bottom", "toSide": "top", "labelAt": [120, 260] },
+    { "id": "living-core", "from": "living_arch", "to": "aeos_core", "label": "Mapeia Arquitetura", "variant": "security", "fromSide": "left", "toSide": "right" },
+    { "id": "landing-harness", "from": "landing_page", "to": "harness", "label": "Consome APIs", "variant": "dashed", "fromSide": "bottom", "toSide": "right" },
+    { "id": "crialli-harness", "from": "crialli_app", "to": "harness", "label": "Consome DB/Gateway", "variant": "dashed", "fromSide": "left", "toSide": "right", "labelAt": [410, 380] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Independência de Projetos", "items": ["Projetos não modificam o código ou a governança do AEOS Core", "Cada aplicação possui sua própria suíte .specs/ e escopo delimitado"] },
+    { "dot": "emerald", "title": "Living Architecture Integration", "items": ["O projeto Living Architecture lê os metadados do repositório", "Gera visualizações interativas em tempo real sem acoplamento de runtime"] }
+  ]
+}

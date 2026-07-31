@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Observability & Audit Trail Dataflow",
+    "subtitle": "Fluxo de Coleta de Logs, Mapeamento de Tokens, Telemetria e Auditoria no pcl-db",
+    "output": "obs-audit-trail.html",
+    "viewBox": [1120, 720],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "collection-and-parsing",
+        "label": "Captura & Normalização",
+        "focus": ["cli_runner", "log_collector", "parser"],
+        "note": "Coleta em tempo real de logs de execução e contagem de tokens."
+      },
+      {
+        "id": "persistence-and-ui",
+        "label": "Persistência & Dashboard",
+        "focus": ["parser", "pcl_db", "paperclip_ui"],
+        "note": "Armazenamento no PostgreSQL 17 e exibição no PaperClip Dashboard."
+      }
+    ]
+  },
+  "stages": [
+    { "label": "Emissão" },
+    { "label": "Captura" },
+    { "label": "Estruturação" },
+    { "label": "Persistência" },
+    { "label": "Auditoria" }
+  ],
+  "nodes": [
+    { "id": "cli_runner", "type": "frontend", "label": "Agentes & CLI", "sublabel": "execução de tarefas", "stage": 0, "row": 1, "tag": "emissão" },
+    { "id": "log_collector", "type": "cloud", "label": "Log Collector", "sublabel": "stdout e stderr", "stage": 1, "row": 1, "tag": "ingestão" },
+    { "id": "parser", "type": "backend", "label": "JSON Parser", "sublabel": "métricas de tokens", "stage": 2, "row": 1, "tag": "telemetria" },
+    { "id": "pcl_db", "type": "database", "label": "pcl-db (Postgres)", "sublabel": "tabela audit_logs", "stage": 3, "row": 1, "tag": "persistência" },
+    { "id": "paperclip_ui", "type": "security", "label": "PaperClip UI", "sublabel": "painel em :3100", "stage": 4, "row": 1, "tag": "observabilidade" }
+  ],
+  "flows": [
+    { "id": "cli-collector", "from": "cli_runner", "to": "log_collector", "label": "streams de log", "classification": "logs brutos", "variant": "default", "route": "straight" },
+    { "id": "collector-parser", "from": "log_collector", "to": "parser", "label": "normalização", "classification": "telemetria", "variant": "emphasis", "route": "straight" },
+    { "id": "parser-db", "from": "parser", "to": "pcl_db", "label": "grava logs", "classification": "estruturados", "variant": "emphasis", "route": "straight" },
+    { "id": "db-paperclip", "from": "pcl_db", "to": "paperclip_ui", "label": "exibe métricas", "classification": "dashboards", "variant": "security", "route": "straight" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Telemetria & Transparência", "items": ["Contagem rigorosa de consumo de tokens por agente e sessão", "Logs de execução mantidos para auditoria adversarial pós-mortem"] },
+    { "dot": "emerald", "title": "PaperClip Integration", "items": ["Dashboards em tempo real na porta :3100 conectados ao banco PostgreSQL", "Histórico de status e diagnósticos do Harness local"] }
+  ]
+}

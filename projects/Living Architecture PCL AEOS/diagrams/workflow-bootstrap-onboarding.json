@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Bootstrap & Onboarding Pipeline",
+    "subtitle": "Fluxo de Onboarding de Agentes, Leitura Constitucional e Instanciação de Projetos",
+    "output": "workflow-bootstrap-onboarding.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "onboarding-and-setup",
+        "label": "Leitura & Setup",
+        "focus": ["read_foundation", "env_check"],
+        "note": "Leitura obrigatória da constituição PCL AEOS e checagem de runtime."
+      },
+      {
+        "id": "scaffolding-path",
+        "label": "Scaffolding & Spec-Driven",
+        "focus": ["copy_templates", "init_specs", "session_handoff"],
+        "note": "Cópia dos templates TLC e geração da suíte de especificações."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "onboarding", "label": "Onboarding & Regras" },
+    { "id": "setup", "label": "Setup de Ambiente" },
+    { "id": "bootstrap", "label": "Instanciação Spec-Driven" },
+    { "id": "handover", "label": "Handoff & Prontidão" }
+  ],
+  "phases": [
+    { "id": "phase_init", "label": "Inicialização", "fromCol": 0, "toCol": 1 },
+    { "id": "phase_scaffolding", "label": "Scaffolding", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "phase_ready", "label": "Prontidão", "fromCol": 4, "toCol": 4, "variant": "dashed" }
+  ],
+  "mainPath": ["read_foundation", "env_check", "copy_templates", "init_specs", "session_handoff"],
+  "nodes": [
+    { "id": "read_foundation", "lane": "onboarding", "col": 0, "type": "frontend", "label": "Foundation", "sublabel": "Leitura FOUNDATION.md" },
+    { "id": "env_check", "lane": "setup", "col": 1, "type": "backend", "label": "Env Check", "sublabel": "Docker + Node.js" },
+    { "id": "copy_templates", "lane": "bootstrap", "col": 2, "type": "backend", "label": "Copy Templates", "sublabel": "templates/tlc/*" },
+    { "id": "init_specs", "lane": "bootstrap", "col": 3, "type": "security", "label": "Init Specs", "sublabel": ".specs/specify.md" },
+    { "id": "session_handoff", "lane": "handover", "col": 4, "type": "external", "label": "Handoff", "sublabel": "Protocolo de Sessão" }
+  ],
+  "edges": [
+    { "from": "read_foundation", "to": "env_check", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "env_check", "to": "copy_templates", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "copy_templates", "to": "init_specs", "variant": "emphasis" },
+    { "from": "init_specs", "to": "session_handoff", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Onboarding Rigoroso", "items": ["Agentes leem primeiramente a constituição PCL AEOS em foundation/", "Nenhuma ação é realizada antes do ambiente passar nos checks do doctor"] },
+    { "dot": "emerald", "title": "Instanciação Imutável", "items": ["Templates TLC originais nunca são preenchidos diretamente", "Sempre copiados para a pasta .specs/ do projeto cliente"] }
+  ]
+}

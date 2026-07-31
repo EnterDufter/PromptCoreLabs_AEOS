@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "TLC Spec-Driven Execution Loop (Metodologia v3)",
+    "subtitle": "Ciclo de Validação e Orquestração entre Operador, Planner, Builder, QA e Auditor",
+    "output": "seq-tlc-execution.html",
+    "viewBox": [800, 880],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "specification-gate",
+        "label": "Gate 1: Especificação (Specify)",
+        "focus": ["operador", "planner"],
+        "note": "Aprovação do documento specify.md pelo operador humano."
+      },
+      {
+        "id": "build-and-qa-loop",
+        "label": "Loop Builder & QA Adversário",
+        "focus": ["planner", "builder", "qa"],
+        "note": "Edições cirúrgicas pelo Builder com até 3 retentativas e testes QA."
+      },
+      {
+        "id": "compliance-and-signoff",
+        "label": "Auditoria de Compliance & Assinatura",
+        "focus": ["qa", "auditor", "operador"],
+        "note": "Verificação de vazamento de chaves, validate.md e aprovação final."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "operador", "type": "external", "label": "Operador", "sublabel": "Humano / Dev" },
+    { "id": "planner", "type": "backend", "label": "Planner", "sublabel": "Lead Engineer" },
+    { "id": "builder", "type": "backend", "label": "Builder", "sublabel": "Fast Executor" },
+    { "id": "qa", "type": "security", "label": "QA Reviewer", "sublabel": "QA Adversário" },
+    { "id": "auditor", "type": "security", "label": "Auditor", "sublabel": "Compliance" }
+  ],
+  "segments": [
+    { "from": 150, "to": 280, "label": "Etapa 1 & 2: Specify & Tasks" },
+    { "from": 300, "to": 550, "label": "Etapa 3 & 4: Execute & QA Loop" },
+    { "from": 570, "to": 780, "label": "Etapa 5: Audit & Signoff" }
+  ],
+  "messages": [
+    { "from": "operador", "to": "planner", "y": 180, "label": "Aprova specify.md (Gate 1)", "variant": "emphasis" },
+    { "from": "planner", "to": "builder", "y": 240, "label": "Entrega tasks.md (Backlog Atômico)", "variant": "emphasis" },
+    { "from": "builder", "to": "qa", "y": 330, "label": "Solicita Validação de Diffs", "variant": "emphasis" },
+    { "from": "qa", "to": "builder", "y": 410, "label": "REFUTED se testes falham", "variant": "dashed" },
+    { "from": "qa", "to": "auditor", "y": 500, "label": "VERIFIED (Código e Diffs Ok)", "variant": "emphasis" },
+    { "from": "auditor", "to": "operador", "y": 620, "label": "Entrega validate.md e Relatório", "variant": "return" },
+    { "from": "operador", "to": "planner", "y": 720, "label": "Assina Gate no STATE.md", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "planner", "from": 170, "to": 250, "type": "backend" },
+    { "participant": "builder", "from": 230, "to": 420, "type": "backend" },
+    { "participant": "qa", "from": 320, "to": 510, "type": "security" },
+    { "participant": "auditor", "from": 490, "to": 630, "type": "security" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Governança Spec-Driven", "items": ["Nenhuma implementação inicia sem o Gate de Tasks assinado", "Rastreabilidade completa entre specify.md, design.md e tasks.md"] },
+    { "dot": "orange", "title": "Micro-Loop de Retentativa", "items": ["Builder possui limite estrito de no máximo 3 retentativas", "QA executa testes adversários em ambiente isolado"] },
+    { "dot": "emerald", "title": "Assinatura Humana", "items": ["O operador humano é a autoridade final para avanço de Stage Gate", "Auditor valida ausência de vazamento de segredos e conformidade NFR"] }
+  ]
+}

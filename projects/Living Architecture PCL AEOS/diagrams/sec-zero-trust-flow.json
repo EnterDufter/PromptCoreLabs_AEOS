@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Secret Management & Zero Trust Flow",
+    "subtitle": "Fluxo de Injeção de Segredos, Varredura Adversária pelo CISO e Prevenção Zero Leak",
+    "output": "sec-zero-trust-flow.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "injection-and-scan",
+        "label": "Injeção & Varredura CISO",
+        "focus": ["user_input", "env_parse", "ciso_scan"],
+        "note": "Carregamento de variáveis de ambiente e varredura de padrões de chaves sensíveis."
+      },
+      {
+        "id": "sanitization-and-gate",
+        "label": "Sanitização & Approval",
+        "focus": ["sanitization", "clean_approval"],
+        "note": "Redefinição de segredos detectados e autorização do gate de segurança."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "developer", "label": "Operador / Prompt" },
+    { "id": "ciso", "label": "CISO Security Agent" },
+    { "id": "harness", "label": "PCL Harness Runtime" },
+    { "id": "audit", "label": "QA Auditor Gate" }
+  ],
+  "phases": [
+    { "id": "phase_input", "label": "Entrada & Env", "fromCol": 0, "toCol": 1 },
+    { "id": "phase_scan", "label": "Varredura CISO", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "phase_pass", "label": "Zero Leak Gate", "fromCol": 4, "toCol": 4, "variant": "dashed" }
+  ],
+  "mainPath": ["user_input", "env_parse", "ciso_scan", "sanitization", "clean_approval"],
+  "nodes": [
+    { "id": "user_input", "lane": "developer", "col": 0, "type": "frontend", "label": "Prompt Input", "sublabel": "Comandos & Configs" },
+    { "id": "env_parse", "lane": "developer", "col": 1, "type": "backend", "label": "Env Loader", "sublabel": "Injeção de Variáveis" },
+    { "id": "ciso_scan", "lane": "ciso", "col": 2, "type": "security", "label": "CISO Scan", "sublabel": "Detecção de RegEx" },
+    { "id": "sanitization", "lane": "ciso", "col": 3, "type": "security", "label": "Sanitizer", "sublabel": "Redefinição Segredos" },
+    { "id": "clean_approval", "lane": "audit", "col": 4, "type": "security", "label": "QA Approval", "sublabel": "Zero Secret Leak" }
+  ],
+  "edges": [
+    { "from": "user_input", "to": "env_parse", "variant": "emphasis" },
+    { "from": "env_parse", "to": "ciso_scan", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "ciso_scan", "to": "sanitization", "variant": "security" },
+    { "from": "sanitization", "to": "clean_approval", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Diretiva Zero Secret Leak", "items": ["Nenhuma API Key, token JWT ou senha pode constar nos logs ou diagramas", "Substituição automática por placeholders seguros antes da persistência"] },
+    { "dot": "emerald", "title": "Inspeção Automática CISO", "items": ["Agente CISO realiza varredura com mais de 40 regras de expressões regulares", "Bloqueio imediato do pipeline se um segredo não tratado for identificado"] }
+  ]
+}
