@@ -359,12 +359,12 @@
     }
 
     /* ================================================== */
-    /* MODAL READER OVERLAY (PAINEL SUSPENSO ESTILIZADO) */
+    /* MODAL READER OVERLAY (EXPANDIDO & DARK GLASSMORPHISM) */
     /* ================================================== */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 8, 17, 0.82);
+      background: rgba(5, 8, 17, 0.82); /* Mantido escuro e focado */
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 2000;
@@ -381,15 +381,17 @@
       pointer-events: auto;
     }
     .modal-container {
-      background: #0d1322;
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(13, 19, 34, 0.88); /* Glassmorphism translúcido */
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
       border-radius: 16px;
-      width: 100%;
-      max-width: 960px;
-      height: 88vh;
+      width: 92%; /* Expansão de largura pedida pelo usuário */
+      max-width: 1240px; /* Largura expandida */
+      height: 90vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.1);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.15);
       transform: translateY(24px) scale(0.98);
       transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
@@ -398,7 +400,7 @@
       transform: translateY(0) scale(1);
     }
     .modal-header {
-      background: #131c31;
+      background: rgba(19, 28, 49, 0.9);
       border-bottom: 1px solid var(--border-color);
       padding: 1rem 1.5rem;
       display: flex;
@@ -421,16 +423,44 @@
       font-family: 'JetBrains Mono', monospace;
     }
     .modal-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--text-main);
     }
+    
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    
+    /* BOTÃO DE IMPRESSÃO (MATERIAL PRINT ICON) */
+    .modal-action-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--accent-cyan);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .modal-action-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
     .modal-close-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -450,14 +480,14 @@
       overflow-y: auto;
       flex-grow: 1;
       color: #cbd5e1;
-      font-size: 0.98rem;
-      line-height: 1.8;
+      font-size: 1rem;
+      line-height: 1.85;
     }
 
     /* ESTILIZAÇÃO COMPLETA DO CONTEÚDO MARKDOWN DENTRO DO MODAL */
-    .modal-body h1 { font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-    .modal-body h2 { font-size: 1.4rem; color: var(--accent-blue); margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
-    .modal-body h3 { font-size: 1.15rem; color: var(--accent-indigo); margin: 1.4rem 0 0.6rem 0; }
+    .modal-body h1 { font-size: 1.9rem; color: var(--accent-cyan); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    .modal-body h2 { font-size: 1.45rem; color: var(--accent-blue); margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+    .modal-body h3 { font-size: 1.2rem; color: var(--accent-indigo); margin: 1.4rem 0 0.6rem 0; }
     .modal-body p { margin-bottom: 1.2rem; }
     .modal-body ul, .modal-body ol { margin: 0 0 1.2rem 1.5rem; }
     .modal-body li { margin-bottom: 0.4rem; }
@@ -470,6 +500,27 @@
     .modal-body th { background: #131c31; color: var(--accent-cyan); }
     .modal-body a { color: var(--accent-cyan); text-decoration: none; }
     .modal-body a:hover { text-decoration: underline; }
+
+    /* MEDIA PRINT RULES FOR CLEAN DOCUMENT PRINTING */
+    @media print {
+      body * { visibility: hidden; }
+      .modal-overlay.active, .modal-overlay.active * { visibility: visible; }
+      .modal-overlay {
+        position: absolute; left: 0; top: 0; width: 100%; height: auto;
+        background: #fff !important; backdrop-filter: none !important;
+      }
+      .modal-container {
+        width: 100% !important; max-width: 100% !important; height: auto !important;
+        box-shadow: none !important; border: none !important; background: #fff !important; color: #000 !important;
+      }
+      .modal-header, .modal-actions { display: none !important; }
+      .modal-body { color: #000 !important; padding: 0 !important; font-size: 11pt; }
+      .modal-body h1, .modal-body h2, .modal-body h3 { color: #0f172a !important; border-color: #cbd5e1 !important; }
+      .modal-body code, .modal-body pre { background: #f1f5f9 !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+      .modal-body blockquote { background: #f0f9ff !important; border-left-color: #0284c7 !important; color: #0369a1 !important; }
+      .modal-body table th { background: #f1f5f9 !important; color: #0f172a !important; }
+      .modal-body table th, .modal-body table td { border-color: #cbd5e1 !important; }
+    }
 
     footer {
       text-align: center;
@@ -1053,7 +1104,7 @@ erDiagram
   </main>
 
   <!-- ================================================== -->
-  <!-- MODAL OVERLAY COMPONENT (PAINEL SUSPENSO ESTILIZADO) -->
+  <!-- MODAL OVERLAY COMPONENT (EXPANDIDO & GLASSMORPHISM) -->
   <!-- ================================================== -->
   <div id="doc-modal-overlay" class="modal-overlay" aria-hidden="true">
     <div class="modal-container">
@@ -1062,7 +1113,17 @@ erDiagram
           <span class="modal-badge">DOC READER</span>
           <h3 id="modal-doc-title" class="modal-title">Documento</h3>
         </div>
-        <button id="modal-close-btn" class="modal-close-btn" title="Fechar (ESC)">✕</button>
+        <div class="modal-actions">
+          <!-- Ícone de Impressora Material Symbols -->
+          <button id="modal-print-btn" class="modal-action-btn" title="Imprimir Documento">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </button>
+          <button id="modal-close-btn" class="modal-close-btn" title="Fechar (ESC)">✕</button>
+        </div>
       </div>
       <div id="modal-doc-body" class="modal-body">
         <!-- O conteúdo HTML renderizado do Markdown entra aqui dinamicamente -->
@@ -1084,6 +1145,7 @@ erDiagram
       const modalTitle = document.getElementById('modal-doc-title');
       const modalBody = document.getElementById('modal-doc-body');
       const closeBtn = document.getElementById('modal-close-btn');
+      const printBtn = document.getElementById('modal-print-btn');
 
       // Função para abrir o modal com documento renderizado
       async function openDocModal(url, title) {
@@ -1114,7 +1176,7 @@ erDiagram
           // Ativar Mermaid se houver blocos de diagrama dentro do modal
           const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
           if (mermaidBlocks.length > 0) {
-            mermaidBlocks.forEach((block, idx) => {
+            mermaidBlocks.forEach((block) => {
               const div = document.createElement('div');
               div.className = 'mermaid';
               div.textContent = block.textContent;
@@ -1149,6 +1211,11 @@ erDiagram
           const title = link.getAttribute('data-doc-title') || link.textContent;
           openDocModal(url, title);
         });
+      });
+
+      // Ação do Botão de Impressão
+      printBtn.addEventListener('click', () => {
+        window.print();
       });
 
       // Fechar no botão X
