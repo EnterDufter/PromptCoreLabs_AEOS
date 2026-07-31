@@ -238,6 +238,38 @@
       border-radius: 0 8px 8px 0;
     }
 
+    /* BARRA DE TÍTULO COM BOTÃO INTERATIVO NA MESMA LINHA */
+    .section-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.8rem 0 0.8rem 0;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .btn-diagram-modal {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(96, 165, 250, 0.2) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-cyan);
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+    .btn-diagram-modal:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
+    }
+
     /* GRID EXPANDIDO 2 COLUNAS */
     .grid-expanded {
       display: grid;
@@ -391,7 +423,7 @@
       background: rgba(15, 23, 42, 0.4);
     }
 
-    /* MODAL OVERLAY */
+    /* MODAL OVERLAY (SUPORTA DOCS E DIAGRAMAS FLUTUANTES DE 90% DE VISUALIZAÇÃO) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -412,13 +444,13 @@
       pointer-events: auto;
     }
     .modal-container {
-      background: rgba(13, 19, 34, 0.92);
+      background: rgba(13, 19, 34, 0.94);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(56, 189, 248, 0.4);
       border-radius: 16px;
-      width: 94%;
-      max-width: 1260px;
+      width: 90vw;
+      max-width: 90vw;
       height: 90vh;
       display: flex;
       flex-direction: column;
@@ -569,8 +601,9 @@
       .phase-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       .phase-title-text { font-size: 1.25rem; }
 
-      .modal-container { width: 98%; height: 94vh; margin: 0; border-radius: 12px; }
+      .modal-container { width: 96vw; height: 92vh; margin: 0; border-radius: 12px; }
       .modal-body { padding: 1.2rem; font-size: 0.92rem; }
+      .section-title-bar { flex-direction: column; align-items: flex-start; }
     }
 
     /* IMPRESSÃO PERFEITA SEM PÁGINAS PRETAS OU ADICIONAIS */
@@ -683,7 +716,7 @@
 
     <div class="hero-banner">
       <h2>🗺️ Trilho de Aprendizado Arquitetural & Living Architecture</h2>
-      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo</strong> para explorar o diagrama em tela cheia.</p>
+      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo ↗</strong> para explorar a versão interativa do diagrama em tela flutuante (90%).</p>
     </div>
 
     <!-- ================================================== -->
@@ -699,7 +732,11 @@
         <strong>O que você vai aprender aqui:</strong> O <em>PromptCoreLabs_AEOS</em> é um sistema operacional soberano concebido para governar o desenvolvimento assistido por IA. Nesta primeira fase, você entenderá o contexto do sistema (atores e fronteira local/nuvem) e a topologia de contêineres do Harness físico.
       </div>
 
-      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Fluxo do Conhecimento no AEOS</h3>
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Fluxo do Conhecimento no AEOS</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-knowledge-flow.html" data-diagram-title="Fluxo do Conhecimento no AEOS (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+      </div>
       <p style="color: var(--text-muted); font-size: 0.95rem;">O conhecimento nasce nas diretrizes constitucionais e flui rigorosamente até os projetos ativos:</p>
       
       <div class="mermaid-box">
@@ -736,7 +773,7 @@ graph TD
             <p class="card-exp-desc">Mapeia o operador humano, a fronteira local protegida por VPN Mesh Tailscale, as conexões de inferência na nuvem e o repositório remoto GitHub.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="link-doc" data-doc-title="Estratégia & Visão Corporativa">📖 Ler Artigo de Estratégia ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" data-diagram-title="System Context Diagram (C4 Level 1)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -755,7 +792,7 @@ graph TD
             <p class="card-exp-desc">Detalha os 3 contêineres Docker principais: <code>pcl-db</code> (PostgreSQL + PGVector), <code>pcl-omniroute</code> (Proxy de Inferência) e <code>pcl-paperclip</code> (Dashboard de Orquestração).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc" data-doc-title="Infraestrutura & Docker Harness">📖 Ler Artigo de Infraestrutura ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" data-diagram-title="Harness Container Topology (C4 Level 2)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -774,7 +811,7 @@ graph TD
             <p class="card-exp-desc">Exibe a decomposição dos 14 diretórios chave do repositório consolidado e o fluxo de dados entre governança, memória e execução.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="link-doc" data-doc-title="Modelo C4 & Especificação">📖 Ler Artigo do Modelo C4 ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" data-diagram-title="Repository Component Breakdown (C4 Level 3)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -793,7 +830,7 @@ graph TD
             <p class="card-exp-desc">Demonstra as regras de isolamento soberano dos projetos contidos no diretório <code>projects/</code> (como a Living Architecture e o Crialli).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="link-doc" data-doc-title="Glossário Oficial & Taxonomia">📖 Ler Glossário Oficial ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" data-diagram-title="Projects Taxonomy & Isolation">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -814,8 +851,12 @@ graph TD
         <strong>O que você vai aprender aqui:</strong> O ecossistema PCL AEOS orquestra uma squad com <strong>15 Agentes Inteligentes especialistas</strong>. Nesta etapa, você verá como o Planner, Builder, QA e Auditor colaboram no protocolo de mensagens e na governança do PaperClip.
       </div>
 
-      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">UML de Sequência: Colaboração Atômica entre Agentes</h3>
-      
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">UML de Sequência: Colaboração Atômica entre Agentes</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-agent-collaboration.html" data-diagram-title="Colaboração Atômica entre Agentes (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+      </div>
+
       <div class="mermaid-box">
         <pre class="mermaid">
 sequenceDiagram
@@ -860,7 +901,7 @@ sequenceDiagram
             <p class="card-exp-desc">Mapeia os 15 agentes organizados nas 4 camadas: Estratégia/Negócios, Engenharia/Especificação, Execução de Código e Qualidade/Segurança.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Manual dos 15 Agentes Inteligentes">📖 Manual dos 15 Agentes ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" data-diagram-title="Squad Orchestration & Roles">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -879,7 +920,7 @@ sequenceDiagram
             <p class="card-exp-desc">Máquina de estados de micro-execução que governa as retentativas do agente Builder e as transições de status (IDLE, PLANNING, WORKING, QA_REVIEW).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Matriz RACI dos Agentes">📖 Ver Matriz RACI da Squad ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" data-diagram-title="PCL Cortex Micro-Loop Lifecycle">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -898,7 +939,7 @@ sequenceDiagram
             <p class="card-exp-desc">Sequência de interação contínua entre o desenvolvedor humano, a IDE assistida por IA, os servidores MCP locais e os relatórios de validação.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Integrações & Servidores MCP">📖 Ler Artigo de Integrações MCP ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" data-diagram-title="Developer Experience & IDE Loop">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -917,7 +958,7 @@ sequenceDiagram
             <p class="card-exp-desc">Pipeline de inicialização de novas sessões de IA e transmissão soberana de contexto entre tarefas (Handoff Protocol).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança & Onboarding">📖 Ver Guia de Onboarding ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" data-diagram-title="Bootstrap & Onboarding Pipeline">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -938,8 +979,12 @@ sequenceDiagram
         <strong>O que você vai aprender aqui:</strong> O AEOS possui uma memória vetorial local relacional baseada em PostgreSQL 17 + PGVector. Esta fase cobre como os documentos são fragmentados em chunks, indexados em vetores de 768 dimensões e recuperados no RAG.
       </div>
 
-      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Modelo de Dados da Memória Vetorial (ERD PGVector)</h3>
-      
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Modelo de Dados da Memória Vetorial (ERD PGVector)</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-vector-memory-erd.html" data-diagram-title="Modelo de Dados da Memória Vetorial (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+      </div>
+
       <div class="mermaid-box">
         <pre class="mermaid">
 erDiagram
@@ -982,7 +1027,7 @@ erDiagram
             <p class="card-exp-desc">Linhagem completa dos dados: da varredura de arquivos locais Markdown/JSON até a vetorização, busca por similaridade de cosseno e injeção de contexto no prompt.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc" data-doc-title="Memória & RAG Vetorial PGVector">📖 Ler Artigo RAG Vetorial ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" data-diagram-title="RAG & Memory Data Lineage">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1001,7 +1046,7 @@ erDiagram
             <p class="card-exp-desc">Dataflow de sanitização, extração e migração do acervo de dados legados do diretório <code>legacy/</code> para o novo padrão de memória vetorial.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc" data-doc-title="Regras de Indexação RAG">📖 Ver Regras de Indexação ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" data-diagram-title="Legacy Migration Dataflow">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1020,7 +1065,7 @@ erDiagram
             <p class="card-exp-desc">Trilha imutável de auditoria gravada na tabela <code>agent_execution_logs</code>, garantindo rastreabilidade de cada decisão tomada pela IA.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Segurança & Compliance Zero Trust">📖 Ler Guia de Compliance ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" data-diagram-title="Observability & Audit Trail">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1039,7 +1084,7 @@ erDiagram
             <p class="card-exp-desc">Mapa de integração via Model Context Protocol (MCP) conectando a IDE aos servidores <code>pcl-cortex</code> e <code>gemini-notebooklm</code>.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Protocolo MCP & Ferramentas">📖 Ler Protocolo MCP ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" data-diagram-title="MCP Server Interconnection Map">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1090,7 +1135,7 @@ erDiagram
             <p class="card-exp-desc">Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança TLC v3 & Stage Gates">📖 Ler Matriz de Stage Gates ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" data-diagram-title="TLC Spec-Driven Execution Loop">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1109,7 +1154,7 @@ erDiagram
             <p class="card-exp-desc">Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc" data-doc-title="Runtime & OmniRoute AI Gateway">📖 Ler Artigo de Runtime ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" data-diagram-title="OmniRoute LLM Request Lifecycle">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1128,7 +1173,7 @@ erDiagram
             <p class="card-exp-desc">Topologia de rede física: isolamento de contêineres na sub-rede Docker <code>pcl-network</code> e malha de criptografia perimetral via Tailscale VPN Mesh.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc" data-doc-title="Topologia de Rede & Criptografia">📖 Ler Topologia de Rede ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" data-diagram-title="Network & Security Topology">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1147,7 +1192,7 @@ erDiagram
             <p class="card-exp-desc">Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Regras e Validação de Stage Gates">📖 Ver Regras de Stage Gate ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" data-diagram-title="Governance & Stage Gates Matrix">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1166,7 +1211,7 @@ erDiagram
             <p class="card-exp-desc">Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no <code>.env</code> e auditoria de código.</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Política de Segurança Zero Trust">📖 Ler Política Zero Trust ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" data-diagram-title="Secret Management & Zero Trust">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1185,7 +1230,7 @@ erDiagram
             <p class="card-exp-desc">Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos <code>deliver</code>, <code>validate</code>, <code>render</code>).</p>
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="link-doc" data-doc-title="ADRs & Decisões Arquiteturais">📖 Ler Registros ADR ↗</a>
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="btn-primary">🌐 Abrir Interativo (Nova Aba) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" data-diagram-title="Code-Level Class & Interface Specs">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1226,13 +1271,13 @@ erDiagram
   </main>
 
   <!-- ================================================== -->
-  <!-- MODAL OVERLAY COMPONENT (VIDRO TRANSLÚCIDO SUAVE) -->
+  <!-- MODAL OVERLAY COMPONENT (SUPORTA DOCS E DIAGRAMAS FLUTUANTES DE 90%) -->
   <!-- ================================================== -->
   <div id="doc-modal-overlay" class="modal-overlay" aria-hidden="true">
-    <div class="modal-container">
+    <div id="modal-container-box" class="modal-container">
       <div class="modal-header">
         <div class="modal-title-group">
-          <span class="modal-badge">DOC READER</span>
+          <span id="modal-badge-tag" class="modal-badge">DOC READER</span>
           <h3 id="modal-doc-title" class="modal-title">Documento</h3>
         </div>
         <div class="modal-actions">
@@ -1248,7 +1293,7 @@ erDiagram
         </div>
       </div>
       <div id="modal-doc-body" class="modal-body">
-        <!-- O conteúdo HTML renderizado do Markdown entra aqui dinamicamente -->
+        <!-- Conteúdo do documento Markdown ou Iframe do Diagrama -->
       </div>
     </div>
   </div>
@@ -1264,6 +1309,8 @@ erDiagram
     // SCRIPT DO LEITOR MODAL INTERATIVO & MENU MOBILE
     document.addEventListener('DOMContentLoaded', () => {
       const modalOverlay = document.getElementById('doc-modal-overlay');
+      const modalContainer = document.getElementById('modal-container-box');
+      const modalBadge = document.getElementById('modal-badge-tag');
       const modalTitle = document.getElementById('modal-doc-title');
       const modalBody = document.getElementById('modal-doc-body');
       const closeBtn = document.getElementById('modal-close-btn');
@@ -1284,8 +1331,18 @@ erDiagram
         });
       });
 
-      // Função para abrir o modal com documento renderizado
+      // 1. Função para abrir o modal de documento Markdown
       async function openDocModal(url, title) {
+        modalBadge.textContent = 'DOC READER';
+        printBtn.style.display = 'flex'; // Exibe botão de impressão
+        
+        modalContainer.style.width = '90vw';
+        modalContainer.style.maxWidth = '1260px';
+        modalContainer.style.height = '90vh';
+
+        modalBody.style.padding = '2.5rem';
+        modalBody.style.overflowY = 'auto';
+
         modalTitle.textContent = title || 'Carregando documento...';
         modalBody.innerHTML = `
           <div style="text-align:center; padding: 4rem 1rem; color: var(--accent-cyan);">
@@ -1296,21 +1353,19 @@ erDiagram
         
         modalOverlay.classList.add('active');
         modalOverlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden'; // Impede rolagem no fundo
+        document.body.style.overflow = 'hidden';
 
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`Status ${response.status}`);
           const rawText = await response.text();
 
-          // Renderizar Markdown com Marked.js ou HTML puro
           if (url.endsWith('.md')) {
             modalBody.innerHTML = marked.parse(rawText);
           } else {
             modalBody.innerHTML = rawText;
           }
 
-          // Ativar Mermaid se houver blocos de diagrama dentro do modal
           const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
           if (mermaidBlocks.length > 0) {
             mermaidBlocks.forEach((block) => {
@@ -1333,11 +1388,34 @@ erDiagram
         }
       }
 
+      // 2. Função para abrir o modal de Diagrama Interativo Cortex (90% de visualização)
+      function openDiagramModal(url, title) {
+        modalBadge.textContent = 'DIAGRAM READER';
+        printBtn.style.display = 'none'; // Não precisa de impressão para diagramas
+        
+        modalContainer.style.width = '90vw';
+        modalContainer.style.maxWidth = '90vw';
+        modalContainer.style.height = '90vh';
+
+        modalBody.style.padding = '0';
+        modalBody.style.overflow = 'hidden';
+
+        modalTitle.textContent = title || 'Diagrama Interativo Cortex';
+        modalBody.innerHTML = `
+          <iframe src="${url}" style="width:100%; height:100%; border:none; background: #0b0f19; border-radius: 0 0 16px 16px;"></iframe>
+        `;
+        
+        modalOverlay.classList.add('active');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
       // Função para fechar o modal
       function closeModal() {
         modalOverlay.classList.remove('active');
         modalOverlay.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        modalBody.innerHTML = ''; // Limpa iframe para economizar memória
       }
 
       // Interceptar cliques em todos os links `.link-doc`
@@ -1350,7 +1428,17 @@ erDiagram
         });
       });
 
-      // Ação do Botão de Impressão
+      // Interceptar cliques em todos os botões `.btn-diagram-modal`
+      document.querySelectorAll('.btn-diagram-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = btn.getAttribute('data-diagram-url');
+          const title = btn.getAttribute('data-diagram-title') || 'Diagrama Interativo';
+          openDiagramModal(url, title);
+        });
+      });
+
+      // Ação do Botão de Impressão (Apenas para Markdown)
       printBtn.addEventListener('click', () => {
         window.print();
       });
@@ -1358,7 +1446,7 @@ erDiagram
       // Fechar no botão X
       closeBtn.addEventListener('click', closeModal);
 
-      // Fechar ao clicar fora da caixa do modal (no overlay escurecido)
+      // Fechar ao clicar fora da caixa do modal
       modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) closeModal();
       });
