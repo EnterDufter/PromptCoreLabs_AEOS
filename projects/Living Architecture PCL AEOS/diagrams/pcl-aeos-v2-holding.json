@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "PCL-AEOS v2.0: Holding Digital",
+    "subtitle": "AI-as-a-Service / 3 Camadas (Zero Marginal Cost)",
+    "output": "pcl-aeos-v2-holding.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "camada-1",
+        "label": "Camada 1: Plataforma Core",
+        "focus": ["cortex", "omniroute", "paperclip", "pgvector", "tlc"],
+        "note": "A infraestrutura central reutilizada com custo marginal zero."
+      },
+      {
+        "id": "camada-2",
+        "label": "Camada 2: 15 Verticais B2B",
+        "focus": ["vert_tech", "vert_biz", "vert_ops"],
+        "note": "Os Profit Centers que operam sobre a plataforma core."
+      },
+      {
+        "id": "camada-3",
+        "label": "Camada 3: Produtos & Monetização",
+        "focus": ["produtos"],
+        "note": "APIs, SaaS, Retainers e Cursos gerados pelas verticais."
+      }
+    ]
+  },
+  "components": [
+    { "id": "cortex", "type": "backend", "label": "Cortex", "sublabel": "Living Architecture", "pos": [350, 150], "size": [140, 60] },
+    { "id": "omniroute", "type": "backend", "label": "OmniRoute", "sublabel": "Proxy :20130", "pos": [350, 250], "size": [140, 60] },
+    { "id": "paperclip", "type": "backend", "label": "Paperclip", "sublabel": "Orchestrator :3100", "pos": [150, 150], "size": [140, 60] },
+    { "id": "pgvector", "type": "database", "label": "PGVector RAG", "sublabel": "Memória :5432", "pos": [550, 150], "size": [140, 60] },
+    { "id": "tlc", "type": "security", "label": "TLC Engine", "sublabel": "5 Stage Gates", "pos": [350, 50], "size": [140, 60] },
+    
+    { "id": "vert_tech", "type": "cloud", "label": "Verticais Tech", "sublabel": "Eng, Data, DevSecOps", "pos": [150, 400], "size": [140, 60] },
+    { "id": "vert_biz", "type": "cloud", "label": "Verticais Negócios", "sublabel": "Mkt, RevOps, FinOps", "pos": [350, 400], "size": [140, 60] },
+    { "id": "vert_ops", "type": "cloud", "label": "Verticais Operação", "sublabel": "RH, Jurídico, Edu", "pos": [550, 400], "size": [140, 60] },
+
+    { "id": "produtos", "type": "external", "label": "Produtos", "sublabel": "SaaS, APIs, Retainers", "pos": [350, 550], "size": [140, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Camada 1: Plataforma Core (Infraestrutura Local)", "wraps": ["cortex", "omniroute", "paperclip", "pgvector", "tlc"] },
+    { "kind": "region", "label": "Camada 2: Profit Centers (15 Verticais)", "wraps": ["vert_tech", "vert_biz", "vert_ops"] },
+    { "kind": "region", "label": "Camada 3: Monetização", "wraps": ["produtos"] }
+  ],
+  "connections": [
+    { "id": "tlc-cortex", "from": "tlc", "to": "cortex", "label": "governança", "labelAt": [425, 120] },
+    { "id": "paperclip-cortex", "from": "paperclip", "to": "cortex", "label": "orquestração", "labelAt": [320, 140] },
+    { "id": "pgvector-cortex", "from": "pgvector", "to": "cortex", "label": "rag embeddings", "labelAt": [520, 140] },
+    { "id": "cortex-omniroute", "from": "cortex", "to": "omniroute", "label": "inferência", "labelAt": [425, 220] },
+    
+    { "id": "omni-tech", "from": "omniroute", "to": "vert_tech", "variant": "emphasis" },
+    { "id": "omni-biz", "from": "omniroute", "to": "vert_biz", "variant": "emphasis" },
+    { "id": "omni-ops", "from": "omniroute", "to": "vert_ops", "variant": "emphasis" },
+    
+    { "id": "tech-prod", "from": "vert_tech", "to": "produtos", "label": "entregáveis", "variant": "dashed", "fromSide": "bottom", "toSide": "left", "via": [[220, 580]], "labelAt": [280, 570] },
+    { "id": "biz-prod", "from": "vert_biz", "to": "produtos", "label": "entregáveis", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelAt": [445, 500] },
+    { "id": "ops-prod", "from": "vert_ops", "to": "produtos", "label": "entregáveis", "variant": "dashed", "fromSide": "bottom", "toSide": "right", "via": [[620, 580]], "labelAt": [560, 570] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Plataforma Core", "items": ["Operação com $0 marginal cost reutilizando Cortex, PGVector e Paperclip.", "TLC Agent Skills com 5 Stage Gates."] },
+    { "dot": "emerald", "title": "Verticais B2B", "items": ["Agrupamento das 15 verticais em Tech, Business e Operations.", "Cada vertical atua como um Profit Center independente."] },
+    { "dot": "violet", "title": "Monetização", "items": ["Micro-SaaS White-Label", "Projetos Fechados & Retainers Mensais", "Cursos e APIs"] }
+  ]
+}

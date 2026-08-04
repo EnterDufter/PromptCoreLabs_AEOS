@@ -94,12 +94,14 @@ Runtime
 
 ↓
 
-Projects
+Projects & Verticals (AI Holding Multi-Empresas)
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
 
 Nenhuma camada inferior redefine responsabilidades das superiores.
+
+Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
 
 ---
 
