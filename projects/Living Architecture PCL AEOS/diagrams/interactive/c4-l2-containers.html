@@ -4498,10 +4498,10 @@
         <div class="pulse-dot"></div>
         <h1>C4 Nível 2 — Contêineres do System Harness (Container Diagram)</h1>
       </div>
-      <p class="subtitle">Topologia de Contêineres Docker, Banco de Dados, AI Gateway e Rede Mesh</p>
+      <p class="subtitle">Topologia da Plataforma Core (Harness) alimentando 15 Verticais B2B</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[{"id":"docker-harness","label":"Docker Compose Harness","focus":["paperclip","omniroute","db"],"note":"Contêineres principais orquestrados localmente via Docker."},{"id":"model-routing","label":"Roteamento de Modelos","focus":["omniroute","local_gpu","cloud_apis"],"note":"OmniRoute com EBITDA Shield chaveando entre GPU Local e Cloud APIs."}]</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"docker-harness","label":"Plataforma Core Docker","focus":["paperclip","omniroute","db"],"note":"Contêineres locais que viabilizam o custo marginal zero."},{"id":"model-routing","label":"Roteamento de Modelos","focus":["omniroute","local_gpu","cloud_apis"],"note":"OmniRoute com EBITDA Shield chaveando entre GPU Local e Cloud APIs."}]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4546,7 +4546,7 @@
     <div class="diagram-container" data-detail-level="read">
       <svg viewBox="0 0 960 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
         <title id="archify-diagram-title">C4 Nível 2 — Contêineres do System Harness (Container Diagram)</title>
-        <desc id="archify-diagram-description">Topologia de Contêineres Docker, Banco de Dados, AI Gateway e Rede Mesh</desc>
+        <desc id="archify-diagram-description">Topologia da Plataforma Core (Harness) alimentando 15 Verticais B2B</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4577,23 +4577,23 @@
         <text x="28" y="88" class="t-security" font-size="9" font-weight="600">Host Process &amp; Inference Layer</text>
 
         <!-- Connection paths (before components for correct z-order) -->
-        <path data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Lê/Grava Specs" data-edge-key="0" data-edge-id="paperclip-workspace" data-composition-points="260,263;225,263;225,130;190,130" d="M 260 263 L 233 263 Q 225 263 225 255 L 225 138 Q 225 130 217 130 L 190 130" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="paperclip" data-edge-to="db" data-edge-label="Persiste Estados" data-edge-key="1" data-edge-id="paperclip-db" data-composition-points="330,300;330,420" d="M 330 300 L 330 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Processa Projetos" data-edge-key="0" data-edge-id="paperclip-workspace" data-composition-points="260,263;235,263;235,130;210,130" d="M 260 263 L 243 263 Q 235 263 235 255 L 235 138 Q 235 130 227 130 L 210 130" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="paperclip" data-edge-to="db" data-edge-label="Memória Holding" data-edge-key="1" data-edge-id="paperclip-db" data-composition-points="330,300;330,420" d="M 330 300 L 330 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute" data-composition-points="400,270;500,270" d="M 400 270 L 500 270" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência Local" data-edge-key="3" data-edge-id="omniroute-local" data-composition-points="650,263;695,263;695,150;740,150" d="M 650 263 L 687 263 Q 695 263 695 255 L 695 158 Q 695 150 703 150 L 740 150" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência $0 Cost" data-edge-key="3" data-edge-id="omniroute-local" data-composition-points="650,263;695,263;695,150;740,150" d="M 650 263 L 687 263 Q 695 263 695 255 L 695 158 Q 695 150 703 150 L 740 150" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
         <path data-edge-from="omniroute" data-edge-to="cloud_apis" data-edge-label="Fallback Cloud" data-edge-key="4" data-edge-id="omniroute-cloud" data-composition-points="650,277;695,277;695,390;740,390" d="M 650 277 L 687 277 Q 695 277 695 285 L 695 382 Q 695 390 703 390 L 740 390" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <path data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="5" data-edge-id="tailscale-host" data-composition-points="190,390;225,390;225,277;260,277" d="M 190 390 L 217 390 Q 225 390 225 382 L 225 285 Q 225 277 233 277 L 260 277" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
 
         <!-- Components -->
-        <g id="node-workspace" data-node-id="workspace" data-node-label="Workspace Git" tabindex="0" role="button" aria-label="Focus Workspace Git, Código &amp; Specs, Host Process &amp; Inference Layer" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Código &amp; Specs" data-node-context="Host Process &amp; Inference Layer">
-          <title>Workspace Git · Código &amp; Specs · Host Process &amp; Inference Layer</title>
-          <rect x="50" y="100" width="140" height="60" rx="6" class="c-mask"/>
-          <rect x="50" y="100" width="140" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
+        <g id="node-workspace" data-node-id="workspace" data-node-label="Workspace Git (Verticais)" tabindex="0" role="button" aria-label="Focus Workspace Git (Verticais), Código das 15 Frentes, Host Process &amp; Inference Layer" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Código das 15 Frentes" data-node-context="Host Process &amp; Inference Layer">
+          <title>Workspace Git (Verticais) · Código das 15 Frentes · Host Process &amp; Inference Layer</title>
+          <rect x="50" y="100" width="160" height="60" rx="6" class="c-mask"/>
+          <rect x="50" y="100" width="160" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(56 106) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-detail-anchor x="120" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Workspace Git</text>
-        <text data-detail="context" x="120" y="144" class="t-muted" font-size="9" text-anchor="middle">Código &amp; Specs</text>
+          <text data-detail-anchor x="130" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Workspace Git (Verticais)</text>
+        <text data-detail="context" x="130" y="144" class="t-muted" font-size="9" text-anchor="middle">Código das 15 Frentes</text>
         </g>
 
         <g id="node-paperclip" data-node-id="paperclip" data-node-label="PaperClip UI" tabindex="0" role="button" aria-label="Focus PaperClip UI, Node.js :3100, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Node.js :3100" data-node-tag="Squad Dashboard" data-node-context="Docker Compose Bridge Network (pcl-net)">
@@ -4668,21 +4668,21 @@
         </g>
 
         <!-- Connection labels -->
-        <g data-detail="context" data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Lê/Grava Specs" data-edge-key="0" data-edge-id="paperclip-workspace">
-          <rect x="186.4" y="176.5" width="77.2" height="14" rx="3" class="c-mask"/>
-          <text x="225" y="186.5" class="t-messagebus" font-size="8" text-anchor="middle">Lê/Grava Specs</text>
+        <g data-detail="context" data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Processa Projetos" data-edge-key="0" data-edge-id="paperclip-workspace">
+          <rect x="189.2" y="176.5" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="235" y="186.5" class="t-messagebus" font-size="8" text-anchor="middle">Processa Projetos</text>
         </g>
-        <g data-detail="context" data-edge-from="paperclip" data-edge-to="db" data-edge-label="Persiste Estados" data-edge-key="1" data-edge-id="paperclip-db">
-          <rect x="286.6" y="310" width="86.8" height="14" rx="3" class="c-mask"/>
-          <text x="330" y="320" class="t-muted" font-size="8" text-anchor="middle">Persiste Estados</text>
+        <g data-detail="context" data-edge-from="paperclip" data-edge-to="db" data-edge-label="Memória Holding" data-edge-key="1" data-edge-id="paperclip-db">
+          <rect x="289" y="310" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="330" y="320" class="t-muted" font-size="8" text-anchor="middle">Memória Holding</text>
         </g>
         <g data-detail="context" data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute">
           <rect x="401.8" y="250" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
           <text x="450" y="260" class="t-backend" font-size="8" text-anchor="middle">Reqs de Inferência</text>
         </g>
-        <g data-detail="context" data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência Local" data-edge-key="3" data-edge-id="omniroute-local">
-          <rect x="651.6" y="186.5" width="86.8" height="14" rx="3" class="c-mask"/>
-          <text x="695" y="196.5" class="t-messagebus" font-size="8" text-anchor="middle">Inferência Local</text>
+        <g data-detail="context" data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Inferência $0 Cost" data-edge-key="3" data-edge-id="omniroute-local">
+          <rect x="646.8" y="186.5" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="695" y="196.5" class="t-messagebus" font-size="8" text-anchor="middle">Inferência $0 Cost</text>
         </g>
         <g data-detail="context" data-edge-from="omniroute" data-edge-to="cloud_apis" data-edge-label="Fallback Cloud" data-edge-key="4" data-edge-id="omniroute-cloud">
           <rect x="656.4" y="313.5" width="77.2" height="14" rx="3" class="c-mask"/>
@@ -4899,22 +4899,22 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Orquestração Docker</h3>
+          <h3>Orquestração Core</h3>
         </div>
         <ul>
-          <li>&bull; Contêineres isolados via Docker Compose</li>
-          <li>&bull; PostgreSQL 17 com extensão pgvector ativada</li>
+          <li>&bull; Contêineres centrais sustentam a Holding simultaneamente</li>
+          <li>&bull; PostgreSQL 17 atuando como Memória RAG central das verticais</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot emerald"></div>
-          <h3>Gateway Inteligente</h3>
+          <h3>Custo Marginal Zero</h3>
         </div>
         <ul>
-          <li>&bull; OmniRoute gerencia roteamento e prompt caching</li>
-          <li>&bull; EBITDA Shield reduz custos em chamadas repetitivas</li>
+          <li>&bull; OmniRoute gerencia roteamento e prompt caching global</li>
+          <li>&bull; EBITDA Shield absorve requisições, eliminando custo variável</li>
         </ul>
       </div>
 
@@ -4924,8 +4924,7 @@
           <h3>Acesso e Tunelamento</h3>
         </div>
         <ul>
-          <li>&bull; Rede Mesh Tailscale garante acesso remoto seguro</li>
-          <li>&bull; Sanitização contínua por agentes de QA</li>
+          <li>&bull; Rede Mesh Tailscale garante acesso remoto criptografado</li>
         </ul>
       </div>
     </div>

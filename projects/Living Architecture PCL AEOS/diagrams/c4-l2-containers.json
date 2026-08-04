@@ -3,15 +3,15 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "C4 Nível 2 — Contêineres do System Harness (Container Diagram)",
-    "subtitle": "Topologia de Contêineres Docker, Banco de Dados, AI Gateway e Rede Mesh",
+    "subtitle": "Topologia da Plataforma Core (Harness) alimentando 15 Verticais B2B",
     "output": "c4-l2-containers.html",
     "quality_profile": "showcase",
     "views": [
       {
         "id": "docker-harness",
-        "label": "Docker Compose Harness",
+        "label": "Plataforma Core Docker",
         "focus": ["paperclip", "omniroute", "db"],
-        "note": "Contêineres principais orquestrados localmente via Docker."
+        "note": "Contêineres locais que viabilizam o custo marginal zero."
       },
       {
         "id": "model-routing",
@@ -22,7 +22,7 @@
     ]
   },
   "components": [
-    { "id": "workspace", "type": "cloud", "label": "Workspace Git", "sublabel": "Código & Specs", "pos": [50, 100], "size": [140, 60] },
+    { "id": "workspace", "type": "cloud", "label": "Workspace Git (Verticais)", "sublabel": "Código das 15 Frentes", "pos": [50, 100], "size": [160, 60] },
     { "id": "paperclip", "type": "backend", "label": "PaperClip UI", "sublabel": "Node.js :3100", "pos": [260, 240], "size": [140, 60], "tag": "Squad Dashboard" },
     { "id": "omniroute", "type": "backend", "label": "OmniRoute Gateway", "sublabel": "AI Proxy :20130", "pos": [500, 240], "size": [150, 60], "tag": "EBITDA Shield" },
     { "id": "db", "type": "database", "label": "pcl-db", "sublabel": "PostgreSQL 17 :5432", "pos": [260, 420], "size": [140, 60], "tag": "PGVector RAG" },
@@ -35,16 +35,16 @@
     { "kind": "security-group", "label": "Host Process & Inference Layer", "wraps": ["workspace", "local_gpu", "tailscale"] }
   ],
   "connections": [
-    { "id": "paperclip-workspace", "from": "paperclip", "to": "workspace", "label": "Lê/Grava Specs", "variant": "dashed" },
-    { "id": "paperclip-db", "from": "paperclip", "to": "db", "label": "Persiste Estados", "fromSide": "bottom", "toSide": "top", "labelDy": 30 },
+    { "id": "paperclip-workspace", "from": "paperclip", "to": "workspace", "label": "Processa Projetos", "variant": "dashed" },
+    { "id": "paperclip-db", "from": "paperclip", "to": "db", "label": "Memória Holding", "fromSide": "bottom", "toSide": "top", "labelDy": 30 },
     { "id": "paperclip-omniroute", "from": "paperclip", "to": "omniroute", "label": "Reqs de Inferência", "variant": "emphasis" },
-    { "id": "omniroute-local", "from": "omniroute", "to": "local_gpu", "label": "Inferência Local", "variant": "dashed" },
+    { "id": "omniroute-local", "from": "omniroute", "to": "local_gpu", "label": "Inferência $0 Cost", "variant": "dashed" },
     { "id": "omniroute-cloud", "from": "omniroute", "to": "cloud_apis", "label": "Fallback Cloud", "variant": "emphasis" },
     { "id": "tailscale-host", "from": "tailscale", "to": "paperclip", "label": "Túnel Seguro", "variant": "security" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Orquestração Docker", "items": ["Contêineres isolados via Docker Compose", "PostgreSQL 17 com extensão pgvector ativada"] },
-    { "dot": "emerald", "title": "Gateway Inteligente", "items": ["OmniRoute gerencia roteamento e prompt caching", "EBITDA Shield reduz custos em chamadas repetitivas"] },
-    { "dot": "rose", "title": "Acesso e Tunelamento", "items": ["Rede Mesh Tailscale garante acesso remoto seguro", "Sanitização contínua por agentes de QA"] }
+    { "dot": "cyan", "title": "Orquestração Core", "items": ["Contêineres centrais sustentam a Holding simultaneamente", "PostgreSQL 17 atuando como Memória RAG central das verticais"] },
+    { "dot": "emerald", "title": "Custo Marginal Zero", "items": ["OmniRoute gerencia roteamento e prompt caching global", "EBITDA Shield absorve requisições, eliminando custo variável"] },
+    { "dot": "rose", "title": "Acesso e Tunelamento", "items": ["Rede Mesh Tailscale garante acesso remoto criptografado"] }
   ]
 }

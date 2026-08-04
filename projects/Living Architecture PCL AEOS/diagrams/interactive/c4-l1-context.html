@@ -4498,10 +4498,10 @@
         <div class="pulse-dot"></div>
         <h1>C4 Nível 1 — Contexto do Sistema (System Context)</h1>
       </div>
-      <p class="subtitle">Visão Macro do PromptCoreLabs_AEOS com Atores e Serviços de Nuvem</p>
+      <p class="subtitle">Visão Macro da Holding Digital PCL-AEOS (AI-as-a-Service)</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[{"id":"operador-interaction","label":"Interação do Operador","focus":["operador","aeos"],"note":"Engenheiro de IA interagindo e governando o AEOS."},{"id":"cloud-integrations","label":"Integrações Cloud \u0026 RAG Remote","focus":["aeos","github","cloud_llm"],"note":"Fluxo de persistência remota no GitHub e inferência em nuvem."}]</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"operador-interaction","label":"Interação do Operador","focus":["operador","aeos"],"note":"Engenheiro de IA interagindo e governando a Plataforma Core."},{"id":"holding-delivery","label":"Geração de Valor (Holding)","focus":["aeos","b2b_verticals","market"],"note":"Plataforma Core orquestrando as 15 Verticais e monetizando produtos."},{"id":"cloud-integrations","label":"Integrações Cloud","focus":["aeos","github","cloud_llm"],"note":"Fluxo de persistência e inferência remota."}]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4544,9 +4544,9 @@
 
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read">
-      <svg viewBox="0 0 820 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+      <svg viewBox="0 0 1050 578" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
         <title id="archify-diagram-title">C4 Nível 1 — Contexto do Sistema (System Context)</title>
-        <desc id="archify-diagram-description">Visão Macro do PromptCoreLabs_AEOS com Atores e Serviços de Nuvem</desc>
+        <desc id="archify-diagram-description">Visão Macro da Holding Digital PCL-AEOS (AI-as-a-Service)</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4570,17 +4570,19 @@
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Boundaries (behind everything) -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="290" y="220" width="230" height="280" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="290" y="220" width="500" height="280" rx="12" class="c-region" stroke-width="1"/>
         <text x="298" y="238" class="t-cloud" font-size="9" font-weight="600">Fronteira Local (Host / Harness)</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" x="570" y="90" width="210" height="380" rx="12" class="c-region" stroke-width="1"/>
-        <text x="578" y="108" class="t-cloud" font-size="9" font-weight="600">Serviços Externos em Nuvem</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" x="430" y="60" width="270" height="450" rx="12" class="c-region" stroke-width="1"/>
+        <text x="438" y="78" class="t-cloud" font-size="9" font-weight="600">Serviços Externos em Nuvem</text>
 
         <!-- Connection paths (before components for correct z-order) -->
         <path data-edge-from="operador" data-edge-to="aeos" data-edge-label="Governa e Executa" data-edge-key="0" data-edge-id="operador-aeos" data-composition-points="200,285;320,285" d="M 200 285 L 320 285" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="aeos" data-edge-to="github" data-edge-label="Versiona Código" data-edge-key="1" data-edge-id="aeos-github" data-composition-points="490,278;545,278;545,155;600,155" d="M 490 278 L 537 278 Q 545 278 545 270 L 545 163 Q 545 155 553 155 L 600 155" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="aeos" data-edge-to="cloud_llm" data-edge-label="Inferência Cloud API" data-edge-key="2" data-edge-id="aeos-cloud" data-composition-points="490,292;545,292;545,415;600,415" d="M 490 292 L 537 292 Q 545 292 545 300 L 545 407 Q 545 415 553 415 L 600 415" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="tailscale" data-edge-to="aeos" data-edge-label="Proteção Mesh" data-edge-key="3" data-edge-id="tailscale-sec" data-composition-points="405,420;405,320" d="M 405 420 L 405 320" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="aeos" data-edge-to="b2b_verticals" data-edge-label="Orquestra" data-edge-key="1" data-edge-id="aeos-b2b" data-composition-points="490,285;600,285" d="M 490 285 L 600 285" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="b2b_verticals" data-edge-to="market" data-edge-label="Entrega Produtos" data-edge-key="2" data-edge-id="b2b-market" data-composition-points="760,285;850,285" d="M 760 285 L 850 285" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="aeos" data-edge-to="github" data-edge-label="Versiona Código" data-edge-key="3" data-edge-id="aeos-github" data-composition-points="405,250;405,205;535,205;535,160" d="M 405 250 L 405 213 Q 405 205 413 205 L 527 205 Q 535 205 535 197 L 535 160" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="aeos" data-edge-to="cloud_llm" data-edge-label="Inferência Cloud" data-edge-key="4" data-edge-id="aeos-cloud" data-composition-points="412,320;412,370;595,370;595,420" d="M 412 320 L 412 362 Q 412 370 420 370 L 587 370 Q 595 370 595 378 L 595 420" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="tailscale" data-edge-to="aeos" data-edge-label="Proteção Mesh" data-edge-key="5" data-edge-id="tailscale-sec" data-composition-points="405,420;405,396;421,396;421,344;398,344;398,320" d="M 405 420 L 405 404 Q 405 396 413 396 L 413 396 Q 421 396 421 388 L 421 352 Q 421 344 413 344 L 406 344 Q 398 344 398 336 L 398 320" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
 
         <!-- Components -->
         <g id="node-operador" data-node-id="operador" data-node-label="Operador Humano" tabindex="0" role="button" aria-label="Focus Operador Humano, Engenheiro IA / Dev, Architecture component" aria-pressed="false" data-node-kind="external" data-node-sublabel="Engenheiro IA / Dev" data-node-context="Architecture component">
@@ -4595,38 +4597,62 @@
         <text data-detail="context" x="125" y="299" class="t-muted" font-size="9" text-anchor="middle">Engenheiro IA / Dev</text>
         </g>
 
-        <g id="node-aeos" data-node-id="aeos" data-node-label="PromptCoreLabs_AEOS" tabindex="0" role="button" aria-label="Focus PromptCoreLabs_AEOS, AI Engineering OS, Fronteira Local (Host / Harness)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="AI Engineering OS" data-node-tag="Soberania Local" data-node-context="Fronteira Local (Host / Harness)">
-          <title>PromptCoreLabs_AEOS · AI Engineering OS · Fronteira Local (Host / Harness) · Soberania Local</title>
+        <g id="node-aeos" data-node-id="aeos" data-node-label="Plataforma Core AEOS" tabindex="0" role="button" aria-label="Focus Plataforma Core AEOS, Holding Orchestrator, Fronteira Local (Host / Harness)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Holding Orchestrator" data-node-tag="Soberania Local" data-node-context="Fronteira Local (Host / Harness)">
+          <title>Plataforma Core AEOS · Holding Orchestrator · Fronteira Local (Host / Harness) · Soberania Local</title>
           <rect x="320" y="250" width="170" height="70" rx="6" class="c-mask"/>
           <rect x="320" y="250" width="170" height="70" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(326 256) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-detail-anchor x="405" y="283" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PromptCoreLabs_AEOS</text>
-        <text data-detail="context" x="405" y="299" class="t-muted" font-size="9" text-anchor="middle">AI Engineering OS</text>
+          <text data-detail-anchor x="405" y="283" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Plataforma Core AEOS</text>
+        <text data-detail="context" x="405" y="299" class="t-muted" font-size="9" text-anchor="middle">Holding Orchestrator</text>
         <text data-detail="fine" x="405" y="312" class="t-backend" font-size="7" text-anchor="middle">Soberania Local</text>
+        </g>
+
+        <g id="node-b2b_verticals" data-node-id="b2b_verticals" data-node-label="15 Verticais B2B" tabindex="0" role="button" aria-label="Focus 15 Verticais B2B, Tech, Business, Ops, Fronteira Local (Host / Harness)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Tech, Business, Ops" data-node-tag="$0 Marginal Cost" data-node-context="Fronteira Local (Host / Harness)">
+          <title>15 Verticais B2B · Tech, Business, Ops · Fronteira Local (Host / Harness) · $0 Marginal Cost</title>
+          <rect x="600" y="250" width="160" height="70" rx="6" class="c-mask"/>
+          <rect x="600" y="250" width="160" height="70" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(606 256) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="680" y="283" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">15 Verticais B2B</text>
+        <text data-detail="context" x="680" y="299" class="t-muted" font-size="9" text-anchor="middle">Tech, Business, Ops</text>
+        <text data-detail="fine" x="680" y="312" class="t-backend" font-size="7" text-anchor="middle">$0 Marginal Cost</text>
+        </g>
+
+        <g id="node-market" data-node-id="market" data-node-label="Mercado Consumidor" tabindex="0" role="button" aria-label="Focus Mercado Consumidor, Micro-SaaS &amp; APIs, Architecture component" aria-pressed="false" data-node-kind="external" data-node-sublabel="Micro-SaaS &amp; APIs" data-node-context="Architecture component">
+          <title>Mercado Consumidor · Micro-SaaS &amp; APIs · Architecture component</title>
+          <rect x="850" y="250" width="160" height="70" rx="6" class="c-mask"/>
+          <rect x="850" y="250" width="160" height="70" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(856 256) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="930" y="283" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Mercado Consumidor</text>
+        <text data-detail="context" x="930" y="299" class="t-muted" font-size="9" text-anchor="middle">Micro-SaaS &amp; APIs</text>
         </g>
 
         <g id="node-github" data-node-id="github" data-node-label="GitHub Remote" tabindex="0" role="button" aria-label="Focus GitHub Remote, Repositório &amp; Specs, Serviços Externos em Nuvem" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Repositório &amp; Specs" data-node-context="Serviços Externos em Nuvem">
           <title>GitHub Remote · Repositório &amp; Specs · Serviços Externos em Nuvem</title>
-          <rect x="600" y="120" width="150" height="70" rx="6" class="c-mask"/>
-          <rect x="600" y="120" width="150" height="70" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(606 126) scale(0.6875)">
+          <rect x="460" y="90" width="150" height="70" rx="6" class="c-mask"/>
+          <rect x="460" y="90" width="150" height="70" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(466 96) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-detail-anchor x="675" y="153" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">GitHub Remote</text>
-        <text data-detail="context" x="675" y="169" class="t-muted" font-size="9" text-anchor="middle">Repositório &amp; Specs</text>
+          <text data-detail-anchor x="535" y="123" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">GitHub Remote</text>
+        <text data-detail="context" x="535" y="139" class="t-muted" font-size="9" text-anchor="middle">Repositório &amp; Specs</text>
         </g>
 
         <g id="node-cloud_llm" data-node-id="cloud_llm" data-node-label="Cloud LLM Providers" tabindex="0" role="button" aria-label="Focus Cloud LLM Providers, Gemini / Claude API, Serviços Externos em Nuvem" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Gemini / Claude API" data-node-context="Serviços Externos em Nuvem">
           <title>Cloud LLM Providers · Gemini / Claude API · Serviços Externos em Nuvem</title>
-          <rect x="600" y="380" width="150" height="70" rx="6" class="c-mask"/>
-          <rect x="600" y="380" width="150" height="70" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(606 386) scale(0.6875)">
+          <rect x="520" y="420" width="150" height="70" rx="6" class="c-mask"/>
+          <rect x="520" y="420" width="150" height="70" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(526 426) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-detail-anchor x="675" y="413" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloud LLM Providers</text>
-        <text data-detail="context" x="675" y="429" class="t-muted" font-size="9" text-anchor="middle">Gemini / Claude API</text>
+          <text data-detail-anchor x="595" y="453" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloud LLM Providers</text>
+        <text data-detail="context" x="595" y="469" class="t-muted" font-size="9" text-anchor="middle">Gemini / Claude API</text>
         </g>
 
         <g id="node-tailscale" data-node-id="tailscale" data-node-label="Tailscale Network" tabindex="0" role="button" aria-label="Focus Tailscale Network, VPN Mesh Criptografada, Fronteira Local (Host / Harness)" aria-pressed="false" data-node-kind="security" data-node-sublabel="VPN Mesh Criptografada" data-node-context="Fronteira Local (Host / Harness)">
@@ -4643,40 +4669,48 @@
 
         <!-- Connection labels -->
         <g data-detail="context" data-edge-from="operador" data-edge-to="aeos" data-edge-label="Governa e Executa" data-edge-key="0" data-edge-id="operador-aeos">
-          <rect x="214.2" y="265" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="260" y="275" class="t-backend" font-size="8" text-anchor="middle">Governa e Executa</text>
+          <rect x="214.2" y="228" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="260" y="238" class="t-backend" font-size="8" text-anchor="middle">Governa e Executa</text>
         </g>
-        <g data-detail="context" data-edge-from="aeos" data-edge-to="github" data-edge-label="Versiona Código" data-edge-key="1" data-edge-id="aeos-github">
-          <rect x="504" y="196.5" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="545" y="206.5" class="t-messagebus" font-size="8" text-anchor="middle">Versiona Código</text>
+        <g data-detail="context" data-edge-from="aeos" data-edge-to="b2b_verticals" data-edge-label="Orquestra" data-edge-key="1" data-edge-id="aeos-b2b">
+          <rect x="518.4" y="265" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="545" y="275" class="t-backend" font-size="8" text-anchor="middle">Orquestra</text>
         </g>
-        <g data-detail="context" data-edge-from="aeos" data-edge-to="cloud_llm" data-edge-label="Inferência Cloud API" data-edge-key="2" data-edge-id="aeos-cloud">
-          <rect x="492" y="333.5" width="106" height="14" rx="3" class="c-mask"/>
-          <text x="545" y="343.5" class="t-backend" font-size="8" text-anchor="middle">Inferência Cloud API</text>
+        <g data-detail="context" data-edge-from="b2b_verticals" data-edge-to="market" data-edge-label="Entrega Produtos" data-edge-key="2" data-edge-id="b2b-market">
+          <rect x="761.6" y="265" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="805" y="275" class="t-backend" font-size="8" text-anchor="middle">Entrega Produtos</text>
         </g>
-        <g data-detail="context" data-edge-from="tailscale" data-edge-to="aeos" data-edge-label="Proteção Mesh" data-edge-key="3" data-edge-id="tailscale-sec">
-          <rect x="368.8" y="400" width="72.4" height="14" rx="3" class="c-mask"/>
-          <text x="405" y="410" class="t-security" font-size="8" text-anchor="middle">Proteção Mesh</text>
+        <g data-detail="context" data-edge-from="aeos" data-edge-to="github" data-edge-label="Versiona Código" data-edge-key="3" data-edge-id="aeos-github">
+          <rect x="429" y="185" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="470" y="195" class="t-messagebus" font-size="8" text-anchor="middle">Versiona Código</text>
+        </g>
+        <g data-detail="context" data-edge-from="aeos" data-edge-to="cloud_llm" data-edge-label="Inferência Cloud" data-edge-key="4" data-edge-id="aeos-cloud">
+          <rect x="460.1" y="350" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="503.5" y="360" class="t-messagebus" font-size="8" text-anchor="middle">Inferência Cloud</text>
+        </g>
+        <g data-detail="context" data-edge-from="tailscale" data-edge-to="aeos" data-edge-label="Proteção Mesh" data-edge-key="5" data-edge-id="tailscale-sec">
+          <rect x="376.8" y="376" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="413" y="386" class="t-security" font-size="8" text-anchor="middle">Proteção Mesh</text>
         </g>
 
         <!-- Legend -->
         <g data-legend-bridge>
-          <text x="40" y="539" class="t-primary" font-size="9" font-weight="600">Legend</text>
+          <text x="40" y="549" class="t-primary" font-size="9" font-weight="600">Legend</text>
           <g data-legend-kind="external">
-            <rect x="40" y="544" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
-            <text x="60" y="552" class="t-muted" font-size="8">External</text>
+            <rect x="40" y="554" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="60" y="562" class="t-muted" font-size="8">External</text>
           </g>
           <g data-legend-kind="backend">
-            <rect x="144" y="544" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
-            <text x="164" y="552" class="t-muted" font-size="8">Backend</text>
+            <rect x="144" y="554" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="164" y="562" class="t-muted" font-size="8">Backend</text>
           </g>
           <g data-legend-kind="cloud">
-            <rect x="243" y="544" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
-            <text x="263" y="552" class="t-muted" font-size="8">Cloud</text>
+            <rect x="243" y="554" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
+            <text x="263" y="562" class="t-muted" font-size="8">Cloud</text>
           </g>
           <g data-legend-kind="security">
-            <rect x="332" y="544" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
-            <text x="352" y="552" class="t-muted" font-size="8">Security</text>
+            <rect x="332" y="554" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="352" y="562" class="t-muted" font-size="8">Security</text>
           </g>
         </g>
       </svg>
@@ -4865,22 +4899,21 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Soberania Local</h3>
+          <h3>Holding Digital</h3>
         </div>
         <ul>
-          <li>&bull; Execução autônoma na máquina host</li>
-          <li>&bull; Controle estrito dos dados e memória</li>
+          <li>&bull; Plataforma Core operando 15 verticais independentes B2B</li>
+          <li>&bull; Custo marginal zero garantido pelo Harness local</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot emerald"></div>
-          <h3>Inferência Híbrida</h3>
+          <h3>Monetização Direta</h3>
         </div>
         <ul>
-          <li>&bull; Integração com Cloud LLMs de alto contexto</li>
-          <li>&bull; Modelos GPU locais via Ollama/LM Studio</li>
+          <li>&bull; Produtos embalados como Micro-SaaS e Retainers para o Mercado</li>
         </ul>
       </div>
 

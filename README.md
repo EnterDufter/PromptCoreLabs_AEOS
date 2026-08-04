@@ -10,6 +10,47 @@ Este portal é a **Única Fonte de Verdade (Single Source of Truth)** e a **Livi
 
 ---
 
+## 🏢 PCL-AEOS v2.0: Holding Digital (AI-as-a-Service)
+
+A nossa arquitetura operacional evoluiu para um modelo de **Holding Digital (3 Camadas)**, operando com **15 Verticais de Negócio B2B (Profit Centers)** apoiados em infraestrutura de **custo marginal zero ($0 marginal cost)**.
+
+```mermaid
+flowchart TD
+    %% Camada 1
+    subgraph L1 [Camada 1: Plataforma Core]
+        direction LR
+        CX[Cortex] --- OR[OmniRoute] --- PC[Paperclip] --- PG[PGVector] --- TLC[TLC Gates]
+    end
+    
+    %% Camada 2
+    subgraph L2 [Camada 2: 15 Verticais B2B]
+        direction LR
+        VT[Tech: Eng, Data, DevSecOps]
+        VB[Negócios: Mkt, RevOps, FinOps]
+        VO[Operação: RH, Jurídico, Edu]
+    end
+    
+    %% Camada 3
+    subgraph L3 [Camada 3: Monetização]
+        direction LR
+        SaaS[Micro-SaaS & APIs]
+        RET[Projetos & Retainers]
+    end
+    
+    L1 -->|Orquestração, RAG & Inferência| L2
+    L2 -->|Entregáveis de Alto Valor| L3
+    
+    style L1 fill:#1a365d,stroke:#3182ce,stroke-width:2px,color:#fff
+    style L2 fill:#2c5282,stroke:#4299e1,stroke-width:2px,color:#fff
+    style L3 fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff
+```
+
+| Previsualização (Interativa) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **CORTEX DIAGRAM (HTML)**</a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *Cortex Engine*, mapeando a Plataforma Core (Cortex, OmniRoute, Paperclip), os 15 clusters B2B e a saída de monetização. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Operating Model](ADR-005) |
+
+---
+
 ## 🧭 Trilho de Aprendizado Arquitetural em 4 Fases
 
 1. **[Passo 1: Visão Macro & Fundação](#passo-1-visão-macro--fundação-do-sistema)** — Conceito geral, Fronteiras C4 L1 e Contêineres Docker C4 L2.

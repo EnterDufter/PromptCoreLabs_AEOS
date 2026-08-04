@@ -3,7 +3,7 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "C4 Nível 3 — Componentes do Repositório (Component Diagram)",
-    "subtitle": "Fluxo de Conhecimento e Dependências entre Módulos do PCL AEOS",
+    "subtitle": "Fluxo de Conhecimento e Execução da Holding Digital PCL-AEOS",
     "output": "c4-l3-components.html",
     "quality_profile": "showcase",
     "views": [
@@ -11,39 +11,41 @@
         "id": "governance-flow",
         "label": "Fluxo Constitucional",
         "focus": ["foundation", "architecture", "bootstrap"],
-        "note": "A regras nascem na fundação e governam a arquitetura."
+        "note": "A regras nascem na fundação e governam a arquitetura da Holding."
       },
       {
         "id": "knowledge-and-execution",
-        "label": "Conhecimento & Execução",
-        "focus": ["knowledge", "memory", "agents", "runtime"],
-        "note": "Agentes consomem conhecimento e memória para executar no runtime."
+        "label": "Conhecimento & Entrega B2B",
+        "focus": ["knowledge", "memory", "agents", "b2b_projects"],
+        "note": "Agentes consomem conhecimento central e executam entregas nos projetos B2B."
       }
     ]
   },
   "components": [
     { "id": "foundation", "type": "backend", "label": "foundation / governance", "sublabel": "Constituição & Gates", "pos": [60, 100], "size": [180, 60] },
     { "id": "architecture", "type": "backend", "label": "architecture", "sublabel": "Visão C4 & ADRs", "pos": [310, 100], "size": [160, 60] },
-    { "id": "bootstrap", "type": "backend", "label": "bootstrap", "sublabel": "Onboardings & Projects", "pos": [540, 100], "size": [160, 60] },
+    { "id": "bootstrap", "type": "backend", "label": "bootstrap", "sublabel": "Onboardings", "pos": [540, 100], "size": [160, 60] },
     { "id": "knowledge", "type": "database", "label": "knowledge", "sublabel": "Playbooks & TLC Specs", "pos": [150, 260], "size": [170, 60], "tag": "Conhecimento Explícito" },
     { "id": "memory", "type": "database", "label": "memory", "sublabel": "RAG & PGVector DB", "pos": [450, 260], "size": [170, 60], "tag": "Memória Semântica" },
-    { "id": "agents", "type": "security", "label": "agents & skills", "sublabel": "15 Roles + Cortex Engine", "pos": [300, 420], "size": [180, 60], "tag": "Inteligência Operacional" },
-    { "id": "runtime", "type": "cloud", "label": "runtime & integrations", "sublabel": "Harness, MCP & Tailscale", "pos": [560, 420], "size": [180, 60] }
+    { "id": "agents", "type": "security", "label": "agents & skills", "sublabel": "15 Roles + Cortex Engine", "pos": [220, 420], "size": [180, 60], "tag": "Inteligência Operacional" },
+    { "id": "runtime", "type": "cloud", "label": "runtime & integrations", "sublabel": "Harness, MCP & VPN", "pos": [500, 420], "size": [180, 60] },
+    { "id": "b2b_projects", "type": "backend", "label": "15 B2B Verticals", "sublabel": "projects/*", "pos": [780, 420], "size": [180, 60], "tag": "Produto Final" }
   ],
   "boundaries": [
-    { "kind": "region", "label": "Camada de Diretrizes & Regras", "wraps": ["foundation", "architecture", "bootstrap"] },
-    { "kind": "region", "label": "Camada de Conhecimento, Memória & Agentes", "wraps": ["knowledge", "memory", "agents"] }
+    { "kind": "region", "label": "Camada de Diretrizes (Plataforma Core)", "wraps": ["foundation", "architecture", "bootstrap"] },
+    { "kind": "region", "label": "Camada de Execução Central", "wraps": ["knowledge", "memory", "agents", "runtime"] }
   ],
   "connections": [
     { "id": "fd-arch", "from": "foundation", "to": "architecture", "label": "Define Leis" },
-    { "id": "arch-bs", "from": "architecture", "to": "bootstrap", "label": "Guia Projetos" },
+    { "id": "arch-bs", "from": "architecture", "to": "bootstrap", "label": "Guia Setup" },
     { "id": "bs-kn", "from": "bootstrap", "to": "knowledge", "label": "Instancia Padrões", "fromSide": "bottom", "toSide": "top" },
     { "id": "kn-mem", "from": "knowledge", "to": "memory", "label": "Indexação RAG" },
     { "id": "mem-agt", "from": "memory", "to": "agents", "label": "Provê Contexto", "fromSide": "bottom", "toSide": "top" },
-    { "id": "agt-rt", "from": "agents", "to": "runtime", "label": "Orquestra Ações", "variant": "emphasis" }
+    { "id": "agt-rt", "from": "agents", "to": "runtime", "label": "Roda no" },
+    { "id": "rt-b2b", "from": "runtime", "to": "b2b_projects", "label": "Entrega Valor nas Verticais", "variant": "emphasis", "labelDy": -25 }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Fluxo do Conhecimento", "items": ["Conhecimento nasce na Architecture e é normatizado pela Governance", "Knowledge e Memory alimentam os agentes sem acoplamento direto"] },
-    { "dot": "emerald", "title": "Independência dos Agentes", "items": ["Agentes não possuem conhecimento próprio; consomem Knowledge/Memory", "Cortex Engine orquestra visualização e conformidade Spec-Driven"] }
+    { "dot": "cyan", "title": "Plataforma Core Compartilhada", "items": ["As regras de Foundation e Architecture regulam todas as 15 verticais", "O RAG e os Agentes atendem as demandas concorrentes de todas frentes B2B"] },
+    { "dot": "emerald", "title": "Isolamento Físico de Produtos", "items": ["O diretório 'projects/' hospeda o código-fonte de cada vertical fisicamente isolado"] }
   ]
 }

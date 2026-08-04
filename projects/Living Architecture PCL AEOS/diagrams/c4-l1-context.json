@@ -3,7 +3,7 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "C4 Nível 1 — Contexto do Sistema (System Context)",
-    "subtitle": "Visão Macro do PromptCoreLabs_AEOS com Atores e Serviços de Nuvem",
+    "subtitle": "Visão Macro da Holding Digital PCL-AEOS (AI-as-a-Service)",
     "output": "c4-l1-context.html",
     "quality_profile": "showcase",
     "views": [
@@ -11,36 +11,46 @@
         "id": "operador-interaction",
         "label": "Interação do Operador",
         "focus": ["operador", "aeos"],
-        "note": "Engenheiro de IA interagindo e governando o AEOS."
+        "note": "Engenheiro de IA interagindo e governando a Plataforma Core."
+      },
+      {
+        "id": "holding-delivery",
+        "label": "Geração de Valor (Holding)",
+        "focus": ["aeos", "b2b_verticals", "market"],
+        "note": "Plataforma Core orquestrando as 15 Verticais e monetizando produtos."
       },
       {
         "id": "cloud-integrations",
-        "label": "Integrações Cloud & RAG Remote",
+        "label": "Integrações Cloud",
         "focus": ["aeos", "github", "cloud_llm"],
-        "note": "Fluxo de persistência remota no GitHub e inferência em nuvem."
+        "note": "Fluxo de persistência e inferência remota."
       }
     ]
   },
   "components": [
     { "id": "operador", "type": "external", "label": "Operador Humano", "sublabel": "Engenheiro IA / Dev", "pos": [50, 250], "size": [150, 70] },
-    { "id": "aeos", "type": "backend", "label": "PromptCoreLabs_AEOS", "sublabel": "AI Engineering OS", "pos": [320, 250], "size": [170, 70], "tag": "Soberania Local" },
-    { "id": "github", "type": "cloud", "label": "GitHub Remote", "sublabel": "Repositório & Specs", "pos": [600, 120], "size": [150, 70] },
-    { "id": "cloud_llm", "type": "cloud", "label": "Cloud LLM Providers", "sublabel": "Gemini / Claude API", "pos": [600, 380], "size": [150, 70] },
+    { "id": "aeos", "type": "backend", "label": "Plataforma Core AEOS", "sublabel": "Holding Orchestrator", "pos": [320, 250], "size": [170, 70], "tag": "Soberania Local" },
+    { "id": "b2b_verticals", "type": "backend", "label": "15 Verticais B2B", "sublabel": "Tech, Business, Ops", "pos": [600, 250], "size": [160, 70], "tag": "$0 Marginal Cost" },
+    { "id": "market", "type": "external", "label": "Mercado Consumidor", "sublabel": "Micro-SaaS & APIs", "pos": [850, 250], "size": [160, 70] },
+    { "id": "github", "type": "cloud", "label": "GitHub Remote", "sublabel": "Repositório & Specs", "pos": [460, 90], "size": [150, 70] },
+    { "id": "cloud_llm", "type": "cloud", "label": "Cloud LLM Providers", "sublabel": "Gemini / Claude API", "pos": [520, 420], "size": [150, 70] },
     { "id": "tailscale", "type": "security", "label": "Tailscale Network", "sublabel": "VPN Mesh Criptografada", "pos": [320, 420], "size": [170, 60] }
   ],
   "boundaries": [
-    { "kind": "region", "label": "Fronteira Local (Host / Harness)", "wraps": ["aeos", "tailscale"] },
+    { "kind": "region", "label": "Fronteira Local (Host / Harness)", "wraps": ["aeos", "b2b_verticals", "tailscale"] },
     { "kind": "region", "label": "Serviços Externos em Nuvem", "wraps": ["github", "cloud_llm"] }
   ],
   "connections": [
-    { "id": "operador-aeos", "from": "operador", "to": "aeos", "label": "Governa e Executa", "variant": "emphasis" },
-    { "id": "aeos-github", "from": "aeos", "to": "github", "label": "Versiona Código", "variant": "dashed" },
-    { "id": "aeos-cloud", "from": "aeos", "to": "cloud_llm", "label": "Inferência Cloud API", "variant": "emphasis" },
-    { "id": "tailscale-sec", "from": "tailscale", "to": "aeos", "label": "Proteção Mesh", "variant": "security" }
+    { "id": "operador-aeos", "from": "operador", "to": "aeos", "label": "Governa e Executa", "variant": "emphasis", "labelDy": -37 },
+    { "id": "aeos-b2b", "from": "aeos", "to": "b2b_verticals", "label": "Orquestra", "variant": "emphasis" },
+    { "id": "b2b-market", "from": "b2b_verticals", "to": "market", "label": "Entrega Produtos", "variant": "emphasis" },
+    { "id": "aeos-github", "from": "aeos", "to": "github", "label": "Versiona Código", "variant": "dashed", "fromSide": "top", "toSide": "bottom" },
+    { "id": "aeos-cloud", "from": "aeos", "to": "cloud_llm", "label": "Inferência Cloud", "variant": "dashed", "fromSide": "bottom", "toSide": "top" },
+    { "id": "tailscale-sec", "from": "tailscale", "to": "aeos", "label": "Proteção Mesh", "variant": "security", "fromSide": "top", "toSide": "bottom" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Soberania Local", "items": ["Execução autônoma na máquina host", "Controle estrito dos dados e memória"] },
-    { "dot": "emerald", "title": "Inferência Híbrida", "items": ["Integração com Cloud LLMs de alto contexto", "Modelos GPU locais via Ollama/LM Studio"] },
+    { "dot": "cyan", "title": "Holding Digital", "items": ["Plataforma Core operando 15 verticais independentes B2B", "Custo marginal zero garantido pelo Harness local"] },
+    { "dot": "emerald", "title": "Monetização Direta", "items": ["Produtos embalados como Micro-SaaS e Retainers para o Mercado"] },
     { "dot": "rose", "title": "Segurança & VPN", "items": ["Acesso seguro via rede Mesh Tailscale", "Sanitização e Zero Trust QA"] }
   ]
 }

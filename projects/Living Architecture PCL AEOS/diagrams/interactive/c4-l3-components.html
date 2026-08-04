@@ -4498,10 +4498,10 @@
         <div class="pulse-dot"></div>
         <h1>C4 Nível 3 — Componentes do Repositório (Component Diagram)</h1>
       </div>
-      <p class="subtitle">Fluxo de Conhecimento e Dependências entre Módulos do PCL AEOS</p>
+      <p class="subtitle">Fluxo de Conhecimento e Execução da Holding Digital PCL-AEOS</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[{"id":"governance-flow","label":"Fluxo Constitucional","focus":["foundation","architecture","bootstrap"],"note":"A regras nascem na fundação e governam a arquitetura."},{"id":"knowledge-and-execution","label":"Conhecimento \u0026 Execução","focus":["knowledge","memory","agents","runtime"],"note":"Agentes consomem conhecimento e memória para executar no runtime."}]</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"governance-flow","label":"Fluxo Constitucional","focus":["foundation","architecture","bootstrap"],"note":"A regras nascem na fundação e governam a arquitetura da Holding."},{"id":"knowledge-and-execution","label":"Conhecimento \u0026 Entrega B2B","focus":["knowledge","memory","agents","b2b_projects"],"note":"Agentes consomem conhecimento central e executam entregas nos projetos B2B."}]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4544,9 +4544,9 @@
 
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read">
-      <svg viewBox="0 0 780 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+      <svg viewBox="0 0 1000 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
         <title id="archify-diagram-title">C4 Nível 3 — Componentes do Repositório (Component Diagram)</title>
-        <desc id="archify-diagram-description">Fluxo de Conhecimento e Dependências entre Módulos do PCL AEOS</desc>
+        <desc id="archify-diagram-description">Fluxo de Conhecimento e Execução da Holding Digital PCL-AEOS</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4571,22 +4571,23 @@
 
         <!-- Boundaries (behind everything) -->
         <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="30" y="70" width="700" height="110" rx="12" class="c-region" stroke-width="1"/>
-        <text x="38" y="88" class="t-cloud" font-size="9" font-weight="600">Camada de Diretrizes &amp; Regras</text>
+        <text x="38" y="88" class="t-cloud" font-size="9" font-weight="600">Camada de Diretrizes (Plataforma Core)</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" x="120" y="230" width="530" height="270" rx="12" class="c-region" stroke-width="1"/>
-        <text x="128" y="248" class="t-cloud" font-size="9" font-weight="600">Camada de Conhecimento, Memória &amp; Agentes</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" x="120" y="230" width="590" height="270" rx="12" class="c-region" stroke-width="1"/>
+        <text x="128" y="248" class="t-cloud" font-size="9" font-weight="600">Camada de Execução Central</text>
 
         <!-- Connection paths (before components for correct z-order) -->
         <path data-edge-from="foundation" data-edge-to="architecture" data-edge-label="Define Leis" data-edge-key="0" data-edge-id="fd-arch" data-composition-points="240,130;310,130" d="M 240 130 L 310 130" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="architecture" data-edge-to="bootstrap" data-edge-label="Guia Projetos" data-edge-key="1" data-edge-id="arch-bs" data-composition-points="470,130;540,130" d="M 470 130 L 540 130" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="architecture" data-edge-to="bootstrap" data-edge-label="Guia Setup" data-edge-key="1" data-edge-id="arch-bs" data-composition-points="470,130;540,130" d="M 470 130 L 540 130" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="bootstrap" data-edge-to="knowledge" data-edge-label="Instancia Padrões" data-edge-key="2" data-edge-id="bs-kn" data-composition-points="620,160;620,210;235,210;235,260" d="M 620 160 L 620 202 Q 620 210 612 210 L 243 210 Q 235 210 235 218 L 235 260" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="knowledge" data-edge-to="memory" data-edge-label="Indexação RAG" data-edge-key="3" data-edge-id="kn-mem" data-composition-points="320,290;450,290" d="M 320 290 L 450 290" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="memory" data-edge-to="agents" data-edge-label="Provê Contexto" data-edge-key="4" data-edge-id="mem-agt" data-composition-points="535,320;535,370;390,370;390,420" d="M 535 320 L 535 362 Q 535 370 527 370 L 398 370 Q 390 370 390 378 L 390 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="agents" data-edge-to="runtime" data-edge-label="Orquestra Ações" data-edge-key="5" data-edge-id="agt-rt" data-composition-points="480,450;560,450" d="M 480 450 L 560 450" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="memory" data-edge-to="agents" data-edge-label="Provê Contexto" data-edge-key="4" data-edge-id="mem-agt" data-composition-points="535,320;535,370;310,370;310,420" d="M 535 320 L 535 362 Q 535 370 527 370 L 318 370 Q 310 370 310 378 L 310 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="agents" data-edge-to="runtime" data-edge-label="Roda no" data-edge-key="5" data-edge-id="agt-rt" data-composition-points="400,450;500,450" d="M 400 450 L 500 450" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="runtime" data-edge-to="b2b_projects" data-edge-label="Entrega Valor nas Verticais" data-edge-key="6" data-edge-id="rt-b2b" data-composition-points="680,450;780,450" d="M 680 450 L 780 450" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
 
         <!-- Components -->
-        <g id="node-foundation" data-node-id="foundation" data-node-label="foundation / governance" tabindex="0" role="button" aria-label="Focus foundation / governance, Constituição &amp; Gates, Camada de Diretrizes &amp; Regras" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Constituição &amp; Gates" data-node-context="Camada de Diretrizes &amp; Regras">
-          <title>foundation / governance · Constituição &amp; Gates · Camada de Diretrizes &amp; Regras</title>
+        <g id="node-foundation" data-node-id="foundation" data-node-label="foundation / governance" tabindex="0" role="button" aria-label="Focus foundation / governance, Constituição &amp; Gates, Camada de Diretrizes (Plataforma Core)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Constituição &amp; Gates" data-node-context="Camada de Diretrizes (Plataforma Core)">
+          <title>foundation / governance · Constituição &amp; Gates · Camada de Diretrizes (Plataforma Core)</title>
           <rect x="60" y="100" width="180" height="60" rx="6" class="c-mask"/>
           <rect x="60" y="100" width="180" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(66 106) scale(0.6875)">
@@ -4596,8 +4597,8 @@
         <text data-detail="context" x="150" y="144" class="t-muted" font-size="9" text-anchor="middle">Constituição &amp; Gates</text>
         </g>
 
-        <g id="node-architecture" data-node-id="architecture" data-node-label="architecture" tabindex="0" role="button" aria-label="Focus architecture, Visão C4 &amp; ADRs, Camada de Diretrizes &amp; Regras" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Visão C4 &amp; ADRs" data-node-context="Camada de Diretrizes &amp; Regras">
-          <title>architecture · Visão C4 &amp; ADRs · Camada de Diretrizes &amp; Regras</title>
+        <g id="node-architecture" data-node-id="architecture" data-node-label="architecture" tabindex="0" role="button" aria-label="Focus architecture, Visão C4 &amp; ADRs, Camada de Diretrizes (Plataforma Core)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Visão C4 &amp; ADRs" data-node-context="Camada de Diretrizes (Plataforma Core)">
+          <title>architecture · Visão C4 &amp; ADRs · Camada de Diretrizes (Plataforma Core)</title>
           <rect x="310" y="100" width="160" height="60" rx="6" class="c-mask"/>
           <rect x="310" y="100" width="160" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(316 106) scale(0.6875)">
@@ -4607,19 +4608,19 @@
         <text data-detail="context" x="390" y="144" class="t-muted" font-size="9" text-anchor="middle">Visão C4 &amp; ADRs</text>
         </g>
 
-        <g id="node-bootstrap" data-node-id="bootstrap" data-node-label="bootstrap" tabindex="0" role="button" aria-label="Focus bootstrap, Onboardings &amp; Projects, Camada de Diretrizes &amp; Regras" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Onboardings &amp; Projects" data-node-context="Camada de Diretrizes &amp; Regras">
-          <title>bootstrap · Onboardings &amp; Projects · Camada de Diretrizes &amp; Regras</title>
+        <g id="node-bootstrap" data-node-id="bootstrap" data-node-label="bootstrap" tabindex="0" role="button" aria-label="Focus bootstrap, Onboardings, Camada de Diretrizes (Plataforma Core)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Onboardings" data-node-context="Camada de Diretrizes (Plataforma Core)">
+          <title>bootstrap · Onboardings · Camada de Diretrizes (Plataforma Core)</title>
           <rect x="540" y="100" width="160" height="60" rx="6" class="c-mask"/>
           <rect x="540" y="100" width="160" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(546 106) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-detail-anchor x="620" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">bootstrap</text>
-        <text data-detail="context" x="620" y="144" class="t-muted" font-size="9" text-anchor="middle">Onboardings &amp; Projects</text>
+        <text data-detail="context" x="620" y="144" class="t-muted" font-size="9" text-anchor="middle">Onboardings</text>
         </g>
 
-        <g id="node-knowledge" data-node-id="knowledge" data-node-label="knowledge" tabindex="0" role="button" aria-label="Focus knowledge, Playbooks &amp; TLC Specs, Camada de Conhecimento, Memória &amp; Agentes" aria-pressed="false" data-node-kind="database" data-node-sublabel="Playbooks &amp; TLC Specs" data-node-tag="Conhecimento Explícito" data-node-context="Camada de Conhecimento, Memória &amp; Agentes">
-          <title>knowledge · Playbooks &amp; TLC Specs · Camada de Conhecimento, Memória &amp; Agentes · Conhecimento Explícito</title>
+        <g id="node-knowledge" data-node-id="knowledge" data-node-label="knowledge" tabindex="0" role="button" aria-label="Focus knowledge, Playbooks &amp; TLC Specs, Camada de Execução Central" aria-pressed="false" data-node-kind="database" data-node-sublabel="Playbooks &amp; TLC Specs" data-node-tag="Conhecimento Explícito" data-node-context="Camada de Execução Central">
+          <title>knowledge · Playbooks &amp; TLC Specs · Camada de Execução Central · Conhecimento Explícito</title>
           <rect x="150" y="260" width="170" height="60" rx="6" class="c-mask"/>
           <rect x="150" y="260" width="170" height="60" rx="6" class="c-database" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(156 266) scale(0.6875)">
@@ -4631,8 +4632,8 @@
         <text data-detail="fine" x="235" y="312" class="t-database" font-size="7" text-anchor="middle">Conhecimento Explícito</text>
         </g>
 
-        <g id="node-memory" data-node-id="memory" data-node-label="memory" tabindex="0" role="button" aria-label="Focus memory, RAG &amp; PGVector DB, Camada de Conhecimento, Memória &amp; Agentes" aria-pressed="false" data-node-kind="database" data-node-sublabel="RAG &amp; PGVector DB" data-node-tag="Memória Semântica" data-node-context="Camada de Conhecimento, Memória &amp; Agentes">
-          <title>memory · RAG &amp; PGVector DB · Camada de Conhecimento, Memória &amp; Agentes · Memória Semântica</title>
+        <g id="node-memory" data-node-id="memory" data-node-label="memory" tabindex="0" role="button" aria-label="Focus memory, RAG &amp; PGVector DB, Camada de Execução Central" aria-pressed="false" data-node-kind="database" data-node-sublabel="RAG &amp; PGVector DB" data-node-tag="Memória Semântica" data-node-context="Camada de Execução Central">
+          <title>memory · RAG &amp; PGVector DB · Camada de Execução Central · Memória Semântica</title>
           <rect x="450" y="260" width="170" height="60" rx="6" class="c-mask"/>
           <rect x="450" y="260" width="170" height="60" rx="6" class="c-database" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(456 266) scale(0.6875)">
@@ -4644,28 +4645,40 @@
         <text data-detail="fine" x="535" y="312" class="t-database" font-size="7" text-anchor="middle">Memória Semântica</text>
         </g>
 
-        <g id="node-agents" data-node-id="agents" data-node-label="agents &amp; skills" tabindex="0" role="button" aria-label="Focus agents &amp; skills, 15 Roles + Cortex Engine, Camada de Conhecimento, Memória &amp; Agentes" aria-pressed="false" data-node-kind="security" data-node-sublabel="15 Roles + Cortex Engine" data-node-tag="Inteligência Operacional" data-node-context="Camada de Conhecimento, Memória &amp; Agentes">
-          <title>agents &amp; skills · 15 Roles + Cortex Engine · Camada de Conhecimento, Memória &amp; Agentes · Inteligência Operacional</title>
-          <rect x="300" y="420" width="180" height="60" rx="6" class="c-mask"/>
-          <rect x="300" y="420" width="180" height="60" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(306 426) scale(0.6875)">
+        <g id="node-agents" data-node-id="agents" data-node-label="agents &amp; skills" tabindex="0" role="button" aria-label="Focus agents &amp; skills, 15 Roles + Cortex Engine, Camada de Execução Central" aria-pressed="false" data-node-kind="security" data-node-sublabel="15 Roles + Cortex Engine" data-node-tag="Inteligência Operacional" data-node-context="Camada de Execução Central">
+          <title>agents &amp; skills · 15 Roles + Cortex Engine · Camada de Execução Central · Inteligência Operacional</title>
+          <rect x="220" y="420" width="180" height="60" rx="6" class="c-mask"/>
+          <rect x="220" y="420" width="180" height="60" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(226 426) scale(0.6875)">
             <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
             <path d="m5.8 8 1.5 1.5 3-3"/>
           </g>
-          <text data-detail-anchor x="390" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">agents &amp; skills</text>
-        <text data-detail="context" x="390" y="464" class="t-muted" font-size="9" text-anchor="middle">15 Roles + Cortex Engine</text>
-        <text data-detail="fine" x="390" y="472" class="t-security" font-size="7" text-anchor="middle">Inteligência Operacional</text>
+          <text data-detail-anchor x="310" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">agents &amp; skills</text>
+        <text data-detail="context" x="310" y="464" class="t-muted" font-size="9" text-anchor="middle">15 Roles + Cortex Engine</text>
+        <text data-detail="fine" x="310" y="472" class="t-security" font-size="7" text-anchor="middle">Inteligência Operacional</text>
         </g>
 
-        <g id="node-runtime" data-node-id="runtime" data-node-label="runtime &amp; integrations" tabindex="0" role="button" aria-label="Focus runtime &amp; integrations, Harness, MCP &amp; Tailscale, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Harness, MCP &amp; Tailscale" data-node-context="Architecture component">
-          <title>runtime &amp; integrations · Harness, MCP &amp; Tailscale · Architecture component</title>
-          <rect x="560" y="420" width="180" height="60" rx="6" class="c-mask"/>
-          <rect x="560" y="420" width="180" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(566 426) scale(0.6875)">
+        <g id="node-runtime" data-node-id="runtime" data-node-label="runtime &amp; integrations" tabindex="0" role="button" aria-label="Focus runtime &amp; integrations, Harness, MCP &amp; VPN, Camada de Execução Central" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Harness, MCP &amp; VPN" data-node-context="Camada de Execução Central">
+          <title>runtime &amp; integrations · Harness, MCP &amp; VPN · Camada de Execução Central</title>
+          <rect x="500" y="420" width="180" height="60" rx="6" class="c-mask"/>
+          <rect x="500" y="420" width="180" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(506 426) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-detail-anchor x="650" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">runtime &amp; integrations</text>
-        <text data-detail="context" x="650" y="464" class="t-muted" font-size="9" text-anchor="middle">Harness, MCP &amp; Tailscale</text>
+          <text data-detail-anchor x="590" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">runtime &amp; integrations</text>
+        <text data-detail="context" x="590" y="464" class="t-muted" font-size="9" text-anchor="middle">Harness, MCP &amp; VPN</text>
+        </g>
+
+        <g id="node-b2b_projects" data-node-id="b2b_projects" data-node-label="15 B2B Verticals" tabindex="0" role="button" aria-label="Focus 15 B2B Verticals, projects/*, Architecture component" aria-pressed="false" data-node-kind="backend" data-node-sublabel="projects/*" data-node-tag="Produto Final" data-node-context="Architecture component">
+          <title>15 B2B Verticals · projects/* · Architecture component · Produto Final</title>
+          <rect x="780" y="420" width="180" height="60" rx="6" class="c-mask"/>
+          <rect x="780" y="420" width="180" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(786 426) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="870" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">15 B2B Verticals</text>
+        <text data-detail="context" x="870" y="464" class="t-muted" font-size="9" text-anchor="middle">projects/*</text>
+        <text data-detail="fine" x="870" y="472" class="t-backend" font-size="7" text-anchor="middle">Produto Final</text>
         </g>
 
         <!-- Connection labels -->
@@ -4673,9 +4686,9 @@
           <rect x="243.6" y="110" width="62.8" height="14" rx="3" class="c-mask"/>
           <text x="275" y="120" class="t-muted" font-size="8" text-anchor="middle">Define Leis</text>
         </g>
-        <g data-detail="context" data-edge-from="architecture" data-edge-to="bootstrap" data-edge-label="Guia Projetos" data-edge-key="1" data-edge-id="arch-bs">
-          <rect x="468.8" y="110" width="72.4" height="14" rx="3" class="c-mask"/>
-          <text x="505" y="120" class="t-muted" font-size="8" text-anchor="middle">Guia Projetos</text>
+        <g data-detail="context" data-edge-from="architecture" data-edge-to="bootstrap" data-edge-label="Guia Setup" data-edge-key="1" data-edge-id="arch-bs">
+          <rect x="476" y="110" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="505" y="120" class="t-muted" font-size="8" text-anchor="middle">Guia Setup</text>
         </g>
         <g data-detail="context" data-edge-from="bootstrap" data-edge-to="knowledge" data-edge-label="Instancia Padrões" data-edge-key="2" data-edge-id="bs-kn">
           <rect x="381.7" y="190" width="91.6" height="14" rx="3" class="c-mask"/>
@@ -4686,12 +4699,16 @@
           <text x="385" y="280" class="t-muted" font-size="8" text-anchor="middle">Indexação RAG</text>
         </g>
         <g data-detail="context" data-edge-from="memory" data-edge-to="agents" data-edge-label="Provê Contexto" data-edge-key="4" data-edge-id="mem-agt">
-          <rect x="423.9" y="350" width="77.2" height="14" rx="3" class="c-mask"/>
-          <text x="462.5" y="360" class="t-muted" font-size="8" text-anchor="middle">Provê Contexto</text>
+          <rect x="383.9" y="350" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="422.5" y="360" class="t-muted" font-size="8" text-anchor="middle">Provê Contexto</text>
         </g>
-        <g data-detail="context" data-edge-from="agents" data-edge-to="runtime" data-edge-label="Orquestra Ações" data-edge-key="5" data-edge-id="agt-rt">
-          <rect x="479" y="430" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="520" y="440" class="t-backend" font-size="8" text-anchor="middle">Orquestra Ações</text>
+        <g data-detail="context" data-edge-from="agents" data-edge-to="runtime" data-edge-label="Roda no" data-edge-key="5" data-edge-id="agt-rt">
+          <rect x="428.2" y="430" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="450" y="440" class="t-muted" font-size="8" text-anchor="middle">Roda no</text>
+        </g>
+        <g data-detail="context" data-edge-from="runtime" data-edge-to="b2b_projects" data-edge-label="Entrega Valor nas Verticais" data-edge-key="6" data-edge-id="rt-b2b">
+          <rect x="660.2" y="405" width="139.6" height="14" rx="3" class="c-mask"/>
+          <text x="730" y="415" class="t-backend" font-size="8" text-anchor="middle">Entrega Valor nas Verticais</text>
         </g>
 
         <!-- Legend -->
@@ -4900,22 +4917,21 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Fluxo do Conhecimento</h3>
+          <h3>Plataforma Core Compartilhada</h3>
         </div>
         <ul>
-          <li>&bull; Conhecimento nasce na Architecture e é normatizado pela Governance</li>
-          <li>&bull; Knowledge e Memory alimentam os agentes sem acoplamento direto</li>
+          <li>&bull; As regras de Foundation e Architecture regulam todas as 15 verticais</li>
+          <li>&bull; O RAG e os Agentes atendem as demandas concorrentes de todas frentes B2B</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot emerald"></div>
-          <h3>Independência dos Agentes</h3>
+          <h3>Isolamento Físico de Produtos</h3>
         </div>
         <ul>
-          <li>&bull; Agentes não possuem conhecimento próprio; consomem Knowledge/Memory</li>
-          <li>&bull; Cortex Engine orquestra visualização e conformidade Spec-Driven</li>
+          <li>&bull; O diretório &#39;projects/&#39; hospeda o código-fonte de cada vertical fisicamente isolado</li>
         </ul>
       </div>
     </div>
