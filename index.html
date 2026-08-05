@@ -1590,11 +1590,12 @@ graph LR
         document.body.style.overflow = 'hidden';
 
         try {
-          const response = await fetch(url);
+          const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+          const response = await fetch(fetchUrl, { cache: 'no-cache' });
           if (!response.ok) throw new Error(`Status ${response.status}`);
           const rawText = await response.text();
 
-          if (url.endsWith('.md')) {
+          if (url.endsWith('.md') || url.includes('.md?')) {
             modalBody.innerHTML = marked.parse(rawText);
           } else {
             modalBody.innerHTML = rawText;
