@@ -230,6 +230,35 @@ Nenhum agente possui autoridade arquitetural.
 
 ---
 
+## Mapeamento de Agentes, Sub-Agentes e Distribuição de Skills
+
+A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
+
+1. **Squad Core de Engenharia (Spec-Driven Loop)**:
+   - **Planner Agent**: Decomposição de especificações (`specify.md`) e planejamento de backlog (`tasks.md`).
+   - **Builder Agent**: Escrita cirúrgica de código, refatoração e geração de diffs.
+   - **Reviewer QA**: Testes adversários, execução de suítes de teste e validação de regressão.
+   - **Auditor Agent**: Compliance constitucional, verificação de segredos e selamento dos Stage Gates.
+
+2. **Squad de Estratégia & Arquitetura**:
+   - **Strategist_One**: OKRs corporativos, visão do produto e métricas North Star.
+   - **Lead TLC Engineer**: Manutenção da arquitetura viva, governança C4 e motor Cortex Archify.
+
+3. **Squad SecOps, FinOps & Infraestrutura**:
+   - **CISO Security Agent**: Segurança Zero Trust, sanitização de chaves e imunização Mesh Tailscale.
+   - **BizOps Controller**: Monitoramento da cadência de sprints e gargalos de fluxo no Paperclip.
+   - **Financial Advisor**: Auditoria de FinOps e controle de custos de inferência (EBITDA Shield no OmniRoute).
+
+4. **Squad Data, Growth, LegalOps & People**:
+   - **RevOps Architect**: Funil de aquisição GTM, conversão de Micro-SaaS e retenção B2B.
+   - **Data Insight Agent**: RAG relacional, indexação de vetores (PGVector) e pipelines de ML.
+   - **Neuromarketing Strategist**: Branding, copywriting de auto-conversão e identidade visual.
+   - **Compliance Steward**: Jurídico, normas de privacidade (LGPD/GDPR) e governança contratual.
+   - **Skills Manager**: Gestão da matriz de competências dos agentes, skills e onboarding.
+
+
+---
+
 # Responsabilidades
 
 ## Humanos
