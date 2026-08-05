@@ -1,5 +1,7 @@
 # Módulo RAG Vetorial & Memory Dataflow — PCL AEOS
 
+> ℹ️ **Documentação de Migração Legada (DIAG-LEG-01)**: Se você deseja consultar a especificação de sanitização e migração do acervo `legacy/`, [clique aqui para abrir o artigo oficial de Migração Legada](../legacy-migration/README.md).
+
 ==================================================
 1. ARQUITETURA DA MEMÓRIA ORGANIZACIONAL
 ==================================================
