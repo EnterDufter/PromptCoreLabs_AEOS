@@ -80,7 +80,6 @@ graph TD
     classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
-        direction LR
         Cortex["🧠 Cortex Engine"]:::platform
         OmniRoute["⚡ OmniRoute :20130"]:::platform
         Paperclip["🤖 Paperclip :3100"]:::platform
@@ -116,7 +115,6 @@ graph TD
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
-        direction LR
         P1["📦 Proposta Fechada"]:::products
         P2["🔄 Retainers Mensais"]:::products
         P3["🚀 Micro-SaaS White-Label"]:::products
@@ -346,7 +344,6 @@ graph TD
     classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
     subgraph P1["Fase 1: Concepção & Governança"]
-        direction TD
         O["1. Opportunity (Oportunidade)"]:::phase1
         AC["2. Arch Check (Arquitetura)"]:::phase1
         GC["3. Gov Check (Governança)"]:::phase1
@@ -356,7 +353,6 @@ graph TD
     end
 
     subgraph P2["Fase 2: Especificação & Execução"]
-        direction TD
         SP["6. Specification (specify.md)"]:::phase2
         DS["7. Design (design.md)"]:::phase2
         PL["8. Planning (tasks.md)"]:::phase2
@@ -366,7 +362,6 @@ graph TD
     end
 
     subgraph P3["Fase 3: Implantação & Aprendizado"]
-        direction TD
         DP["11. Deployment (Deploy & Signoff)"]:::phase3
         OP["12. Operation (Operação Contínua)"]:::phase3
         LE["13. Learning (Retroalimentação)"]:::phase3
