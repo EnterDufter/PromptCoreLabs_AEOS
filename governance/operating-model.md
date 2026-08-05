@@ -31,6 +31,18 @@ Permitir que qualquer iniciativa seja desenvolvida de forma estruturada, rastre�
 
 ---
 
+## 📐 Padrão Oficial de Legibilidade e Impressão de Diagramas (Standard)
+
+Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamente seguir este padrão inviolável:
+
+1. **Quebra de Linha em Rótulos (`<br/>`)**: Rótulos e descrições de nós no Mermaid devem utilizar quebras de linha explícitas (`<br/>`) e formatação em itálico/subtítulos para expandir a altura das caixas e garantir que as fontes sejam renderizadas em tamanho amplo e legível sem extrapolar margens.
+2. **Orientação por Domínio**:
+   - Organogramas, árvores hierárquicas e matrizes de agentes devem utilizar estritamente **orientação vertical (`graph TD`)**.
+   - Pipelines lineares de precedência e etapas de ciclo de vida devem utilizar **orientação horizontal (`graph LR`)**.
+3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da folha A4 com fontes legíveis de no mínimo `13pt/14px`.
+
+---
+
 # Princípios Operacionais
 
 Toda operação deverá obedecer rigorosamente à seguinte precedência:

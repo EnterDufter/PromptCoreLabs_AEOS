@@ -15,29 +15,29 @@ A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (port
 ```mermaid
 graph TD
     subgraph StratSquad["Squad de Estratégia & Governança Executiva"]
-        S1["Strategist_One (Visão & OKRs)"]
-        LEAD["Lead_TLC_Engineer (Arquitetura)"]
-        AUD["Auditor (Compliance & Signoff)"]
+        S1["Strategist_One<br/><i>(Visão & OKRs)</i>"]
+        LEAD["Lead_TLC_Engineer<br/><i>(Arquitetura Viva)</i>"]
+        AUD["Auditor Agent<br/><i>(Compliance & Signoff)</i>"]
     end
 
     subgraph CoreSquad["Squad Core de Engenharia TLC"]
-        PLN["Planner Agent (Especificação)"]
-        BLD["Builder Agent (Escrita Código)"]
-        QA["Reviewer QA (Testes Adversários)"]
+        PLN["Planner Agent<br/><i>(Decomposição & Backlog)</i>"]
+        BLD["Builder Agent<br/><i>(Escrita de Código & Diffs)</i>"]
+        QA["Reviewer QA<br/><i>(Testes Adversários & Cobertura)</i>"]
     end
 
     subgraph SecOpsSquad["Squad SecOps, FinOps & Infra"]
-        CISO["CISO Security Agent (Zero Trust)"]
-        BIZ["BizOps Controller (Processos)"]
-        FIN["Financial Advisor (FinOps)"]
+        CISO["CISO Security Agent<br/><i>(Zero Trust & Mesh)</i>"]
+        BIZ["BizOps Controller<br/><i>(Processos & Sprints)</i>"]
+        FIN["Financial Advisor<br/><i>(FinOps & EBITDA Shield)</i>"]
     end
 
     subgraph GrowthDataSquad["Squad Data, Growth & People"]
-        REV["RevOps Architect (GTM & Conversion)"]
-        DATA["Data Insight Agent (RAG & ML)"]
-        NEURO["Neuromarketing Strategist (Branding)"]
-        COMP["Compliance Steward (LegalOps)"]
-        SKILL["Skills Manager (People & Skills)"]
+        REV["RevOps Architect<br/><i>(GTM & Conversão B2B)</i>"]
+        DATA["Data Insight Agent<br/><i>(RAG Relacional & ML)</i>"]
+        NEURO["Neuromarketing Strategist<br/><i>(Branding & Copywriting)</i>"]
+        COMP["Compliance Steward<br/><i>(LegalOps & LGPD)</i>"]
+        SKILL["Skills Manager<br/><i>(People & Competências)</i>"]
     end
 
     StratSquad --> CoreSquad
@@ -59,43 +59,38 @@ graph TD
     classDef squadSec fill:#181825,stroke:#f38ba8,stroke-width:1.5px,color:#cdd6f4;
     classDef squadFin fill:#181825,stroke:#fab387,stroke-width:1.5px,color:#cdd6f4;
 
-    CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing, create-rfc, tlc-spec-driven</i>"]:::board
+    CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing • create-rfc • tlc-spec-driven</i>"]:::board
 
-    subgraph Vert_Software["Vertical Software Studio & DevSecOps"]
-        LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven, create-adr, best-practices, perf-astro</i>"]:::squadDev
-        CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor, best-practices</i>"]:::squadSec
+    subgraph Vert_Software["Frente 1: Software Studio & DevSecOps"]
+        direction TD
+        LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven • create-adr • best-practices</i>"]:::squadDev
+        CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor • best-practices</i>"]:::squadSec
         AgileBot["bot-agile-master (Agile QA)"]:::squadOps
+        LeadEng --> CISO --> AgileBot
     end
 
-    subgraph Vert_Growth["Vertical Marketing, RevOps & Growth"]
-        RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr, ai-cold-outreach</i>"]:::squadRev
-        CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo, ai-ugc-ads</i>"]:::squadRev
-        GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo, best-practices</i>"]:::squadRev
+    subgraph Vert_Growth["Frente 2: Marketing, RevOps & Growth"]
+        direction TD
+        RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr • ai-cold-outreach</i>"]:::squadRev
+        CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo • ai-ugc-ads</i>"]:::squadRev
+        GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo • best-practices</i>"]:::squadRev
+        RevOps --> CMO --> GrowthDS
     end
 
-    subgraph Vert_Consulting["Vertical Consultoria, FinOps & People"]
-        Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing, create-rfc</i>"]:::squadEstra
+    subgraph Vert_Consulting["Frente 3: Consultoria, FinOps & People Ops"]
+        direction TD
+        Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing • create-rfc</i>"]:::squadEstra
         FinAdv["Financial_Advisor (CFO Lead)<br/><i>ai-pricing</i>"]:::squadFin
         Compliance["Compliance_Steward (Legal/Compliance)<br/><i>create-adr</i>"]:::squadFin
         SkillsMgr["Skills_Manager (People Ops)<br/><i>agent-skills-cli</i>"]:::squadFin
+        BizOps["BizOps_Controller (BizOps/Processes)<br/><i>tlc-spec-driven • best-practices</i>"]:::squadOps
         FinBot["bot-financial (FinOps Bot)"]:::squadFin
-        BizOps["BizOps_Controller (BizOps/Processes)<br/><i>tlc-spec-driven, best-practices</i>"]:::squadOps
+        Strategist --> FinAdv --> Compliance --> SkillsMgr --> BizOps --> FinBot
     end
 
-    CEO --> Strategist
-    CEO --> RevOps
-    CEO --> LeadEng
-    CEO --> BizOps
-    CEO --> CISO
-    CEO --> FinAdv
-    CEO --> Compliance
-    CEO --> SkillsMgr
-
-    RevOps --> CMO
-    RevOps --> GrowthDS
-    Strategist --> Compliance
-    LeadEng --> AgileBot
-    FinAdv --> FinBot
+    CEO --> Vert_Software
+    CEO --> Vert_Growth
+    CEO --> Vert_Consulting
 ```
 
 ---
