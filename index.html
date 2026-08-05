@@ -1168,25 +1168,33 @@ sequenceDiagram
 
       <div class="mermaid-box">
         <pre class="mermaid">
-erDiagram
-    document_chunks {
-        uuid id PK
-        varchar source_file
-        varchar section
-        timestamp last_modified
-        vector embedding "dimensão: 768 / 1536"
-    }
-    agent_execution_logs {
-        uuid execution_id PK
-        uuid session_id
-        timestamp timestamp
-        varchar project_id
-        varchar agent_role
-        varchar status
-        jsonb metrics
-        text error_trace
-    }
-    document_chunks ||--o{ agent_execution_logs : references
+graph LR
+    classDef shortM fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef medM fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef longM fill:#1e1b4b,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef erdTable fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph Tier1["1. Memoria de Curto Prazo"]
+        S1["Contexto Ativo do Agente<br/>Conversa e Prompt Buffer"]:::shortM
+        S2["OmniRoute Prompt Cache<br/>Porta 20130 EBITDA Shield"]:::shortM
+        S1 --> S2
+    end
+
+    subgraph Tier2["2. Memoria de Medio Prazo"]
+        M1["Docs Markdown e ADRs"]:::medM
+        M2["Chunking e Embeddings 768D"]:::medM
+        M3["Busca por Cosseno HNSW"]:::medM
+        M1 --> M2 --> M3
+    end
+
+    subgraph Tier3["3. Memoria de Longo Prazo e ERD"]
+        T1["Tabela document_chunks<br/>id, source_file, embedding"]:::erdTable
+        T2["Tabela agent_execution_logs<br/>execution_id, session_id, metrics"]:::erdTable
+        T1 -.-> T2
+    end
+
+    Tier1 --> Tier2
+    Tier2 --> Tier3
         </pre>
       </div>
 
