@@ -39,11 +39,7 @@ Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamen
 2. **Orientação por Domínio**:
    - Organogramas, árvores hierárquicas e matrizes de agentes devem utilizar estritamente **orientação vertical (`graph TD`)**.
    - Pipelines lineares de precedência e etapas de ciclo de vida devem utilizar **orientação horizontal (`graph LR`)**.
-3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da folha A4 com fontes legíveis de no mínimo `13pt/14px`.
-
----
-
-# Princípios Operacionais
+3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da fol# Princípios Operacionais
 
 Toda operação deverá obedecer rigorosamente à seguinte precedência:
 
@@ -51,16 +47,7 @@ Toda operação deverá obedecer rigorosamente à seguinte precedência:
 graph LR
     classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
     
-    subgraph R1["Fase de Governança & Arquitetura"]
-        direction LR
-        A["1. Architecture"]:::step --> B["2. Governance"]:::step --> C["3. Knowledge"]:::step --> D["4. Memory"]:::step
-    end
-    subgraph R2["Fase de Execução & Aprendizado"]
-        direction LR
-        E["5. Execution"]:::step --> F["6. Validation"]:::step --> G["7. Learning"]:::step
-    end
-
-    R1 --> R2
+    A["1. Architecture"]:::step --> B["2. Governance"]:::step --> C["3. Knowledge"]:::step --> D["4. Memory"]:::step --> E["5. Execution"]:::step --> F["6. Validation"]:::step --> G["7. Learning"]:::step
 ```
 
 Nenhuma automação poderá inverter esta ordem.
@@ -75,16 +62,7 @@ O AEOS opera sobre sete capacidades permanentes:
 graph LR
     classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
 
-    subgraph C_Top["Fundamentos de Governança"]
-        direction LR
-        C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap --> C3["3. Knowledge"]:::cap --> C4["4. Memory"]:::cap
-    end
-    subgraph C_Bot["Execução & Entrega em Verticais"]
-        direction LR
-        C5["5. Agents"]:::cap --> C6["6. Runtime"]:::cap --> C7["7. Projects & Verticals"]:::cap
-    end
-
-    C_Top --> C_Bot
+    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap --> C3["3. Knowledge"]:::cap --> C4["4. Memory"]:::cap --> C5["5. Agents"]:::cap --> C6["6. Runtime"]:::cap --> C7["7. Projects & Verticals"]:::cap
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
@@ -103,28 +81,39 @@ graph TD
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
         direction LR
-        Cortex["🧠 Cortex Engine"]:::platform --> OmniRoute["⚡ OmniRoute :20130"]:::platform --> Paperclip["🤖 Paperclip :3100"]:::platform --> RAG["💾 PGVector RAG"]:::platform --> TLCSkills["🛠️ TLC Skills Engine"]:::platform
+        Cortex["🧠 Cortex Engine"]:::platform
+        OmniRoute["⚡ OmniRoute :20130"]:::platform
+        Paperclip["🤖 Paperclip :3100"]:::platform
+        RAG["💾 PGVector RAG"]:::platform
+        TLCSkills["🛠️ TLC Agent Skills"]:::platform
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        subgraph F1["Tech, Data & GovTech"]
-            direction LR
-            V1["1. Software Studio"]:::verticals --> V5["5. Data & Analytics"]:::verticals --> V13["13. DevSecOps Studio"]:::verticals --> V12["12. Venture Studio"]:::verticals --> V15["15. GovTech & RFP"]:::verticals
-        end
-        subgraph F2["Growth, Sales & Business"]
-            direction LR
-            V2["2. Marketing & Growth"]:::verticals --> V3["3. RevOps & CRM"]:::verticals --> V4["4. AI Consulting"]:::verticals --> V11["11. Mídia & Podcasts"]:::verticals --> V14["14. E-Commerce Pricing"]:::verticals
-        end
-        subgraph F3["Operations, FinOps & People"]
-            direction LR
-            V6["6. AI Academy"]:::verticals --> V7["7. Jurídico & Compliance"]:::verticals --> V8["8. RH & People Ops"]:::verticals --> V9["9. FinOps & Pricing"]:::verticals --> V10["10. Customer Success"]:::verticals
-        end
-        F1 --> F2 --> F3
+        direction LR
+        V1["1. Software Studio"]:::verticals
+        V2["2. Marketing & Growth"]:::verticals
+        V3["3. RevOps & CRM"]:::verticals
+        V4["4. AI Consulting"]:::verticals
+        V5["5. Data & Analytics"]:::verticals
+        V6["6. AI Academy"]:::verticals
+        V7["7. Jurídico & Compliance"]:::verticals
+        V8["8. RH & People Ops"]:::verticals
+        V9["9. FinOps & Pricing"]:::verticals
+        V10["10. Customer Success"]:::verticals
+        V11["11. Mídia & Podcasts"]:::verticals
+        V12["12. Venture Studio"]:::verticals
+        V13["13. DevSecOps Studio"]:::verticals
+        V14["14. E-Commerce Pricing"]:::verticals
+        V15["15. GovTech & RFP"]:::verticals
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
         direction LR
-        P1["📦 Proposta Fechada"]:::products --> P2["🔄 Retainers Mensais"]:::products --> P3["🚀 Micro-SaaS White-Label"]:::products --> P4["🔌 APIs & Agentes"]:::products --> P5["🎓 Assinaturas Academy"]:::products
+        P1["📦 Proposta Fechada"]:::products
+        P2["🔄 Retainers Mensais"]:::products
+        P3["🚀 Micro-SaaS White-Label"]:::products
+        P4["🔌 APIs & Agentes"]:::products
+        P5["🎓 Assinaturas Academy"]:::products
     end
 
     Layer1 --> Layer2
@@ -324,23 +313,14 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 
 # Modelo de Autoridade
 
-Toda decisão segue obrigatoriamente a hierarquia soberana padronizada abaixo:
+Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
 
 ```mermaid
 graph LR
     classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
     classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
 
-    subgraph A_Top["Soberania & Estratégia"]
-        direction LR
-        U["👑 Operador Humano"]:::top --> Arc["1. Architecture"]:::auth --> Gov["2. Governance"]:::auth --> Spec["3. Specifications"]:::auth
-    end
-    subgraph A_Bot["Execução & Runtime"]
-        direction LR
-        EC["4. Execution Cell"]:::auth --> RT["5. Runtime"]:::auth --> Agt["6. Agentes"]:::auth --> Mdl["7. Modelos de IA"]:::auth
-    end
-
-    A_Top --> A_Bot
+    U["👑 Operador Humano"]:::top --> Arc["1. Architecture"]:::auth --> Gov["2. Governance"]:::auth --> Spec["3. Specifications"]:::auth --> EC["4. Execution Cell"]:::auth --> RT["5. Runtime"]:::auth --> Agt["6. Agentes"]:::auth --> Mdl["7. Modelos de IA"]:::auth
 ```
 
 Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
@@ -349,27 +329,27 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo padronizado em 3 fases horizontais:
+Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases horizontais:
 
 ```mermaid
-graph TD
+graph LR
     classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
     classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
     classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
     subgraph P1["Fase 1: Concepção & Governança"]
         direction LR
-        O["1. Opportunity"]:::phase1 --> AC["2. Arch Check"]:::phase1 --> GC["3. Gov Check"]:::phase1 --> ECC["4. Cell Creation"]:::phase1 --> MS["5. Method Selection"]:::phase1
+        O["Opportunity"]:::phase1 --> AC["Arch Check"]:::phase1 --> GC["Gov Check"]:::phase1 --> ECC["Cell Creation"]:::phase1 --> MS["Method Selection"]:::phase1
     end
 
     subgraph P2["Fase 2: Especificação & Execução"]
         direction LR
-        SP["6. Specification"]:::phase2 --> DS["7. Design"]:::phase2 --> PL["8. Planning"]:::phase2 --> EX["9. Execution"]:::phase2 --> VA["10. Validation"]:::phase2
+        SP["Specification"]:::phase2 --> DS["Design"]:::phase2 --> PL["Planning"]:::phase2 --> EX["Execution"]:::phase2 --> VA["Validation"]:::phase2
     end
 
     subgraph P3["Fase 3: Implantação & Aprendizado"]
         direction LR
-        DP["11. Deployment"]:::phase3 --> OP["12. Operation"]:::phase3 --> LE["13. Learning"]:::phase3 --> KU["14. Knowledge"]:::phase3 --> MU["15. Memory"]:::phase3
+        DP["Deployment"]:::phase3 --> OP["Operation"]:::phase3 --> LE["Learning"]:::phase3 --> KU["Knowledge"]:::phase3 --> MU["Memory"]:::phase3
     end
 
     P1 --> P2 --> P3
