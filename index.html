@@ -1567,6 +1567,12 @@ graph LR
 
       // 1. Função para abrir o modal de documento Markdown
       async function openDocModal(url, title) {
+        // Interceptor de segurança anti-cache: se o navegador do usuário estiver rodando um HTML antigo com "Regras de Indexação" no Card 2
+        if (title && (title.includes('Regras de Indexação') || title.includes('Migração Legada'))) {
+          url = 'projects/Living%20Architecture%20PCL%20AEOS/docs/legacy-migration/README.md';
+          title = 'Migração & Higienização Legada';
+        }
+
         modalBadge.textContent = 'DOC READER';
         printBtn.style.display = 'flex'; // Exibe botão de impressão
         
