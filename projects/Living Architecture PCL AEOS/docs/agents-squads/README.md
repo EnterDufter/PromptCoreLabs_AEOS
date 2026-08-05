@@ -47,6 +47,77 @@ graph TD
 
 ---
 
+## 2.1. ESTRUTURA ORGANIZACIONAL NO PAPERCLIP (ORG CHART DA HOLDING)
+
+```mermaid
+graph TD
+    classDef board fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
+    classDef squadEstra fill:#181825,stroke:#f9e2af,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadRev fill:#181825,stroke:#a6e3a1,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadDev fill:#181825,stroke:#89dceb,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadOps fill:#181825,stroke:#cba6f7,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadSec fill:#181825,stroke:#f38ba8,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadFin fill:#181825,stroke:#fab387,stroke-width:1.5px,color:#cdd6f4;
+
+    CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing, create-rfc, tlc-spec-driven</i>"]:::board
+
+    subgraph Vert_Software["Vertical Software Studio & DevSecOps"]
+        LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven, create-adr, best-practices, perf-astro</i>"]:::squadDev
+        CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor, best-practices</i>"]:::squadSec
+        AgileBot["bot-agile-master (Agile QA)"]:::squadOps
+    end
+
+    subgraph Vert_Growth["Vertical Marketing, RevOps & Growth"]
+        RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr, ai-cold-outreach</i>"]:::squadRev
+        CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo, ai-ugc-ads</i>"]:::squadRev
+        GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo, best-practices</i>"]:::squadRev
+    end
+
+    subgraph Vert_Consulting["Vertical Consultoria, FinOps & People"]
+        Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing, create-rfc</i>"]:::squadEstra
+        FinAdv["Financial_Advisor (CFO Lead)<br/><i>ai-pricing</i>"]:::squadFin
+        Compliance["Compliance_Steward (Legal/Compliance)<br/><i>create-adr</i>"]:::squadFin
+        SkillsMgr["Skills_Manager (People Ops)<br/><i>agent-skills-cli</i>"]:::squadFin
+        FinBot["bot-financial (FinOps Bot)"]:::squadFin
+        BizOps["BizOps_Controller (BizOps/Processes)<br/><i>tlc-spec-driven, best-practices</i>"]:::squadOps
+    end
+
+    CEO --> Strategist
+    CEO --> RevOps
+    CEO --> LeadEng
+    CEO --> BizOps
+    CEO --> CISO
+    CEO --> FinAdv
+    CEO --> Compliance
+    CEO --> SkillsMgr
+
+    RevOps --> CMO
+    RevOps --> GrowthDS
+    Strategist --> Compliance
+    LeadEng --> AgileBot
+    FinAdv --> FinBot
+```
+
+---
+
+## 2.2. MATRIZ DE DISTRIBUIÇÃO DE SKILLS (PAPERCLIP + TLC SKILLS)
+
+| Agente / Papel | Liderança / Atuação nas Verticais | Skills Originais (Paperclip) | Novas TLC Skills Adicionadas |
+|---|---|---|---|
+| **CEO** | Orquestração Geral PCL, Venture Studio | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `summarize-meeting` | `ai-pricing`, `create-rfc`, `tlc-spec-driven` |
+| **Strategist_One** | Head de AI Consulting, GovTech & Estratégia | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `swot-analysis`, `lean-canvas`, `competitor-analysis`, `business-model`, `competitive-battlecard` | `ai-pricing`, `create-rfc` |
+| **RevOps_Architect** | Head de RevOps, CRM, Automação & Vendas B2B | `ideal-customer-profile`, `gtm-strategy`, `gtm-motions`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `customer-journey-map` | `ai-sdr`, `ai-cold-outreach` |
+| **Neuromarketing_Strategist** | Head de Marketing Digital, Branding & Mídia | `marketing-ideas`, `positioning-ideas`, `product-name`, `value-prop-statements`, `customer-journey-map`, `user-personas` | `ai-seo`, `ai-ugc-ads` |
+| **Data_Insight_Agent** | Lead de Data & Analytics, BI e Customer Success | `ab-test-analysis`, `metrics-dashboard`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `product-vision` | `ai-seo`, `best-practices` |
+| **Lead_TLC_Engineer** | Head de Software Studio & Vibe-Coding | `user-stories`, `create-prd`, `sprint-plan`, `test-scenarios`, `prioritize-features`, `outcome-roadmap` | `tlc-spec-driven`, `create-adr`, `best-practices`, `perf-astro` |
+| **BizOps_Controller** | Lead de Operações, Qualidade e Processos | `sprint-plan`, `prioritization-frameworks`, `prioritize-features`, `release-notes`, `summarize-meeting`, `retro` | `tlc-spec-driven`, `best-practices` |
+| **CISO_Security_Agent** | Head de DevSecOps, CyberSecurity & Cloud | `pre-mortem`, `privacy-policy`, `test-scenarios` | `aws-advisor`, `best-practices` |
+| **Financial_Advisor** | Head de Financeiro, FinOps, Pricing & E-Commerce | `pricing-strategy`, `monetization-strategy`, `market-sizing`, `summarize-interview`, `draft-nda` | `ai-pricing` |
+| **Compliance_Steward** | Lead de Jurídico, LGPD & Compliance | `draft-nda`, `privacy-policy` | `create-adr` |
+| **Skills_Manager** | Lead de RH, People Ops & AI Academy | `review-resume`, `interview-script`, `summarize-interview`, `grammar-check` | `agent-skills-cli` |
+
+---
+
 ## 3. ESPECIFICAÇÃO DETALHADA DOS 15 AGENTES
 
 ### 🛠️ Squad Core de Engenharia (Spec-Driven Loop)

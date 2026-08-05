@@ -103,6 +103,52 @@ Nenhuma camada inferior redefine responsabilidades das superiores.
 
 Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
 
+## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
+
+```mermaid
+graph TD
+    classDef platform fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
+    classDef verticals fill:#181825,stroke:#a6e3a1,stroke-width:1.5px,color:#cdd6f4;
+    classDef products fill:#181825,stroke:#f9e2af,stroke-width:1.5px,color:#cdd6f4;
+
+    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS (Infraestrutura Local $0 Custo Marginal)"]
+        Cortex["🧠 Cortex Engine (Arch Intelligence)"]:::platform
+        OmniRoute["⚡ OmniRoute :20130 (EBITDA Shield)"]:::platform
+        Paperclip["🤖 Paperclip :3100 (Orchestration & State)"]:::platform
+        RAG["💾 PGVector RAG :5432 (Shared Memory 768D)"]:::platform
+        TLCSkills["🛠️ TLC Agent Skills Engine"]:::platform
+    end
+
+    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (AI-as-a-Service / Profit Centers)"]
+        V1["1. Software Engineering Studio"]:::verticals
+        V2["2. Marketing, Branding & Growth"]:::verticals
+        V3["3. RevOps, CRM & Automação"]:::verticals
+        V4["4. AI Consulting & Advisory"]:::verticals
+        V5["5. Data & Analytics (BI)"]:::verticals
+        V6["6. Educação & AI Academy"]:::verticals
+        V7["7. Jurídico & Compliance"]:::verticals
+        V8["8. RH, People & Recrutamento"]:::verticals
+        V9["9. Financeiro, Pricing & FinOps"]:::verticals
+        V10["10. Customer Success & Retention"]:::verticals
+        V11["11. Conteúdo, Mídia & Podcasts"]:::verticals
+        V12["12. Venture Studio (Startups PCL)"]:::verticals
+        V13["13. DevSecOps & Security Studio"]:::verticals
+        V14["14. E-Commerce & Dynamic Pricing"]:::verticals
+        V15["15. GovTech & RFP Automation"]:::verticals
+    end
+
+    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos de Saída"]
+        P1["📦 Proposta / Projeto Fechado"]:::products
+        P2["🔄 Retainers & Fees Mensais"]:::products
+        P3["🚀 Micro-SaaS & White-Label (Kraken, etc.)"]:::products
+        P4["🔌 APIs & Agentes Especializados"]:::products
+        P5["🎓 Cursos & Assinaturas AI Academy"]:::products
+    end
+
+    Layer1 --> Layer2
+    Layer2 --> Layer3
+```
+
 ---
 
 # Unidade Operacional
