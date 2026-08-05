@@ -77,50 +77,53 @@ Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-mul
 
 ```mermaid
 graph TD
-    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
     classDef verticals fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
     classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
 
-    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS (Infraestrutura Local $0 Custo Marginal)"]
+    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
         direction LR
-        Cortex["🧠 Cortex Engine (Arch Intelligence)"]:::platform
-        OmniRoute["⚡ OmniRoute :20130 (EBITDA Shield)"]:::platform
-        Paperclip["🤖 Paperclip :3100 (Orchestration)"]:::platform
-        RAG["💾 PGVector RAG :5432 (Shared Memory)"]:::platform
-        TLCSkills["🛠️ TLC Agent Skills Engine"]:::platform
+        Cortex["🧠 Cortex Engine"]:::platform
+        OmniRoute["⚡ OmniRoute :20130"]:::platform
+        Paperclip["🤖 Paperclip :3100"]:::platform
+        RAG["💾 PGVector RAG"]:::platform
+        TLCSkills["🛠️ TLC Skills Engine"]:::platform
     end
 
-    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (AI-as-a-Service / Profit Centers)"]
+    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
         subgraph GroupTech["Frente Tech & Security"]
-            V1["1. Software Engineering Studio"]:::verticals
-            V5["5. Data & Analytics (BI)"]:::verticals
-            V13["13. DevSecOps & Security Studio"]:::verticals
+            direction LR
+            V1["1. Software Studio"]:::verticals
+            V5["5. Data & Analytics"]:::verticals
+            V13["13. DevSecOps Studio"]:::verticals
         end
         subgraph GroupBiz["Frente Growth & Business"]
-            V2["2. Marketing, Branding & Growth"]:::verticals
-            V3["3. RevOps, CRM & Automação"]:::verticals
-            V4["4. AI Consulting & Advisory"]:::verticals
-            V11["11. Conteúdo, Mídia & Podcasts"]:::verticals
-            V14["14. E-Commerce & Dynamic Pricing"]:::verticals
+            direction LR
+            V2["2. Marketing & Growth"]:::verticals
+            V3["3. RevOps & CRM"]:::verticals
+            V4["4. AI Consulting"]:::verticals
+            V11["11. Mídia & Podcasts"]:::verticals
+            V14["14. E-Commerce Pricing"]:::verticals
         end
         subgraph GroupOps["Frente Ops, FinOps & Gov"]
-            V6["6. Educação & AI Academy"]:::verticals
+            direction LR
+            V6["6. AI Academy"]:::verticals
             V7["7. Jurídico & Compliance"]:::verticals
-            V8["8. RH, People & Recrutamento"]:::verticals
-            V9["9. Financeiro, Pricing & FinOps"]:::verticals
-            V10["10. Customer Success & Retention"]:::verticals
-            V12["12. Venture Studio (Startups PCL)"]:::verticals
-            V15["15. GovTech & RFP Automation"]:::verticals
+            V8["8. RH & People Ops"]:::verticals
+            V9["9. FinOps & Pricing"]:::verticals
+            V10["10. Customer Success"]:::verticals
+            V12["12. Venture Studio"]:::verticals
+            V15["15. GovTech & RFP"]:::verticals
         end
     end
 
-    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos de Saída"]
+    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
         direction LR
-        P1["📦 Proposta / Projeto Fechado"]:::products
-        P2["🔄 Retainers & Fees Mensais"]:::products
-        P3["🚀 Micro-SaaS & White-Label"]:::products
-        P4["🔌 APIs & Agentes Especializados"]:::products
-        P5["🎓 Cursos & Assinaturas AI Academy"]:::products
+        P1["📦 Projeto Fechado"]:::products
+        P2["🔄 Retainers Mensais"]:::products
+        P3["🚀 Micro-SaaS White-Label"]:::products
+        P4["🔌 APIs & Agentes"]:::products
+        P5["🎓 Assinaturas Academy"]:::products
     end
 
     Layer1 --> Layer2
@@ -342,36 +345,30 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases:
+Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases horizontais:
 
 ```mermaid
-graph TD
-    classDef phase1 fill:#0f172a,stroke:#38bdf8,color:#fff;
-    classDef phase2 fill:#1e1b4b,stroke:#c084fc,color:#fff;
-    classDef phase3 fill:#064e3b,stroke:#34d399,color:#fff;
+graph LR
+    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
+    classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
+    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
-    subgraph PhaseInit["Fase 1: Concepção & Governança"]
-        O["Opportunity"]:::phase1 --> AC["Architecture Check"]:::phase1
-        AC --> GC["Governance Check"]:::phase1
-        GC --> ECC["Execution Cell Creation"]:::phase1
-        ECC --> MS["Methodology Selection"]:::phase1
+    subgraph P1["Fase 1: Concepção & Governança"]
+        direction LR
+        O["Opportunity"]:::phase1 --> AC["Arch Check"]:::phase1 --> GC["Gov Check"]:::phase1 --> ECC["Cell Creation"]:::phase1 --> MS["Method Selection"]:::phase1
     end
 
-    subgraph PhaseSpec["Fase 2: Especificação & Execução"]
-        MS --> SP["Specification"]:::phase2
-        SP --> DS["Design"]:::phase2
-        DS --> PL["Planning"]:::phase2
-        PL --> EX["Execution"]:::phase2
-        EX --> VA["Validation"]:::phase2
+    subgraph P2["Fase 2: Especificação & Execução"]
+        direction LR
+        SP["Specification"]:::phase2 --> DS["Design"]:::phase2 --> PL["Planning"]:::phase2 --> EX["Execution"]:::phase2 --> VA["Validation"]:::phase2
     end
 
-    subgraph PhaseOps["Fase 3: Implantação & Aprendizado"]
-        VA --> DP["Deployment"]:::phase3
-        DP --> OP["Operation"]:::phase3
-        OP --> LE["Learning"]:::phase3
-        LE --> KU["Knowledge Update"]:::phase3
-        KU --> MU["Memory Update"]:::phase3
+    subgraph P3["Fase 3: Implantação & Aprendizado"]
+        direction LR
+        DP["Deployment"]:::phase3 --> OP["Operation"]:::phase3 --> LE["Learning"]:::phase3 --> KU["Knowledge"]:::phase3 --> MU["Memory"]:::phase3
     end
+
+    P1 --> P2 --> P3
 ```
 
 Cada transição exige critérios explícitos.
