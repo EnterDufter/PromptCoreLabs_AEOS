@@ -35,31 +35,17 @@ Permitir que qualquer iniciativa seja desenvolvida de forma estruturada, rastre�
 
 Toda operação deverá obedecer rigorosamente à seguinte precedência:
 
-Architecture
-
-↓
-
-Governance
-
-↓
-
-Knowledge
-
-↓
-
-Memory
-
-↓
-
-Execution
-
-↓
-
-Validation
-
-↓
-
-Learning
+```mermaid
+graph LR
+    classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    
+    A["1. Architecture"]:::step --> B["2. Governance"]:::step
+    B --> C["3. Knowledge"]:::step
+    C --> D["4. Memory"]:::step
+    D --> E["5. Execution"]:::step
+    E --> F["6. Validation"]:::step
+    F --> G["7. Learning"]:::step
+```
 
 Nenhuma automação poderá inverter esta ordem.
 
@@ -67,34 +53,18 @@ Nenhuma automação poderá inverter esta ordem.
 
 # Modelo Operacional
 
-O AEOS opera sobre sete capacidades permanentes.
+O AEOS opera sobre sete capacidades permanentes:
 
-```text
-Architecture
+```mermaid
+graph LR
+    classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
 
-↓
-
-Governance
-
-↓
-
-Knowledge
-
-↓
-
-Memory
-
-↓
-
-Agents
-
-↓
-
-Runtime
-
-↓
-
-Projects & Verticals (AI Holding Multi-Empresas)
+    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap
+    C2 --> C3["3. Knowledge"]:::cap
+    C3 --> C4["4. Memory"]:::cap
+    C4 --> C5["5. Agents"]:::cap
+    C5 --> C6["6. Runtime"]:::cap
+    C6 --> C7["7. Projects & Verticals"]:::cap
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
@@ -350,38 +320,20 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 
 # Modelo de Autoridade
 
-Toda decisão segue obrigatoriamente a hierarquia abaixo.
+Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
 
-```text
-Usuário
+```mermaid
+graph LR
+    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
 
-↓
-
-Architecture
-
-↓
-
-Governance
-
-↓
-
-Specifications
-
-↓
-
-Execution Cell
-
-↓
-
-Runtime
-
-↓
-
-Agents
-
-↓
-
-Models
+    U["👑 Operador Humano (Usuário)"]:::top --> Arc["1. Architecture"]:::auth
+    Arc --> Gov["2. Governance"]:::auth
+    Gov --> Spec["3. Specifications"]:::auth
+    Spec --> EC["4. Execution Cell"]:::auth
+    EC --> RT["5. Runtime"]:::auth
+    RT --> Agt["6. Agentes"]:::auth
+    Agt --> Mdl["7. Modelos de IA"]:::auth
 ```
 
 Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
@@ -390,66 +342,36 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo.
+Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases:
 
-```text
-Opportunity
+```mermaid
+graph TD
+    classDef phase1 fill:#0f172a,stroke:#38bdf8,color:#fff;
+    classDef phase2 fill:#1e1b4b,stroke:#c084fc,color:#fff;
+    classDef phase3 fill:#064e3b,stroke:#34d399,color:#fff;
 
-↓
+    subgraph PhaseInit["Fase 1: Concepção & Governança"]
+        O["Opportunity"]:::phase1 --> AC["Architecture Check"]:::phase1
+        AC --> GC["Governance Check"]:::phase1
+        GC --> ECC["Execution Cell Creation"]:::phase1
+        ECC --> MS["Methodology Selection"]:::phase1
+    end
 
-Architecture Check
+    subgraph PhaseSpec["Fase 2: Especificação & Execução"]
+        MS --> SP["Specification"]:::phase2
+        SP --> DS["Design"]:::phase2
+        DS --> PL["Planning"]:::phase2
+        PL --> EX["Execution"]:::phase2
+        EX --> VA["Validation"]:::phase2
+    end
 
-↓
-
-Governance Check
-
-↓
-
-Execution Cell Creation
-
-↓
-
-Methodology Selection
-
-↓
-
-Specification
-
-↓
-
-Design
-
-↓
-
-Planning
-
-↓
-
-Execution
-
-↓
-
-Validation
-
-↓
-
-Deployment
-
-↓
-
-Operation
-
-↓
-
-Learning
-
-↓
-
-Knowledge Update
-
-↓
-
-Memory Update
+    subgraph PhaseOps["Fase 3: Implantação & Aprendizado"]
+        VA --> DP["Deployment"]:::phase3
+        DP --> OP["Operation"]:::phase3
+        OP --> LE["Learning"]:::phase3
+        LE --> KU["Knowledge Update"]:::phase3
+        KU --> MU["Memory Update"]:::phase3
+    end
 ```
 
 Cada transição exige critérios explícitos.
