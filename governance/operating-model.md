@@ -107,40 +107,48 @@ Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-mul
 
 ```mermaid
 graph TD
-    classDef platform fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
-    classDef verticals fill:#181825,stroke:#a6e3a1,stroke-width:1.5px,color:#cdd6f4;
-    classDef products fill:#181825,stroke:#f9e2af,stroke-width:1.5px,color:#cdd6f4;
+    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef verticals fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+    classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS (Infraestrutura Local $0 Custo Marginal)"]
+        direction LR
         Cortex["🧠 Cortex Engine (Arch Intelligence)"]:::platform
         OmniRoute["⚡ OmniRoute :20130 (EBITDA Shield)"]:::platform
-        Paperclip["🤖 Paperclip :3100 (Orchestration & State)"]:::platform
-        RAG["💾 PGVector RAG :5432 (Shared Memory 768D)"]:::platform
+        Paperclip["🤖 Paperclip :3100 (Orchestration)"]:::platform
+        RAG["💾 PGVector RAG :5432 (Shared Memory)"]:::platform
         TLCSkills["🛠️ TLC Agent Skills Engine"]:::platform
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (AI-as-a-Service / Profit Centers)"]
-        V1["1. Software Engineering Studio"]:::verticals
-        V2["2. Marketing, Branding & Growth"]:::verticals
-        V3["3. RevOps, CRM & Automação"]:::verticals
-        V4["4. AI Consulting & Advisory"]:::verticals
-        V5["5. Data & Analytics (BI)"]:::verticals
-        V6["6. Educação & AI Academy"]:::verticals
-        V7["7. Jurídico & Compliance"]:::verticals
-        V8["8. RH, People & Recrutamento"]:::verticals
-        V9["9. Financeiro, Pricing & FinOps"]:::verticals
-        V10["10. Customer Success & Retention"]:::verticals
-        V11["11. Conteúdo, Mídia & Podcasts"]:::verticals
-        V12["12. Venture Studio (Startups PCL)"]:::verticals
-        V13["13. DevSecOps & Security Studio"]:::verticals
-        V14["14. E-Commerce & Dynamic Pricing"]:::verticals
-        V15["15. GovTech & RFP Automation"]:::verticals
+        subgraph GroupTech["Frente Tech & Security"]
+            V1["1. Software Engineering Studio"]:::verticals
+            V5["5. Data & Analytics (BI)"]:::verticals
+            V13["13. DevSecOps & Security Studio"]:::verticals
+        end
+        subgraph GroupBiz["Frente Growth & Business"]
+            V2["2. Marketing, Branding & Growth"]:::verticals
+            V3["3. RevOps, CRM & Automação"]:::verticals
+            V4["4. AI Consulting & Advisory"]:::verticals
+            V11["11. Conteúdo, Mídia & Podcasts"]:::verticals
+            V14["14. E-Commerce & Dynamic Pricing"]:::verticals
+        end
+        subgraph GroupOps["Frente Ops, FinOps & Gov"]
+            V6["6. Educação & AI Academy"]:::verticals
+            V7["7. Jurídico & Compliance"]:::verticals
+            V8["8. RH, People & Recrutamento"]:::verticals
+            V9["9. Financeiro, Pricing & FinOps"]:::verticals
+            V10["10. Customer Success & Retention"]:::verticals
+            V12["12. Venture Studio (Startups PCL)"]:::verticals
+            V15["15. GovTech & RFP Automation"]:::verticals
+        end
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos de Saída"]
+        direction LR
         P1["📦 Proposta / Projeto Fechado"]:::products
         P2["🔄 Retainers & Fees Mensais"]:::products
-        P3["🚀 Micro-SaaS & White-Label (Kraken, etc.)"]:::products
+        P3["🚀 Micro-SaaS & White-Label"]:::products
         P4["🔌 APIs & Agentes Especializados"]:::products
         P5["🎓 Cursos & Assinaturas AI Academy"]:::products
     end
