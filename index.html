@@ -617,20 +617,28 @@
       color: #7dd3fc;
       font-size: 0.9rem;
     }
-    .modal-body .mermaid {
-      background: rgba(11, 15, 25, 0.8);
+    .modal-body .mermaid,
+    .mermaid-box {
+      background: rgba(11, 15, 25, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 1.2rem;
+      padding: 1.5rem;
       margin: 1.5rem 0;
-      overflow-x: auto;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
       text-align: center;
     }
-    .modal-body .mermaid svg {
-      max-width: 100% !important;
+    .modal-body .mermaid svg,
+    .mermaid-box svg {
+      min-width: 650px !important;
+      width: 100% !important;
       height: auto !important;
-      min-height: 250px;
+      font-size: 15px !important;
+    }
+    .modal-body .mermaid svg text,
+    .mermaid-box svg text {
       font-size: 14px !important;
+      font-weight: 600 !important;
     }
     .modal-body table {
       width: 100%;
@@ -822,12 +830,18 @@
       .modal-body .mermaid svg {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 100% !important;
         height: auto !important;
         max-height: none !important;
         display: block !important;
         margin: 0 auto !important;
-        font-size: 13px !important;
+        font-size: 11pt !important;
         page-break-inside: avoid;
+      }
+      .modal-body .mermaid svg text {
+        font-size: 11pt !important;
+        font-weight: 700 !important;
+        fill: #000000 !important;
       }
     }
   </style>

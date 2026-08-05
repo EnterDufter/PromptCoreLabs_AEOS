@@ -48,15 +48,15 @@ Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamen
 Toda operação deverá obedecer rigorosamente à seguinte precedência:
 
 ```mermaid
-graph LR
+graph TD
     classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
     
-    A["1. Architecture"]:::step --> B["2. Governance"]:::step
-    B --> C["3. Knowledge"]:::step
-    C --> D["4. Memory"]:::step
-    D --> E["5. Execution"]:::step
-    E --> F["6. Validation"]:::step
-    F --> G["7. Learning"]:::step
+    A["1. Architecture<br/><i>(Visão & ADRs)</i>"]:::step --> B["2. Governance<br/><i>(Regras & Gates)</i>"]:::step
+    B --> C["3. Knowledge<br/><i>(Documentação)</i>"]:::step
+    C --> D["4. Memory<br/><i>(PGVector RAG)</i>"]:::step
+    D --> E["5. Execution<br/><i>(Execution Cells)</i>"]:::step
+    E --> F["6. Validation<br/><i>(Reviewer QA)</i>"]:::step
+    F --> G["7. Learning<br/><i>(Retroalimentação)</i>"]:::step
 ```
 
 Nenhuma automação poderá inverter esta ordem.
@@ -68,15 +68,15 @@ Nenhuma automação poderá inverter esta ordem.
 O AEOS opera sobre sete capacidades permanentes:
 
 ```mermaid
-graph LR
+graph TD
     classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
 
-    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap
-    C2 --> C3["3. Knowledge"]:::cap
-    C3 --> C4["4. Memory"]:::cap
-    C4 --> C5["5. Agents"]:::cap
-    C5 --> C6["6. Runtime"]:::cap
-    C6 --> C7["7. Projects & Verticals"]:::cap
+    C1["1. Architecture<br/><i>(Diretrizes Arquiteturais)</i>"]:::cap --> C2["2. Governance<br/><i>(Conformidade Constitucional)</i>"]:::cap
+    C2 --> C3["3. Knowledge<br/><i>(Acervo de Conhecimento)</i>"]:::cap
+    C3 --> C4["4. Memory<br/><i>(Memória Semântica PGVector)</i>"]:::cap
+    C4 --> C5["5. Agents<br/><i>(Orquestração da Squad 15)</i>"]:::cap
+    C5 --> C6["6. Runtime<br/><i>(Ambiente de Execução)</i>"]:::cap
+    C6 --> C7["7. Projects & Verticals<br/><i>(15 Verticais B2B)</i>"]:::cap
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
@@ -94,7 +94,6 @@ graph TD
     classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
-        direction LR
         Cortex["🧠 Cortex Engine<br/><i>(Arch Intelligence)</i>"]:::platform
         OmniRoute["⚡ OmniRoute :20130<br/><i>(EBITDA Shield)</i>"]:::platform
         Paperclip["🤖 Paperclip :3100<br/><i>(Orchestration)</i>"]:::platform
@@ -103,34 +102,24 @@ graph TD
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        subgraph GroupTech["Frente Tech & Security"]
-            V1["1. Software Studio"]:::verticals
-            V5["5. Data & Analytics"]:::verticals
-            V13["13. DevSecOps Studio"]:::verticals
-            V1 --> V5 --> V13
-        end
-        subgraph GroupBiz["Frente Growth & Business"]
-            V2["2. Marketing & Growth"]:::verticals
-            V3["3. RevOps & CRM"]:::verticals
-            V4["4. AI Consulting"]:::verticals
-            V11["11. Mídia & Podcasts"]:::verticals
-            V14["14. E-Commerce Pricing"]:::verticals
-            V2 --> V3 --> V4 --> V11 --> V14
-        end
-        subgraph GroupOps["Frente Ops, FinOps & Gov"]
-            V6["6. AI Academy"]:::verticals
-            V7["7. Jurídico & Compliance"]:::verticals
-            V8["8. RH & People Ops"]:::verticals
-            V9["9. FinOps & Pricing"]:::verticals
-            V10["10. Customer Success"]:::verticals
-            V12["12. Venture Studio"]:::verticals
-            V15["15. GovTech & RFP"]:::verticals
-            V6 --> V7 --> V8 --> V9 --> V10 --> V12 --> V15
-        end
+        V1["1. Software Studio"]:::verticals
+        V2["2. Marketing & Growth"]:::verticals
+        V3["3. RevOps & CRM"]:::verticals
+        V4["4. AI Consulting"]:::verticals
+        V5["5. Data & Analytics"]:::verticals
+        V6["6. AI Academy"]:::verticals
+        V7["7. Jurídico & Compliance"]:::verticals
+        V8["8. RH & People Ops"]:::verticals
+        V9["9. FinOps & Pricing"]:::verticals
+        V10["10. Customer Success"]:::verticals
+        V11["11. Mídia & Podcasts"]:::verticals
+        V12["12. Venture Studio"]:::verticals
+        V13["13. DevSecOps Studio"]:::verticals
+        V14["14. E-Commerce Pricing"]:::verticals
+        V15["15. GovTech & RFP"]:::verticals
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
-        direction LR
         P1["📦 Proposta / Projeto Fechado"]:::products
         P2["🔄 Retainers Mensais"]:::products
         P3["🚀 Micro-SaaS White-Label"]:::products
@@ -335,20 +324,20 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 
 # Modelo de Autoridade
 
-Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
+Toda decisão segue obrigatoriamente a hierarquia soberana vertical abaixo:
 
 ```mermaid
-graph LR
+graph TD
     classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
     classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
 
-    U["👑 Operador Humano (Usuário)"]:::top --> Arc["1. Architecture"]:::auth
-    Arc --> Gov["2. Governance"]:::auth
-    Gov --> Spec["3. Specifications"]:::auth
-    Spec --> EC["4. Execution Cell"]:::auth
-    EC --> RT["5. Runtime"]:::auth
-    RT --> Agt["6. Agentes"]:::auth
-    Agt --> Mdl["7. Modelos de IA"]:::auth
+    U["👑 Operador Humano (Usuário)<br/><i>(Soberania Absoluta)</i>"]:::top --> Arc["1. Architecture<br/><i>(Visão & ADRs)</i>"]:::auth
+    Arc --> Gov["2. Governance<br/><i>(Regras Constitucionais)</i>"]:::auth
+    Gov --> Spec["3. Specifications<br/><i>(specify.md)</i>"]:::auth
+    Spec --> EC["4. Execution Cell<br/><i>(Célula Operacional)</i>"]:::auth
+    EC --> RT["5. Runtime<br/><i>(Orquestrador)</i>"]:::auth
+    RT --> Agt["6. Agentes Inteligentes<br/><i>(Squad 15)</i>"]:::auth
+    Agt --> Mdl["7. Modelos de IA<br/><i>(LLMs & Inference)</i>"]:::auth
 ```
 
 Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
@@ -357,7 +346,7 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases em matriz:
+Toda iniciativa percorre o seguinte fluxo sequencial em 3 fases:
 
 ```mermaid
 graph TD
