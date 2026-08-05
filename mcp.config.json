@@ -20,6 +20,27 @@
       "env": {},
       "disabled": false,
       "autoApprove": []
+    },
+    "tlc-agent-skills": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@tech-leads-club/agent-skills",
+        "mcp"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-playwright"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }

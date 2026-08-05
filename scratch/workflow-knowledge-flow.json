@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Fluxo do Conhecimento no AEOS",
+    "subtitle": "Fluxo Soberano de Diretrizes da Governança até Aplicações Ativas",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "main", "label": "Fases da Jornada do Conhecimento" }
+  ],
+  "states": [
+    { "id": "foundation", "type": "start", "label": "Governança", "sublabel": "TLC v3 & Bootstrap", "lane": "main", "col": 0, "step": "01", "tag": "Constituição" },
+    { "id": "knowledge", "type": "active", "label": "Conhecimento", "sublabel": "PGVector RAG 768-dim", "lane": "main", "col": 1, "step": "02", "tag": "Memória" },
+    { "id": "agents", "type": "active", "label": "Squad de IA", "sublabel": "15 Agentes Ativos", "lane": "main", "col": 2, "step": "03", "tag": "Orquestração" },
+    { "id": "runtime", "type": "active", "label": "Runtime Local", "sublabel": "Harness & LLMs", "lane": "main", "col": 3, "step": "04", "tag": "Infra" },
+    { "id": "projects", "type": "success", "label": "Projetos Ativos", "sublabel": "Living Architecture & Apps", "lane": "main", "col": 4, "step": "05", "tag": "Soberano" }
+  ],
+  "transitions": [],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Jornada do Conhecimento AEOS",
+      "items": [
+        "01. Governança: Define regras constitucionais, limites Zero Trust e Onboarding",
+        "02. Conhecimento: Fragmenta e recupera embeddings via PGVector 17",
+        "03. Squad de IA: 15 Agentes colaboram em tarefas especializadas",
+        "04. Runtime: Harness Docker local (pcl-db, omniroute, paperclip)",
+        "05. Projetos: Entrega de valor soberano em produção"
+      ]
+    }
+  ]
+}

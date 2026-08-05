@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Modelo de Dados da Memória Vetorial (PGVector 17)",
+    "subtitle": "Linhagem de dados de document_chunks e agent_execution_logs para RAG local",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    { "label": "Fontes" },
+    { "label": "Vetorização" },
+    { "label": "Memória Relacional" },
+    { "label": "Consumidores RAG" }
+  ],
+  "nodes": [
+    { "id": "docs", "type": "frontend", "label": "Documentos local", "sublabel": "Markdown & JSON", "stage": 0, "row": 0, "tag": "Arquivos" },
+    { "id": "chunker", "type": "backend", "label": "Chunker & Embed", "sublabel": "Ollama / Gemini", "stage": 1, "row": 0, "tag": "768-dim" },
+    { "id": "pgvector", "type": "database", "label": "document_chunks", "sublabel": "PostgreSQL 17 + PGVector", "stage": 2, "row": 0, "tag": "Vetores" },
+    { "id": "logs", "type": "database", "label": "execution_logs", "sublabel": "Tabela de Auditoria", "stage": 2, "row": 2, "tag": "Logs" },
+    { "id": "rag", "type": "backend", "label": "Motor RAG AEOS", "sublabel": "Busca por Cosseno", "stage": 3, "row": 1, "tag": "Contexto" }
+  ],
+  "flows": [
+    { "from": "docs", "to": "chunker", "label": "Varredura local", "variant": "default" },
+    { "from": "chunker", "to": "pgvector", "label": "Gravando embeddings", "variant": "emphasis" },
+    { "from": "pgvector", "to": "rag", "label": "Consulta cosseno", "variant": "emphasis" },
+    { "from": "logs", "to": "rag", "label": "Métricas & histórico", "variant": "dashed" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Estrutura PGVector",
+      "items": [
+        "document_chunks: Guarda id, file_path, section, content e embedding (vector 768-dim)",
+        "agent_execution_logs: Grava execution_id, session_id, agent_role, status e jsonb",
+        "Similaridade: As consultas utilizam índice HNSW para busca vetorial ultrarrápida",
+        "Zero Cloud Leak: Dados e embeddings permanecem em contêiner local isolado"
+      ]
+    }
+  ]
+}

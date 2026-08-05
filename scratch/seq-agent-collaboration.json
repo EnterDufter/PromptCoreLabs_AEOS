@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Colaboração Atômica entre Agentes (TLC v3)",
+    "subtitle": "Ciclo de vida de aprovação, execução cirúrgica, auditoria QA e compliance Zero Trust",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "humano", "type": "external", "label": "Humano", "sublabel": "Operador" },
+    { "id": "planner", "type": "backend", "label": "Planner", "sublabel": "Especifica" },
+    { "id": "builder", "type": "backend", "label": "Builder", "sublabel": "Código" },
+    { "id": "qa", "type": "security", "label": "QA Agent", "sublabel": "Revisão" },
+    { "id": "auditor", "type": "security", "label": "Auditor", "sublabel": "Zero Trust" }
+  ],
+  "messages": [
+    { "from": "humano", "to": "planner", "y": 180, "label": "Aprova specify.md (Gate 1)", "variant": "security" },
+    { "from": "planner", "to": "builder", "y": 230, "label": "Entrega tasks.md (Backlog)", "variant": "emphasis" },
+    { "from": "builder", "to": "qa", "y": 290, "label": "Solicita validação (Código + Diffs)", "variant": "default" },
+    { "from": "qa", "to": "builder", "y": 340, "label": "REFUTED com logs (Se falhar)", "variant": "return" },
+    { "from": "qa", "to": "auditor", "y": 390, "label": "Solicita compliance (VERIFIED)", "variant": "security" },
+    { "from": "auditor", "to": "humano", "y": 450, "label": "Entrega validate.md e relatório", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "humano", "from": 170, "to": 480, "type": "external" },
+    { "participant": "planner", "from": 180, "to": 240, "type": "backend" },
+    { "participant": "builder", "from": 230, "to": 350, "type": "backend" },
+    { "participant": "qa", "from": 290, "to": 400, "type": "security" },
+    { "participant": "auditor", "from": 390, "to": 460, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Colaboração Atômica",
+      "items": [
+        "Gate 1: O Operador Humano valida a intenção de negócio no specify.md",
+        "Backlog: O Agente Planner quebra a demanda em tarefas atômicas",
+        "Execução: O Agente Builder implementa código e refatorações",
+        "QA: O Agente QA testa de forma adversária e emite VERIFIED",
+        "Compliance: O Agente Auditor valida Zero Trust e chaves de segurança"
+      ]
+    }
+  ]
+}
