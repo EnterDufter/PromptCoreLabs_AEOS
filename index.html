@@ -1449,6 +1449,42 @@ erDiagram
       </table>
     </section>
 
+    <!-- SEÇÃO DE GLOSSÁRIO E CONVENÇÕES DE PRIORIDADES -->
+    <section style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+      <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">📚 Glossário & Convenções de Níveis de Prioridade (P0 a P3)</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Para garantir a governança e o alinhamento da squad de IA com as diretrizes do PCL-AEOS, cada entregável e diagrama é classificado por um nível estrito de prioridade e responsabilidade:</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem;">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid #ef4444; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p0">P0 Crítico</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Requisito constitucional fundamental, infraestrutura crítica de segurança (Zero Trust) ou Stage Gate de validação inegociável. Qualquer pendência em um item P0 paralisa os pipelines e impede o deploy em produção.</p>
+        </div>
+
+        <div style="background: rgba(249, 115, 22, 0.08); border: 1px solid #f97316; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p1">P1 Alto</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Funcionalidade prioritária de produto, módulo de orquestração de agentes ou componente essencial para a entregabilidade das Verticais B2B. Priorizado logo após a estabilização dos itens P0.</p>
+        </div>
+
+        <div style="background: rgba(234, 179, 8, 0.08); border: 1px solid #eab308; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p2">P2 Médio</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Melhoria de eficiência operacional, automações auxiliares de workflow ou documentações complementares. Implementado após o fechamento das entregas P0 e P1.</p>
+        </div>
+
+        <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid #38bdf8; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p3">P3 Evolutivo</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Melhoria contínua de longo prazo, otimização fina de performance, refinamento estético de diagramas ou refatoração de débitos técnicos não bloqueantes.</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ================================================== -->
