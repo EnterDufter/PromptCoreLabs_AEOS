@@ -89,22 +89,30 @@ graph TD
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        direction LR
-        V1["1. Software Studio"]:::verticals
-        V2["2. Marketing & Growth"]:::verticals
-        V3["3. RevOps & CRM"]:::verticals
-        V4["4. AI Consulting"]:::verticals
-        V5["5. Data & Analytics"]:::verticals
-        V6["6. AI Academy"]:::verticals
-        V7["7. Jurídico & Compliance"]:::verticals
-        V8["8. RH & People Ops"]:::verticals
-        V9["9. FinOps & Pricing"]:::verticals
-        V10["10. Customer Success"]:::verticals
-        V11["11. Mídia & Podcasts"]:::verticals
-        V12["12. Venture Studio"]:::verticals
-        V13["13. DevSecOps Studio"]:::verticals
-        V14["14. E-Commerce Pricing"]:::verticals
-        V15["15. GovTech & RFP"]:::verticals
+        subgraph GroupTech["Tech & Data"]
+            V1["1. Software Studio"]:::verticals
+            V5["5. Data & Analytics"]:::verticals
+            V13["13. DevSecOps Studio"]:::verticals
+            V12["12. Venture Studio"]:::verticals
+            V15["15. GovTech & RFP"]:::verticals
+            V1 --> V5 --> V13 --> V12 --> V15
+        end
+        subgraph GroupBiz["Growth & Sales"]
+            V2["2. Marketing & Growth"]:::verticals
+            V3["3. RevOps & CRM"]:::verticals
+            V4["4. AI Consulting"]:::verticals
+            V11["11. Mídia & Podcasts"]:::verticals
+            V14["14. E-Commerce Pricing"]:::verticals
+            V2 --> V3 --> V4 --> V11 --> V14
+        end
+        subgraph GroupOps["Ops, FinOps & Gov"]
+            V6["6. AI Academy"]:::verticals
+            V7["7. Jurídico & Compliance"]:::verticals
+            V8["8. RH & People Ops"]:::verticals
+            V9["9. FinOps & Pricing"]:::verticals
+            V10["10. Customer Success"]:::verticals
+            V6 --> V7 --> V8 --> V9 --> V10
+        end
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
@@ -329,27 +337,42 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases horizontais:
+Toda iniciativa percorre o seguinte fluxo vertical em 3 fases:
 
 ```mermaid
-graph LR
+graph TD
     classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
     classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
     classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
     subgraph P1["Fase 1: Concepção & Governança"]
-        direction LR
-        O["Opportunity"]:::phase1 --> AC["Arch Check"]:::phase1 --> GC["Gov Check"]:::phase1 --> ECC["Cell Creation"]:::phase1 --> MS["Method Selection"]:::phase1
+        direction TD
+        O["1. Opportunity (Oportunidade)"]:::phase1
+        AC["2. Arch Check (Arquitetura)"]:::phase1
+        GC["3. Gov Check (Governança)"]:::phase1
+        ECC["4. Cell Creation (Execution Cell)"]:::phase1
+        MS["5. Method Selection (Metodologia)"]:::phase1
+        O --> AC --> GC --> ECC --> MS
     end
 
     subgraph P2["Fase 2: Especificação & Execução"]
-        direction LR
-        SP["Specification"]:::phase2 --> DS["Design"]:::phase2 --> PL["Planning"]:::phase2 --> EX["Execution"]:::phase2 --> VA["Validation"]:::phase2
+        direction TD
+        SP["6. Specification (specify.md)"]:::phase2
+        DS["7. Design (design.md)"]:::phase2
+        PL["8. Planning (tasks.md)"]:::phase2
+        EX["9. Execution (Builder Agent)"]:::phase2
+        VA["10. Validation (Reviewer QA)"]:::phase2
+        SP --> DS --> PL --> EX --> VA
     end
 
     subgraph P3["Fase 3: Implantação & Aprendizado"]
-        direction LR
-        DP["Deployment"]:::phase3 --> OP["Operation"]:::phase3 --> LE["Learning"]:::phase3 --> KU["Knowledge"]:::phase3 --> MU["Memory"]:::phase3
+        direction TD
+        DP["11. Deployment (Deploy & Signoff)"]:::phase3
+        OP["12. Operation (Operação Contínua)"]:::phase3
+        LE["13. Learning (Retroalimentação)"]:::phase3
+        KU["14. Knowledge (Update Conhecimento)"]:::phase3
+        MU["15. Memory (Persistência no RAG)"]:::phase3
+        DP --> OP --> LE --> KU --> MU
     end
 
     P1 --> P2 --> P3
