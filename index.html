@@ -1243,7 +1243,7 @@ graph LR
             <h4 class="card-exp-title">Legacy Migration Dataflow</h4>
             <p class="card-exp-desc">Dataflow de sanitização, extração e migração do acervo de dados legados do diretório <code>legacy/</code> para o novo padrão de memória vetorial.</p>
             <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/legacy-migration.md" class="link-doc" data-doc-title="Migração & Higienização Legada">📖 Ver Migração Legada ↗</a>
+              <a href="legacy-migration.md" class="link-doc" data-doc-title="Migração & Higienização Legada">📖 Ver Migração Legada ↗</a>
               <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" data-diagram-title="Legacy Migration Dataflow">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
@@ -1569,7 +1569,7 @@ graph LR
       async function openDocModal(url, title) {
         // Interceptor de segurança anti-cache: se o navegador do usuário estiver rodando um HTML antigo com "Regras de Indexação" no Card 2
         if (title && (title.includes('Regras de Indexação') || title.includes('Migração Legada'))) {
-          url = 'projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/legacy-migration.md';
+          url = 'legacy-migration.md';
           title = 'Migração & Higienização Legada';
         }
 
