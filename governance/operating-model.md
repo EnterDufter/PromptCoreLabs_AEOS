@@ -80,38 +80,33 @@ graph TD
     classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
-        Cortex["🧠 Cortex Engine"]:::platform
-        OmniRoute["⚡ OmniRoute :20130"]:::platform
-        Paperclip["🤖 Paperclip :3100"]:::platform
-        RAG["💾 PGVector RAG"]:::platform
-        TLCSkills["🛠️ TLC Agent Skills"]:::platform
+        C1["🧠 Cortex Engine"]:::platform
+        C2["⚡ OmniRoute :20130"]:::platform
+        C3["🤖 Paperclip :3100"]:::platform
+        C4["💾 PGVector RAG"]:::platform
+        C5["🛠️ TLC Agent Skills"]:::platform
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        subgraph GroupTech["Tech & Data"]
-            V1["1. Software Studio"]:::verticals
-            V5["5. Data & Analytics"]:::verticals
-            V13["13. DevSecOps Studio"]:::verticals
-            V12["12. Venture Studio"]:::verticals
-            V15["15. GovTech & RFP"]:::verticals
-            V1 --> V5 --> V13 --> V12 --> V15
-        end
-        subgraph GroupBiz["Growth & Sales"]
-            V2["2. Marketing & Growth"]:::verticals
-            V3["3. RevOps & CRM"]:::verticals
-            V4["4. AI Consulting"]:::verticals
-            V11["11. Mídia & Podcasts"]:::verticals
-            V14["14. E-Commerce Pricing"]:::verticals
-            V2 --> V3 --> V4 --> V11 --> V14
-        end
-        subgraph GroupOps["Ops, FinOps & Gov"]
-            V6["6. AI Academy"]:::verticals
-            V7["7. Jurídico & Compliance"]:::verticals
-            V8["8. RH & People Ops"]:::verticals
-            V9["9. FinOps & Pricing"]:::verticals
-            V10["10. Customer Success"]:::verticals
-            V6 --> V7 --> V8 --> V9 --> V10
-        end
+        V1["1. Software Studio"]:::verticals
+        V2["2. Marketing & Growth"]:::verticals
+        V3["3. RevOps & CRM"]:::verticals
+        V4["4. AI Consulting"]:::verticals
+        V5["5. Data & Analytics"]:::verticals
+        V6["6. AI Academy"]:::verticals
+        V7["7. Jurídico & Compliance"]:::verticals
+        V8["8. RH & People Ops"]:::verticals
+        V9["9. FinOps & Pricing"]:::verticals
+        V10["10. Customer Success"]:::verticals
+        V11["11. Mídia & Podcasts"]:::verticals
+        V12["12. Venture Studio"]:::verticals
+        V13["13. DevSecOps Studio"]:::verticals
+        V14["14. E-Commerce Pricing"]:::verticals
+        V15["15. GovTech & RFP"]:::verticals
+        
+        V1 --- V2 --- V3 --- V4 --- V5
+        V6 --- V7 --- V8 --- V9 --- V10
+        V11 --- V12 --- V13 --- V14 --- V15
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
@@ -335,7 +330,7 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo vertical em 3 fases:
+Toda iniciativa percorre o seguinte fluxo em 3 fases:
 
 ```mermaid
 graph TD
@@ -344,30 +339,18 @@ graph TD
     classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
     subgraph P1["Fase 1: Concepção & Governança"]
-        O["1. Opportunity (Oportunidade)"]:::phase1
-        AC["2. Arch Check (Arquitetura)"]:::phase1
-        GC["3. Gov Check (Governança)"]:::phase1
-        ECC["4. Cell Creation (Execution Cell)"]:::phase1
-        MS["5. Method Selection (Metodologia)"]:::phase1
-        O --> AC --> GC --> ECC --> MS
+        direction LR
+        O["1. Opportunity"]:::phase1 --> AC["2. Arch Check"]:::phase1 --> GC["3. Gov Check"]:::phase1 --> ECC["4. Cell Creation"]:::phase1 --> MS["5. Method Selection"]:::phase1
     end
 
     subgraph P2["Fase 2: Especificação & Execução"]
-        SP["6. Specification (specify.md)"]:::phase2
-        DS["7. Design (design.md)"]:::phase2
-        PL["8. Planning (tasks.md)"]:::phase2
-        EX["9. Execution (Builder Agent)"]:::phase2
-        VA["10. Validation (Reviewer QA)"]:::phase2
-        SP --> DS --> PL --> EX --> VA
+        direction LR
+        SP["6. Specification"]:::phase2 --> DS["7. Design"]:::phase2 --> PL["8. Planning"]:::phase2 --> EX["9. Execution"]:::phase2 --> VA["10. Validation"]:::phase2
     end
 
     subgraph P3["Fase 3: Implantação & Aprendizado"]
-        DP["11. Deployment (Deploy & Signoff)"]:::phase3
-        OP["12. Operation (Operação Contínua)"]:::phase3
-        LE["13. Learning (Retroalimentação)"]:::phase3
-        KU["14. Knowledge (Update Conhecimento)"]:::phase3
-        MU["15. Memory (Persistência no RAG)"]:::phase3
-        DP --> OP --> LE --> KU --> MU
+        direction LR
+        DP["11. Deployment"]:::phase3 --> OP["12. Operation"]:::phase3 --> LE["13. Learning"]:::phase3 --> KU["14. Knowledge"]:::phase3 --> MU["15. Memory"]:::phase3
     end
 
     P1 --> P2 --> P3
