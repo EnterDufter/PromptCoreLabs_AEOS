@@ -154,4 +154,5 @@ erDiagram
 ## 5. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
 Este módulo refere-se diretamente aos diagramas do Portal Mestre:
 - 🟡 **[data-rag-memory.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html)**: Lineage do pipeline de ingestão e busca vetorial RAG.
+- 🔄 **[data-legacy-migration.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)**: Dataflow de sanitização e migração do acervo legado (Ver **[Documentação de Migração Legada](../legacy-migration/README.md)**).
 - 💜 **[obs-audit-trail.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html)**: Coleta de logs de execução e métricas de tokens no `pcl-db`.
