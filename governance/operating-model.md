@@ -95,30 +95,29 @@ graph TD
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
         direction LR
-        Cortex["🧠 Cortex Engine"]:::platform
-        OmniRoute["⚡ OmniRoute :20130"]:::platform
-        Paperclip["🤖 Paperclip :3100"]:::platform
-        RAG["💾 PGVector RAG"]:::platform
-        TLCSkills["🛠️ TLC Skills Engine"]:::platform
+        Cortex["🧠 Cortex Engine<br/><i>(Arch Intelligence)</i>"]:::platform
+        OmniRoute["⚡ OmniRoute :20130<br/><i>(EBITDA Shield)</i>"]:::platform
+        Paperclip["🤖 Paperclip :3100<br/><i>(Orchestration)</i>"]:::platform
+        RAG["💾 PGVector RAG<br/><i>(Shared Memory)</i>"]:::platform
+        TLCSkills["🛠️ TLC Agent Skills<br/><i>(Skills Engine)</i>"]:::platform
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
         subgraph GroupTech["Frente Tech & Security"]
-            direction LR
             V1["1. Software Studio"]:::verticals
             V5["5. Data & Analytics"]:::verticals
             V13["13. DevSecOps Studio"]:::verticals
+            V1 --> V5 --> V13
         end
         subgraph GroupBiz["Frente Growth & Business"]
-            direction LR
             V2["2. Marketing & Growth"]:::verticals
             V3["3. RevOps & CRM"]:::verticals
             V4["4. AI Consulting"]:::verticals
             V11["11. Mídia & Podcasts"]:::verticals
             V14["14. E-Commerce Pricing"]:::verticals
+            V2 --> V3 --> V4 --> V11 --> V14
         end
         subgraph GroupOps["Frente Ops, FinOps & Gov"]
-            direction LR
             V6["6. AI Academy"]:::verticals
             V7["7. Jurídico & Compliance"]:::verticals
             V8["8. RH & People Ops"]:::verticals
@@ -126,12 +125,13 @@ graph TD
             V10["10. Customer Success"]:::verticals
             V12["12. Venture Studio"]:::verticals
             V15["15. GovTech & RFP"]:::verticals
+            V6 --> V7 --> V8 --> V9 --> V10 --> V12 --> V15
         end
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
         direction LR
-        P1["📦 Projeto Fechado"]:::products
+        P1["📦 Proposta / Projeto Fechado"]:::products
         P2["🔄 Retainers Mensais"]:::products
         P3["🚀 Micro-SaaS White-Label"]:::products
         P4["🔌 APIs & Agentes"]:::products
@@ -357,27 +357,39 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 
 # Fluxo Operacional
 
-Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases horizontais:
+Toda iniciativa percorre o seguinte fluxo estruturado em 3 fases em matriz:
 
 ```mermaid
-graph LR
+graph TD
     classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
     classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
     classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
 
     subgraph P1["Fase 1: Concepção & Governança"]
-        direction LR
-        O["Opportunity"]:::phase1 --> AC["Arch Check"]:::phase1 --> GC["Gov Check"]:::phase1 --> ECC["Cell Creation"]:::phase1 --> MS["Method Selection"]:::phase1
+        O["1. Opportunity<br/><i>(Identificação Oportunidade)</i>"]:::phase1
+        AC["2. Arch Check<br/><i>(Verificação Arquitetural)</i>"]:::phase1
+        GC["3. Gov Check<br/><i>(Verificação Governança)</i>"]:::phase1
+        ECC["4. Cell Creation<br/><i>(Criação de Cell)</i>"]:::phase1
+        MS["5. Method Selection<br/><i>(Escolha Metodologia)</i>"]:::phase1
+        O --> AC --> GC --> ECC --> MS
     end
 
     subgraph P2["Fase 2: Especificação & Execução"]
-        direction LR
-        SP["Specification"]:::phase2 --> DS["Design"]:::phase2 --> PL["Planning"]:::phase2 --> EX["Execution"]:::phase2 --> VA["Validation"]:::phase2
+        SP["6. Specification<br/><i>(Redação specify.md)</i>"]:::phase2
+        DS["7. Design<br/><i>(Modelagem design.md)</i>"]:::phase2
+        PL["8. Planning<br/><i>(Backlog tasks.md)</i>"]:::phase2
+        EX["9. Execution<br/><i>(Construção Builder)</i>"]:::phase2
+        VA["10. Validation<br/><i>(Testes Reviewer QA)</i>"]:::phase2
+        SP --> DS --> PL --> EX --> VA
     end
 
     subgraph P3["Fase 3: Implantação & Aprendizado"]
-        direction LR
-        DP["Deployment"]:::phase3 --> OP["Operation"]:::phase3 --> LE["Learning"]:::phase3 --> KU["Knowledge"]:::phase3 --> MU["Memory"]:::phase3
+        DP["11. Deployment<br/><i>(Deploy & Signoff)</i>"]:::phase3
+        OP["12. Operation<br/><i>(Operação Contínua)</i>"]:::phase3
+        LE["13. Learning<br/><i>(Retroalimentação)</i>"]:::phase3
+        KU["14. Knowledge<br/><i>(Update Conhecimento)</i>"]:::phase3
+        MU["15. Memory<br/><i>(Persistência no RAG)</i>"]:::phase3
+        DP --> OP --> LE --> KU --> MU
     end
 
     P1 --> P2 --> P3

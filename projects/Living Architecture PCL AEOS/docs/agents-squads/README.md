@@ -62,7 +62,6 @@ graph TD
     CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing • create-rfc • tlc-spec-driven</i>"]:::board
 
     subgraph Vert_Software["Frente 1: Software Studio & DevSecOps"]
-        direction TD
         LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven • create-adr • best-practices</i>"]:::squadDev
         CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor • best-practices</i>"]:::squadSec
         AgileBot["bot-agile-master (Agile QA)"]:::squadOps
@@ -70,7 +69,6 @@ graph TD
     end
 
     subgraph Vert_Growth["Frente 2: Marketing, RevOps & Growth"]
-        direction TD
         RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr • ai-cold-outreach</i>"]:::squadRev
         CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo • ai-ugc-ads</i>"]:::squadRev
         GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo • best-practices</i>"]:::squadRev
@@ -78,7 +76,6 @@ graph TD
     end
 
     subgraph Vert_Consulting["Frente 3: Consultoria, FinOps & People Ops"]
-        direction TD
         Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing • create-rfc</i>"]:::squadEstra
         FinAdv["Financial_Advisor (CFO Lead)<br/><i>ai-pricing</i>"]:::squadFin
         Compliance["Compliance_Steward (Legal/Compliance)<br/><i>create-adr</i>"]:::squadFin
@@ -88,9 +85,9 @@ graph TD
         Strategist --> FinAdv --> Compliance --> SkillsMgr --> BizOps --> FinBot
     end
 
-    CEO --> Vert_Software
-    CEO --> Vert_Growth
-    CEO --> Vert_Consulting
+    CEO --> LeadEng
+    CEO --> RevOps
+    CEO --> Strategist
 ```
 
 ---
