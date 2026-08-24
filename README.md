@@ -204,7 +204,7 @@ docker compose down
 
 ### PASSO 5: MEMÓRIA TRIPARTIDA, CLOUDFLARE & DRP (DISASTER RECOVERY PLAN)
 
-> **O que você vai aprender aqui:** A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero ($0.00/mês), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO $\le$ 1h/24h e RTO $\le$ 15min.
+> **O que você vai aprender aqui:** A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero (`$0.00/mês`), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO ≤ 1h/24h e RTO ≤ 15min.
 
 #### Quickstart: Comandos do DRP & Backup Engine
 
@@ -220,15 +220,15 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 
 | Camada | Escopo & Tecnologia | Destino / Nuvem | SLA & Frequência |
 |---|---|---|---|
-| **Longo Prazo (Cold SQL)** | Dump `pcl-db` (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum | **Cloudflare R2 Bucket** (`pcl-backup-memoria-tripartida`) | **RPO $\le$ 24h** / **RTO $\le$ 15min** |
-| **Médio Prazo (Event Docs)** | Snapshots de arquivos de estado (`STATE.md`), playbooks e documentação viva | **Cloudflare R2 Bucket** (`/medium-term/`) | **RPO $\le$ 1h** (Event-Driven) |
+| **Longo Prazo (Cold SQL)** | Dump `pcl-db` (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum | **Cloudflare R2 Bucket** (`pcl-backup-memoria-tripartida`) | **RPO ≤ 24h** / **RTO ≤ 15min** |
+| **Médio Prazo (Event Docs)** | Snapshots de arquivos de estado (`STATE.md`), playbooks e documentação viva | **Cloudflare R2 Bucket** (`/medium-term/`) | **RPO ≤ 1h** (Event-Driven) |
 | **Borda Ativa (Hot Sync)** | Sincronização de metadados relacionais e índices vetoriais RAG | **Cloudflare D1 & Vectorize** | **RPO < 5min** (Edge Push) |
 
 #### Diagramas de Resiliência, Memória Tripartida & Cloudflare
 
 | Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DIAG-MEM-01"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP**<br>Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês), borda D1/Vectorize e plano de recuperação DRP (SLA RTO $\le$ 15min). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registro ADR-006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DIAG-MEM-01"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP**<br>Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 (`$0.00/mês`), borda D1/Vectorize e plano de recuperação DRP (SLA RTO ≤ 15min). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registro ADR-006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
 
 ---
 
