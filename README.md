@@ -51,12 +51,13 @@ flowchart TD
 
 ---
 
-## 🧭 Trilho de Aprendizado Arquitetural em 4 Fases
+## 🧭 Trilho de Aprendizado Arquitetural em 5 Fases
 
 1. **[Passo 1: Visão Macro & Fundação](#passo-1-visão-macro--fundação-do-sistema)** — Conceito geral, Fronteiras C4 L1 e Contêineres Docker C4 L2.
 2. **[Passo 2: Squad de IA & Agentes](#passo-2-squad-de-ia--agentes-inteligentes)** — Manual dos 15 Agentes, Micro-Loop Cortex e Sequência DevEx.
 3. **[Passo 3: Conhecimento & RAG Vetorial](#passo-3-conhecimento--memória-persistente-rag)** — Ingestão RAG, Embeddings 768D e ERD PGVector.
 4. **[Passo 4: Infra, Runtime & Governança](#passo-4-infraestrutura-runtime--governança)** — AI Gateway OmniRoute, Tailscale e os 5 Stage Gates TLC v3.
+5. **[Passo 5: Memória Tripartida, Cloudflare & DRP](#passo-5-memória-tripartida-cloudflare--drp-disaster-recovery-plan)** — Backup Cifrado AES-256 no R2, Borda D1/Vectorize e DRP Engine.
 
 ---
 
@@ -205,7 +206,7 @@ docker compose down
 
 > **O que você vai aprender aqui:** A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero ($0.00/mês), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO $\le$ 1h/24h e RTO $\le$ 15min.
 
-#### Scripts da Memória Tripartida & DRP Engine
+#### Quickstart: Comandos do DRP & Backup Engine
 
 ```powershell
 # Executar o backup completo da Memória de Longo Prazo (PostgreSQL pcl-db + AES-256 + Cloudflare R2)
@@ -215,7 +216,7 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/backup-aeos-tripartido.
 powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido.ps1"
 ```
 
-#### Tabela da Memória Tripartida & SLAs de DRP
+#### Matriz da Memória Tripartida & SLAs de DRP
 
 | Camada | Escopo & Tecnologia | Destino / Nuvem | SLA & Frequência |
 |---|---|---|---|
@@ -223,11 +224,11 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 | **Médio Prazo (Event Docs)** | Snapshots de arquivos de estado (`STATE.md`), playbooks e documentação viva | **Cloudflare R2 Bucket** (`/medium-term/`) | **RPO $\le$ 1h** (Event-Driven) |
 | **Borda Ativa (Hot Sync)** | Sincronização de metadados relacionais e índices vetoriais RAG | **Cloudflare D1 & Vectorize** | **RPO < 5min** (Edge Push) |
 
-#### Diagrama Interativo do Cortex (Memória Tripartida & DRP)
+#### Diagramas de Resiliência, Memória Tripartida & Cloudflare
 
 | Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DIAG-MEM-01"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP**<br>Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês), borda D1/Vectorize e plano de recuperação DRP (SLA RTO $\le$ 15min). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registros ADR-006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DIAG-MEM-01"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP**<br>Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês), borda D1/Vectorize e plano de recuperação DRP (SLA RTO $\le$ 15min). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registro ADR-006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
 
 ---
 
