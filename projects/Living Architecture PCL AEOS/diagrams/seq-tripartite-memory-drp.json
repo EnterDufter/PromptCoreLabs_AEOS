@@ -7,7 +7,27 @@
     "output": "seq-tripartite-memory-drp.html",
     "viewBox": [800, 880],
     "animation": "trace",
-    "quality_profile": "showcase"
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "cold-backup-pipeline",
+        "label": "1. Pipeline de Backup Cifrado AES-256",
+        "focus": ["backup_script", "db", "openssl"],
+        "note": "Execução do pg_dump -Fc, cálculo do hash SHA-256 e criptografia simétrica AES-256."
+      },
+      {
+        "id": "r2-zero-egress-push",
+        "label": "2. Transferência Cloudflare R2 ($0 Egress)",
+        "focus": ["backup_script", "r2"],
+        "note": "Push seguro unidirecional para o bucket pcl-backup-memoria-tripartida."
+      },
+      {
+        "id": "drp-disaster-recovery",
+        "label": "3. Plano de Recuperação de Desastres (DRP)",
+        "focus": ["drp_script", "r2", "openssl", "db"],
+        "note": "Download do último snapshot cifrado, descriptografia e pg_restore com SLA RTO <= 15min."
+      }
+    ]
   },
   "participants": [
     { "id": "db", "type": "database", "label": "pcl-db", "sublabel": "PostgreSQL 17" },

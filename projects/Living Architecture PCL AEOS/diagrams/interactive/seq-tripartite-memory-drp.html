@@ -4501,7 +4501,7 @@
       <p class="subtitle">Fluxo de Backup Cifrado AES-256, Cloudflare R2 ($0.00/mês) e Restauração Automatizada</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[]</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"cold-backup-pipeline","label":"1. Pipeline de Backup Cifrado AES-256","focus":["backup_script","db","openssl"],"note":"Execução do pg_dump -Fc, cálculo do hash SHA-256 e criptografia simétrica AES-256."},{"id":"r2-zero-egress-push","label":"2. Transferência Cloudflare R2 ($0 Egress)","focus":["backup_script","r2"],"note":"Push seguro unidirecional para o bucket pcl-backup-memoria-tripartida."},{"id":"drp-disaster-recovery","label":"3. Plano de Recuperação de Desastres (DRP)","focus":["drp_script","r2","openssl","db"],"note":"Download do último snapshot cifrado, descriptografia e pg_restore com SLA RTO \u003c= 15min."}]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4949,7 +4949,7 @@
 
     <!-- Footer -->
     <p class="footer">
-      Sequence diagram &bull; Built with Archify<span class="no-print"> &bull; <a class="artifact-start-link" href="https://tt-a1i.github.io/archify/start.html?type=sequence&amp;source=artifact" target="_blank" rel="noopener noreferrer">Create yours &nearr;</a> &bull; Hover to trace &bull; <kbd>R</kbd> route &bull; Click to focus &bull; <kbd>+</kbd>/<kbd>&minus;</kbd> zoom &bull; <kbd>M</kbd> radar &bull; <kbd>T</kbd> theme &bull; <kbd>E</kbd> export</span>
+      Sequence diagram &bull; Built with Archify<span class="no-print"> &bull; <a class="artifact-start-link" href="https://tt-a1i.github.io/archify/start.html?type=sequence&amp;source=artifact" target="_blank" rel="noopener noreferrer">Create yours &nearr;</a> &bull; Hover to trace &bull; <kbd>R</kbd> route &bull; Click to focus &bull; <kbd>+</kbd>/<kbd>&minus;</kbd> zoom &bull; <kbd>M</kbd> radar &bull; <kbd>[</kbd>/<kbd>]</kbd> views &bull; <kbd>P</kbd> play story &bull; <kbd>T</kbd> theme &bull; <kbd>E</kbd> export</span>
     </p>
   </div>
 
