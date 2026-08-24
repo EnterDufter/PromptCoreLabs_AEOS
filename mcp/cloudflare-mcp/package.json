@@ -1,0 +1,22 @@
+{
+  "name": "@promptcore-labs/mcp-cloudflare",
+  "version": "1.0.0",
+  "description": "Workspace MCP Server for Cloudflare integration (Pages, R2, D1, Vectorize) in PromptCore Labs AEOS",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx -y @cloudflare/mcp-server-cloudflare run",
+    "test": "node --eval \"console.log('mcp-cloudflare syntax ok')\""
+  },
+  "keywords": [
+    "mcp",
+    "cloudflare",
+    "r2",
+    "d1",
+    "pages",
+    "vectorize",
+    "aeos"
+  ],
+  "author": "Eduardo (PromptCore Labs)",
+  "license": "MIT"
+}

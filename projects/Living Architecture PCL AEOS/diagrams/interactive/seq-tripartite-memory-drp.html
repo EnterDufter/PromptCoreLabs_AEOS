@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="archify 2.12.0">
-  <title>C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida Diagram</title>
+  <title>Ciclo de Vida da Memória Tripartida &amp; DRP (Disaster Recovery Plan) Diagram</title>
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
@@ -4496,12 +4496,12 @@
     <div class="header">
       <div class="header-row">
         <div class="pulse-dot"></div>
-        <h1>C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida</h1>
+        <h1>Ciclo de Vida da Memória Tripartida &amp; DRP (Disaster Recovery Plan)</h1>
       </div>
-      <p class="subtitle">Topologia da Plataforma Core (Harness), Cloudflare MCP &amp; Resiliência R2/D1/Vectorize</p>
+      <p class="subtitle">Fluxo de Backup Cifrado AES-256, Cloudflare R2 ($0.00/mês) e Restauração Automatizada</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[{"id":"docker-harness","label":"Plataforma Core Docker","focus":["paperclip","omniroute","db"],"note":"Contêineres locais que viabilizam a operação de custo marginal zero."},{"id":"tripartite-memory","label":"Memória Tripartida \u0026 R2","focus":["db","backup_engine","r2_storage","cloudflare_mcp"],"note":"Backup frio cifrado em AES-256 no R2 com SLAs RPO \u003c= 1h/24h e RTO \u003c= 15min."}]</script>
+    <script id="archify-guided-views-data" type="application/json">[]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4544,9 +4544,9 @@
 
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read">
-      <svg viewBox="0 0 960 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
-        <title id="archify-diagram-title">C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida</title>
-        <desc id="archify-diagram-description">Topologia da Plataforma Core (Harness), Cloudflare MCP &amp; Resiliência R2/D1/Vectorize</desc>
+      <svg viewBox="0 0 800 880" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Ciclo de Vida da Memória Tripartida &amp; DRP (Disaster Recovery Plan)</title>
+        <desc id="archify-diagram-description">Fluxo de Backup Cifrado AES-256, Cloudflare R2 ($0.00/mês) e Restauração Automatizada</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4569,170 +4569,178 @@
         <!-- Background Grid -->
         <rect width="100%" height="100%" fill="url(#grid)" />
 
-        <!-- Boundaries (behind everything) -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="230" y="210" width="450" height="290" rx="12" class="c-region" stroke-width="1"/>
-        <text x="238" y="228" class="t-cloud" font-size="9" font-weight="600">Docker Compose Bridge Network (pcl-net)</text>
+        <!-- Time Segments -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="150" width="704" height="300" rx="10" class="c-lane" stroke-width="1"/>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="security-group" data-composition-frame-id="1" x="470" y="210" width="450" height="290" rx="8" class="c-security-group" stroke-width="1"/>
-        <text x="478" y="228" class="t-security" font-size="9" font-weight="600">Host Infrastructure &amp; Edge Cloudflare Zero Trust</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="480" width="704" height="300" rx="10" class="c-lane" stroke-width="1"/>
 
-        <!-- Connection paths (before components for correct z-order) -->
-        <path data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Processa Projetos" data-edge-key="0" data-edge-id="paperclip-workspace" data-composition-points="260,263;235,263;235,130;210,130" d="M 260 263 L 243 263 Q 235 263 235 255 L 235 138 Q 235 130 227 130 L 210 130" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="paperclip" data-edge-to="db" data-edge-label="Memória Holding" data-edge-key="1" data-edge-id="paperclip-db" data-composition-points="330,300;330,420" d="M 330 300 L 330 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute" data-composition-points="400,270;500,270" d="M 400 270 L 500 270" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="3" data-edge-id="db-backup" data-composition-points="400,450;500,450" d="M 400 450 L 500 450" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="4" data-edge-id="backup-r2" data-composition-points="650,450;740,450" d="M 650 450 L 740 450" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="5" data-edge-id="mcp-cloudflare" data-composition-points="815,300;815,420" d="M 815 300 L 815 420" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="6" data-edge-id="tailscale-host" data-composition-points="190,390;225,390;225,277;260,277" d="M 190 390 L 217 390 Q 225 390 225 382 L 225 285 Q 225 277 233 277 L 260 277" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <!-- Lifelines -->
+        <path d="M 62 142 L 62 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 170 142 L 170 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 278 142 L 278 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 386 142 L 386 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 494 142 L 494 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
 
-        <!-- Components -->
-        <g id="node-workspace" data-node-id="workspace" data-node-label="Workspace Git" tabindex="0" role="button" aria-label="Focus Workspace Git, Código das Verticais PCL, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Código das Verticais PCL" data-node-context="Architecture component">
-          <title>Workspace Git · Código das Verticais PCL · Architecture component</title>
-          <rect x="50" y="100" width="160" height="60" rx="6" class="c-mask"/>
-          <rect x="50" y="100" width="160" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(56 106) scale(0.6875)">
-            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
-          </g>
-          <text data-detail-anchor x="130" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Workspace Git</text>
-        <text data-detail="context" x="130" y="144" class="t-muted" font-size="9" text-anchor="middle">Código das Verticais PCL</text>
+        <!-- Activations -->
+        <rect x="165" y="170" width="10" height="260" rx="3" class="c-mask"/>
+        <rect x="165" y="170" width="10" height="260" rx="3" class="c-security" stroke-width="1"/>
+        <rect x="273" y="290" width="10" height="80" rx="3" class="c-mask"/>
+        <rect x="273" y="290" width="10" height="80" rx="3" class="c-security" stroke-width="1"/>
+        <rect x="489" y="520" width="10" height="230" rx="3" class="c-mask"/>
+        <rect x="489" y="520" width="10" height="230" rx="3" class="c-backend" stroke-width="1"/>
+
+        <!-- Messages -->
+        <g data-edge-from="backup_script" data-edge-to="db" data-edge-label="1. Executa docker exec pg_dump -Fc" data-edge-key="0">
+          <path data-composition-edge-from="backup_script" data-composition-edge-to="db" data-composition-points="163,180;69,180" d="M 163 180 L 69 180" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="21.599999999999994" y="160" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="170" class="t-backend" font-size="9" text-anchor="middle">1. Executa docker exec pg_dump -Fc</text>
+        </g>
         </g>
 
-        <g id="node-paperclip" data-node-id="paperclip" data-node-label="PaperClip UI" tabindex="0" role="button" aria-label="Focus PaperClip UI, Node.js :3100, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Node.js :3100" data-node-tag="Squad Dashboard" data-node-context="Docker Compose Bridge Network (pcl-net)">
-          <title>PaperClip UI · Node.js :3100 · Docker Compose Bridge Network (pcl-net) · Squad Dashboard</title>
-          <rect x="260" y="240" width="140" height="60" rx="6" class="c-mask"/>
-          <rect x="260" y="240" width="140" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(266 246) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-detail-anchor x="330" y="268" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PaperClip UI</text>
-        <text data-detail="context" x="330" y="284" class="t-muted" font-size="9" text-anchor="middle">Node.js :3100</text>
-        <text data-detail="fine" x="330" y="292" class="t-backend" font-size="7" text-anchor="middle">Squad Dashboard</text>
+        <g data-edge-from="db" data-edge-to="backup_script" data-edge-label="2. Retorna dump comprimido (.dump)" data-edge-key="1">
+          <path data-composition-edge-from="db" data-composition-edge-to="backup_script" data-composition-points="69,240;163,240" d="M 69 240 L 163 240" class="a-default" data-animate="edge" style="--step:1" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="21.599999999999994" y="220" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="230" class="t-muted" font-size="9" text-anchor="middle">2. Retorna dump comprimido (.dump)</text>
+        </g>
         </g>
 
-        <g id="node-omniroute" data-node-id="omniroute" data-node-label="OmniRoute Gateway" tabindex="0" role="button" aria-label="Focus OmniRoute Gateway, AI Proxy :20130, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="AI Proxy :20130" data-node-tag="EBITDA Shield" data-node-context="Docker Compose Bridge Network (pcl-net)">
-          <title>OmniRoute Gateway · AI Proxy :20130 · Docker Compose Bridge Network (pcl-net) · EBITDA Shield</title>
-          <rect x="500" y="240" width="150" height="60" rx="6" class="c-mask"/>
-          <rect x="500" y="240" width="150" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(506 246) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-detail-anchor x="575" y="268" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OmniRoute Gateway</text>
-        <text data-detail="context" x="575" y="284" class="t-muted" font-size="9" text-anchor="middle">AI Proxy :20130</text>
-        <text data-detail="fine" x="575" y="292" class="t-backend" font-size="7" text-anchor="middle">EBITDA Shield</text>
+        <g data-edge-from="backup_script" data-edge-to="openssl" data-edge-label="3. Aplica AES-256-CBC + PBKDF2" data-edge-key="2">
+          <path data-composition-edge-from="backup_script" data-composition-edge-to="openssl" data-composition-points="177,300;271,300" d="M 177 300 L 271 300" class="a-security" data-animate="edge" style="--step:2" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <g data-detail="context">
+          <rect x="140" y="280" width="168" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="290" class="t-security" font-size="9" text-anchor="middle">3. Aplica AES-256-CBC + PBKDF2</text>
+        </g>
         </g>
 
-        <g id="node-db" data-node-id="db" data-node-label="pcl-db" tabindex="0" role="button" aria-label="Focus pcl-db, PostgreSQL 17 :5432, Docker Compose Bridge Network (pcl-net)" aria-pressed="false" data-node-kind="database" data-node-sublabel="PostgreSQL 17 :5432" data-node-tag="PGVector RAG" data-node-context="Docker Compose Bridge Network (pcl-net)">
-          <title>pcl-db · PostgreSQL 17 :5432 · Docker Compose Bridge Network (pcl-net) · PGVector RAG</title>
-          <rect x="260" y="420" width="140" height="60" rx="6" class="c-mask"/>
-          <rect x="260" y="420" width="140" height="60" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(266 426) scale(0.6875)">
+        <g data-edge-from="openssl" data-edge-to="backup_script" data-edge-label="4. Retorna .dump.enc cifrado + SHA-256" data-edge-key="3">
+          <path data-composition-edge-from="openssl" data-composition-edge-to="backup_script" data-composition-points="271,360;177,360" d="M 271 360 L 177 360" class="a-default" data-animate="edge" style="--step:3" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="119.2" y="340" width="209.6" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="350" class="t-muted" font-size="9" text-anchor="middle">4. Retorna .dump.enc cifrado + SHA-256</text>
+        </g>
+        </g>
+
+        <g data-edge-from="backup_script" data-edge-to="r2" data-edge-label="5. Push Unidirecional (Wrangler / R2)" data-edge-key="4">
+          <path data-composition-edge-from="backup_script" data-composition-edge-to="r2" data-composition-points="177,420;379,420" d="M 177 420 L 379 420" class="a-emphasis" data-animate="edge" style="--step:4" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="175.8" y="400" width="204.4" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="410" class="t-backend" font-size="9" text-anchor="middle">5. Push Unidirecional (Wrangler / R2)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="drp_script" data-edge-to="r2" data-edge-label="6. [DRP Trigger] Requisita último snapshot cifrado" data-edge-key="5">
+          <path data-composition-edge-from="drp_script" data-composition-edge-to="r2" data-composition-points="487,540;393,540" d="M 487 540 L 393 540" class="a-emphasis" data-animate="edge" style="--step:5" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="304" y="520" width="272" height="16" rx="3" class="c-mask"/>
+          <text x="440" y="530" class="t-backend" font-size="9" text-anchor="middle">6. [DRP Trigger] Requisita último snapshot cifrado</text>
+        </g>
+        </g>
+
+        <g data-edge-from="r2" data-edge-to="drp_script" data-edge-label="7. Download de .dump.enc cifrado ($0 Egress)" data-edge-key="6">
+          <path data-composition-edge-from="r2" data-composition-edge-to="drp_script" data-composition-points="393,600;487,600" d="M 393 600 L 487 600" class="a-default" data-animate="edge" style="--step:6" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="319.6" y="580" width="240.8" height="16" rx="3" class="c-mask"/>
+          <text x="440" y="590" class="t-muted" font-size="9" text-anchor="middle">7. Download de .dump.enc cifrado ($0 Egress)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="drp_script" data-edge-to="openssl" data-edge-label="8. Descriptografa via chave mestra AES-256" data-edge-key="7">
+          <path data-composition-edge-from="drp_script" data-composition-edge-to="openssl" data-composition-points="487,660;285,660" d="M 487 660 L 285 660" class="a-security" data-animate="edge" style="--step:7" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <g data-detail="context">
+          <rect x="270.8" y="640" width="230.4" height="16" rx="3" class="c-mask"/>
+          <text x="386" y="650" class="t-security" font-size="9" text-anchor="middle">8. Descriptografa via chave mestra AES-256</text>
+        </g>
+        </g>
+
+        <g data-edge-from="drp_script" data-edge-to="db" data-edge-label="9. Executa pg_restore --clean (RTO &lt;= 15min)" data-edge-key="8">
+          <path data-composition-edge-from="drp_script" data-composition-edge-to="db" data-composition-points="487,740;69,740" d="M 487 740 L 69 740" class="a-emphasis" data-animate="edge" style="--step:8" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="157.6" y="720" width="240.8" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="730" class="t-backend" font-size="9" text-anchor="middle">9. Executa pg_restore --clean (RTO &lt;= 15min)</text>
+        </g>
+        </g>
+
+        <!-- Segment Labels -->
+        <g data-graph-role="segment-label" data-segment-id="0">
+          <rect x="56" y="128" width="206.4" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="141" class="t-dim" font-size="9" font-weight="600">Pipeline de Backup Frio (Longo Prazo)</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="1">
+          <rect x="56" y="458" width="216.8" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="471" class="t-dim" font-size="9" font-weight="600">Plano de Recuperação de Desastres (DRP)</text>
+        </g>
+
+        <!-- Participants -->
+        <g id="node-db" data-node-id="db" data-node-label="pcl-db" tabindex="0" role="button" aria-label="Focus pcl-db, PostgreSQL 17, Sequence participant" aria-pressed="false" data-node-kind="database" data-node-sublabel="PostgreSQL 17" data-node-context="Sequence participant">
+          <title>pcl-db · PostgreSQL 17 · Sequence participant</title>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-database" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(25 78) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-detail-anchor x="330" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">pcl-db</text>
-        <text data-detail="context" x="330" y="464" class="t-muted" font-size="9" text-anchor="middle">PostgreSQL 17 :5432</text>
-        <text data-detail="fine" x="330" y="472" class="t-database" font-size="7" text-anchor="middle">PGVector RAG</text>
+          <text data-detail-anchor x="62" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">pcl-db</text>
+          <text data-detail="context" x="62" y="111" class="t-muted" font-size="7" text-anchor="middle">PostgreSQL 17</text>
         </g>
 
-        <g id="node-backup_engine" data-node-id="backup_engine" data-node-label="PCL Backup &amp; DRP" tabindex="0" role="button" aria-label="Focus PCL Backup &amp; DRP, AES-256 + SHA-256, Host Infrastructure &amp; Edge Cloudflare Zero Trust" aria-pressed="false" data-node-kind="security" data-node-sublabel="AES-256 + SHA-256" data-node-tag="Memória Tripartida" data-node-context="Host Infrastructure &amp; Edge Cloudflare Zero Trust">
-          <title>PCL Backup &amp; DRP · AES-256 + SHA-256 · Host Infrastructure &amp; Edge Cloudflare Zero Trust · Memória Tripartida</title>
-          <rect x="500" y="420" width="150" height="60" rx="6" class="c-mask"/>
-          <rect x="500" y="420" width="150" height="60" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(506 426) scale(0.6875)">
+        <g id="node-backup_script" data-node-id="backup_script" data-node-label="Backup Engine" tabindex="0" role="button" aria-label="Focus Backup Engine, PowerShell / Bash, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="PowerShell / Bash" data-node-context="Sequence participant">
+          <title>Backup Engine · PowerShell / Bash · Sequence participant</title>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(133 78) scale(0.6875)">
             <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
             <path d="m5.8 8 1.5 1.5 3-3"/>
           </g>
-          <text data-detail-anchor x="575" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PCL Backup &amp; DRP</text>
-        <text data-detail="context" x="575" y="464" class="t-muted" font-size="9" text-anchor="middle">AES-256 + SHA-256</text>
-        <text data-detail="fine" x="575" y="472" class="t-security" font-size="7" text-anchor="middle">Memória Tripartida</text>
+          <text data-detail-anchor x="170" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Backup Engine</text>
+          <text data-detail="context" x="170" y="111" class="t-muted" font-size="7" text-anchor="middle">PowerShell / Bash</text>
         </g>
 
-        <g id="node-r2_storage" data-node-id="r2_storage" data-node-label="Cloudflare R2" tabindex="0" role="button" aria-label="Focus Cloudflare R2, S3-Compatible $0.00, Host Infrastructure &amp; Edge Cloudflare Zero Trust" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="S3-Compatible $0.00" data-node-tag="Cold Storage" data-node-context="Host Infrastructure &amp; Edge Cloudflare Zero Trust">
-          <title>Cloudflare R2 · S3-Compatible $0.00 · Host Infrastructure &amp; Edge Cloudflare Zero Trust · Cold Storage</title>
-          <rect x="740" y="420" width="150" height="60" rx="6" class="c-mask"/>
-          <rect x="740" y="420" width="150" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(746 426) scale(0.6875)">
+        <g id="node-openssl" data-node-id="openssl" data-node-label="OpenSSL" tabindex="0" role="button" aria-label="Focus OpenSSL, AES-256-CBC, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="AES-256-CBC" data-node-context="Sequence participant">
+          <title>OpenSSL · AES-256-CBC · Sequence participant</title>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(241 78) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="278" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OpenSSL</text>
+          <text data-detail="context" x="278" y="111" class="t-muted" font-size="7" text-anchor="middle">AES-256-CBC</text>
+        </g>
+
+        <g id="node-r2" data-node-id="r2" data-node-label="Cloudflare R2" tabindex="0" role="button" aria-label="Focus Cloudflare R2, S3 Bucket, Sequence participant" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="S3 Bucket" data-node-context="Sequence participant">
+          <title>Cloudflare R2 · S3 Bucket · Sequence participant</title>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-cloud" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(349 78) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-detail-anchor x="815" y="448" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloudflare R2</text>
-        <text data-detail="context" x="815" y="464" class="t-muted" font-size="9" text-anchor="middle">S3-Compatible $0.00</text>
-        <text data-detail="fine" x="815" y="472" class="t-cloud" font-size="7" text-anchor="middle">Cold Storage</text>
+          <text data-detail-anchor x="386" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloudflare R2</text>
+          <text data-detail="context" x="386" y="111" class="t-muted" font-size="7" text-anchor="middle">S3 Bucket</text>
         </g>
 
-        <g id="node-cloudflare_mcp" data-node-id="cloudflare_mcp" data-node-label="Cloudflare MCP" tabindex="0" role="button" aria-label="Focus Cloudflare MCP, @promptcore-labs/mcp, Host Infrastructure &amp; Edge Cloudflare Zero Trust" aria-pressed="false" data-node-kind="backend" data-node-sublabel="@promptcore-labs/mcp" data-node-tag="Zero Trust MCP" data-node-context="Host Infrastructure &amp; Edge Cloudflare Zero Trust">
-          <title>Cloudflare MCP · @promptcore-labs/mcp · Host Infrastructure &amp; Edge Cloudflare Zero Trust · Zero Trust MCP</title>
-          <rect x="740" y="240" width="150" height="60" rx="6" class="c-mask"/>
-          <rect x="740" y="240" width="150" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(746 246) scale(0.6875)">
+        <g id="node-drp_script" data-node-id="drp_script" data-node-label="DRP Engine" tabindex="0" role="button" aria-label="Focus DRP Engine, Disaster Recovery, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Disaster Recovery" data-node-context="Sequence participant">
+          <title>DRP Engine · Disaster Recovery · Sequence participant</title>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(457 78) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-detail-anchor x="815" y="268" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cloudflare MCP</text>
-        <text data-detail="context" x="815" y="284" class="t-muted" font-size="9" text-anchor="middle">@promptcore-labs/mcp</text>
-        <text data-detail="fine" x="815" y="292" class="t-backend" font-size="7" text-anchor="middle">Zero Trust MCP</text>
-        </g>
-
-        <g id="node-tailscale" data-node-id="tailscale" data-node-label="Tailscale VPN" tabindex="0" role="button" aria-label="Focus Tailscale VPN, Mesh Network, Architecture component" aria-pressed="false" data-node-kind="security" data-node-sublabel="Mesh Network" data-node-context="Architecture component">
-          <title>Tailscale VPN · Mesh Network · Architecture component</title>
-          <rect x="50" y="360" width="140" height="60" rx="6" class="c-mask"/>
-          <rect x="50" y="360" width="140" height="60" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(56 366) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
-          </g>
-          <text data-detail-anchor x="120" y="388" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Tailscale VPN</text>
-        <text data-detail="context" x="120" y="404" class="t-muted" font-size="9" text-anchor="middle">Mesh Network</text>
-        </g>
-
-        <!-- Connection labels -->
-        <g data-detail="context" data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Processa Projetos" data-edge-key="0" data-edge-id="paperclip-workspace">
-          <rect x="189.2" y="176.5" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="235" y="186.5" class="t-messagebus" font-size="8" text-anchor="middle">Processa Projetos</text>
-        </g>
-        <g data-detail="context" data-edge-from="paperclip" data-edge-to="db" data-edge-label="Memória Holding" data-edge-key="1" data-edge-id="paperclip-db">
-          <rect x="289" y="310" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="330" y="320" class="t-muted" font-size="8" text-anchor="middle">Memória Holding</text>
-        </g>
-        <g data-detail="context" data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute">
-          <rect x="401.8" y="250" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
-          <text x="450" y="260" class="t-backend" font-size="8" text-anchor="middle">Reqs de Inferência</text>
-        </g>
-        <g data-detail="context" data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="3" data-edge-id="db-backup">
-          <rect x="418.6" y="430" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="450" y="440" class="t-security" font-size="8" text-anchor="middle">pg_dump -Fc</text>
-        </g>
-        <g data-detail="context" data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="4" data-edge-id="backup-r2">
-          <rect x="661.2" y="430" width="67.6" height="14" rx="3" class="c-mask"/>
-          <text x="695" y="440" class="t-backend" font-size="8" text-anchor="middle">AES-256 Push</text>
-        </g>
-        <g data-detail="context" data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="5" data-edge-id="mcp-cloudflare">
-          <rect x="764.4" y="310" width="101.2" height="14" rx="3" class="c-mask"/>
-          <text x="815" y="320" class="t-messagebus" font-size="8" text-anchor="middle">API Audit &amp; Control</text>
-        </g>
-        <g data-detail="context" data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="6" data-edge-id="tailscale-host">
-          <rect x="191.2" y="313.5" width="67.6" height="14" rx="3" class="c-mask"/>
-          <text x="225" y="323.5" class="t-security" font-size="8" text-anchor="middle">Túnel Seguro</text>
+          <text data-detail-anchor x="494" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">DRP Engine</text>
+          <text data-detail="context" x="494" y="111" class="t-muted" font-size="7" text-anchor="middle">Disaster Recovery</text>
         </g>
 
         <!-- Legend -->
-        <g data-legend-bridge>
-          <text x="40" y="539" class="t-primary" font-size="9" font-weight="600">Legend</text>
-          <g data-legend-kind="cloud">
-            <rect x="40" y="544" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
-            <text x="60" y="552" class="t-muted" font-size="8">Cloud</text>
-          </g>
-          <g data-legend-kind="backend">
-            <rect x="129" y="544" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
-            <text x="149" y="552" class="t-muted" font-size="8">Backend</text>
-          </g>
-          <g data-legend-kind="database">
-            <rect x="228" y="544" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
-            <text x="248" y="552" class="t-muted" font-size="8">Database</text>
-          </g>
-          <g data-legend-kind="security">
-            <rect x="332" y="544" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
-            <text x="352" y="552" class="t-muted" font-size="8">Security</text>
-          </g>
-        </g>
+        <text x="150" y="806" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 150 826 L 184 826" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="193" y="829" class="t-muted" font-size="8">request</text>
+        <path d="M 270 826 L 304 826" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <text x="313" y="829" class="t-muted" font-size="8">return</text>
+        <path d="M 385 826 L 419 826" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="428" y="829" class="t-muted" font-size="8">security</text>
+        <path d="M 530 826 L 564 826" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="573" y="829" class="t-muted" font-size="8">async trace</text>
       </svg>
       <p class="intent-trace-status no-print" id="intent-trace-status" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="share-chapter-cue no-print" id="share-chapter-cue" hidden role="status" aria-live="polite">
@@ -4919,40 +4927,29 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Orquestração Core</h3>
+          <h3>Criptografia Zero Trust</h3>
         </div>
         <ul>
-          <li>&bull; Contêineres centrais sustentam a Holding simultaneamente</li>
-          <li>&bull; PostgreSQL 17 atuando como Memória RAG central das verticais</li>
+          <li>&bull; Nenhum dado desprotegido trafega fora da máquina local</li>
+          <li>&bull; Criptografia AES-256 com PBKDF2 de 100.000 iterações</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot emerald"></div>
-          <h3>Memória Tripartida &amp; R2</h3>
+          <h3>SLAs de Resiliência</h3>
         </div>
         <ul>
-          <li>&bull; Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)</li>
-          <li>&bull; Plano de Recuperação de Desastres (DRP) com RTO &lt;= 15min</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot rose"></div>
-          <h3>Segurança &amp; MCP</h3>
-        </div>
-        <ul>
-          <li>&bull; Rede Mesh Tailscale garante acesso remoto criptografado</li>
-          <li>&bull; Cloudflare MCP Server viabiliza gestão Zero Trust via IDE</li>
+          <li>&bull; RPO &lt;= 24h para Cold SQL / RPO &lt;= 1h para Event Docs</li>
+          <li>&bull; RTO &lt;= 15min (Testado na prática com restauração em 4s)</li>
         </ul>
       </div>
     </div>
 
     <!-- Footer -->
     <p class="footer">
-      Architecture diagram &bull; Built with Archify<span class="no-print"> &bull; <a class="artifact-start-link" href="https://tt-a1i.github.io/archify/start.html?type=architecture&amp;source=artifact" target="_blank" rel="noopener noreferrer">Create yours &nearr;</a> &bull; Hover to trace &bull; <kbd>R</kbd> route &bull; Click to focus &bull; <kbd>+</kbd>/<kbd>&minus;</kbd> zoom &bull; <kbd>M</kbd> radar &bull; <kbd>[</kbd>/<kbd>]</kbd> views &bull; <kbd>P</kbd> play story &bull; <kbd>T</kbd> theme &bull; <kbd>E</kbd> export</span>
+      Sequence diagram &bull; Built with Archify<span class="no-print"> &bull; <a class="artifact-start-link" href="https://tt-a1i.github.io/archify/start.html?type=sequence&amp;source=artifact" target="_blank" rel="noopener noreferrer">Create yours &nearr;</a> &bull; Hover to trace &bull; <kbd>R</kbd> route &bull; Click to focus &bull; <kbd>+</kbd>/<kbd>&minus;</kbd> zoom &bull; <kbd>M</kbd> radar &bull; <kbd>T</kbd> theme &bull; <kbd>E</kbd> export</span>
     </p>
   </div>
 

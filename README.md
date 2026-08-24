@@ -201,6 +201,30 @@ docker compose down
 
 ---
 
+### PASSO 5: MEMÓRIA TRIPARTIDA, CLOUDFLARE & DRP (DISASTER RECOVERY PLAN)
+
+> **O que você vai aprender aqui:** A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero ($0.00/mês), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO $\le$ 1h/24h e RTO $\le$ 15min.
+
+#### Scripts da Memória Tripartida & DRP Engine
+
+```powershell
+# Executar o backup completo da Memória de Longo Prazo (PostgreSQL pcl-db + AES-256 + Cloudflare R2)
+powershell -ExecutionPolicy Bypass -File "scripts/backup/backup-aeos-tripartido.ps1" -Mode cron
+
+# Testar o Plano de Recuperação de Desastres (DRP) em 1 comando
+powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido.ps1"
+```
+
+#### Tabela da Memória Tripartida & SLAs de DRP
+
+| Camada | Escopo & Tecnologia | Destino / Nuvem | SLA & Frequência |
+|---|---|---|---|
+| **Longo Prazo (Cold SQL)** | Dump `pcl-db` (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum | **Cloudflare R2 Bucket** (`pcl-backup-memoria-tripartida`) | **RPO $\le$ 24h** / **RTO $\le$ 15min** |
+| **Médio Prazo (Event Docs)** | Snapshots de arquivos de estado (`STATE.md`), playbooks e documentação viva | **Cloudflare R2 Bucket** (`/medium-term/`) | **RPO $\le$ 1h** (Event-Driven) |
+| **Borda Ativa (Hot Sync)** | Sincronização de metadados relacionais e índices vetoriais RAG | **Cloudflare D1 & Vectorize** | **RPO < 5min** (Edge Push) |
+
+---
+
 ### 📑 TAXONOMIA E ESTRUTURA DO REPOSITÓRIO (14 DIRETÓRIOS)
 
 | Diretório | Responsabilidade Arquitetural | Tipo |

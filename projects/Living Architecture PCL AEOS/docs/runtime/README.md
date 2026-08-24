@@ -54,4 +54,12 @@ sequenceDiagram
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
 - 🟡 **[seq-omniroute-routing.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
+- 🟡 **[seq-tripartite-memory-drp.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
 - 🟡 **[life-cortex-micro-loop.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
+
+---
+
+## 5. RESILIÊNCIA & MEMÓRIA TRIPARTIDA
+- **Cold SQL Backup (Longo Prazo)**: Snapshots de `pcl-db` compactados e criptografados em AES-256 enviados para o Cloudflare R2 (`pcl-backup-memoria-tripartida`).
+- **Disaster Recovery Plan (DRP)**: SLAs de RPO $\le$ 1h/24h e RTO $\le$ 15min. Restauração executada via `restore-aeos-tripartido.ps1`.
+- **MCP Server Cloudflare**: Integração com a IDE para monitoramento e gestão do ecossistema.

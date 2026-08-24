@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Ciclo de Vida da Memória Tripartida & DRP (Disaster Recovery Plan)",
+    "subtitle": "Fluxo de Backup Cifrado AES-256, Cloudflare R2 ($0.00/mês) e Restauração Automatizada",
+    "output": "seq-tripartite-memory-drp.html",
+    "viewBox": [800, 880],
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "db", "type": "database", "label": "pcl-db", "sublabel": "PostgreSQL 17" },
+    { "id": "backup_script", "type": "security", "label": "Backup Engine", "sublabel": "PowerShell / Bash" },
+    { "id": "openssl", "type": "security", "label": "OpenSSL", "sublabel": "AES-256-CBC" },
+    { "id": "r2", "type": "cloud", "label": "Cloudflare R2", "sublabel": "S3 Bucket" },
+    { "id": "drp_script", "type": "backend", "label": "DRP Engine", "sublabel": "Disaster Recovery" }
+  ],
+  "segments": [
+    { "from": 150, "to": 450, "label": "Pipeline de Backup Frio (Longo Prazo)" },
+    { "from": 480, "to": 780, "label": "Plano de Recuperação de Desastres (DRP)" }
+  ],
+  "messages": [
+    { "from": "backup_script", "to": "db", "y": 180, "label": "1. Executa docker exec pg_dump -Fc", "variant": "emphasis" },
+    { "from": "db", "to": "backup_script", "y": 240, "label": "2. Retorna dump comprimido (.dump)", "variant": "return" },
+    { "from": "backup_script", "to": "openssl", "y": 300, "label": "3. Aplica AES-256-CBC + PBKDF2", "variant": "security" },
+    { "from": "openssl", "to": "backup_script", "y": 360, "label": "4. Retorna .dump.enc cifrado + SHA-256", "variant": "return" },
+    { "from": "backup_script", "to": "r2", "y": 420, "label": "5. Push Unidirecional (Wrangler / R2)", "variant": "emphasis" },
+    { "from": "drp_script", "to": "r2", "y": 540, "label": "6. [DRP Trigger] Requisita último snapshot cifrado", "variant": "emphasis" },
+    { "from": "r2", "to": "drp_script", "y": 600, "label": "7. Download de .dump.enc cifrado ($0 Egress)", "variant": "return" },
+    { "from": "drp_script", "to": "openssl", "y": 660, "label": "8. Descriptografa via chave mestra AES-256", "variant": "security" },
+    { "from": "drp_script", "to": "db", "y": 740, "label": "9. Executa pg_restore --clean (RTO <= 15min)", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "backup_script", "from": 170, "to": 430, "type": "security" },
+    { "participant": "openssl", "from": 290, "to": 370, "type": "security" },
+    { "participant": "drp_script", "from": 520, "to": 750, "type": "backend" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Criptografia Zero Trust", "items": ["Nenhum dado desprotegido trafega fora da máquina local", "Criptografia AES-256 com PBKDF2 de 100.000 iterações"] },
+    { "dot": "emerald", "title": "SLAs de Resiliência", "items": ["RPO <= 24h para Cold SQL / RPO <= 1h para Event Docs", "RTO <= 15min (Testado na prática com restauração em 4s)"] }
+  ]
+}

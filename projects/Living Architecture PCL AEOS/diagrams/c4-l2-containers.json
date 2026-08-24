@@ -2,8 +2,8 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "C4 Nível 2 — Contêineres do System Harness (Container Diagram)",
-    "subtitle": "Topologia da Plataforma Core (Harness) alimentando 15 Verticais B2B",
+    "title": "C4 Nível 2 — Contêineres do System Harness & Memória Tripartida",
+    "subtitle": "Topologia da Plataforma Core (Harness), Cloudflare MCP & Resiliência R2/D1/Vectorize",
     "output": "c4-l2-containers.html",
     "quality_profile": "showcase",
     "views": [
@@ -11,40 +11,42 @@
         "id": "docker-harness",
         "label": "Plataforma Core Docker",
         "focus": ["paperclip", "omniroute", "db"],
-        "note": "Contêineres locais que viabilizam o custo marginal zero."
+        "note": "Contêineres locais que viabilizam a operação de custo marginal zero."
       },
       {
-        "id": "model-routing",
-        "label": "Roteamento de Modelos",
-        "focus": ["omniroute", "local_gpu", "cloud_apis"],
-        "note": "OmniRoute com EBITDA Shield chaveando entre GPU Local e Cloud APIs."
+        "id": "tripartite-memory",
+        "label": "Memória Tripartida & R2",
+        "focus": ["db", "backup_engine", "r2_storage", "cloudflare_mcp"],
+        "note": "Backup frio cifrado em AES-256 no R2 com SLAs RPO <= 1h/24h e RTO <= 15min."
       }
     ]
   },
   "components": [
-    { "id": "workspace", "type": "cloud", "label": "Workspace Git (Verticais)", "sublabel": "Código das 15 Frentes", "pos": [50, 100], "size": [160, 60] },
+    { "id": "workspace", "type": "cloud", "label": "Workspace Git", "sublabel": "Código das Verticais PCL", "pos": [50, 100], "size": [160, 60] },
     { "id": "paperclip", "type": "backend", "label": "PaperClip UI", "sublabel": "Node.js :3100", "pos": [260, 240], "size": [140, 60], "tag": "Squad Dashboard" },
     { "id": "omniroute", "type": "backend", "label": "OmniRoute Gateway", "sublabel": "AI Proxy :20130", "pos": [500, 240], "size": [150, 60], "tag": "EBITDA Shield" },
     { "id": "db", "type": "database", "label": "pcl-db", "sublabel": "PostgreSQL 17 :5432", "pos": [260, 420], "size": [140, 60], "tag": "PGVector RAG" },
-    { "id": "local_gpu", "type": "cloud", "label": "Local GPU Models", "sublabel": "Ollama / LM Studio", "pos": [740, 120], "size": [150, 60] },
-    { "id": "cloud_apis", "type": "cloud", "label": "Cloud LLM APIs", "sublabel": "Gemini / Claude API", "pos": [740, 360], "size": [150, 60] },
+    { "id": "backup_engine", "type": "security", "label": "PCL Backup & DRP", "sublabel": "AES-256 + SHA-256", "pos": [500, 420], "size": [150, 60], "tag": "Memória Tripartida" },
+    { "id": "r2_storage", "type": "cloud", "label": "Cloudflare R2", "sublabel": "S3-Compatible $0.00", "pos": [740, 420], "size": [150, 60], "tag": "Cold Storage" },
+    { "id": "cloudflare_mcp", "type": "backend", "label": "Cloudflare MCP", "sublabel": "@promptcore-labs/mcp", "pos": [740, 240], "size": [150, 60], "tag": "Zero Trust MCP" },
     { "id": "tailscale", "type": "security", "label": "Tailscale VPN", "sublabel": "Mesh Network", "pos": [50, 360], "size": [140, 60] }
   ],
   "boundaries": [
     { "kind": "region", "label": "Docker Compose Bridge Network (pcl-net)", "wraps": ["paperclip", "omniroute", "db"] },
-    { "kind": "security-group", "label": "Host Process & Inference Layer", "wraps": ["workspace", "local_gpu", "tailscale"] }
+    { "kind": "security-group", "label": "Host Infrastructure & Edge Cloudflare Zero Trust", "wraps": ["backup_engine", "r2_storage", "cloudflare_mcp"] }
   ],
   "connections": [
     { "id": "paperclip-workspace", "from": "paperclip", "to": "workspace", "label": "Processa Projetos", "variant": "dashed" },
     { "id": "paperclip-db", "from": "paperclip", "to": "db", "label": "Memória Holding", "fromSide": "bottom", "toSide": "top", "labelDy": 30 },
     { "id": "paperclip-omniroute", "from": "paperclip", "to": "omniroute", "label": "Reqs de Inferência", "variant": "emphasis" },
-    { "id": "omniroute-local", "from": "omniroute", "to": "local_gpu", "label": "Inferência $0 Cost", "variant": "dashed" },
-    { "id": "omniroute-cloud", "from": "omniroute", "to": "cloud_apis", "label": "Fallback Cloud", "variant": "emphasis" },
+    { "id": "db-backup", "from": "db", "to": "backup_engine", "label": "pg_dump -Fc", "variant": "security" },
+    { "id": "backup-r2", "from": "backup_engine", "to": "r2_storage", "label": "AES-256 Push", "variant": "emphasis" },
+    { "id": "mcp-cloudflare", "from": "cloudflare_mcp", "to": "r2_storage", "label": "API Audit & Control", "variant": "dashed", "labelDy": 30 },
     { "id": "tailscale-host", "from": "tailscale", "to": "paperclip", "label": "Túnel Seguro", "variant": "security" }
   ],
   "cards": [
     { "dot": "cyan", "title": "Orquestração Core", "items": ["Contêineres centrais sustentam a Holding simultaneamente", "PostgreSQL 17 atuando como Memória RAG central das verticais"] },
-    { "dot": "emerald", "title": "Custo Marginal Zero", "items": ["OmniRoute gerencia roteamento e prompt caching global", "EBITDA Shield absorve requisições, eliminando custo variável"] },
-    { "dot": "rose", "title": "Acesso e Tunelamento", "items": ["Rede Mesh Tailscale garante acesso remoto criptografado"] }
+    { "dot": "emerald", "title": "Memória Tripartida & R2", "items": ["Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)", "Plano de Recuperação de Desastres (DRP) com RTO <= 15min"] },
+    { "dot": "rose", "title": "Segurança & MCP", "items": ["Rede Mesh Tailscale garante acesso remoto criptografado", "Cloudflare MCP Server viabiliza gestão Zero Trust via IDE"] }
   ]
 }
