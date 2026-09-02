@@ -47,17 +47,18 @@ flowchart TD
 
 | Previsualização (Interativa) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **CORTEX DIAGRAM (HTML)**</a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *Cortex Engine*, mapeando a Plataforma Core (Cortex, OmniRoute, Paperclip), os 15 clusters B2B e a saída de monetização. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Operating Model](ADR-005) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="300" alt="DIAG-HOLD-01"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *Cortex Engine*, mapeando a Plataforma Core (Cortex, OmniRoute, Paperclip), os 15 clusters B2B e a saída de monetização. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Operating Model](ADR-005) |
 
 ---
 
-## 🧭 Trilho de Aprendizado Arquitetural em 5 Fases
+## 🧭 Trilho de Aprendizado Arquitetural em 6 Fases
 
 1. **[Passo 1: Visão Macro & Fundação](#passo-1-visão-macro--fundação-do-sistema)** — Conceito geral, Fronteiras C4 L1 e Contêineres Docker C4 L2.
 2. **[Passo 2: Squad de IA & Agentes](#passo-2-squad-de-ia--agentes-inteligentes)** — Manual dos 15 Agentes, Micro-Loop Cortex e Sequência DevEx.
 3. **[Passo 3: Conhecimento & RAG Vetorial](#passo-3-conhecimento--memória-persistente-rag)** — Ingestão RAG, Embeddings 768D e ERD PGVector.
 4. **[Passo 4: Infra, Runtime & Governança](#passo-4-infraestrutura-runtime--governança)** — AI Gateway OmniRoute, Tailscale e os 5 Stage Gates TLC v3.
 5. **[Passo 5: Memória Tripartida, Cloudflare & DRP](#passo-5-memória-tripartida-cloudflare--drp-disaster-recovery-plan)** — Backup Cifrado AES-256 no R2, Borda D1/Vectorize e DRP Engine.
+6. **[Passo 6: Execução Reativa & Failover Sob Demanda](#passo-6-execução-reativa--failover-sob-demanda-pcl-aeos-pilha-local)** — Inferência Reativa, Trigger-Based Watchers e Matriz de Portabilidade de Hardware.
 
 ---
 
@@ -236,6 +237,20 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 
 > **Inferência Reativa e Smart Failover**: A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com **0 MB de VRAM alocada**. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
 
+#### Diagrama de Sequência & Ciclo de Vida Reativo (Cortex Engine)
+
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.png" width="300" alt="DIAG-FAILOVER-01"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Representação da inteligência de alternância de estado gerada pelo *Cortex Engine*, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md)<br>[📖 Guia de Otimização VRAM](docs/hardware-vram-optimization.md) |
+
+#### Scripts de Automação Reativa (`scripts/windows/`)
+
+| Script PowerShell | Função Arquitetural | Comportamento de Memória |
+|---|---|---|
+| [`watch_network_trigger.ps1`](file:///c:/PromptCore_Labs/scripts/windows/watch_network_trigger.ps1) | Monitor de conectividade contínuo (Ping / Health Check a cada 10s) | Baixíssimo overhead de CPU/RAM (sem GPU) |
+| [`on_offline_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_offline_event.ps1) | Gatilho de Failover ativado na perda de rede/VPN | Executa `lms load --gpu max` sob demanda (~5.3 GB VRAM) |
+| [`on_online_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_online_event.ps1) | Gatilho de Restauração ativado ao retornar a conectividade | Executa `lms unload --all` (retorna VRAM para 0 MB) |
+
 #### Subir a Pilha Local & Monitor Reativo
 
 ```powershell
@@ -246,8 +261,9 @@ docker compose -f docker-compose.aeos.yml up -d
 powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1"
 ```
 
-#### Documentação de VRAM & Ciclo de Vida Reativo
-Consulte o guia técnico em [`docs/hardware-vram-optimization.md`](file:///c:/PromptCore_Labs/docs/hardware-vram-optimization.md) para detalhes sobre o ciclo de vida reativo (Trigger-Based Model Loading/Unloading), limites de contexto e alocação de memória na NVIDIA RTX 3050 (6 GB VRAM).
+#### Documentação de Portabilidade & VRAM
+* **[Guia Técnico de Portabilidade de Hardware](file:///c:/PromptCore_Labs/docs/hardware-portability-guide.md)**: Matriz de escala para qualquer especificação (4GB, 6GB, 8GB, 12GB+ VRAM ou CPU-only).
+* **[Guia Técnico de Otimização de VRAM](file:///c:/PromptCore_Labs/docs/hardware-vram-optimization.md)**: Detalhes de limites de contexto e quantização na NVIDIA RTX 3050.
 
 ---
 

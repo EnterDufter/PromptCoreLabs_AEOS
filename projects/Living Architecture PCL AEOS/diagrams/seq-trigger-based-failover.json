@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Trigger-Based On-Demand Failover & Hardware Portability Lifecycle",
+    "subtitle": "Ciclo de Vida Reativo de Inferência Local PCL AEOS (0 MB VRAM Online -> Trigger Offline -> VRAM Release)",
+    "type": "sequence",
+    "quality_profile": "showcase",
+    "version": "2.0"
+  },
+  "participants": [
+    { "id": "paperclip", "label": "PaperClip (Agentes)", "type": "frontend" },
+    { "id": "omniroute", "label": "OmniRoute (AI Gateway)", "type": "backend" },
+    { "id": "watcher", "label": "Network Watcher (.ps1)", "type": "security" },
+    { "id": "cloud_api", "label": "APIs Nuvem / Ollama Cloud", "type": "cloud" },
+    { "id": "lmstudio", "label": "LM Studio Local (Host)", "type": "database" }
+  ],
+  "messages": [
+    { "from": "watcher", "to": "cloud_api", "label": "1. Ping Health Check (Cada 10s)", "type": "status" },
+    { "from": "paperclip", "to": "omniroute", "label": "2. Requisição de Inferência (Model *)", "type": "normal" },
+    { "from": "omniroute", "to": "cloud_api", "label": "3. Roteamento Nuvem (VRAM Local = 0 MB)", "type": "normal" },
+    { "from": "watcher", "to": "watcher", "label": "4. DETECÇÃO DE QUEDA (Network Offline)", "type": "alert" },
+    { "from": "watcher", "to": "lmstudio", "label": "5. Dispara on_offline_event.ps1 (lms load --gpu max)", "type": "action" },
+    { "from": "lmstudio", "to": "lmstudio", "label": "6. Aloca Qwen2.5-Coder na GPU (~5.3 GB VRAM)", "type": "status" },
+    { "from": "omniroute", "to": "lmstudio", "label": "7. Smart Failover -> Inferência Local (Host 1234)", "type": "fallback" },
+    { "from": "watcher", "to": "watcher", "label": "8. RESTAURAÇÃO DE REDE (Network Online)", "type": "alert" },
+    { "from": "watcher", "to": "lmstudio", "label": "9. Dispara on_online_event.ps1 (lms unload --all)", "type": "action" },
+    { "from": "lmstudio", "to": "lmstudio", "label": "10. VRAM Liberada (Retorna a 0 MB Alocados)", "type": "status" }
+  ]
+}
