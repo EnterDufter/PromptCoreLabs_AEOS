@@ -232,6 +232,25 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 
 ---
 
+### ⚡ PASSO 6: EXECUÇÃO REATIVA & FAILOVER SOB DEMANDA (PCL AEOS PILHA LOCAL)
+
+> **Inferência Reativa e Smart Failover**: A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com **0 MB de VRAM alocada**. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
+
+#### Subir a Pilha Local & Monitor Reativo
+
+```powershell
+# 1. Subir os Contêineres Docker (OmniRoute + PaperClip + PostgreSQL)
+docker compose -f docker-compose.aeos.yml up -d
+
+# 2. Iniciar o Monitor Reativo de Conectividade e Recursos (Trigger-Based)
+powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1"
+```
+
+#### Documentação de VRAM & Ciclo de Vida Reativo
+Consulte o guia técnico em [`docs/hardware-vram-optimization.md`](file:///c:/PromptCore_Labs/docs/hardware-vram-optimization.md) para detalhes sobre o ciclo de vida reativo (Trigger-Based Model Loading/Unloading), limites de contexto e alocação de memória na NVIDIA RTX 3050 (6 GB VRAM).
+
+---
+
 ### 📑 TAXONOMIA E ESTRUTURA DO REPOSITÓRIO (14 DIRETÓRIOS)
 
 | Diretório | Responsabilidade Arquitetural | Tipo |

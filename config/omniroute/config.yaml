@@ -1,0 +1,121 @@
+# PCL AEOS OmniRoute Unified Gateway Configuration
+# Mode: Trigger-Based On-Demand Failover Strategy
+#
+# Estratégia de Recursos:
+# 1. Estado Online (Normal): 100% das requisições vão para Cloud (cloud_primary / ollama_cloud).
+#    Hardware local (RTX 3050 6GB VRAM) fica com 0 MB alocados.
+# 2. Estado Offline (Trigger): Na ausência de internet, o script de gatilho (on_offline_event.ps1)
+#    carrega o modelo local na VRAM sob demanda. O OmniRoute repassa as chamadas para lmstudio_local / ollama_local.
+
+gateway:
+  name: "PCL AEOS Unified Gateway"
+  port: 20130
+  strategy: "smart_failover"
+  timeout_ms: 30000
+  log_level: "info"
+
+providers:
+  # Priority 1: Cloud APIs Primárias (OpenRouter / APIs Nuvem)
+  cloud_primary:
+    name: "Remote Cloud Provider"
+    type: "openai"
+    enabled: true
+    priority: 1
+    base_url: "https://openrouter.ai/api/v1"
+    api_key: "${OPENROUTER_API_KEY:-sk-dummy-cloud-key}"
+    health_check:
+      enabled: true
+      endpoint: "https://openrouter.ai/api/v1/models"
+      interval_seconds: 15
+      timeout_ms: 2500
+
+  # Priority 2: Ollama Cloud API (Nuvem Gratuita - gpt-oss:120b / gemma4:31b)
+  ollama_cloud:
+    name: "Ollama Cloud API (Free Tier)"
+    type: "openai"
+    enabled: true
+    priority: 2
+    base_url: "https://api.ollama.com/v1"
+    api_key: "${OLLAMA_API_KEY:-sk-ollama-cloud-key}"
+    models:
+      - id: "gpt-oss:120b"
+        alias: "cloud-reasoning"
+        context_length: 32768
+      - id: "gemma4:31b"
+        alias: "cloud-coder"
+        context_length: 16384
+      - id: "gpt-oss:20b"
+        alias: "cloud-fast"
+        context_length: 16384
+    health_check:
+      enabled: true
+      endpoint: "https://api.ollama.com/v1/models"
+      interval_seconds: 15
+      timeout_ms: 3000
+
+  # Priority 3: LM Studio Local (Acionado SOB DEMANDA apenas no evento Offline)
+  lmstudio_local:
+    name: "LM Studio Local (On-Demand Host Windows)"
+    type: "openai"
+    enabled: true
+    priority: 3
+    on_demand_failover: true
+    base_url: "http://host.docker.internal:1234/v1"
+    api_key: "lm-studio"
+    models:
+      - id: "qwen2.5-coder-7b-instruct"
+        alias: "coder"
+        context_length: 8192
+      - id: "deepseek-coder-v2-lite-instruct"
+        alias: "moe-coder"
+        context_length: 8192
+    health_check:
+      enabled: true
+      endpoint: "http://host.docker.internal:1234/v1/models"
+      interval_seconds: 10
+      timeout_ms: 3000
+
+  # Priority 4: Ollama Local (Fallback Secundário Offline)
+  ollama_local:
+    name: "Ollama Local (On-Demand Host Windows)"
+    type: "openai"
+    enabled: true
+    priority: 4
+    on_demand_failover: true
+    base_url: "http://host.docker.internal:11434/v1"
+    api_key: "ollama"
+    models:
+      - id: "qwen2.5-coder:7b-instruct-q4_K_M"
+        alias: "coder-fallback"
+        context_length: 8192
+      - id: "gemma3:4b"
+        alias: "fast-fallback"
+        context_length: 8192
+    health_check:
+      enabled: true
+      endpoint: "http://host.docker.internal:11434/v1/models"
+      interval_seconds: 10
+      timeout_ms: 3000
+
+routing_rules:
+  - match:
+      model: "*"
+    strategy: "failover"
+    chain:
+      - "cloud_primary"
+      - "ollama_cloud"
+      - "lmstudio_local"
+      - "ollama_local"
+
+failover_policy:
+  enabled: true
+  triggers:
+    - "ENOTFOUND"
+    - "ECONNREFUSED"
+    - "ETIMEDOUT"
+    - "FETCH_ERROR"
+    - "HTTP_502"
+    - "HTTP_503"
+    - "HTTP_504"
+  max_retries_per_provider: 1
+  retry_delay_ms: 500

@@ -1,0 +1,79 @@
+name: pcl-aeos
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: pcl-db
+    restart: always
+    environment:
+      POSTGRES_USER: paperclip
+      POSTGRES_PASSWORD: paperclip
+      POSTGRES_DB: paperclip
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - aeos-net
+
+  omniroute:
+    build:
+      context: ./OmniRoute
+      dockerfile: Dockerfile
+    image: omniroute:cli
+    container_name: pcl-omniroute
+    restart: always
+    ports:
+      - "20130:20130"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - ./OmniRoute/.env
+    environment:
+      - PORT=20130
+      - DATA_DIR=/var/lib/omniroute
+      - INITIAL_PASSWORD=admin
+      - AUTH_DISABLED=1
+      - SKIP_LOGIN=1
+      - REQUIRE_LOGIN=false
+      - CONFIG_FILE=/var/lib/omniroute/config.yaml
+    volumes:
+      - omniroute-data:/var/lib/omniroute
+      - ./config/omniroute/config.yaml:/var/lib/omniroute/config.yaml:ro
+    networks:
+      - aeos-net
+
+  paperclip:
+    build: 
+      context: ./PaperClip
+      dockerfile: Dockerfile
+    container_name: pcl-paperclip
+    restart: always
+    ports:
+      - "3100:3100"
+    depends_on:
+      - db
+      - omniroute
+    env_file:
+      - ./PaperClip/.env
+    environment:
+      - DATABASE_URL=postgres://paperclip:paperclip@db:5432/paperclip
+      - OMNI_ROUTE_URL=http://omniroute:20130
+      - OPENAI_API_BASE=http://omniroute:20130/v1
+      - OPENAI_API_KEY=sk-omniroute-local
+      - PCL_HOME=/app
+      - COMPANIES_DIR=/app/companies
+    volumes:
+      - paperclip-storage:/app/storage
+      - ./PaperClip-Companies:/app/companies
+    networks:
+      - aeos-net
+
+networks:
+  aeos-net:
+    driver: bridge
+
+volumes:
+  db-data:
+  omniroute-data:
+  paperclip-storage:
