@@ -59,6 +59,36 @@ sequenceDiagram
     GPU-->>LMStudio: VRAM Liberada (Retorna a 0 MB Alocados)
 ```
 
+### 🔄 Máquina de Estados de Transição de VRAM (State Diagram)
+
+```mermaid
+stateDiagram-v2
+    [*] --> OnlineState : Conexão Ativa
+    
+    state OnlineState {
+        [*] --> CloudRouting
+        CloudRouting: OmniRoute -> Cloud APIs / Ollama Cloud
+        CloudRouting: VRAM Local = 0 GB Alocados
+    }
+    
+    OnlineState --> OfflineTrigger : Queda de Conexão / Ping Fail
+    
+    state OfflineState {
+        OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
+        TriggerScript --> LMSLoad : lms load qwen2.5-coder-7b --gpu max
+        LMSLoad --> LocalRouting : OmniRoute -> LM Studio Local (1234)
+    }
+    
+    OfflineState --> OnlineTrigger : Conexão Restabelecida
+    
+    state Restoration {
+        OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
+        UnloadScript --> LMSUnload : lms unload (VRAM Liberada)
+    }
+    
+    Restoration --> OnlineState
+```
+
 ---
 
 ## 📜 Especificação Detalhada dos Scripts de Automação (`scripts/windows/`)

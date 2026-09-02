@@ -56,9 +56,9 @@ flowchart TD
 1. **[Passo 1: Visão Macro & Fundação](#passo-1-visão-macro--fundação-do-sistema)** — Conceito geral, Fronteiras C4 L1 e Contêineres Docker C4 L2.
 2. **[Passo 2: Squad de IA & Agentes](#passo-2-squad-de-ia--agentes-inteligentes)** — Manual dos 15 Agentes, Micro-Loop Cortex e Sequência DevEx.
 3. **[Passo 3: Conhecimento & RAG Vetorial](#passo-3-conhecimento--memória-persistente-rag)** — Ingestão RAG, Embeddings 768D e ERD PGVector.
-4. **[Passo 4: Infra, Runtime & Governança](#passo-4-infraestrutura-runtime--governança)** — AI Gateway OmniRoute, Tailscale e os 5 Stage Gates TLC v3.
-5. **[Passo 5: Memória Tripartida, Cloudflare & DRP](#passo-5-memória-tripartida-cloudflare--drp-disaster-recovery-plan)** — Backup Cifrado AES-256 no R2, Borda D1/Vectorize e DRP Engine.
-6. **[Passo 6: Execução Reativa & Failover Sob Demanda](#passo-6-execução-reativa--failover-sob-demanda-pcl-aeos-pilha-local)** — Inferência Reativa, Trigger-Based Watchers e Matriz de Portabilidade de Hardware.
+4. **[Passo 4: Backup & DRP](#passo-4-backup--drp-disaster-recovery-plan)** — Backup Cifrado AES-256 no R2, Borda D1/Vectorize e DRP Engine.
+5. **[Passo 5: Infra, Runtime & Governança](#passo-5-infraestrutura-runtime--governança)** — AI Gateway OmniRoute, Tailscale e os 5 Stage Gates TLC v3.
+6. **[Passo 6: Execução Reativa & Failover Sob Demanda](#passo-6-execução-reativa--failover-sob-demanda-pcl-aeos-pilha-local)** — Inferência Reativa, Trigger-Based Watchers e Matriz de Portabilidade.
 
 ---
 
@@ -173,37 +173,7 @@ erDiagram
 
 ---
 
-### PASSO 4: INFRAESTRUTURA, RUNTIME & GOVERNANÇA
-
-> **O que você vai aprender aqui:** A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
-
-#### Quickstart: Comandos do Harness Local (Docker)
-
-```bash
-# Inicializar todos os serviços localmente
-docker compose up -d
-
-# Acompanhar logs de inferência e governança em tempo real
-docker compose logs -f
-
-# Parar contêineres preservando volumes persistentes
-docker compose down
-```
-
-#### Diagramas de Operação, Segurança e Stage Gates
-
-| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" width="300" alt="DIAG-SEQ-01"></a> | **DIAG-SEQ-01 • TLC Spec-Driven Execution Loop**<br>Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Matriz de Stage Gates](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="DIAG-SEQ-02"></a> | **DIAG-SEQ-02 • OmniRoute LLM Request Lifecycle**<br>Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo de Runtime](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="DIAG-INF-01"></a> | **DIAG-INF-01 • Network & Security Topology**<br>Topologia de rede física: isolamento de contêineres na sub-rede Docker `pcl-network` e malha de criptografia perimetral via Tailscale VPN Mesh. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Topologia de Rede](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="DIAG-GOV-01"></a> | **DIAG-GOV-01 • Governance & Stage Gates Matrix**<br>Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Regras de Stage Gate](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="DIAG-SEC-01"></a> | **DIAG-SEC-01 • Secret Management & Zero Trust**<br>Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no `.env` e auditoria de código. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Política Zero Trust](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" width="300" alt="DIAG-C4-04"></a> | **DIAG-C4-04 • Code-Level Class & Interface Specs**<br>Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos `deliver`, `validate`, `render`). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registros ADR](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md) |
-
----
-
-### PASSO 5: MEMÓRIA TRIPARTIDA, CLOUDFLARE & DRP (DISASTER RECOVERY PLAN)
+### PASSO 4: BACKUP & DRP (DISASTER RECOVERY PLAN)
 
 > **O que você vai aprender aqui:** A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero (`$0.00/mês`), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO ≤ 1h/24h e RTO ≤ 15min.
 
@@ -233,9 +203,69 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 
 ---
 
+### PASSO 5: INFRAESTRUTURA, RUNTIME & GOVERNANÇA
+
+> **O que você vai aprender aqui:** A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
+
+#### Quickstart: Comandos do Harness Local (Docker)
+
+```bash
+# Inicializar todos os serviços localmente
+docker compose up -d
+
+# Acompanhar logs de inferência e governança em tempo real
+docker compose logs -f
+
+# Parar contêineres preservando volumes persistentes
+docker compose down
+```
+
+#### Diagramas de Operação, Segurança e Stage Gates
+
+| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+|:---:|---|:---:|
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" width="300" alt="DIAG-SEQ-01"></a> | **DIAG-SEQ-01 • TLC Spec-Driven Execution Loop**<br>Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Matriz de Stage Gates](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="DIAG-SEQ-02"></a> | **DIAG-SEQ-02 • OmniRoute LLM Request Lifecycle**<br>Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Artigo de Runtime](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="DIAG-INF-01"></a> | **DIAG-INF-01 • Network & Security Topology**<br>Topologia de rede física: isolamento de contêineres na sub-rede Docker `pcl-network` e malha de criptografia perimetral via Tailscale VPN Mesh. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Topologia de Rede](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="DIAG-GOV-01"></a> | **DIAG-GOV-01 • Governance & Stage Gates Matrix**<br>Matriz formal de governança que define as assinaturas digitais, papéis executivos e requisitos de aprovação para cada avanço de etapa. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Regras de Stage Gate](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="DIAG-SEC-01"></a> | **DIAG-SEC-01 • Secret Management & Zero Trust**<br>Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no `.env` e auditoria de código. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Política Zero Trust](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" width="300" alt="DIAG-C4-04"></a> | **DIAG-C4-04 • Code-Level Class & Interface Specs**<br>Especificação em nível de código (Nível L4 C4) do compilador Cortex Archify CLI (módulos `deliver`, `validate`, `render`). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Registros ADR](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md) |
+
+---
+
 ### ⚡ PASSO 6: EXECUÇÃO REATIVA & FAILOVER SOB DEMANDA (PCL AEOS PILHA LOCAL)
 
 > **Inferência Reativa e Smart Failover**: A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com **0 MB de VRAM alocada**. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
+
+#### Diagrama de Máquina de Estados & Transição de VRAM
+
+```mermaid
+stateDiagram-v2
+    [*] --> OnlineState : Conexão Ativa
+    
+    state OnlineState {
+        [*] --> CloudRouting
+        CloudRouting: OmniRoute -> Cloud APIs / Ollama Cloud
+        CloudRouting: VRAM Local = 0 GB Alocados
+    }
+    
+    OnlineState --> OfflineTrigger : Queda de Conexão / Ping Fail
+    
+    state OfflineState {
+        OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
+        TriggerScript --> LMSLoad : lms load qwen2.5-coder-7b --gpu max
+        LMSLoad --> LocalRouting : OmniRoute -> LM Studio Local (1234)
+    }
+    
+    OfflineState --> OnlineTrigger : Conexão Restabelecida
+    
+    state Restoration {
+        OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
+        UnloadScript --> LMSUnload : lms unload (VRAM Liberada)
+    }
+    
+    Restoration --> OnlineState
+```
 
 #### Diagrama de Sequência & Ciclo de Vida Reativo (Cortex Engine)
 

@@ -853,7 +853,7 @@
         <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
         <div class="badge-bar">
           <span class="badge">v1.0 Sovereign</span>
-          <span class="badge">18 Diagramas Interativos</span>
+          <span class="badge">20 Diagramas Interativos</span>
           <span class="badge">TLC Spec-Driven v3</span>
           <span class="badge">100% Zero Trust</span>
         </div>
@@ -879,7 +879,9 @@
       <a href="#fase-1" class="phase-tab"><span class="phase-num">1</span> Visão Macro</a>
       <a href="#fase-2" class="phase-tab"><span class="phase-num">2</span> Squad IA</a>
       <a href="#fase-3" class="phase-tab"><span class="phase-num">3</span> RAG Memória</a>
-      <a href="#fase-4" class="phase-tab"><span class="phase-num">4</span> Infra & Governança</a>
+      <a href="#fase-4" class="phase-tab"><span class="phase-num">4</span> Backup & DRP</a>
+      <a href="#fase-5" class="phase-tab"><span class="phase-num">5</span> Infra & Governança</a>
+      <a href="#fase-6" class="phase-tab"><span class="phase-num">6</span> Failover Local</a>
     </div>
   </nav>
 
@@ -887,7 +889,7 @@
 
     <div class="hero-banner">
       <h2>🗺️ Trilho de Aprendizado Arquitetural & Living Architecture</h2>
-      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 4 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo ↗</strong> para explorar a versão interativa do diagrama em tela flutuante (90%).</p>
+      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 6 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo ↗</strong> para explorar a versão interativa do diagrama em tela flutuante (90%).</p>
     </div>
 
     <!-- ================================================== -->
@@ -895,7 +897,7 @@
     <!-- ================================================== -->
     <section id="fase-1" class="phase-section">
       <div class="phase-header">
-        <span class="phase-badge-title">Passo 1 de 4</span>
+        <span class="phase-badge-title">Passo 1 de 6</span>
         <h2 class="phase-title-text"> Visão Macro & Fundação do Sistema</h2>
       </div>
 
@@ -1014,7 +1016,7 @@ graph LR
     <!-- ================================================== -->
     <section id="fase-2" class="phase-section">
       <div class="phase-header">
-        <span class="phase-badge-title">Passo 2 de 4</span>
+        <span class="phase-badge-title">Passo 2 de 6</span>
         <h2 class="phase-title-text">🤖 Squad de IA & Agentes Inteligentes</h2>
       </div>
 
@@ -1161,7 +1163,7 @@ sequenceDiagram
     <!-- ================================================== -->
     <section id="fase-3" class="phase-section">
       <div class="phase-header">
-        <span class="phase-badge-title">Passo 3 de 4</span>
+        <span class="phase-badge-title">Passo 3 de 6</span>
         <h2 class="phase-title-text">🧠 Conhecimento & Memória Persistente (RAG)</h2>
       </div>
 
@@ -1291,11 +1293,90 @@ graph LR
     </section>
 
     <!-- ================================================== -->
-    <!-- FASE 4: INFRAESTRUTURA, RUNTIME E GOVERNANÇA -->
+    <!-- FASE 4: BACKUP & DRP (DISASTER RECOVERY PLAN) -->
     <!-- ================================================== -->
     <section id="fase-4" class="phase-section">
       <div class="phase-header">
-        <span class="phase-badge-title">Passo 4 de 4</span>
+        <span class="phase-badge-title">Passo 4 de 6</span>
+        <h2 class="phase-title-text">💾 Backup & DRP (Disaster Recovery Plan)</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero (<code>$0.00/mês</code>), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO &le; 1h/24h e RTO &le; 15min.
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do DRP & Backup Engine</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Comandos PowerShell para execução de rotinas automáticas de backup e teste de desastre:</p>
+
+      <div class="mermaid-box" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #38bdf8;">
+        # Executar o backup completo da Memória de Longo Prazo (PostgreSQL pcl-db + AES-256 + Cloudflare R2)<br>
+        powershell -ExecutionPolicy Bypass -File "scripts/backup/backup-aeos-tripartido.ps1" -Mode cron<br><br>
+        # Testar o Plano de Recuperação de Desastres (DRP) em 1 comando<br>
+        powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido.ps1"
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Matriz da Memória Tripartida & SLAs de DRP</h3>
+      <table class="taxonomy-table" style="margin-bottom: 2rem;">
+        <thead>
+          <tr>
+            <th>Camada</th>
+            <th>Escopo & Tecnologia</th>
+            <th>Destino / Nuvem</th>
+            <th>SLA & Frequência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Longo Prazo (Cold SQL)</strong></td>
+            <td>Dump <code>pcl-db</code> (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum</td>
+            <td><strong>Cloudflare R2 Bucket</strong> (<code>pcl-backup-memoria-tripartida</code>)</td>
+            <td><strong>RPO &le; 24h</strong> / <strong>RTO &le; 15min</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Médio Prazo (Event Docs)</strong></td>
+            <td>Snapshots de arquivos de estado (<code>STATE.md</code>), playbooks e documentação viva</td>
+            <td><strong>Cloudflare R2 Bucket</strong> (<code>/medium-term/</code>)</td>
+            <td><strong>RPO &le; 1h</strong> (Event-Driven)</td>
+          </tr>
+          <tr>
+            <td><strong>Borda Ativa (Hot Sync)</strong></td>
+            <td>Sincronização de metadados relacionais e índices vetoriais RAG</td>
+            <td><strong>Cloudflare D1 & Vectorize</strong></td>
+            <td><strong>RPO &lt; 5min</strong> (Edge Push)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagrama de Resiliência & Memória Tripartida</h3>
+
+      <div class="grid-expanded">
+        <!-- DIAG-MEM-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" alt="DIAG-MEM-01 Tripartite Memory & DRP">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-MEM-01 • Resiliência & DRP</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Memória Tripartida & DRP</h4>
+            <p class="card-exp-desc">Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês), borda D1/Vectorize e plano de recuperação DRP (SLA RTO &le; 15min).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md" class="link-doc" data-doc-title="ADR-006 Memória Tripartida & DRP">📖 Ler ADR-006 ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" data-diagram-title="Memória Tripartida & DRP (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 5: INFRAESTRUTURA, RUNTIME E GOVERNANÇA -->
+    <!-- ================================================== -->
+    <section id="fase-5" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 5 de 6</span>
         <h2 class="phase-title-text">🛡️ Infraestrutura, Runtime & Governança</h2>
       </div>
 
@@ -1353,25 +1434,6 @@ graph LR
             <div class="card-exp-footer">
               <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc" data-doc-title="Runtime & OmniRoute AI Gateway">📖 Ler Artigo de Runtime ↗</a>
               <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" data-diagram-title="OmniRoute LLM Request Lifecycle">🌐 Abrir Interativo ↗</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- DIAG-MEM-01 -->
-        <div class="card-exp">
-          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" alt="DIAG-MEM-01 Tripartite Memory & DRP">
-          </a>
-          <div class="card-exp-content">
-            <div class="card-exp-meta">
-              <span class="card-exp-id">DIAG-MEM-01 • Resiliência & DRP</span>
-              <span class="priority-tag p0">P0 Crítico</span>
-            </div>
-            <h4 class="card-exp-title">Memória Tripartida & DRP</h4>
-            <p class="card-exp-desc">Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês), borda D1/Vectorize e plano de recuperação DRP (SLA RTO &le; 15min).</p>
-            <div class="card-exp-footer">
-              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md" class="link-doc" data-doc-title="ADR-006 Memória Tripartida & DRP">📖 Ler ADR-006 ↗</a>
-              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" data-diagram-title="Memória Tripartida & DRP (Cortex Archify)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1453,6 +1515,115 @@ graph LR
         </div>
 
       </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 6: EXECUÇÃO REATIVA & FAILOVER SOB DEMANDA -->
+    <!-- ================================================== -->
+    <section id="fase-6" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 6 de 6</span>
+        <h2 class="phase-title-text">⚡ Execução Reativa & Failover Sob Demanda (PCL AEOS Pilha Local)</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>Inferência Reativa e Smart Failover:</strong> A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com <strong>0 MB de VRAM alocada</strong>. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
+      </div>
+
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Máquina de Estados & Ciclo de Transição de VRAM</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+      </div>
+
+      <div class="mermaid-box">
+        <pre class="mermaid">
+stateDiagram-v2
+    [*] --> OnlineState : Conexão Ativa
+    
+    state OnlineState {
+        [*] --> CloudRouting
+        CloudRouting: OmniRoute -> Cloud APIs / Ollama Cloud
+        CloudRouting: VRAM Local = 0 GB Alocados
+    }
+    
+    OnlineState --> OfflineTrigger : Queda de Conexão / Ping Fail
+    
+    state OfflineState {
+        OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
+        TriggerScript --> LMSLoad : lms load qwen2.5-coder-7b --gpu max
+        LMSLoad --> LocalRouting : OmniRoute -> LM Studio Local (1234)
+    }
+    
+    OfflineState --> OnlineTrigger : Conexão Restabelecida
+    
+    state Restoration {
+        OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
+        UnloadScript --> LMSUnload : lms unload (VRAM Liberada)
+    }
+    
+    Restoration --> OnlineState
+        </pre>
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas & Especificação da Pilha Local</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-FAILOVER-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.png" alt="DIAG-FAILOVER-01 Trigger-Based On-Demand Failover">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-FAILOVER-01 • Failover Reativo</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Trigger-Based On-Demand Failover</h4>
+            <p class="card-exp-desc">Representação da inteligência de alternância de estado gerada pelo <em>Cortex Engine</em>, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede.</p>
+            <div class="card-exp-footer">
+              <a href="docs/hardware-portability-guide.md" class="link-doc" data-doc-title="Guia de Portabilidade de Hardware">📖 Ler Guia de Portabilidade ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (Cortex Archify)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Scripts de Automação Reativa (<code>scripts/windows/</code>)</h3>
+      <table class="taxonomy-table" style="margin-bottom: 2rem;">
+        <thead>
+          <tr>
+            <th>Script PowerShell</th>
+            <th>Função Arquitetural</th>
+            <th>Comportamento de Memória</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>watch_network_trigger.ps1</code></td>
+            <td>Monitor de conectividade contínuo (Ping / Health Check a cada 10s)</td>
+            <td>Baixíssimo overhead de CPU/RAM (0 MB GPU VRAM)</td>
+          </tr>
+          <tr>
+            <td><code>on_offline_event.ps1</code></td>
+            <td>Gatilho de Failover ativado na perda de rede/VPN</td>
+            <td>Executa <code>lms load --gpu max</code> sob demanda (~5.3 GB VRAM)</td>
+          </tr>
+          <tr>
+            <td><code>on_online_event.ps1</code></td>
+            <td>Gatilho de Restauração ativado ao retornar a conectividade</td>
+            <td>Executa <code>lms unload --all</code> (retorna VRAM para 0 MB)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Manuais de Engenharia de Hardware & VRAM</h3>
+      <ul style="color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; padding-left: 1.5rem;">
+        <li><a href="docs/hardware-portability-guide.md" class="link-doc" data-doc-title="Guia Oficial de Portabilidade de Hardware">📖 Guia Oficial de Portabilidade de Hardware & Especificação de Scripts</a>: Matriz de escala para qualquer máquina (4GB, 6GB, 8GB, 12GB+ VRAM ou CPU-only).</li>
+        <li><a href="docs/hardware-vram-optimization.md" class="link-doc" data-doc-title="Guia de Otimização de VRAM">📖 Guia Técnico de Otimização de VRAM & Perfil LOQ 15IAX9</a>: Parâmetros de quantização Q4_K_M e context window de 8192 tokens.</li>
+      </ul>
     </section>
 
     <!-- SEÇÃO DE TAXONOMIA COMPLETA DO REPOSITÓRIO -->
