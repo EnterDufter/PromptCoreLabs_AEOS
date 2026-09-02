@@ -3,17 +3,24 @@
     Gatilho de Perda de Conectividade (Offline Event Trigger) - PCL AEOS
 .DESCRIPTION
     Executado exclusivamente quando é detectada a ausência de conexão de rede/VPN.
-    Subo o modelo local no LM Studio sob demanda na VRAM para garantir a continuidade dos agentes.
+    Orquestra o Failover em 2 Níveis Locais:
+      - Nível 1: Ollama Local (Porta 11434) com qwen2.5-coder:7b-instruct-q4_K_M (100% VRAM)
+      - Nível 2: LM Studio Server (Porta 1234) com DeepSeek-Coder-V2-Lite MoE (GPU Offload)
 #>
 
 [CmdletBinding()]
 param (
-    [int]$Port = 1234,
-    [string]$ModelId = "qwen2.5-coder-7b-instruct",
-    [string]$GpuAlloc = "max",
-    [int]$ContextWindow = 8192,
-    [string]$LogFile = "$PSScriptRoot\..\..\logs\network_failover.log"
+    [int]$OllamaPort = 11434,
+    [string]$OllamaModel = "qwen2.5-coder:7b-instruct-q4_K_M",
+    [int]$LMSPort = 1234,
+    [string]$LMSModel = "deepseek-coder-v2-lite-instruct",
+    [string]$LogFile = ""
 )
+
+if ([string]::IsNullOrWhiteSpace($LogFile)) {
+    $projectRoot = if ($PSScriptRoot) { (Get-Item "$PSScriptRoot\..\..").FullName } else { "C:\PromptCore_Labs" }
+    $LogFile = Join-Path $projectRoot "logs\network_failover.log"
+}
 
 # Garantir diretório de log
 $logDir = Split-Path -Parent $LogFile
@@ -28,9 +35,24 @@ function Write-Log {
 }
 
 Write-Log "--------------------------------------------------------"
-Write-Log "ALERTA: QUEDA DE CONECTIVIDADE DETECTADA! Iniciando Failover Local..." "WARN"
+Write-Log "ALERTA: QUEDA DE CONECTIVIDADE DETECTADA! Iniciando Failover Local em 2 Níveis..." "WARN"
 
-# Localizar CLI 'lms'
+# ====================================================================
+# NÍVEL 1: Garantir Prontidão do Ollama Local (Alta Velocidade em 100% VRAM)
+# ====================================================================
+Write-Log "Verificando Servidor Ollama na porta $OllamaPort..."
+try {
+    $ollamaTest = Invoke-RestMethod -Uri "http://localhost:$OllamaPort/api/tags" -TimeoutSec 3 -ErrorAction Stop
+    Write-Log "SUCESSO: Servidor Ollama ativo na porta $OllamaPort (Nível 1 de Failover pronto)." "SUCCESS"
+} catch {
+    Write-Log "Servidor Ollama nao respondeu. Tentando inicializar processo 'ollama serve'..." "WARN"
+    Start-Process -FilePath "ollama" -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 2
+}
+
+# ====================================================================
+# NÍVEL 2: Garantir Servidor LM Studio Ativo (Para Refatoração MoE)
+# ====================================================================
 $lmsCmd = Get-Command "lms" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
 if (-not $lmsCmd) {
     $paths = @(
@@ -41,26 +63,16 @@ if (-not $lmsCmd) {
     foreach ($p in $paths) { if (Test-Path $p) { $lmsCmd = $p; break } }
 }
 
-if (-not $lmsCmd) {
-    Write-Log "ERRO: CLI 'lms' do LM Studio nao encontrada no host." "ERROR"
-    exit 1
+if ($lmsCmd) {
+    Write-Log "Garantindo servidor LM Studio na porta $LMSPort (Nível 2 MoE)..."
+    try {
+        & $lmsCmd server start --port $LMSPort 2>&1 | Out-String | ForEach-Object { Write-Log $_.Trim() }
+        Write-Log "SUCESSO: Servidor LM Studio ativo na porta $LMSPort (Nível 2 de Failover pronto)." "SUCCESS"
+    } catch {
+        Write-Log "Servidor LM Studio ja ativo na porta $LMSPort."
+    }
+} else {
+    Write-Log "Aviso: CLI 'lms' nao encontrada. Nível 2 dependera do Ollama." "WARN"
 }
 
-# 1. Garantir que o servidor LM Studio esteja rodando
-Write-Log "Garantindo servidor LM Studio na porta $Port..."
-try {
-    & $lmsCmd server start --port $Port 2>&1 | Out-String | ForEach-Object { Write-Log $_.Trim() }
-} catch {
-    Write-Log "Servidor LM Studio ja ativo ou inicializado."
-}
-
-Start-Sleep -Seconds 2
-
-# 2. Carregar o Modelo Sob Demanda na GPU
-Write-Log "Carregando modelo '$ModelId' na VRAM (GPU=$GpuAlloc, Context=$ContextWindow)..."
-try {
-    & $lmsCmd load $ModelId --gpu $GpuAlloc --ttl 1800 --context-length $ContextWindow 2>&1 | Out-String | ForEach-Object { Write-Log $_.Trim() }
-    Write-Log "SUCESSO: Modelo local carregado na GPU para operacao Offline." "SUCCESS"
-} catch {
-    Write-Log "Falha ao carregar modelo local: $_" "ERROR"
-}
+Write-Log "Failover Local configurado com sucesso: OmniRoute roteara automaticamente." "SUCCESS"

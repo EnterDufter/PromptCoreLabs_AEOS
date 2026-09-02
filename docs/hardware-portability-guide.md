@@ -75,15 +75,18 @@ stateDiagram-v2
     
     state OfflineState {
         OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
-        TriggerScript --> LMSLoad : lms load qwen2.5-coder-7b --gpu max
-        LMSLoad --> LocalRouting : OmniRoute -> LM Studio Local (1234)
+        TriggerScript --> FailoverL1 : Nível 1: Ollama Local (11434) qwen2.5-coder:7b (100% VRAM)
+        FailoverL1 --> FailoverL2 : Nível 2: LM Studio (1234) DeepSeek-Coder-V2 MoE (Offload)
+        FailoverL2 --> LocalRouting : OmniRoute Smart Failover
     }
     
     OfflineState --> OnlineTrigger : Conexão Restabelecida
     
     state Restoration {
         OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
-        UnloadScript --> LMSUnload : lms unload (VRAM Liberada)
+        UnloadScript --> LMSUnload : lms unload --all
+        UnloadScript --> OllamaStop : ollama stop qwen2.5-coder:7b
+        OllamaStop --> ZeroVRAM : VRAM Liberada (Retorna a 0 MB)
     }
     
     Restoration --> OnlineState
@@ -105,22 +108,23 @@ stateDiagram-v2
   ```
 
 ### 2. `scripts/windows/on_offline_event.ps1`
-* **Responsabilidade**: Gatilho de failover executado exclusivamente na perda de rede.
+* **Responsabilidade**: Gatilho de failover executado exclusivamente na perda de rede para orquestrar o failover local em 2 níveis.
 * **Ações**:
-  1. Verifica a existência da CLI `lms`.
-  2. Garante o serviço do LM Studio escutando na porta `1234`.
-  3. Executa `lms load <ModelId> --gpu max --ttl 1800 --context-length 8192` sob demanda.
+  1. **Nível 1 (Alta Velocidade)**: Valida e garante prontidão do serviço Ollama na porta `11434` rodando `qwen2.5-coder:7b-instruct-q4_K_M` (100% alocado na VRAM de 6 GB).
+  2. **Nível 2 (MoE / Refatoração)**: Garante prontidão do LM Studio Server na porta `1234` com suporte ao modelo `DeepSeek-Coder-V2-Lite-Instruct` com GPU Offload (VRAM + RAM DDR5).
 * **Parâmetros**:
-  * `-Port` (Padrão: `1234`)
-  * `-ModelId` (Padrão: `"qwen2.5-coder-7b-instruct"`)
-  * `-GpuAlloc` (Padrão: `"max"`)
+  * `-OllamaPort` (Padrão: `11434`)
+  * `-OllamaModel` (Padrão: `"qwen2.5-coder:7b-instruct-q4_K_M"`)
+  * `-LMSPort` (Padrão: `1234`)
+  * `-LMSModel` (Padrão: `"deepseek-coder-v2-lite-instruct"`)
 
 ### 3. `scripts/windows/on_online_event.ps1`
-* **Responsabilidade**: Gatilho de restauração executado ao retornar a conectividade.
+* **Responsabilidade**: Gatilho de restauração executado ao retornar a conectividade de rede.
 * **Ações**:
-  1. Invoca `lms unload --all`.
-  2. Libera 100% da VRAM da GPU para o sistema operacional.
-  3. Registra o evento de desalocação no log `logs/network_failover.log`.
+  1. Executa `lms unload --all` para descarregar instâncias do LM Studio.
+  2. Executa `ollama stop <OllamaModel>` para descarregar modelos em memória no Ollama.
+  3. Garante o retorno estrito de **0 MB de VRAM alocada** na GPU física (RTX 3050).
+  4. Registra o evento de desalocação no log `logs/network_failover.log`.
 
 ---
 

@@ -53,47 +53,41 @@ providers:
       interval_seconds: 15
       timeout_ms: 3000
 
-  # Priority 3: LM Studio Local (Acionado SOB DEMANDA apenas no evento Offline)
-  lmstudio_local:
-    name: "LM Studio Local (On-Demand Host Windows)"
+  # Priority 3: Ollama Local (Failover Nível 1 - Alta Velocidade em 100% VRAM)
+  ollama_local:
+    name: "Ollama Local - Failover Nivel 1 (Alta Velocidade)"
     type: "openai"
     enabled: true
     priority: 3
-    on_demand_failover: true
-    base_url: "http://host.docker.internal:1234/v1"
-    api_key: "lm-studio"
-    models:
-      - id: "qwen2.5-coder-7b-instruct"
-        alias: "coder"
-        context_length: 8192
-      - id: "deepseek-coder-v2-lite-instruct"
-        alias: "moe-coder"
-        context_length: 8192
-    health_check:
-      enabled: true
-      endpoint: "http://host.docker.internal:1234/v1/models"
-      interval_seconds: 10
-      timeout_ms: 3000
-
-  # Priority 4: Ollama Local (Fallback Secundário Offline)
-  ollama_local:
-    name: "Ollama Local (On-Demand Host Windows)"
-    type: "openai"
-    enabled: true
-    priority: 4
     on_demand_failover: true
     base_url: "http://host.docker.internal:11434/v1"
     api_key: "ollama"
     models:
       - id: "qwen2.5-coder:7b-instruct-q4_K_M"
-        alias: "coder-fallback"
-        context_length: 8192
-      - id: "gemma3:4b"
-        alias: "fast-fallback"
+        alias: "coder-fast"
         context_length: 8192
     health_check:
       enabled: true
       endpoint: "http://host.docker.internal:11434/v1/models"
+      interval_seconds: 10
+      timeout_ms: 3000
+
+  # Priority 4: LM Studio Local (Failover Nível 2 - Lógica MoE / Refatoração Profunda)
+  lmstudio_local:
+    name: "LM Studio Local - Failover Nivel 2 (MoE / Refatoracao)"
+    type: "openai"
+    enabled: true
+    priority: 4
+    on_demand_failover: true
+    base_url: "http://host.docker.internal:1234/v1"
+    api_key: "lm-studio"
+    models:
+      - id: "deepseek-coder-v2-lite-instruct"
+        alias: "coder-moe"
+        context_length: 8192
+    health_check:
+      enabled: true
+      endpoint: "http://host.docker.internal:1234/v1/models"
       interval_seconds: 10
       timeout_ms: 3000
 
@@ -104,8 +98,8 @@ routing_rules:
     chain:
       - "cloud_primary"
       - "ollama_cloud"
-      - "lmstudio_local"
       - "ollama_local"
+      - "lmstudio_local"
 
 failover_policy:
   enabled: true

@@ -1562,15 +1562,18 @@ stateDiagram-v2
     
     state OfflineState {
         OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
-        TriggerScript --> LMSLoad : lms load qwen2.5-coder-7b --gpu max
-        LMSLoad --> LocalRouting : OmniRoute -> LM Studio Local (1234)
+        TriggerScript --> FailoverL1 : Nível 1: Ollama Local (11434) qwen2.5-coder:7b (100% VRAM)
+        FailoverL1 --> FailoverL2 : Nível 2: LM Studio (1234) DeepSeek-Coder-V2 MoE (Offload)
+        FailoverL2 --> LocalRouting : OmniRoute Smart Failover
     }
     
     OfflineState --> OnlineTrigger : Conexão Restabelecida
     
     state Restoration {
         OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
-        UnloadScript --> LMSUnload : lms unload (VRAM Liberada)
+        UnloadScript --> LMSUnload : lms unload --all
+        UnloadScript --> OllamaStop : ollama stop qwen2.5-coder:7b
+        OllamaStop --> ZeroVRAM : VRAM Liberada (Retorna a 0 MB)
     }
     
     Restoration --> OnlineState

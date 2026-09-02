@@ -10,8 +10,13 @@
 param (
     [int]$CheckIntervalSeconds = 10,
     [string[]]$TestEndpoints = @("1.1.1.1", "8.8.8.8", "openrouter.ai"),
-    [string]$LogFile = "$PSScriptRoot\..\..\logs\network_watcher.log"
+    [string]$LogFile = ""
 )
+
+if ([string]::IsNullOrWhiteSpace($LogFile)) {
+    $projectRoot = if ($PSScriptRoot) { (Get-Item "$PSScriptRoot\..\..").FullName } else { "C:\PromptCore_Labs" }
+    $LogFile = Join-Path $projectRoot "logs\network_watcher.log"
+}
 
 $logDir = Split-Path -Parent $LogFile
 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
