@@ -10,7 +10,7 @@ O **Model Context Protocol (MCP)** é o padrão de integração assíncrona base
 
 ## 2. SERVIDORES MCP REGISTRADOS
 
-1. **`pcl-cortex` MCP Server**: Servidor nativo do Cortex para validação, renderização e compilação da suíte visuais do motor Archify CLI (`archify.mjs`).
+1. **`pcl-cortex` MCP Server**: Servidor nativo do Cortex para validação, renderização e compilação da suíte visual do motor PCL Cortex Engine CLI (`cortex.mjs`).
 2. **`gemini-notebooklm` MCP Server**: Servidor de pesquisa, síntese de documentos e consulta a cadernos de conhecimento.
 
 ---
@@ -28,7 +28,7 @@ graph TD
     end
 
     subgraph MCPServers["Servidores MCP Ativos"]
-        CX_MCP["pcl-cortex MCP Server\n(Archify CLI v2.12)"]
+        CX_MCP["pcl-cortex MCP Server\n(Cortex Engine v2.12)"]
         NLM_MCP["gemini-notebooklm MCP Server\n(Pesquisa & RAG)"]
     end
 

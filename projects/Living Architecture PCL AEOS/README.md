@@ -6,11 +6,11 @@ DOCUMENTAÇÃO VIVA E CATÁLOGO DE ARQUITETURA
 
 O **Living Architecture PCL AEOS** é o projeto oficial de arquitetura viva do ecossistema **PromptCoreLabs_AEOS**, projetado e executado sob governança do agente de inteligência **Cortex**.
 
-> 💡 **Dica de Navegação**: Clique sobre qualquer imagem miniatura ou título de card abaixo para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **Cortex Archify Engine** (com animações de sinal, alternância entre modo escuro/claro, filtros de visões e exportação em alta resolução).
+> 💡 **Dica de Navegação**: Clique sobre qualquer imagem miniatura ou título de card abaixo para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **PCL Cortex Engine** (com animações de sinal, alternância entre modo escuro/claro, filtros de visões e exportação em alta resolução).
 
 ---
 
-## 📊 Galeria Visual de Diagramas Interativos (Cortex Archify Engine)
+## 📊 Galeria Visual de Diagramas Interativos (PCL Cortex Engine)
 
 ### 🔴 Diagramas Críticos (P0)
 

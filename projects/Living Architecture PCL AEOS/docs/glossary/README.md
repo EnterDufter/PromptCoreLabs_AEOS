@@ -7,7 +7,7 @@ DICIONÁRIO DE TERMOS TÉCNICOS DA ARQUITETURA
 | Termo | Definição no Ecossistema PCL AEOS |
 |---|---|
 | **AEOS** | AI Engineering Operating System — O sistema operacional de engenharia para gestão de agentes e software. |
-| **Archify Engine** | Motor de renderização visual interativa desenvolvido na persona Cortex para compilação de diagramas HTML standalone com SVG inline. |
+| **Cortex Visual Engine** | Motor de renderização visual interativa desenvolvido na persona Cortex para compilação de diagramas HTML standalone com SVG inline. |
 | **Cortex** | Persona especializada em inteligência de sistemas e visualização arquitetural do PCL AEOS. |
 | **EBITDA Shield** | Mecanismo de prompt caching e roteamento de custos no AI Gateway OmniRoute para otimização do uso de tokens. |
 | **Execution Cell** | Unidade atômica de execução e log de tarefas processadas por um agente de IA no runtime. |
