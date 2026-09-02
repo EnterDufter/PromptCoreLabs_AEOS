@@ -864,7 +864,7 @@
         <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
         <div class="badge-bar">
           <span class="badge">v1.0 Sovereign</span>
-          <span class="badge">20 Diagramas Interativos</span>
+          <span class="badge">25 Diagramas Interativos</span>
           <span class="badge">TLC Spec-Driven v3</span>
           <span class="badge">100% Zero Trust</span>
         </div>
@@ -1575,33 +1575,35 @@ flowchart TD
 
       <div class="mermaid-box mermaid-box-compact">
         <pre class="mermaid">
-stateDiagram-v2
-    [*] --> OnlineState : Conexão Ativa
-    
-    state OnlineState {
-        [*] --> CloudRouting
-        CloudRouting : OmniRoute para Cloud APIs
-        CloudRouting : VRAM Local = 0 MB Alocada
-    }
-    
-    OnlineState --> OfflineState : Queda de Conexão
-    
-    state OfflineState {
-        [*] --> FailoverNivel1
-        FailoverNivel1 : Nível 1 - Ollama qwen2.5-coder-7b (100% VRAM)
-        FailoverNivel1 --> FailoverNivel2 : Se Indisponível ou Tarefa MoE
-        FailoverNivel2 : Nível 2 - LM Studio DeepSeek-Coder-V2 (Offload)
-    }
-    
-    OfflineState --> Restoration : Conexão Restabelecida
-    
-    state Restoration {
-        [*] --> UnloadModels
-        UnloadModels : lms unload e ollama stop
-        UnloadModels : Retorno estrito a 0 MB VRAM
-    }
-    
-    Restoration --> OnlineState
+flowchart TD
+    Start([Conexão Estabelecida]) --> OnlineState
+
+    subgraph OnlineState [1. Estado Online: 0 MB VRAM Alocada]
+        direction TB
+        CloudRouting["OmniRoute Roteia para Cloud APIs"]
+        ZeroVRAM["GPU RTX 3050 em Repouso (0 MB VRAM)"]
+        CloudRouting --- ZeroVRAM
+    end
+
+    OnlineState -->|Queda de Conexão / Falha de Ping| OfflineState
+
+    subgraph OfflineState [2. Estado Offline: Failover Local sob Demanda]
+        direction TB
+        FailoverL1["Nível 1: Ollama qwen2.5-coder-7b<br>(100% VRAM ~4.7 GB)"]
+        FailoverL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM + RAM)"]
+        FailoverL1 -.->|Se Indisponível ou Tarefa MoE| FailoverL2
+    end
+
+    OfflineState -->|Conexão de Rede Restabelecida| Restoration
+
+    subgraph Restoration [3. Restauração & Desalocação Imediata]
+        direction TB
+        UnloadModels["lms unload --all e ollama stop"]
+        ResetZero["Retorno Estrito a 0 MB de VRAM"]
+        UnloadModels --> ResetZero
+    end
+
+    Restoration -->|GPU Liberada| OnlineState
         </pre>
       </div>
 
@@ -1612,7 +1614,7 @@ stateDiagram-v2
         <!-- DIAG-INFER-01 -->
         <div class="card-exp">
           <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/arch-hybrid-inference-failover.svg" alt="DIAG-INFER-01 Hybrid Inference Architecture & 2-Tier Smart Failover">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/arch-hybrid-inference-failover.png" alt="DIAG-INFER-01 Hybrid Inference Architecture & 2-Tier Smart Failover">
           </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
@@ -1631,7 +1633,7 @@ stateDiagram-v2
         <!-- DIAG-FAILOVER-01 -->
         <div class="card-exp">
           <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.svg" alt="DIAG-FAILOVER-01 Trigger-Based On-Demand Failover">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-trigger-based-failover.png" alt="DIAG-FAILOVER-01 Trigger-Based On-Demand Failover">
           </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">

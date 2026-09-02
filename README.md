@@ -262,41 +262,42 @@ flowchart TD
 #### Diagrama de Máquina de Estados & Transição de VRAM
 
 ```mermaid
-stateDiagram-v2
-    [*] --> OnlineState : Conexão Ativa
-    
-    state OnlineState {
-        [*] --> CloudRouting
-        CloudRouting : OmniRoute para Cloud APIs
-        CloudRouting : VRAM Local = 0 MB Alocada
-    }
-    
-    OnlineState --> OfflineState : Queda de Conexão
-    
-    state OfflineState {
-        [*] --> FailoverNivel1
-        FailoverNivel1 : Nível 1 - Ollama qwen2.5-coder-7b (100% VRAM)
-        FailoverNivel1 --> FailoverNivel2 : Se Indisponível ou Tarefa MoE
-        FailoverNivel2 : Nível 2 - LM Studio DeepSeek-Coder-V2 (Offload)
-    }
-    
-    OfflineState --> Restoration : Conexão Restabelecida
-    
-    state Restoration {
-        [*] --> UnloadModels
-        UnloadModels : lms unload e ollama stop
-        UnloadModels : Retorno estrito a 0 MB VRAM
-    }
-    
-    Restoration --> OnlineState
+flowchart TD
+    Start([Conexão Estabelecida]) --> OnlineState
+
+    subgraph OnlineState [1. Estado Online: 0 MB VRAM Alocada]
+        direction TB
+        CloudRouting["OmniRoute Roteia para Cloud APIs"]
+        ZeroVRAM["GPU RTX 3050 em Repouso (0 MB VRAM)"]
+        CloudRouting --- ZeroVRAM
+    end
+
+    OnlineState -->|Queda de Conexão / Falha de Ping| OfflineState
+
+    subgraph OfflineState [2. Estado Offline: Failover Local sob Demanda]
+        direction TB
+        FailoverL1["Nível 1: Ollama qwen2.5-coder-7b<br>(100% VRAM ~4.7 GB)"]
+        FailoverL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM + RAM)"]
+        FailoverL1 -.->|Se Indisponível ou Tarefa MoE| FailoverL2
+    end
+
+    OfflineState -->|Conexão de Rede Restabelecida| Restoration
+
+    subgraph Restoration [3. Restauração & Desalocação Imediata]
+        UnloadModels["lms unload --all e ollama stop"]
+        ResetZero["Retorno Estrito a 0 MB de VRAM"]
+        UnloadModels --> ResetZero
+    end
+
+    Restoration -->|GPU Liberada| OnlineState
 ```
 
 #### Diagrama de Sequência & Ciclo de Vida Reativo (Cortex Engine)
 
-| Previsualização (SVG / PNG) | Diagrama & Detalhes | Ações & Documentação |
+| Previsualização (PNG) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/arch-hybrid-inference-failover.svg" width="300" alt="DIAG-INFER-01"></a> | **DIAG-INFER-01 • Hybrid Inference & 2-Tier Failover**<br>Topologia de inferência em 3 camadas gerada pelo *PCL Cortex Engine*: Modo Online Free Tier (0 MB VRAM), Failover Nível 1 com Ollama Qwen 2.5 Coder 7B (100% VRAM) e Failover Nível 2 com LM Studio DeepSeek-Coder-V2 MoE (GPU Offload). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Inferência Híbrida](docs/hybrid-inference-architecture.md)<br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.svg" width="300" alt="DIAG-FAILOVER-01"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Ciclo de vida reativo e alternância de estado gerada pelo *PCL Cortex Engine*, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md)<br>[📖 Guia de Otimização VRAM](docs/hardware-vram-optimization.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living Architecture PCL AEOS/diagrams/assets/arch-hybrid-inference-failover.png" width="300" alt="DIAG-INFER-01"></a> | **DIAG-INFER-01 • Hybrid Inference & 2-Tier Failover**<br>Topologia de inferência em 3 camadas gerada pelo *PCL Cortex Engine*: Modo Online Free Tier (0 MB VRAM), Failover Nível 1 com Ollama Qwen 2.5 Coder 7B (100% VRAM) e Failover Nível 2 com LM Studio DeepSeek-Coder-V2 MoE (GPU Offload). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Inferência Híbrida](docs/hybrid-inference-architecture.md)<br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-trigger-based-failover.png" width="300" alt="DIAG-FAILOVER-01"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Ciclo de vida reativo e alternância de estado gerada pelo *PCL Cortex Engine*, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md)<br>[📖 Guia de Otimização VRAM](docs/hardware-vram-optimization.md) |
 
 #### Scripts de Automação Reativa (`scripts/windows/`)
 

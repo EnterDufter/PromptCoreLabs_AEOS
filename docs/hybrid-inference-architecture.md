@@ -57,33 +57,35 @@ flowchart TD
 O estado de alocação da GPU transita dinamicamente entre zero e máxima performance:
 
 ```mermaid
-stateDiagram-v2
-    [*] --> OnlineState : Conexão Ativa
-    
-    state OnlineState {
-        [*] --> CloudRouting
-        CloudRouting : OmniRoute para Cloud APIs
-        CloudRouting : VRAM Local = 0 MB Alocada
-    }
-    
-    OnlineState --> OfflineState : Queda de Conexão
-    
-    state OfflineState {
-        [*] --> FailoverNivel1
-        FailoverNivel1 : Nível 1 - Ollama qwen2.5-coder-7b (100% VRAM)
-        FailoverNivel1 --> FailoverNivel2 : Se Indisponível ou Tarefa MoE
-        FailoverNivel2 : Nível 2 - LM Studio DeepSeek-Coder-V2 (Offload)
-    }
-    
-    OfflineState --> Restoration : Conexão Restabelecida
-    
-    state Restoration {
-        [*] --> UnloadModels
-        UnloadModels : lms unload e ollama stop
-        UnloadModels : Retorno estrito a 0 MB VRAM
-    }
-    
-    Restoration --> OnlineState
+flowchart TD
+    Start([Conexão Estabelecida]) --> OnlineState
+
+    subgraph OnlineState [1. Estado Online: 0 MB VRAM Alocada]
+        direction TB
+        CloudRouting["OmniRoute Roteia para Cloud APIs"]
+        ZeroVRAM["GPU RTX 3050 em Repouso (0 MB VRAM)"]
+        CloudRouting --- ZeroVRAM
+    end
+
+    OnlineState -->|Queda de Conexão / Falha de Ping| OfflineState
+
+    subgraph OfflineState [2. Estado Offline: Failover Local sob Demanda]
+        direction TB
+        FailoverL1["Nível 1: Ollama qwen2.5-coder-7b<br>(100% VRAM ~4.7 GB)"]
+        FailoverL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM + RAM)"]
+        FailoverL1 -.->|Se Indisponível ou Tarefa MoE| FailoverL2
+    end
+
+    OfflineState -->|Conexão de Rede Restabelecida| Restoration
+
+    subgraph Restoration [3. Restauração & Desalocação Imediata]
+        direction TB
+        UnloadModels["lms unload --all e ollama stop"]
+        ResetZero["Retorno Estrito a 0 MB de VRAM"]
+        UnloadModels --> ResetZero
+    end
+
+    Restoration -->|GPU Liberada| OnlineState
 ```
 
 ### Automação via PowerShell (`scripts/windows/`):
