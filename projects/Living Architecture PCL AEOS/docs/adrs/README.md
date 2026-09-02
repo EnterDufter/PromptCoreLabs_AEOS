@@ -31,7 +31,7 @@ Cada ADR é imutável: uma decisão aceita nunca é excluída, apenas substituí
 | **ADR-0003** | Higiene da Documentação Constitucional da Foundation v1.0 | **Accepted** | 2026-07-08 | Estabelecimento do `FOUNDATION.md` como constituição imutável da plataforma. |
 | **ADR-0004** | Implementação Concorrente de Knowledge e Runtime | **Accepted** | 2026-07-08 | Paralelismo na construção de playbooks e contêineres do Harness local. |
 | **ADR-0005** | Unificação do AI Gateway via OmniRoute no Harness | **Accepted** | 2026-07-15 | Proxy unificado de inferência (porta `:20130`), prompt caching e fallback dinâmico. |
-| **ADR-0006** | Adoção do Cortex Archify CLI para Living Architecture | **Accepted** | 2026-07-25 | Motor visual `archify.mjs` para validação e compilação de diagramas interativos HTML. |
+| **ADR-0006** | Adoção do PCL Cortex Visual Engine para Living Architecture | **Accepted** | 2026-07-25 | Motor visual Cortex para validação e compilação de diagramas interativos HTML. |
 | **ADR-0007** | Metodologia Governança TLC Spec-Driven v3 & 5 Stage Gates | **Accepted** | 2026-07-30 | Exigência da suíte `.specs/` (`specify.md`, `design.md`, `tasks.md`, `validate.md`) para todo projeto. |
 
 ---
@@ -46,7 +46,7 @@ Cada ADR é imutável: uma decisão aceita nunca é excluída, apenas substituí
 - **Contexto**: Necessidade de controlar custos de token, latência e disponibilidade entre modelos locais (Ollama/LM Studio) e Cloud (Gemini/Claude).
 - **Justificativa**: EBITDA Shield (cache de prompt), fallback automático sem quebrar a sessão do agente e auditoria centralizada.
 
-### 📍 **ADR-0006: Cortex Archify CLI & Living Architecture**
+### 📍 **ADR-0006: PCL Cortex Visual Engine & Living Architecture**
 - **Contexto**: Documentações em imagem estática se tornam obsoletas rapidamente.
 - **Justificativa**: Renderização visual dinâmica 100% soberana em HTML interativo autocontido com SVG inline e validação de regras de composição em tempo de build.
 

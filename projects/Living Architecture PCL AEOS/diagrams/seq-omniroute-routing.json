@@ -45,7 +45,7 @@
     { "from": "client", "to": "omniroute", "y": 180, "label": "POST /v1/chat/completions", "variant": "emphasis" },
     { "from": "omniroute", "to": "cache", "y": 230, "label": "Lookup Hash no Prompt Cache", "variant": "emphasis" },
     { "from": "cache", "to": "omniroute", "y": 280, "label": "Cache Miss / Hit Result", "variant": "return" },
-    { "from": "omniroute", "to": "local_gpu", "y": 360, "label": "Trivial Gate -> Qwen3 / Gemma 3", "variant": "dashed" },
+    { "from": "omniroute", "to": "local_gpu", "y": 360, "label": "Failover Local -> Qwen 2.5 / DeepSeek MoE", "variant": "dashed" },
     { "from": "local_gpu", "to": "omniroute", "y": 440, "label": "Resposta ou GPU Unavailable", "variant": "return" },
     { "from": "omniroute", "to": "cloud_llm", "y": 590, "label": "Fallback -> Gemini 3.1 Pro / Claude 3.5", "variant": "emphasis" },
     { "from": "cloud_llm", "to": "omniroute", "y": 670, "label": "Token Stream + Meta Metrics", "variant": "return" },

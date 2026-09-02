@@ -237,6 +237,28 @@ docker compose down
 
 > **Inferência Reativa e Smart Failover**: A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com **0 MB de VRAM alocada**. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
 
+#### Arquitetura de Inferência Implementada (Fluxo de Decisão OmniRoute)
+
+```mermaid
+flowchart TD
+    Req[Requisição do PaperClip / Agente] --> OmniRoute[OmniRoute AI Gateway :20130]
+    
+    subgraph ModoOnline [1. Operação Primária Online - 0 MB VRAM]
+        OmniRoute -->|Rede Ativa| CloudAPI[Cloud Free Tier / OpenRouter]
+        CloudAPI --> SuccessCloud((Resposta Cloud))
+    end
+    
+    subgraph FailoverL1 [2. Failover Nível 1 - Alta Velocidade]
+        CloudAPI -.->|Timeout / Queda de Rede| OllamaLocal[Ollama Local :11434<br>qwen2.5-coder:7b-instruct-q4_K_M]
+        OllamaLocal -->|100% VRAM ~4.7 GB| SuccessOllama((Resposta Nível 1))
+    end
+    
+    subgraph FailoverL2 [3. Failover Nível 2 - Lógica MoE / Refatoração]
+        OllamaLocal -.->|Se Indisponível / Tarefa MoE| LMStudioLocal[LM Studio :1234<br>DeepSeek-Coder-V2-Lite MoE Q4_K_S]
+        LMStudioLocal -->|GPU Offload VRAM+RAM| SuccessLMS((Resposta Nível 2))
+    end
+```
+
 #### Diagrama de Máquina de Estados & Transição de VRAM
 
 ```mermaid
@@ -245,26 +267,25 @@ stateDiagram-v2
     
     state OnlineState {
         [*] --> CloudRouting
-        CloudRouting: OmniRoute -> Cloud APIs / Ollama Cloud
-        CloudRouting: VRAM Local = 0 GB Alocados
+        CloudRouting : OmniRoute para Cloud APIs
+        CloudRouting : VRAM Local = 0 MB Alocada
     }
     
-    OnlineState --> OfflineTrigger : Queda de Conexão / Ping Fail
+    OnlineState --> OfflineState : Queda de Conexão
     
     state OfflineState {
-        OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
-        TriggerScript --> FailoverL1 : Nível 1: Ollama Local (11434) qwen2.5-coder:7b (100% VRAM)
-        FailoverL1 --> FailoverL2 : Nível 2: LM Studio (1234) DeepSeek-Coder-V2 MoE (Offload)
-        FailoverL2 --> LocalRouting : OmniRoute Smart Failover
+        [*] --> FailoverNivel1
+        FailoverNivel1 : Nível 1 - Ollama qwen2.5-coder-7b (100% VRAM)
+        FailoverNivel1 --> FailoverNivel2 : Se Indisponível ou Tarefa MoE
+        FailoverNivel2 : Nível 2 - LM Studio DeepSeek-Coder-V2 (Offload)
     }
     
-    OfflineState --> OnlineTrigger : Conexão Restabelecida
+    OfflineState --> Restoration : Conexão Restabelecida
     
     state Restoration {
-        OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
-        UnloadScript --> LMSUnload : lms unload --all
-        UnloadScript --> OllamaStop : ollama stop qwen2.5-coder:7b
-        OllamaStop --> ZeroVRAM : VRAM Liberada (Retorna a 0 MB)
+        [*] --> UnloadModels
+        UnloadModels : lms unload e ollama stop
+        UnloadModels : Retorno estrito a 0 MB VRAM
     }
     
     Restoration --> OnlineState
@@ -272,17 +293,18 @@ stateDiagram-v2
 
 #### Diagrama de Sequência & Ciclo de Vida Reativo (Cortex Engine)
 
-| Previsualização (Thumbnail PNG) | Diagrama & Detalhes | Ações & Documentação |
+| Previsualização (SVG / PNG) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.png" width="300" alt="DIAG-FAILOVER-01"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Representação da inteligência de alternância de estado gerada pelo *Cortex Engine*, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md)<br>[📖 Guia de Otimização VRAM](docs/hardware-vram-optimization.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/arch-hybrid-inference-failover.svg" width="300" alt="DIAG-INFER-01"></a> | **DIAG-INFER-01 • Hybrid Inference & 2-Tier Failover**<br>Topologia de inferência em 3 camadas gerada pelo *PCL Cortex Engine*: Modo Online Free Tier (0 MB VRAM), Failover Nível 1 com Ollama Qwen 2.5 Coder 7B (100% VRAM) e Failover Nível 2 com LM Studio DeepSeek-Coder-V2 MoE (GPU Offload). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Inferência Híbrida](docs/hybrid-inference-architecture.md)<br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.svg" width="300" alt="DIAG-FAILOVER-01"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Ciclo de vida reativo e alternância de estado gerada pelo *PCL Cortex Engine*, demonstrando o estado online (0 MB VRAM), disparo sob demanda no evento de queda e desalocação ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Guia de Portabilidade](docs/hardware-portability-guide.md)<br>[📖 Guia de Otimização VRAM](docs/hardware-vram-optimization.md) |
 
 #### Scripts de Automação Reativa (`scripts/windows/`)
 
 | Script PowerShell | Função Arquitetural | Comportamento de Memória |
 |---|---|---|
-| [`watch_network_trigger.ps1`](file:///c:/PromptCore_Labs/scripts/windows/watch_network_trigger.ps1) | Monitor de conectividade contínuo (Ping / Health Check a cada 10s) | Baixíssimo overhead de CPU/RAM (sem GPU) |
-| [`on_offline_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_offline_event.ps1) | Gatilho de Failover ativado na perda de rede/VPN | Executa `lms load --gpu max` sob demanda (~5.3 GB VRAM) |
-| [`on_online_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_online_event.ps1) | Gatilho de Restauração ativado ao retornar a conectividade | Executa `lms unload --all` (retorna VRAM para 0 MB) |
+| [`watch_network_trigger.ps1`](file:///c:/PromptCore_Labs/scripts/windows/watch_network_trigger.ps1) | Monitor de conectividade contínuo (Ping / Health Check a cada 10s) | Baixíssimo overhead de CPU/RAM (0 MB GPU VRAM) |
+| [`on_offline_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_offline_event.ps1) | Gatilho de Failover ativado na perda de rede/VPN | Prontidão do Ollama (Porta 11434) e LM Studio Server (Porta 1234) |
+| [`on_online_event.ps1`](file:///c:/PromptCore_Labs/scripts/windows/on_online_event.ps1) | Gatilho de Restauração ativado ao retornar a conectividade | Executa `lms unload --all` e `ollama stop` (retorna VRAM para 0 MB) |
 
 #### Subir a Pilha Local & Monitor Reativo
 
@@ -294,7 +316,8 @@ docker compose -f docker-compose.aeos.yml up -d
 powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1"
 ```
 
-#### Documentação de Portabilidade & VRAM
+#### Documentação Técnica de Inferência, Portabilidade & VRAM
+* **[Guia Técnico de Inferência Híbrida & Failover em 2 Níveis](file:///c:/PromptCore_Labs/docs/hybrid-inference-architecture.md)**: Especificação completa da estratégia Cloud 0 MB VRAM + Ollama L1 (100% VRAM) + LM Studio L2 MoE (Offload).
 * **[Guia Técnico de Portabilidade de Hardware](file:///c:/PromptCore_Labs/docs/hardware-portability-guide.md)**: Matriz de escala para qualquer especificação (4GB, 6GB, 8GB, 12GB+ VRAM ou CPU-only).
 * **[Guia Técnico de Otimização de VRAM](file:///c:/PromptCore_Labs/docs/hardware-vram-optimization.md)**: Detalhes de limites de contexto e quantização na NVIDIA RTX 3050.
 

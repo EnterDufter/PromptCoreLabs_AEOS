@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Hybrid Inference Architecture & 2-Tier Smart Failover",
+    "subtitle": "Estratégia de 3 Camadas: Operação Online 0 MB VRAM, Failover Nível 1 Ollama e Nível 2 LM Studio MoE",
+    "output": "arch-hybrid-inference-failover.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "view-online",
+        "label": "1. Modo Online (0 MB VRAM)",
+        "focus": ["paperclip_squad", "omniroute_gw", "cloud_primary"],
+        "note": "Operação primária contínua através de provedores Cloud Free Tier sem custo de hardware local."
+      },
+      {
+        "id": "view-failover-l1",
+        "label": "2. Failover Nível 1 (Ollama)",
+        "focus": ["omniroute_gw", "ollama_l1", "hardware_gpu"],
+        "note": "Alta velocidade com qwen2.5-coder:7b rodando 100% alocado nos 6 GB de VRAM da GPU."
+      },
+      {
+        "id": "view-failover-l2",
+        "label": "3. Failover Nível 2 (LM Studio MoE)",
+        "focus": ["omniroute_gw", "lmstudio_l2", "hardware_gpu"],
+        "note": "Lógica pesada e refatoração com DeepSeek-Coder-V2-Lite MoE dividida entre VRAM e RAM DDR5."
+      }
+    ]
+  },
+  "components": [
+    { "id": "paperclip_squad", "type": "frontend", "label": "PaperClip Squad", "sublabel": "15 Agentes IA (:3100)", "pos": [30, 240], "size": [150, 65] },
+    { "id": "omniroute_gw", "type": "backend", "label": "OmniRoute Gateway", "sublabel": "AI Gateway :20130 (EBITDA Shield)", "pos": [300, 240], "size": [170, 65], "tag": "Orquestrador" },
+    { "id": "cloud_primary", "type": "cloud", "label": "Cloud Free Tier", "sublabel": "OpenRouter / Nuvem (0 MB VRAM)", "pos": [580, 100], "size": [180, 65], "tag": "Primário Online" },
+    { "id": "ollama_l1", "type": "database", "label": "Ollama Local (Nível 1)", "sublabel": "qwen2.5-coder:7b (:11434)", "pos": [580, 240], "size": [180, 65], "tag": "100% VRAM" },
+    { "id": "lmstudio_l2", "type": "database", "label": "LM Studio (Nível 2)", "sublabel": "DeepSeek-Coder-V2 MoE (:1234)", "pos": [580, 380], "size": [180, 65], "tag": "GPU Offload" },
+    { "id": "hardware_gpu", "type": "security", "label": "NVIDIA RTX 3050", "sublabel": "6GB VRAM + 16GB RAM DDR5", "pos": [850, 310], "size": [160, 65], "tag": "Hardware Host" },
+    { "id": "watcher_daemon", "type": "security", "label": "Watcher Daemon", "sublabel": "PowerShell Trigger (.ps1)", "pos": [300, 420], "size": [170, 65], "tag": "Governança" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Ambiente Local Host Windows (Failover Reativo Sob Demanda)", "wraps": ["ollama_l1", "lmstudio_l2", "hardware_gpu"] }
+  ],
+  "connections": [
+    { "id": "pc-or", "from": "paperclip_squad", "to": "omniroute_gw", "label": "Req OpenAI", "variant": "emphasis", "labelDy": -16 },
+    { "id": "or-cloud", "from": "omniroute_gw", "to": "cloud_primary", "label": "Modo Online Ativo", "variant": "emphasis", "fromSide": "top", "toSide": "left" },
+    { "id": "or-ollama", "from": "omniroute_gw", "to": "ollama_l1", "label": "Failover Nível 1", "variant": "dashed", "fromSide": "right", "toSide": "left" },
+    { "id": "or-lms", "from": "omniroute_gw", "to": "lmstudio_l2", "label": "Failover Nível 2", "variant": "dashed", "fromSide": "bottom", "toSide": "left" },
+    { "id": "ollama-gpu", "from": "ollama_l1", "to": "hardware_gpu", "label": "Aloca ~4.7 GB VRAM", "variant": "emphasis", "fromSide": "right", "toSide": "top" },
+    { "id": "lms-gpu", "from": "lmstudio_l2", "to": "hardware_gpu", "label": "Offload VRAM + RAM", "variant": "emphasis", "fromSide": "right", "toSide": "bottom" },
+    { "id": "watcher-or", "from": "watcher_daemon", "to": "omniroute_gw", "label": "Detecção de Queda", "variant": "security", "fromSide": "top", "toSide": "bottom" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Operação Online Primária", "items": ["Custo marginal zero com provedores Cloud Free Tier e OpenRouter", "A GPU física local permanece com 0 MB de VRAM alocada durante todo o expediente online"] },
+    { "dot": "emerald", "title": "Failover Nível 1 (Ollama Local)", "items": ["Modelo especializado qwen2.5-coder:7b-instruct-q4_K_M", "Roda 100% alocado na VRAM de 6 GB da RTX 3050 para respostas ultra-rápidas"] },
+    { "dot": "violet", "title": "Failover Nível 2 (LM Studio MoE)", "items": ["DeepSeek-Coder-V2-Lite-Instruct (16B parâmetros / 2.4B ativos)", "GPU Offload dinâmico distribuindo camadas entre VRAM e 16 GB de RAM DDR5"] },
+    { "dot": "rose", "title": "Governança Reativa de Memória", "items": ["Scripts PowerShell on_offline_event e on_online_event", "Desalocação total imediata de memória ao restabelecer conexão (Retorno a 0 MB)"] }
+  ]
+}

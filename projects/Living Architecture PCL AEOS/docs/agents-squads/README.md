@@ -6,7 +6,7 @@
 
 O **PromptCoreLabs_AEOS** opera sob uma arquitetura de múltiplos agentes autônomos e especializados (**Multi-Agent System - MAS**). Cada agente possui um contrato operacional estrito, limites de autonomia delimitados, entradas/saídas padronizadas e uma atribuição clara na matriz de responsabilidade da plataforma.
 
-A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (porta `:3100`), e a inteligência de visualização de arquitetura é conduzida pela persona **Cortex** através do motor **Archify Engine**.
+A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (porta `:3100`), e a inteligência de visualização de arquitetura é conduzida pela persona **Cortex** através do **PCL Cortex Visual Engine**.
 
 ---
 
@@ -183,7 +183,7 @@ graph TD
 - **Propósito**: Curadoria do repositório de skills dos agentes, onboarding de novos integrantes e handoff de sessão.
 
 #### 15. **Persona Cortex** (Inteligência & Arquitetura Viva)
-- **Liderança**: Núcleo de Visualização & Archify Engine.
+- **Liderança**: Núcleo de Visualização & PCL Cortex Visual Engine.
 - **Propósito**: Ingestão de metadados do repositório, validação de limites de layout, compilação de diagramas interativos HTML e manutenção do Portal Mestre.
 
 ---

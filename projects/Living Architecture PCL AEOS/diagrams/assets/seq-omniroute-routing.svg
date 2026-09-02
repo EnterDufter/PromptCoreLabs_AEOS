@@ -4436,11 +4436,11 @@
         </g>
         </g>
 
-        <g data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Trivial Gate -&gt; Qwen3 / Gemma 3" data-edge-key="3">
+        <g data-edge-from="omniroute" data-edge-to="local_gpu" data-edge-label="Failover Local -&gt; Qwen 2.5 / DeepSeek MoE" data-edge-key="3">
           <path data-composition-edge-from="omniroute" data-composition-edge-to="local_gpu" data-composition-points="177,360;379,360" d="M 177 360 L 379 360" class="a-dashed" data-animate="edge" style="--step:3" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="191.39999999999998" y="340" width="173.20000000000002" height="16" rx="3" class="c-mask"/>
-          <text x="278" y="350" class="t-messagebus" font-size="9" text-anchor="middle">Trivial Gate -&gt; Qwen3 / Gemma 3</text>
+          <rect x="180" y="340" width="196" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="350" class="t-messagebus" font-size="9" text-anchor="middle">Failover Local -&gt; Qwen 2.5 / DeepSeek MoE</text>
         </g>
         </g>
 

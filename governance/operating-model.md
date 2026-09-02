@@ -260,7 +260,7 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 
 2. **Squad de Estratégia & Arquitetura**:
    - **Strategist_One**: OKRs corporativos, visão do produto e métricas North Star.
-   - **Lead TLC Engineer**: Manutenção da arquitetura viva, governança C4 e motor Cortex Archify.
+   - **Lead TLC Engineer**: Manutenção da arquitetura viva, governança C4 e motor PCL Cortex Visual Engine.
 
 3. **Squad SecOps, FinOps & Infraestrutura**:
    - **CISO Security Agent**: Segurança Zero Trust, sanitização de chaves e imunização Mesh Tailscale.

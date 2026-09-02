@@ -67,26 +67,25 @@ stateDiagram-v2
     
     state OnlineState {
         [*] --> CloudRouting
-        CloudRouting: OmniRoute -> Cloud APIs / Ollama Cloud
-        CloudRouting: VRAM Local = 0 GB Alocados
+        CloudRouting : OmniRoute para Cloud APIs
+        CloudRouting : VRAM Local = 0 MB Alocada
     }
     
-    OnlineState --> OfflineTrigger : Queda de Conexão / Ping Fail
+    OnlineState --> OfflineState : Queda de Conexão
     
     state OfflineState {
-        OfflineTrigger --> TriggerScript : Dispara on_offline_event.ps1
-        TriggerScript --> FailoverL1 : Nível 1: Ollama Local (11434) qwen2.5-coder:7b (100% VRAM)
-        FailoverL1 --> FailoverL2 : Nível 2: LM Studio (1234) DeepSeek-Coder-V2 MoE (Offload)
-        FailoverL2 --> LocalRouting : OmniRoute Smart Failover
+        [*] --> FailoverNivel1
+        FailoverNivel1 : Nível 1 - Ollama qwen2.5-coder-7b (100% VRAM)
+        FailoverNivel1 --> FailoverNivel2 : Se Indisponível ou Tarefa MoE
+        FailoverNivel2 : Nível 2 - LM Studio DeepSeek-Coder-V2 (Offload)
     }
     
-    OfflineState --> OnlineTrigger : Conexão Restabelecida
+    OfflineState --> Restoration : Conexão Restabelecida
     
     state Restoration {
-        OnlineTrigger --> UnloadScript : Dispara on_online_event.ps1
-        UnloadScript --> LMSUnload : lms unload --all
-        UnloadScript --> OllamaStop : ollama stop qwen2.5-coder:7b
-        OllamaStop --> ZeroVRAM : VRAM Liberada (Retorna a 0 MB)
+        [*] --> UnloadModels
+        UnloadModels : lms unload e ollama stop
+        UnloadModels : Retorno estrito a 0 MB VRAM
     }
     
     Restoration --> OnlineState
