@@ -6,7 +6,7 @@
 
 Este portal é a **Única Fonte de Verdade (Single Source of Truth)** e a **Living Documentation (Documentação Viva e Dinâmica)** para o ecossistema **PromptCoreLabs_AEOS** (AI Engineering Operating System), conduzido pela inteligência arquitetural **Cortex**.
 
-> 💡 **Guia Narrativo**: Para navegar intuitivamente pela plataforma, siga os **4 Passos Sequenciais** abaixo. Clique sobre qualquer card visual para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **Cortex Archify Engine**.
+> 💡 **Guia Narrativo**: Para navegar intuitivamente pela plataforma, siga os **6 Passos Sequenciais** abaixo. Clique sobre qualquer card visual para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **Cortex Archify Engine**.
 
 ---
 
