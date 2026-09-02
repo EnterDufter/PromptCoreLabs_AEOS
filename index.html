@@ -400,9 +400,20 @@
       background: #080c14;
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       margin: 1.5rem 0;
       overflow-x: auto;
+    }
+    .mermaid-box svg {
+      max-width: 100%;
+      max-height: 420px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .mermaid-box-compact {
+      max-width: 650px;
+      margin: 1.5rem auto;
     }
 
     .taxonomy-table {
@@ -1536,7 +1547,7 @@ graph LR
         <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (Cortex Archify)">🌐 Abrir Interativo ↗</button>
       </div>
 
-      <div class="mermaid-box">
+      <div class="mermaid-box mermaid-box-compact">
         <pre class="mermaid">
 stateDiagram-v2
     [*] --> OnlineState : Conexão Ativa
