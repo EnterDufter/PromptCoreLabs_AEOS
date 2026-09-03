@@ -15,37 +15,31 @@
 Diferente de abordagens tradicionais que mantêm modelos pesados constantemente alocados na GPU (consumindo recursos do sistema durante a navegação/trabalho convencional), o **PCL AEOS** adota um **Ciclo de Vida Reativo baseado em Gatilhos de Estado**:
 
 ```mermaid
-flowchart TD
-    subgraph OnlineState [1. Estado Normal Online: 0 MB VRAM Alocada]
+flowchart LR
+    subgraph S1 [1. Estado Normal Online]
         direction TB
-        CloudReq["Requisições via OmniRoute :20130 -> Cloud APIs / OpenRouter"]
-        ZeroVRAM["VRAM Dedicada RTX 3050 = 0 MB (100% Livre)<br>System RAM DDR5 = 0 MB de modelo alocado"]
-        CloudReq --- ZeroVRAM
+        OnlineReq["OmniRoute :20130 & Cloud APIs"]
+        ZeroVRAM["<b>0 MB VRAM</b> (100% Livre)"]
+        OnlineReq --- ZeroVRAM
     end
 
-    OnlineState -->|Queda de Conexão com Internet / VPN| OfflineTrigger
-
-    subgraph OfflineTrigger [2. Gatilho Offline: Alocação Reativa em 2 Níveis]
+    subgraph S2 [2. Gatilho Offline (2 Níveis)]
         direction TB
-        Watch["1. Daemon watch_network_trigger.ps1 detecta falha no ping"]
-        ScriptOff["2. Executa on_offline_event.ps1"]
-        L1["3. Nível 1: Ollama qwen2.5-coder:7b (100% VRAM ~4.7 GB)"]
-        L2["4. Nível 2: LM Studio DeepSeek-Coder-V2 MoE (GPU Offload VRAM+RAM)"]
-        Watch --> ScriptOff --> L1 -.->|Se Indisponível ou MoE| L2
+        L1["<b>Nível 1: Ollama</b><br>qwen2.5-coder:7b (~4.7 GB)"]
+        L2["<b>Nível 2: LM Studio</b><br>DeepSeek MoE (Offload)"]
+        L1 -.-> L2
     end
 
-    OfflineTrigger -->|Restabelecimento da Conexão de Rede| OnlineTrigger
-
-    subgraph OnlineTrigger [3. Gatilho Online: Restauração & Retorno a Zero VRAM]
+    subgraph S3 [3. Restauração & Retorno]
         direction TB
-        DetectOn["1. Daemon detecta o retorno da conectividade"]
-        ScriptOn["2. Executa on_online_event.ps1"]
-        UnloadAll["3. Comandos lms unload --all e ollama stop"]
-        ZeroBack["4. VRAM e RAM liberadas instantaneamente (Retorno a 0 MB)"]
-        DetectOn --> ScriptOn --> UnloadAll --> ZeroBack
+        Unload["on_online_event.ps1<br>lms unload & ollama stop"]
+        ZeroBack["<b>Retorno a 0 MB VRAM</b>"]
+        Unload --- ZeroBack
     end
 
-    OnlineTrigger -->|GPU 100% Liberada| OnlineState
+    S1 -->|Queda de Rede| S2
+    S2 -->|Rede Ativa| S3
+    S3 -->|VRAM Liberada| S1
 ```
 
 ---

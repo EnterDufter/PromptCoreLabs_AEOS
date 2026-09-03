@@ -1658,12 +1658,12 @@ flowchart LR
           <tr>
             <td><code>on_offline_event.ps1</code></td>
             <td>Gatilho de Failover ativado na perda de rede/VPN</td>
-            <td>Executa <code>lms load --gpu max</code> sob demanda (~5.3 GB VRAM)</td>
+            <td>Prontidão imediata de Ollama (:11434) e LM Studio (:1234) sob demanda</td>
           </tr>
           <tr>
             <td><code>on_online_event.ps1</code></td>
             <td>Gatilho de Restauração ativado ao retornar a conectividade</td>
-            <td>Executa <code>lms unload --all</code> (retorna VRAM para 0 MB)</td>
+            <td>Executa <code>lms unload --all</code> e <code>ollama stop</code> (retorna VRAM para 0 MB)</td>
           </tr>
         </tbody>
       </table>
