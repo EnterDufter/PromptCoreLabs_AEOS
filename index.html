@@ -629,8 +629,7 @@
       color: #7dd3fc;
       font-size: 0.9rem;
     }
-    .modal-body .mermaid,
-    .mermaid-box {
+    .modal-body .mermaid {
       background: rgba(11, 15, 25, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -640,13 +639,10 @@
       -webkit-overflow-scrolling: touch;
       text-align: center;
     }
-    .modal-body .mermaid svg,
-    .mermaid-box svg {
+    .modal-body .mermaid svg {
       max-width: 100% !important;
-      max-height: 480px;
       height: auto !important;
-      width: auto !important;
-      display: inline-block;
+      display: block;
       margin: 0 auto;
     }
     .modal-body table {
@@ -1543,7 +1539,7 @@ graph LR
         <h3 style="color: var(--accent-cyan); margin: 0;">Arquitetura de Inferência Implementada (Fluxo de Decisão OmniRoute)</h3>
       </div>
 
-      <div class="mermaid-box mermaid-box-compact">
+      <div class="mermaid-box">
         <pre class="mermaid">
 flowchart TD
     Req[Requisição do PaperClip / Agente] --> OmniRoute[OmniRoute AI Gateway :20130]
@@ -1570,7 +1566,7 @@ flowchart TD
         <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
       </div>
 
-      <div class="mermaid-box mermaid-box-compact">
+      <div class="mermaid-box">
         <pre class="mermaid">
 flowchart LR
     subgraph S1 [1. Modo Online]
