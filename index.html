@@ -94,8 +94,19 @@
       color: var(--accent-cyan);
       font-family: 'JetBrains Mono', monospace;
     }
-    
-    /* NAVBAR FLUTUANTE COMPACTA (Sticky 52px) */
+    .badge-link {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .badge-link:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+      transform: translateY(-1px);
+    }
     .navbar-sticky {
       position: sticky;
       top: 0;
@@ -720,6 +731,22 @@
       .section-title-bar { flex-direction: column; align-items: flex-start; }
     }
 
+    footer {
+      text-align: center;
+      padding: 3.5rem 1.5rem 3rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 4rem;
+      background: rgba(8, 12, 20, 0.6);
+    }
+    footer p {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      margin: 0;
+    }
+
     /* IMPRESSÃO PERFEITA SEM PÁGINAS PRETAS OU ADICIONAIS */
     @media print {
       @page { margin: 1.5cm; size: auto; }
@@ -856,10 +883,23 @@
         <h1 class="hero-title-cyan">PromptCore Labs Architecture</h1>
         <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
         <div class="badge-bar">
-          <span class="badge">v1.0 Sovereign</span>
+          <span class="badge">v1.0 Soberania</span>
           <span class="badge">25 Diagramas Interativos</span>
           <span class="badge">TLC Spec-Driven v3</span>
           <span class="badge">100% Zero Trust</span>
+          <a href="https://github.com/EnterDufter/PromptCoreLabs_AEOS" target="_blank" rel="noopener noreferrer" class="badge badge-link" title="Repositório GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; margin-right: 5px;">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+          <a href="https://promptcore.com.br/" target="_blank" rel="noopener noreferrer" class="badge badge-link" title="PromptCore Labs Home">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            PromptCore Labs
+          </a>
         </div>
       </div>
     </div>
@@ -1771,7 +1811,7 @@ flowchart TD
   </div>
 
   <footer>
-    <p>PromptCoreLabs_AEOS v1.0 Sovereign — Todos os direitos reservados – 2026</p>
+    <p>PromptCore Labs AEOS — v1.0 Soberania — Todos os direitos reservados – 2026</p>
   </footer>
 
   <script type="module">
