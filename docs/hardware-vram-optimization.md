@@ -16,30 +16,27 @@ Diferente de abordagens tradicionais que mantêm modelos pesados constantemente 
 
 ```mermaid
 flowchart LR
-    subgraph S1 [1. Estado Normal Online]
+    subgraph ModoOnline [1. Modo Online]
         direction TB
-        OnlineReq["OmniRoute :20130 & Cloud APIs"]
-        ZeroVRAM["<b>0 MB VRAM</b> (100% Livre)"]
-        OnlineReq --- ZeroVRAM
+        NodeOnline["OmniRoute :20130<br>0 MB VRAM Alocada"]
     end
 
-    subgraph S2 [2. Gatilho Offline (2 Níveis)]
+    subgraph FailoverLocal [2. Failover Local]
         direction TB
-        L1["<b>Nível 1: Ollama</b><br>qwen2.5-coder:7b (~4.7 GB)"]
-        L2["<b>Nível 2: LM Studio</b><br>DeepSeek MoE (Offload)"]
-        L1 -.-> L2
+        NodeL1["Nível 1: Ollama qwen2.5-coder 7B<br>(100% VRAM ~4.7 GB)"]
+        NodeL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM+RAM)"]
+        NodeL1 -.->|Se Indisponível / MoE| NodeL2
     end
 
-    subgraph S3 [3. Restauração & Retorno]
+    subgraph ModoRestauracao [3. Restauração]
         direction TB
-        Unload["on_online_event.ps1<br>lms unload & ollama stop"]
-        ZeroBack["<b>Retorno a 0 MB VRAM</b>"]
-        Unload --- ZeroBack
+        NodeUnload["on_online_event.ps1<br>Retorno Estrito a 0 MB VRAM"]
     end
 
-    S1 -->|Queda de Rede| S2
-    S2 -->|Rede Ativa| S3
-    S3 -->|VRAM Liberada| S1
+    NodeOnline -->|Queda de Rede| NodeL1
+    NodeL1 -->|Rede Reestabelecida| NodeUnload
+    NodeL2 -->|Rede Reestabelecida| NodeUnload
+    NodeUnload -->|GPU Liberada| NodeOnline
 ```
 
 ---

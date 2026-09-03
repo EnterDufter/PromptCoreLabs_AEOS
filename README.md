@@ -263,30 +263,27 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph S1 [1. Modo Online]
+    subgraph ModoOnline [1. Modo Online]
         direction TB
-        Online["Rede Ativa<br><b>OmniRoute -> Cloud</b>"]
-        ZeroVRAM["VRAM = <b>0 MB</b>"]
-        Online --- ZeroVRAM
+        NodeOnline["OmniRoute :20130<br>0 MB VRAM Alocada"]
     end
 
-    subgraph S2 [2. Failover Local]
+    subgraph FailoverLocal [2. Failover Local]
         direction TB
-        L1["Nível 1: Ollama<br><b>qwen2.5-coder:7b</b> (100% VRAM)"]
-        L2["Nível 2: LM Studio<br><b>DeepSeek MoE</b> (Offload)"]
-        L1 -.-> L2
+        NodeL1["Nível 1: Ollama qwen2.5-coder 7B<br>(100% VRAM ~4.7 GB)"]
+        NodeL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM+RAM)"]
+        NodeL1 -.->|Se Indisponível / MoE| NodeL2
     end
 
-    subgraph S3 [3. Restauração]
+    subgraph ModoRestauracao [3. Restauração]
         direction TB
-        Unload["on_online_event.ps1<br><b>lms unload & ollama stop</b>"]
-        ZeroRet["Retorno a <b>0 MB VRAM</b>"]
-        Unload --- ZeroRet
+        NodeUnload["on_online_event.ps1<br>Retorno Estrito a 0 MB VRAM"]
     end
 
-    S1 -->|Queda de Rede| S2
-    S2 -->|Rede Online| S3
-    S3 -->|GPU Liberada| S1
+    NodeOnline -->|Queda de Rede| NodeL1
+    NodeL1 -->|Rede Reestabelecida| NodeUnload
+    NodeL2 -->|Rede Reestabelecida| NodeUnload
+    NodeUnload -->|GPU Liberada| NodeOnline
 ```
 
 #### Diagrama de Sequência & Ciclo de Vida Reativo (Cortex Engine)
