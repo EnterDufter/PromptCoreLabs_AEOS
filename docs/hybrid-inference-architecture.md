@@ -57,35 +57,31 @@ flowchart TD
 O estado de alocação da GPU transita dinamicamente entre zero e máxima performance:
 
 ```mermaid
-flowchart TD
-    Start([Conexão Estabelecida]) --> OnlineState
-
-    subgraph OnlineState [1. Estado Online: 0 MB VRAM Alocada]
+flowchart LR
+    subgraph S1 [1. Modo Online]
         direction TB
-        CloudRouting["OmniRoute Roteia para Cloud APIs"]
-        ZeroVRAM["GPU RTX 3050 em Repouso (0 MB VRAM)"]
-        CloudRouting --- ZeroVRAM
+        Online["Rede Ativa<br><b>OmniRoute -> Cloud</b>"]
+        ZeroVRAM["VRAM = <b>0 MB</b>"]
+        Online --- ZeroVRAM
     end
 
-    OnlineState -->|Queda de Conexão / Falha de Ping| OfflineState
-
-    subgraph OfflineState [2. Estado Offline: Failover Local sob Demanda]
+    subgraph S2 [2. Failover Local]
         direction TB
-        FailoverL1["Nível 1: Ollama qwen2.5-coder-7b<br>(100% VRAM ~4.7 GB)"]
-        FailoverL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM + RAM)"]
-        FailoverL1 -.->|Se Indisponível ou Tarefa MoE| FailoverL2
+        L1["Nível 1: Ollama<br><b>qwen2.5-coder:7b</b> (100% VRAM)"]
+        L2["Nível 2: LM Studio<br><b>DeepSeek MoE</b> (Offload)"]
+        L1 -.-> L2
     end
 
-    OfflineState -->|Conexão de Rede Restabelecida| Restoration
-
-    subgraph Restoration [3. Restauração & Desalocação Imediata]
+    subgraph S3 [3. Restauração]
         direction TB
-        UnloadModels["lms unload --all e ollama stop"]
-        ResetZero["Retorno Estrito a 0 MB de VRAM"]
-        UnloadModels --> ResetZero
+        Unload["on_online_event.ps1<br><b>lms unload & ollama stop</b>"]
+        ZeroRet["Retorno a <b>0 MB VRAM</b>"]
+        Unload --- ZeroRet
     end
 
-    Restoration -->|GPU Liberada| OnlineState
+    S1 -->|Queda de Rede| S2
+    S2 -->|Rede Online| S3
+    S3 -->|GPU Liberada| S1
 ```
 
 ### Automação via PowerShell (`scripts/windows/`):
