@@ -640,8 +640,7 @@
       text-align: center;
     }
     .modal-body .mermaid svg {
-      max-width: 650px !important;
-      width: 100% !important;
+      max-width: 100% !important;
       height: auto !important;
       display: block;
       margin: 0 auto;
@@ -1569,28 +1568,30 @@ flowchart TD
 
       <div class="mermaid-box">
         <pre class="mermaid">
-flowchart LR
-    subgraph ModoOnline [1. Modo Online]
+flowchart TD
+    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+
+    subgraph EstadoOnline [1. Estado Primário Online]
         direction TB
-        NodeOnline["OmniRoute :20130<br>0 MB VRAM Alocada"]
+        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
+        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
     end
 
-    subgraph FailoverLocal [2. Failover Local]
+    subgraph EstadoOffline [2. Failover Local Sob Demanda]
         direction TB
-        NodeL1["Nível 1: Ollama qwen2.5-coder 7B<br>(100% VRAM ~4.7 GB)"]
-        NodeL2["Nível 2: LM Studio DeepSeek MoE<br>(GPU Offload VRAM+RAM)"]
-        NodeL1 -.->|Se Indisponível / MoE| NodeL2
+        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
+        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
+        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
     end
 
-    subgraph ModoRestauracao [3. Restauração]
+    subgraph EstadoRestauracao [3. Restauração & Desalocação]
         direction TB
-        NodeUnload["on_online_event.ps1<br>Retorno Estrito a 0 MB VRAM"]
+        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
+        TriggerOn --> Unload[lms unload --all e ollama stop]
+        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
     end
 
-    NodeOnline -->|Queda de Rede| NodeL1
-    NodeL1 -->|Rede Reestabelecida| NodeUnload
-    NodeL2 -->|Rede Reestabelecida| NodeUnload
-    NodeUnload -->|GPU Liberada| NodeOnline
+    ZeroReturn -->|GPU 100% Liberada| Router
         </pre>
       </div>
 
