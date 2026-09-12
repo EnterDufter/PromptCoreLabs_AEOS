@@ -3,7 +3,7 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "C4 Nível 2 — Contêineres do System Harness & Memória Tripartida",
-    "subtitle": "Topologia da Plataforma Core (Harness), Cloudflare MCP & Resiliência R2/D1/Vectorize",
+    "subtitle": "Topologia da Plataforma Core (Harness), Persistência Externa (ADR-0008) & Resiliência Cloudflare R2",
     "output": "c4-l2-containers.html",
     "quality_profile": "showcase",
     "views": [
@@ -11,7 +11,7 @@
         "id": "docker-harness",
         "label": "Plataforma Core Docker",
         "focus": ["paperclip", "omniroute", "db"],
-        "note": "Contêineres locais que viabilizam a operação de custo marginal zero."
+        "note": "Contêineres locais com binding obrigatório de volume externo (ADR-0008)."
       },
       {
         "id": "tripartite-memory",
@@ -32,7 +32,7 @@
     { "id": "tailscale", "type": "security", "label": "Tailscale VPN", "sublabel": "Mesh Network", "pos": [50, 360], "size": [140, 60] }
   ],
   "boundaries": [
-    { "kind": "region", "label": "Docker Compose Bridge Network (pcl-net)", "wraps": ["paperclip", "omniroute", "db"] },
+    { "kind": "region", "label": "Docker Compose Bridge Network (pcl-aeos_aeos-net)", "wraps": ["paperclip", "omniroute", "db"] },
     { "kind": "security-group", "label": "Host Infrastructure & Edge Cloudflare Zero Trust", "wraps": ["backup_engine", "r2_storage", "cloudflare_mcp"] }
   ],
   "connections": [
@@ -45,7 +45,7 @@
     { "id": "tailscale-host", "from": "tailscale", "to": "paperclip", "label": "Túnel Seguro", "variant": "security" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Orquestração Core", "items": ["Contêineres centrais sustentam a Holding simultaneamente", "PostgreSQL 17 atuando como Memória RAG central das verticais"] },
+    { "dot": "cyan", "title": "Orquestração Core & Persistência (ADR-0008)", "items": ["Binding externo obrigatório dos volumes legados (promptcore_labs_db-data)", "PostgreSQL 17 atuando como Memória RAG central da holding PROAA"] },
     { "dot": "emerald", "title": "Memória Tripartida & R2", "items": ["Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)", "Plano de Recuperação de Desastres (DRP) com RTO <= 15min"] },
     { "dot": "rose", "title": "Segurança & MCP", "items": ["Rede Mesh Tailscale garante acesso remoto criptografado", "Cloudflare MCP Server viabiliza gestão Zero Trust via IDE"] }
   ]
