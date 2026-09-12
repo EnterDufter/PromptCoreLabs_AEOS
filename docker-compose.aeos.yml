@@ -75,5 +75,11 @@ networks:
 
 volumes:
   db-data:
+    external: true
+    name: promptcore_labs_db-data
   omniroute-data:
+    external: true
+    name: promptcore_labs_omniroute-data
   paperclip-storage:
+    external: true
+    name: promptcore_labs_paperclip-storage
