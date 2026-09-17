@@ -35,6 +35,35 @@ Decidiu-se pelas seguintes ações constitutivas no ecossistema PCL AEOS:
    * **`/boost`**: Ativado para raciocínio profundo e solução de problemas de arquitetura complexos.
    * **`/goal`**: Ativado nos Stage Gates 3 a 5 para execução contínua com auto-correção e bateria de testes automatizados.
 
+```mermaid
+flowchart TD
+    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
+        GrillMe["/grill-me (Entrevista & Alinhamento de Design)"]
+        Boost["/boost (Análise Profunda & Refatoração de Arquitetura)"]
+    end
+
+    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
+        HitL["Human-in-the-Loop (Aprovação do Implementation Plan)"]
+    end
+
+    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
+        Goal["/goal (Execução Autônoma Contínua & Testes)"]
+        Subagents["Subagentes em Paralelo (Prototyping, InfraSec, Data)"]
+    end
+
+    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
+        Walkthrough["Walkthrough & Evidências de Teste"]
+        Learn["/learn (Gravação de Aprendizados nos KIs)"]
+    end
+
+    GrillMe --> HitL
+    Boost --> HitL
+    HitL --> Goal
+    Goal --> Subagents
+    Subagents --> Walkthrough
+    Walkthrough --> Learn
+```
+
 4. **Auditabilidade & Compliance ISO 42001 / 27001**:
    * Todos os logs de execução de subagentes, comandos de terminal e alterações são gravados em arquivos auditáveis em formato JSONL (`transcript_full.jsonl`).
    * O artefato `implementation_plan.md` com autorização explícita constitui o registro de *Human-in-the-Loop (HitL)* para a ISO 42001.

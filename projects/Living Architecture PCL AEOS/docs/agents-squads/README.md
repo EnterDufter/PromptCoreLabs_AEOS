@@ -110,6 +110,39 @@ graph TD
 
 ---
 
+## 2.3. MATRIZ DE FUNCIONAMENTO DOS COMANDOS SLASH & GOVERNANÇA (ANTIGRAVITY IDE)
+
+```mermaid
+flowchart TD
+    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
+        GrillMe["/grill-me (Entrevista & Alinhamento de Design)"]
+        Boost["/boost (Análise Profunda & Refatoração de Arquitetura)"]
+    end
+
+    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
+        HitL["Human-in-the-Loop (Aprovação do Implementation Plan)"]
+    end
+
+    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
+        Goal["/goal (Execução Autônoma Contínua & Testes)"]
+        Subagents["Subagentes em Paralelo (Prototyping, InfraSec, Data)"]
+    end
+
+    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
+        Walkthrough["Walkthrough & Evidências de Teste"]
+        Learn["/learn (Gravação de Aprendizados nos KIs)"]
+    end
+
+    GrillMe --> HitL
+    Boost --> HitL
+    HitL --> Goal
+    Goal --> Subagents
+    Subagents --> Walkthrough
+    Walkthrough --> Learn
+```
+
+---
+
 ## 3. ESPECIFICAÇÃO DETALHADA DOS 15 AGENTES
 
 ### 🛠️ Squad Core de Engenharia (Spec-Driven Loop)
