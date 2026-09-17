@@ -35,6 +35,7 @@ Cada ADR é imutável: uma decisão aceita nunca é excluída, apenas substituí
 | **ADR-0007** | Metodologia Governança TLC Spec-Driven v3 & 5 Stage Gates | **Accepted** | 2026-07-30 | Exigência da suíte `.specs/` (`specify.md`, `design.md`, `tasks.md`, `validate.md`) para todo projeto. |
 | **ADR-0008** | Governança de Persistência de Volumes Docker e Namespace Isolation | **Accepted** | 2026-09-12 | Obrigatoriedade de binding externo nos volumes do Docker Compose e trava de segurança para o agente. |
 | **ADR-0009** | Governança do Triage Gate e Abordagem Dual-Track SDD (Lean vs Full) | **Accepted** | 2026-09-12 | Triagem dinâmica entre Rota Lean (tlc-spec-lean) e Rota Full SDD (5 Stage Gates). |
+| **ADR-0010** | Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness | **Accepted** | 2026-09-17 | Substituição de squad-vibe-coding por squad-prototyping e acoplamento do Antigravity IDE às squads sob ISO 42001/27001. |
 
 ---
 
