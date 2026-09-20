@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 
 const contactEmail = "contato@promptcore.com.br";
@@ -7,14 +8,36 @@ export function FinalCTA() {
     <section id="contato" className="section-band py-16 sm:py-24">
       <Container className="relative">
         <div className="border border-vibrant-cyan/30 bg-surface-panel p-6 shadow-cyan-glow/20 sm:p-10 lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="grid gap-10 lg:grid-cols-[0.98fr_1.02fr] lg:items-center">
             <div>
-              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-vibrant-cyan">
-                // SESSÃO ESTRATÉGICA EXECUTIVA
-              </p>
-              <h2 className="mt-4 max-w-3xl font-heading text-2xl font-bold leading-tight text-text-high-contrast sm:text-4xl lg:text-4xl tracking-tight">
-                Pronto para conquistar Soberania Tecnológica e implantar seu Bunker de IA?
-              </h2>
+              {/* Bento-Grid Header: Logo (Retângulo Vermelho) + Título/Badge (Retângulo Amarelo) */}
+              <div className="grid gap-5 sm:gap-6 sm:grid-cols-[auto_1fr] items-center mb-6">
+                {/* Bento Card: Logo PCL Chip (Estilo AEOS) */}
+                <div className="relative flex shrink-0 items-center justify-center border border-vibrant-cyan/30 bg-surface-navy/90 p-3 sm:p-4 shadow-cyan-glow/20 group hover:border-vibrant-cyan hover:shadow-cyan-glow transition-all w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
+                  <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3 z-10">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-tertiary"></span>
+                  </span>
+                  <Image
+                    src="/pcl-logo.png"
+                    alt="PromptCore Labs Architecture Logo"
+                    width={140}
+                    height={140}
+                    priority
+                    className="h-full w-full object-contain filter drop-shadow-[0_0_10px_rgba(0,240,255,0.55)] group-hover:drop-shadow-[0_0_18px_rgba(0,240,255,0.85)] group-hover:scale-105 transition-all duration-300"
+                  />
+                </div>
+
+                {/* Conteúdo Textual da Seção de Contato */}
+                <div>
+                  <p className="font-mono text-xs font-semibold uppercase tracking-widest text-vibrant-cyan">
+                    // SESSÃO ESTRATÉGICA EXECUTIVA
+                  </p>
+                  <h2 className="mt-2 font-heading text-xl sm:text-2xl lg:text-3xl font-bold leading-tight text-text-high-contrast tracking-tight">
+                    Pronto para conquistar Soberania Tecnológica e implantar seu Bunker de IA?
+                  </h2>
+                </div>
+              </div>
               <p className="mt-4 font-mono text-xs leading-relaxed text-blueprint-gray sm:text-sm">
                 Agende uma conversa direta com nosso <strong>Founder & Principal AI Forward Deployed Architect</strong>. Vamos avaliar o cenário da sua empresa, identificar riscos de vazamento de dados, custos ocultos e estruturar a implantação sob as normas ISO 27001 e ISO 42001.
               </p>
