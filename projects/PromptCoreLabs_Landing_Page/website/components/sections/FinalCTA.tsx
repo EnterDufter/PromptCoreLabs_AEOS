@@ -10,21 +10,17 @@ export function FinalCTA() {
         <div className="border border-vibrant-cyan/30 bg-surface-panel p-6 shadow-cyan-glow/20 sm:p-10 lg:p-12">
           <div className="grid gap-10 lg:grid-cols-[0.98fr_1.02fr] lg:items-center">
             <div>
-              {/* Bento-Grid Header: Logo (Retângulo Vermelho) + Título/Badge (Retângulo Amarelo) */}
+              {/* Bento-Grid Header: Logo PNG Transparente Ampliado + Título/Badge */}
               <div className="grid gap-5 sm:gap-6 sm:grid-cols-[auto_1fr] items-center mb-6">
-                {/* Bento Card: Logo PCL Chip (Estilo AEOS) */}
-                <div className="relative flex shrink-0 items-center justify-center border border-vibrant-cyan/30 bg-surface-navy/90 p-3 sm:p-4 shadow-cyan-glow/20 group hover:border-vibrant-cyan hover:shadow-cyan-glow transition-all w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                  <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3 z-10">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-tertiary"></span>
-                  </span>
+                {/* Bento Card: Logo PCL Transparente Ampliado (Sem caixa de fundo nem luz verde) */}
+                <div className="relative flex shrink-0 items-center justify-center group w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40">
                   <Image
                     src="/pcl-logo.png"
                     alt="PromptCore Labs Architecture Logo"
-                    width={140}
-                    height={140}
+                    width={160}
+                    height={160}
                     priority
-                    className="h-full w-full object-contain filter drop-shadow-[0_0_10px_rgba(0,240,255,0.55)] group-hover:drop-shadow-[0_0_18px_rgba(0,240,255,0.85)] group-hover:scale-105 transition-all duration-300"
+                    className="h-full w-full object-contain filter drop-shadow-[0_0_12px_rgba(0,240,255,0.45)] group-hover:drop-shadow-[0_0_20px_rgba(0,240,255,0.75)] group-hover:scale-105 transition-all duration-300"
                   />
                 </div>
 
