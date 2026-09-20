@@ -37,8 +37,6 @@ export function Header() {
       <Container className="flex min-h-16 items-center justify-between gap-3 sm:gap-5">
         <a href="#inicio" className="flex items-center gap-2.5 sm:gap-3 group shrink-0" aria-label="PromptCore Labs - Início">
           <div className="relative flex items-center justify-center">
-            {/* Soft Cyan Glow Halo behind logo */}
-            <div className="absolute inset-0 bg-vibrant-cyan/25 blur-md rounded-full pointer-events-none group-hover:bg-vibrant-cyan/45 transition-all duration-300"></div>
             <span className="absolute -top-1 -right-1 z-10 flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
@@ -46,9 +44,9 @@ export function Header() {
             <Image
               src="/pcl-logo.png"
               alt="PCL Logo"
-              width={44}
-              height={44}
-              className="relative z-0 h-10 w-10 sm:h-11 sm:w-11 object-contain drop-shadow-[0_0_12px_rgba(0,240,255,0.65)] group-hover:drop-shadow-[0_0_20px_rgba(0,240,255,0.95)] group-hover:scale-105 transition-all duration-300"
+              width={52}
+              height={52}
+              className="relative z-0 h-11 w-11 sm:h-[50px] sm:w-[50px] object-contain drop-shadow-[0_0_6px_rgba(0,240,255,0.35)] group-hover:drop-shadow-[0_0_12px_rgba(0,240,255,0.65)] group-hover:scale-105 transition-all duration-300"
             />
           </div>
           <span className="font-heading text-sm sm:text-base font-bold text-text-high-contrast tracking-tight group-hover:text-vibrant-cyan transition-colors">
