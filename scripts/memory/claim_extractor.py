@@ -195,14 +195,26 @@ class PCLClaimExtractor:
 
 if __name__ == "__main__":
     extractor = PCLClaimExtractor()
-    print("Iniciando extração piloto com carimbos de proveniência...")
-    test_files = [
+    print("Iniciando extração em massa de claims com carimbos de proveniência e Tiers de autoridade...")
+    core_files = [
+        ("foundation/FOUNDATION.md", "human_architect"),
         ("architecture/principles.md", "human_architect"),
+        ("architecture/modules.md", "human_architect"),
         ("architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md", "human_architect"),
-        ("specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md", "claude-3-5-sonnet")
+        ("governance/governance.md", "human_architect"),
+        ("governance/operating-model.md", "human_architect"),
+        ("governance/decision-authority.md", "human_architect"),
+        ("governance/policies.md", "human_architect"),
+        ("governance/roles.md", "human_architect"),
+        ("governance/stage-gates.md", "human_architect"),
+        ("memory/README.md", "human_architect"),
+        ("specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md", "claude-3-5-sonnet"),
+        ("specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md", "claude-3-5-sonnet"),
+        ("specs/pcl-aeos-evolution/spec-pcl-aeos-extended-memory-agent.md", "claude-3-5-sonnet"),
+        ("specs/pcl-aeos-evolution/spec-pcl-aeos-antigravity-rollout-playbook-v2.md", "claude-3-5-sonnet")
     ]
     total = 0
-    for file_path, model in test_files:
+    for file_path, model in core_files:
         claims = extractor.extract_claims_from_file(file_path, source_model_override=model)
         ids = extractor.persist_claims(claims)
         print(f"📄 {file_path} -> {len(ids)} claims persistidas (Tier {extractor.determine_authority_tier(file_path)}, Modelo: {model})")

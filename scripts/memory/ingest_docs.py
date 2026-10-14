@@ -57,26 +57,51 @@ class PCLDocumentIngestor:
     def parse_hierarchical_sections(self, content: str) -> List[Dict[str, str]]:
         """
         Navegação Vectorless: divide o documento respeitando os títulos de seção
-        (Markdown Headings # e ##).
+        (Markdown Headings #, ##, ### e Banners === / ---).
         """
         lines = content.split("\n")
         sections = []
         current_title = "Introdução"
         current_lines = []
 
-        for line in lines:
-            if re.match(r"^#{1,3}\s+", line):
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            line_str = line.strip()
+            
+            # 1. Detecta Markdown Header (#, ##, ###)
+            is_header = False
+            header_title = ""
+            if re.match(r"^#{1,4}\s+", line):
+                is_header = True
+                header_title = re.sub(r"^#{1,4}\s+", "", line).strip()
+            
+            # 2. Detecta Banner Header (=== ou --- abaixo de linha de texto)
+            elif i + 1 < len(lines) and re.match(r"^={3,}$|^-{3,}$", lines[i+1].strip()) and line_str and not line_str.startswith("="):
+                is_header = True
+                header_title = line_str
+                i += 1 # pula a linha de separador
+            
+            # 3. Detecta Banner Header centralizado (linha entre ===)
+            elif re.match(r"^={3,}$|^-{3,}$", line_str) and i + 2 < len(lines) and re.match(r"^={3,}$|^-{3,}$", lines[i+2].strip()):
+                is_header = True
+                header_title = lines[i+1].strip()
+                i += 2 # pula título e fechamento
+
+            if is_header:
                 if current_lines:
                     text_block = "\n".join(current_lines).strip()
-                    if len(text_block) > 30: # Ignora blocos vazios
+                    if len(text_block) > 30:
                         sections.append({
                             "title": current_title,
                             "content": text_block
                         })
-                current_title = re.sub(r"^#{1,3}\s+", "", line).strip()
+                current_title = header_title
                 current_lines = [line]
             else:
                 current_lines.append(line)
+            
+            i += 1
 
         if current_lines:
             text_block = "\n".join(current_lines).strip()
@@ -103,7 +128,6 @@ class PCLDocumentIngestor:
 
         # 1. Inserção de Chunks Vetoriais 768D
         for idx, sec in enumerate(sections):
-            print(f"   * Processando chunk {idx+1}/{len(sections)}: '{sec['title'][:35]}...'")
             vec = self.rag.get_embedding(sec["content"][:2000])
             vec_str = "[" + ",".join(str(x) for x in vec) + "]"
             
@@ -136,7 +160,6 @@ class PCLDocumentIngestor:
         entity_id = entity_res[0]["id"] if entity_res else None
 
         if entity_id:
-            # Cria claim piloto
             claim_text = f"Documento oficial {doc_name} define regras e principios com hash {meta['file_sha256'][:8]}."
             clean_claim_text = claim_text.replace("'", "''")
             claim_sql = f"""
@@ -154,7 +177,6 @@ class PCLDocumentIngestor:
             claim_res = self.db.query_json(claim_sql)
             if claim_res:
                 claim_id = claim_res[0]["id"]
-                # Cria recibo de evidência
                 receipt_sql = f"""
                     INSERT INTO memory.evidence_receipts
                     (claim_id, source_file, file_sha256, git_commit_hash, section_anchor)
@@ -168,15 +190,31 @@ class PCLDocumentIngestor:
                 """
                 self.db.execute_sql(receipt_sql)
         
-        print(f"✅ Ingestão concluída com sucesso para: {doc_name}")
+        print(f"✅ Ingestão concluída com sucesso para: {doc_name} ({len(sections)} chunks)")
 
 if __name__ == "__main__":
     ingestor = PCLDocumentIngestor()
     docs_to_ingest = [
+        "foundation/FOUNDATION.md",
         "architecture/principles.md",
         "architecture/modules.md",
-        "governance/stage-gates.md"
+        "architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md",
+        "governance/governance.md",
+        "governance/operating-model.md",
+        "governance/decision-authority.md",
+        "governance/policies.md",
+        "governance/roles.md",
+        "governance/stage-gates.md",
+        "memory/README.md",
+        "specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md",
+        "specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md",
+        "specs/pcl-aeos-evolution/spec-pcl-aeos-extended-memory-agent.md",
+        "specs/pcl-aeos-evolution/spec-pcl-aeos-antigravity-rollout-playbook-v2.md"
     ]
+    print(f"\n========================================================")
+    print(f" INICIANDO INGESTÃO EM MASSA DE {len(docs_to_ingest)} DOCUMENTOS CORE ")
+    print(f"========================================================")
     for doc in docs_to_ingest:
         ingestor.ingest_document(doc)
-    print("\n🎉 Todos os documentos piloto foram ingeridos no schema 'memory' com vetores 768D e recibos de evidência!\n")
+    print(f"\n🎉 Todos os {len(docs_to_ingest)} documentos core foram ingeridos no schema 'memory' com vetores 768D e recibos de evidência!\n")
+
