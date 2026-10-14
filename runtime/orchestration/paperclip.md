@@ -49,6 +49,25 @@ Todas as requisições de agentes no PaperClip utilizam o OmniRoute Gateway para
   - Reviewer/QA & Micro-Loop Evidence/Trivial Gate: TIER-3 (Cloud Fast Fallback - Gemini 3 Flash / GPT-4o-mini).
 
 ==================================================
+PAPERCLIP AGENT HARNESS (v2.0 CONFINAMENTO)
+==================================================
+
+O Paperclip Agent Harness (`scripts/agent/paperclip_agent_harness.py`) é o motor de execução segura e confinamento de agentes autônomos do PCL AEOS v2.0:
+
+• Confinamento Gate 3 (Tool-Call Gating):
+  - Isola as ferramentas executáveis dos agentes em sandbox controlado.
+  - Bloqueia chamadas de sistema inseguras ou mutações não autorizadas.
+  - Alimenta o contexto do agente apenas com Claims atômicas validadas (`memory.claims`) e recibos criptográficos auditáveis (`memory.evidence_receipts`).
+
+• Ponto de Parada Humana no Gate 4 (Human-in-the-Loop):
+  - Qualquer ação com potencial de impacto estrutural (deploy em produção, migração destrutiva ou gasto de infraestrutura) exige aprovação manual formal no Gate 4.
+  - O agente é obrigado a pausar a execução e aguardar o veredito humano antes de avançar.
+
+• Protocolo de Tolerância a Falhas:
+  - Bounded retries limitados a 3 tentativas por tarefa atômica.
+  - Reversão imediata em caso de rejeição de evidências pelo Reviewer/QA.
+
+==================================================
 PERSISTÊNCIA E SOBERANIA DE DADOS
 ==================================================
 

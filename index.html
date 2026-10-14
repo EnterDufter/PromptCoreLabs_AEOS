@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark" data-mode="conceptual">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- PCL-AEOS Knowledge Platform v2.0.0 -->
-  <title>PromptCore Labs — Plataforma de Conhecimento PCL AEOS v2.0</title>
-  <meta name="description" content="AI Engineering Operating System — Plataforma de Conhecimento, Arquitetura Viva e Memória Cognitiva Soberana">
+  <!-- PCL-AEOS Portal v2.0.1 - Forced Cache Refresh -->
+  <title>PromptCore Labs Architecture — Trilho de Aprendizado & Living Architecture</title>
+  <meta name="description" content="AI Engineering Operating System — Portal de Arquitetura Viva e Guia Narrativo de Aprendizado">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Marked.js para renderização de Markdown sob demanda em modais -->
+  <!-- Marked.js para compilar Markdown em HTML estilizado instantaneamente -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
@@ -19,972 +19,2269 @@
       --bg-card: #131b2e;
       --bg-card-hover: #1a2744;
       --border-color: #1e293b;
-      --border-focus: #38bdf8;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent-cyan: #38bdf8;
       --accent-blue: #60a5fa;
       --accent-indigo: #818cf8;
       --accent-purple: #c084fc;
-      --accent-emerald: #10b981;
-      --accent-rose: #f43f5e;
-      --accent-amber: #f59e0b;
-      --glow-cyan: 0 0 24px rgba(56, 189, 248, 0.4);
-      --glow-emerald: 0 0 24px rgba(16, 185, 129, 0.4);
+      --tag-p0-bg: #451a03; --tag-p0-text: #f97316; --tag-p0-border: #7c2d12;
+      --tag-p1-bg: #422006; --tag-p1-text: #eab308; --tag-p1-border: #713f12;
+      --tag-p2-bg: #172554; --tag-p2-text: #38bdf8; --tag-p2-border: #1e40af;
+      --tag-p3-bg: #3b0764; --tag-p3-text: #c084fc; --tag-p3-border: #6b21a8;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', sans-serif;
       line-height: 1.7;
-      padding-bottom: 6rem;
+      padding-bottom: 5rem;
     }
 
-    /* HEADER & HERO */
+    /* HERO HEADER COM LOGO PCL E GLOW CYAN */
     .header-hero {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.98) 100%);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(11, 15, 25, 0.98) 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 3rem 1.5rem 2.2rem 1.5rem;
-      position: relative;
+      padding: 3rem 1.5rem 2.5rem 1.5rem;
     }
-    .hero-container {
-      max-width: 1240px;
+    .hero-brand-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2rem;
+      max-width: 1100px;
       margin: 0 auto;
     }
-    .hero-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+    .hero-logo-img {
+      height: 120px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.55));
+      transition: transform 0.3s ease;
     }
-    .hero-brand {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
+    .hero-logo-img:hover {
+      transform: scale(1.04);
     }
-    .hero-badge-tag {
-      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-indigo) 100%);
-      color: #0b0f19;
+    .hero-text-box {
+      text-align: left;
+    }
+    .hero-title-cyan {
+      font-size: 2.6rem;
       font-weight: 800;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 999px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-    .hero-title {
-      font-size: 2.3rem;
-      font-weight: 800;
+      color: #ffffff; /* Texto em branco puro */
+      text-shadow: 0 0 18px rgba(56, 189, 248, 0.85), 0 0 38px rgba(56, 189, 248, 0.45); /* Aura/brilho Cyan */
+      margin-bottom: 0.5rem;
       letter-spacing: -0.5px;
-      color: #ffffff;
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-      margin-bottom: 0.3rem;
     }
-    .hero-subtitle {
+    .hero-text-box p {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 780px;
+      margin-bottom: 1.2rem;
     }
-
-    /* SELETOR DE MODO COGNITIVO (DUAL-TRACK) */
-    .mode-selector-box {
-      background: rgba(19, 27, 46, 0.8);
+    .badge-bar {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.35rem;
-      display: inline-flex;
-      gap: 0.35rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
     }
-    .mode-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      padding: 0.6rem 1.1rem;
-      border-radius: 8px;
+    .badge-link {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
-    .mode-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.05);
+    .badge-link:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+      transform: translateY(-1px);
     }
-    .mode-btn.active {
-      background: var(--accent-cyan);
-      color: #0b0f19;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
-      font-weight: 700;
-    }
-
-    /* BARRA DE NAVEGAÇÃO DOS 4 NÍVEIS */
-    .nav-bar-sticky {
+    .navbar-sticky {
       position: sticky;
       top: 0;
-      z-index: 90;
-      background: rgba(11, 15, 25, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.75rem 1.5rem;
-    }
-    .nav-bar-container {
-      max-width: 1240px;
-      margin: 0 auto;
+      z-index: 1000;
+      height: 52px;
+      background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      overflow-x: auto;
-      scrollbar-width: none;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
-    .nav-links {
+    .nav-brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--accent-cyan);
+      text-decoration: none;
       display: flex;
-      gap: 0.6rem;
-    }
-    .nav-link-item {
-      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(19, 27, 46, 0.6);
+    }
+    .nav-phases {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    .phase-tab {
+      background: rgba(19, 27, 46, 0.8);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
       font-weight: 600;
-      padding: 0.45rem 0.9rem;
-      border-radius: 8px;
+      text-decoration: none;
       transition: all 0.2s ease;
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
-    .nav-link-item:hover {
+    .phase-tab:hover {
       border-color: var(--accent-cyan);
+      background: var(--bg-card-hover);
       color: var(--accent-cyan);
       transform: translateY(-1px);
     }
-    .nav-num {
+    .phase-num {
       background: var(--accent-cyan);
       color: #0b0f19;
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.7rem;
       font-weight: 800;
     }
 
-    /* CONTAINER PRINCIPAL */
-    .main-container {
+    /* BOTÃO MENU MOBILE (HAMBURGUER) */
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #e3e3e3;
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .mobile-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .container {
       max-width: 1240px;
       margin: 0 auto;
       padding: 2.5rem 1.5rem;
     }
 
-    /* CARDS DE INDICADORES SOBERANOS */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
       margin-bottom: 3rem;
     }
-    .metric-card {
-      background: linear-gradient(135deg, rgba(19, 27, 46, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.4rem;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+    .hero-banner h2 {
+      font-size: 1.35rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.6rem;
     }
-    .metric-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent-cyan);
-    }
-    .metric-icon {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-    }
-    .metric-value {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #ffffff;
-      font-family: 'JetBrains Mono', monospace;
-      margin-bottom: 0.2rem;
-    }
-    .metric-value.cyan { color: var(--accent-cyan); text-shadow: 0 0 14px rgba(56, 189, 248, 0.4); }
-    .metric-value.emerald { color: var(--accent-emerald); text-shadow: 0 0 14px rgba(16, 185, 129, 0.4); }
-    .metric-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .hero-banner p {
       color: var(--text-muted);
-    }
-    .metric-desc {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 0.4rem;
-      line-height: 1.4;
+      font-size: 0.95rem;
+      margin: 0;
     }
 
-    /* SEÇÕES DE NÍVEL */
-    .level-section {
-      background: rgba(19, 27, 46, 0.35);
+    /* FASES SEÇÕES */
+    .phase-section {
+      background: rgba(19, 27, 46, 0.4);
       border: 1px solid var(--border-color);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 2.5rem 2rem;
       margin-bottom: 3.5rem;
-      scroll-margin-top: 80px;
+      scroll-margin-top: 70px;
     }
-    .level-header {
+    .phase-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
       gap: 1rem;
       margin-bottom: 1.5rem;
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 1rem;
     }
-    .level-title-group {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .level-tag {
-      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%);
+    .phase-badge-title {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
       color: #0b0f19;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 800;
       padding: 0.35rem 0.8rem;
       border-radius: 20px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .level-title {
-      font-size: 1.6rem;
+    .phase-title-text {
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--text-main);
     }
-
-    /* CALLOUT BOX PEDAGÓGICA (METÁFORA) */
-    .analogy-box {
-      background: rgba(15, 23, 42, 0.7);
-      border-left: 4px solid var(--accent-cyan);
-      border-radius: 0 12px 12px 0;
-      padding: 1.4rem 1.6rem;
-      margin-bottom: 2rem;
-    }
-    .analogy-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.5rem;
-    }
-    .analogy-text {
-      color: var(--text-muted);
+    .phase-intro {
       font-size: 0.98rem;
-      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      background: rgba(11, 15, 25, 0.6);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 1rem 1.2rem;
+      border-radius: 0 8px 8px 0;
     }
 
-    /* VISUALIZADOR CORTEX EMBUTIDO */
-    .cortex-viewer-box {
-      background: #070a12;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      overflow: hidden;
-      margin: 2rem 0;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    }
-    .cortex-viewer-header {
-      background: rgba(19, 27, 46, 0.9);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.8rem 1.2rem;
+    /* BARRA DE TÍTULO COM BOTÃO INTERATIVO NA MESMA LINHA */
+    .section-title-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      margin: 1.8rem 0 0.8rem 0;
       flex-wrap: wrap;
       gap: 0.8rem;
     }
-    .cortex-viewer-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .cortex-viewer-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+    .btn-diagram-modal {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(96, 165, 250, 0.2) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
       color: var(--accent-cyan);
-      padding: 0.2rem 0.6rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 0.45rem 1rem;
       border-radius: 6px;
-    }
-    .cortex-viewer-actions {
-      display: flex;
-      gap: 0.6rem;
-    }
-    .cortex-action-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      transition: all 0.2s ease;
+      text-decoration: none;
     }
-    .cortex-action-btn:hover {
+    .btn-diagram-modal:hover {
+      background: rgba(56, 189, 248, 0.3);
       border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-      background: rgba(56, 189, 248, 0.1);
-    }
-    .cortex-iframe {
-      width: 100%;
-      height: 640px;
-      border: none;
-      display: block;
-      background: #0b0f19;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
     }
 
-    /* GRID DE CARDS EXPLICATIVOS */
-    .cards-grid {
+    /* GRID EXPANDIDO 2 COLUNAS */
+    .grid-expanded {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.4rem;
-      margin: 1.8rem 0;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
-    .info-card {
+
+    .card-exp {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+    .card-exp:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.12);
+    }
+    .card-exp-img {
+      width: 100%;
+      height: 280px;
+      background: #060911;
+      border-bottom: 1px solid var(--border-color);
+      overflow: hidden;
+      position: relative;
+    }
+    .card-exp-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .card-exp:hover .card-exp-img img {
+      transform: scale(1.03);
+    }
+    .card-exp-content {
       padding: 1.5rem;
-      transition: all 0.2s ease;
-    }
-    .info-card:hover {
-      border-color: rgba(56, 189, 248, 0.4);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-    .info-card-header {
       display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 0.8rem;
+      flex-direction: column;
+      flex-grow: 1;
     }
-    .info-card-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+    .card-exp-meta {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
     }
-    .icon-cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); }
-    .icon-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
-    .icon-purple { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); }
-    .icon-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
-    .info-card-title {
-      font-size: 1.1rem;
+    .card-exp-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+    .card-exp-title {
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-main);
+      margin-bottom: 0.5rem;
     }
-    .info-card-body {
-      color: var(--text-muted);
+    .card-exp-desc {
       font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      flex-grow: 1;
       line-height: 1.6;
     }
-    .info-card-list {
-      margin-top: 0.8rem;
-      padding-left: 1.2rem;
-      color: var(--text-muted);
+    .card-exp-footer {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      margin-top: auto;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 100%);
+      color: #0b0f19;
+      font-weight: 700;
       font-size: 0.88rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
     }
-    .info-card-list li {
-      margin-bottom: 0.35rem;
+    .btn-primary:hover {
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+      transform: scale(1.02);
+    }
+    .link-doc {
+      color: var(--accent-indigo);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+    }
+    .link-doc:hover {
+      color: var(--accent-cyan);
+      text-decoration: underline;
     }
 
-    /* VISIBILIDADE CONTROLADA PELO SELETOR DE MODO */
-    html[data-mode="conceptual"] .tech-only {
-      display: none !important;
+    .priority-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
     }
-    html[data-mode="technical"] .conceptual-only {
-      display: none !important;
+    .p0 { background: var(--tag-p0-bg); color: var(--tag-p0-text); border: 1px solid var(--tag-p0-border); }
+    .p1 { background: var(--tag-p1-bg); color: var(--tag-p1-text); border: 1px solid var(--tag-p1-border); }
+    .p2 { background: var(--tag-p2-bg); color: var(--tag-p2-text); border: 1px solid var(--tag-p2-border); }
+    .p3 { background: var(--tag-p3-bg); color: var(--tag-p3-text); border: 1px solid var(--tag-p3-border); }
+
+    .mermaid-box {
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+    .mermaid-box svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .mermaid-box-compact {
+      max-width: 860px;
+      margin: 1.5rem auto;
+      padding: 1.5rem;
     }
 
-    /* MODAL DE VISUALIZAÇÃO DE MARKDOWN */
+    .taxonomy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+    .taxonomy-table th, .taxonomy-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .taxonomy-table th {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--accent-cyan);
+    }
+    .taxonomy-table tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    /* MODAL OVERLAY (SUPORTA DOCS E DIAGRAMAS FLUTUANTES DE 90% DE VISUALIZAÇÃO) */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(11, 15, 25, 0.45);
       backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: none;
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
     }
     .modal-overlay.active {
-      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
     .modal-container {
-      background: #0f172a;
-      border: 1px solid var(--border-color);
+      background: rgba(13, 19, 34, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
       border-radius: 16px;
-      width: 100%;
-      max-width: 900px;
-      max-height: 90vh;
+      width: 90vw;
+      max-width: 90vw;
+      height: 90vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.18);
+      transform: translateY(24px) scale(0.98);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
     }
+    .modal-overlay.active .modal-container {
+      transform: translateY(0) scale(1);
+    }
     .modal-header {
-      background: #1e293b;
+      background: rgba(19, 28, 49, 0.92);
+      border-bottom: 1px solid var(--border-color);
       padding: 1rem 1.5rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-color);
+      justify-content: space-between;
+    }
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .modal-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
     }
     .modal-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      color: #ffffff;
-      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-main);
     }
-    .modal-close-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.5rem;
+    
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    
+    .modal-action-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--accent-cyan);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      line-height: 1;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .modal-action-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
     .modal-close-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.1);
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+      transform: rotate(90deg);
     }
     .modal-body {
-      padding: 2rem;
+      padding: 2.2rem;
       overflow-y: auto;
+      flex-grow: 1;
       color: #cbd5e1;
-      font-size: 0.95rem;
-      line-height: 1.8;
+      font-size: 0.925rem;
+      line-height: 1.65;
     }
-    .modal-body h1, .modal-body h2, .modal-body h3 {
-      color: #ffffff;
-      margin: 1.5rem 0 0.8rem 0;
+
+    /* ESTILIZAÇÃO ENXUTA E LEGÍVEL DO MARKDOWN DENTRO DO MODAL */
+    .modal-body h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin: 0.5rem 0 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      letter-spacing: -0.3px;
+    }
+    .modal-body h2 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 1.4rem 0 0.6rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.35rem;
+    }
+    .modal-body h3 {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--accent-indigo);
+      margin: 1.1rem 0 0.4rem 0;
+    }
+    .modal-body h4 {
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      margin: 0.9rem 0 0.3rem 0;
+    }
+    .modal-body p {
+      margin-bottom: 0.75rem;
+    }
+    .modal-body ul, .modal-body ol {
+      margin: 0 0 0.85rem 1.4rem;
+    }
+    .modal-body li {
+      margin-bottom: 0.3rem;
+    }
+    .modal-body code {
+      background: #080c14;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      border: 1px solid var(--border-color);
     }
     .modal-body pre {
-      background: #0b0f19;
-      border: 1px solid #1e293b;
-      padding: 1rem;
+      background: #070a12;
+      border: 1px solid var(--border-color);
+      padding: 0.8rem 1rem;
       border-radius: 8px;
       overflow-x: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      margin: 1rem 0;
+      margin-bottom: 1rem;
+    }
+    .modal-body pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      font-size: 0.82rem;
+    }
+    .modal-body blockquote {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.85rem;
+      color: #7dd3fc;
+      font-size: 0.9rem;
+    }
+    .modal-body .mermaid {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+      text-align: center;
+    }
+    .modal-body .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      margin: 0 auto;
     }
     .modal-body table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1.5rem 0;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
     }
     .modal-body th, .modal-body td {
-      border: 1px solid #334155;
-      padding: 0.6rem 0.9rem;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.75rem;
       text-align: left;
     }
     .modal-body th {
-      background: #1e293b;
+      background: #131c31;
       color: var(--accent-cyan);
     }
-
-    /* FOOTER */
-    .site-footer {
-      border-top: 1px solid var(--border-color);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-    }
-    .site-footer a {
+    .modal-body a {
       color: var(--accent-cyan);
       text-decoration: none;
     }
+    .modal-body a:hover {
+      text-decoration: underline;
+    }
+
+    /* RESPONSIVIDADE MOBILE & REGRAS DE IMPRESSÃO */
+    @media (max-width: 768px) {
+      .header-hero { padding: 2rem 1rem 1.5rem 1rem; }
+      .hero-brand-layout { flex-direction: column; text-align: center; gap: 1rem; }
+      .hero-logo-img { height: 85px; }
+      .hero-title-cyan { font-size: 1.8rem; }
+      .hero-text-box p { font-size: 0.92rem; }
+      .badge-bar { justify-content: center; }
+
+      .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+
+      /* MENU DROPDOWN MOBILE COM FADE E SUAVE DESLOCAMENTO */
+      .nav-phases {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(11, 15, 25, 0.98);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.75rem;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+        margin-top: 0.5rem;
+      }
+      .nav-phases.active {
+        display: flex;
+        animation: fadeInDown 0.25s ease forwards;
+      }
+      .phase-tab {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0.8rem 1rem;
+      }
+
+      .container { padding: 1.5rem 1rem; }
+      .grid-expanded { grid-template-columns: 1fr; gap: 1.2rem; }
+      .card-exp-img { height: 200px; }
+      .phase-section { padding: 1.5rem 1rem; }
+      .phase-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .phase-title-text { font-size: 1.25rem; }
+
+      .modal-container { width: 96vw; height: 92vh; margin: 0; border-radius: 12px; }
+      .modal-body { padding: 1.2rem 1rem; font-size: 0.875rem; line-height: 1.58; }
+      .modal-body h1 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+      .modal-body h2 { font-size: 1.05rem; margin: 1.1rem 0 0.5rem 0; }
+      .modal-body h3 { font-size: 0.95rem; margin: 0.9rem 0 0.35rem 0; }
+      .modal-body pre { padding: 0.6rem 0.8rem; font-size: 0.78rem; }
+      .modal-body code { font-size: 0.78rem; }
+      .modal-body table { font-size: 0.8rem; }
+      .modal-body th, .modal-body td { padding: 0.4rem 0.5rem; }
+      .section-title-bar { flex-direction: column; align-items: flex-start; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 3.5rem 1.5rem 3rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 4rem;
+      background: rgba(8, 12, 20, 0.6);
+    }
+    footer p {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      margin: 0;
+    }
+
+    /* IMPRESSÃO PERFEITA SEM PÁGINAS PRETAS OU ADICIONAIS */
+    @media print {
+      @page { margin: 1.5cm; size: auto; }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .header-hero, .navbar-sticky, main.container, footer {
+        display: none !important;
+      }
+      .modal-overlay {
+        position: static !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: block !important;
+      }
+      .modal-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+        transform: none !important;
+      }
+      .modal-header, .modal-actions {
+        display: none !important;
+      }
+      .modal-body {
+        padding: 0 !important;
+        overflow: visible !important;
+        color: #1e293b !important;
+        font-size: 9.5pt !important;
+        line-height: 1.45 !important;
+      }
+      .modal-body h1 {
+        font-size: 13pt !important;
+        color: #0f172a !important;
+        border-bottom: 1pt solid #cbd5e1 !important;
+        margin: 0.5rem 0 0.5rem 0 !important;
+        padding-bottom: 0.2rem !important;
+        page-break-after: avoid;
+      }
+      .modal-body h2 {
+        font-size: 11.5pt !important;
+        color: #0f172a !important;
+        border-bottom: 1pt solid #e2e8f0 !important;
+        margin: 0.8rem 0 0.4rem 0 !important;
+        padding-bottom: 0.2rem !important;
+        page-break-after: avoid;
+      }
+      .modal-body h3 {
+        font-size: 10pt !important;
+        color: #1e293b !important;
+        margin: 0.6rem 0 0.3rem 0 !important;
+        page-break-after: avoid;
+      }
+      .modal-body p, .modal-body li {
+        color: #1e293b !important;
+        margin-bottom: 0.4rem !important;
+      }
+      .modal-body code, .modal-body pre {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        font-size: 8.5pt !important;
+        page-break-inside: avoid;
+      }
+      .modal-body blockquote {
+        background: #f1f5f9 !important;
+        border-left: 3pt solid #0284c7 !important;
+        color: #0f172a !important;
+        font-size: 9pt !important;
+      }
+      .modal-body table {
+        font-size: 8.5pt !important;
+        page-break-inside: auto;
+      }
+      .modal-body th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+      }
+      .modal-body th, .modal-body td {
+        border: 1px solid #cbd5e1 !important;
+        padding: 0.35rem 0.5rem !important;
+      }
+      .modal-body tr {
+        page-break-inside: avoid;
+      }
+      .modal-body .mermaid {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 0.5rem !important;
+        margin: 0.8rem 0 !important;
+        page-break-inside: avoid !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .modal-body .mermaid svg {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+        page-break-inside: avoid !important;
+      }
+      .modal-body .mermaid svg text {
+        font-size: 9.5pt !important;
+        font-weight: 700 !important;
+        fill: #000000 !important;
+      }
+    }
+  
+    /* DUAL-TRACK COGNITIVE MODE (EXECUTIVO VS TÉCNICO) */
+    html[data-cognitive-mode="executive"] .view-tech-only {
+      display: none !important;
+    }
+    html[data-cognitive-mode="technical"] .view-executive-only {
+      display: none !important;
+    }
+
+    .dual-track-switch {
+      display: inline-flex;
+      background: rgba(19, 27, 46, 0.95);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 30px;
+      padding: 3px;
+      gap: 3px;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
+    }
+    .dual-track-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .dual-track-btn:hover {
+      color: #fff;
+    }
+    .dual-track-btn.active {
+      background: var(--accent-cyan);
+      color: #0b0f19;
+      font-weight: 800;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+    }
+
+    /* PAINEL DIDÁTICO EXECUTIVO (A METÁFORA DO ESCRITÓRIO E DA BIBLIOTECA) */
+    .executive-spotlight-panel {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(19, 27, 46, 0.96) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 16px;
+      padding: 2.2rem 2.4rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.15);
+    }
+    .exec-title {
+      color: var(--accent-cyan);
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+    .exec-cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+    .exec-mini-card {
+      background: rgba(11, 15, 25, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.2rem;
+      transition: border-color 0.2s;
+    }
+    .exec-mini-card:hover {
+      border-color: var(--accent-cyan);
+    }
+    .exec-mini-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .exec-mini-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- HERO HEADER COM IDENTIDADE VISUAL SOBERANA -->
+  <!-- HERO HEADER COM LOGO PCL E TÍTULO BRANCO COM CYAN GLOW -->
   <header class="header-hero">
-    <div class="hero-container">
-      <div class="hero-top-bar">
-        <div class="hero-brand">
-          <div>
-            <span class="hero-badge-tag">Release v2.0 Soberano</span>
-            <h1 class="hero-title">PromptCore Labs — AEOS</h1>
-            <p class="hero-subtitle">
-              AI Engineering Operating System — Plataforma de Conhecimento, Memória Cognitiva Tripartida e Governança de Agentes Autônomos.
-            </p>
-          </div>
-        </div>
-
-        <!-- SELETOR DE MODO COGNITIVO -->
-        <div class="mode-selector-box">
-          <button class="mode-btn active" id="btn-mode-conceptual" onclick="setMode('conceptual')">
-            👔 Visão Conceitual
-          </button>
-          <button class="mode-btn" id="btn-mode-technical" onclick="setMode('technical')">
-            🛠️ Visão Técnica
-          </button>
-        </div>
-      </div>
-
-      <!-- CARDS DE MÉTRICAS SOBERANAS -->
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-icon">💰</div>
-          <div class="metric-value emerald">$0.00</div>
-          <div class="metric-label">Custo Operacional</div>
-          <div class="metric-desc">Zero dependência de serviços pagos para operações e memória local.</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon">⚡</div>
-          <div class="metric-value cyan">&lt; 15 ms</div>
-          <div class="metric-label">Latência Coprocessador</div>
-          <div class="metric-desc">Laya System One respondendo na CPU INT8 sem tocar a GPU.</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon">🛡️</div>
-          <div class="metric-value">0 MB</div>
-          <div class="metric-label">GPU VRAM Alocada</div>
-          <div class="metric-desc">Placa de vídeo 100% preservada para tarefas pesadas do usuário.</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon">⏱️</div>
-          <div class="metric-value emerald">7.18 s</div>
-          <div class="metric-label">RTO Recuperação DRP</div>
-          <div class="metric-desc">Restauração ponta a ponta validada e auditada em Stage Gate.</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon">📜</div>
-          <div class="metric-value cyan">220</div>
-          <div class="metric-label">Claims Ativas</div>
-          <div class="metric-desc">Fatos atômicos catalogados com recibo criptográfico SHA-256.</div>
+    <div class="hero-brand-layout">
+      <!-- CAMINHO DIRETO DO LOGO NAS ASSETS DO REPOSITÓRIO -->
+      <img src="assets/PCL_Logo_Transparente.png" alt="PCL Logo" class="hero-logo-img">
+      <div class="hero-text-box">
+        <h1 class="hero-title-cyan">PromptCore Labs Architecture</h1>
+        <p>Sistema Operacional de Engenharia Assistida por Inteligência Artificial (AI Engineering Operating System)</p>
+        <div class="badge-bar">
+          <span class="badge" style="background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); color: #fff;">v2.0 Soberania & Cognição</span>
+          <span class="badge">220 Claims Auditáveis</span>
+          <span class="badge" style="color: #34d399; border-color: rgba(52, 211, 153, 0.4);">$0.00 / 0 MB GPU</span>
+          <span class="badge" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.4);">RTO 7.18s DRP</span>
+          <a href="https://github.com/EnterDufter/PromptCoreLabs_AEOS" target="_blank" rel="noopener noreferrer" class="badge badge-link" title="Repositório GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; margin-right: 5px;">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+          <a href="docs/architecture-v2-executive-guide.md" class="badge badge-link link-doc" data-doc-title="Guia Executivo e Conceitual v2.0 (3 Minutos)" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.15);">
+            📖 Guia Executivo (3 Minutos) ↗
+          </a>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- BARRA DE NAVEGAÇÃO DOS 4 NÍVEIS -->
-  <nav class="nav-bar-sticky">
-    <div class="nav-bar-container">
-      <div class="nav-links">
-        <a href="#nivel-1" class="nav-link-item"><span class="nav-num">1</span> Visão Executiva & Contexto</a>
-        <a href="#nivel-2" class="nav-link-item"><span class="nav-num">2</span> Jornada Cognitiva (Memória)</a>
-        <a href="#nivel-3" class="nav-link-item"><span class="nav-num">3</span> Engenharia & Topologia</a>
-        <a href="#nivel-4" class="nav-link-item"><span class="nav-num">4</span> Governança & Auditoria</a>
-      </div>
-      <div>
-        <a href="https://github.com/EnterDufter/PromptCoreLabs_AEOS" target="_blank" class="nav-link-item">
-          ⭐ Repositório GitHub
-        </a>
-      </div>
+  <!-- NAVBAR FLUTUANTE COMPACTA COM "PromptCore Labs AEOS" -->
+  <nav class="navbar-sticky">
+    <a href="#" class="nav-brand">⚡ PromptCore Labs AEOS</a>
+    
+    <!-- Botão Hamburguer Mobile -->
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e3e3e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Lista de Fases do Trilho -->
+    <div id="nav-phases-menu" class="nav-phases">
+      <a href="#fase-1" class="phase-tab"><span class="phase-num">1</span> Visão Macro</a>
+      <a href="#fase-2" class="phase-tab"><span class="phase-num">2</span> Squad IA</a>
+      <a href="#fase-3" class="phase-tab"><span class="phase-num">3</span> RAG Memória</a>
+      <a href="#fase-4" class="phase-tab"><span class="phase-num">4</span> Backup & DRP</a>
+      <a href="#fase-5" class="phase-tab"><span class="phase-num">5</span> Infra & Governança</a>
+      <a href="#fase-6" class="phase-tab"><span class="phase-num">6</span> Failover Local</a>
     </div>
   </nav>
 
-  <!-- CONTEÚDO PRINCIPAL (4 NÍVEIS) -->
-  <main class="main-container">
+  <main class="container">
 
-    <!-- NÍVEL 1: VISÃO EXECUTIVA & CONTEXTO -->
-    <section id="nivel-1" class="level-section">
-      <div class="level-header">
-        <div class="level-title-group">
-          <span class="level-tag">Nível 1</span>
-          <h2 class="level-title">Visão Executiva & Contexto (Em 3 Minutos)</h2>
-        </div>
-        <button class="cortex-action-btn" onclick="openDocModal('docs/architecture-v2-executive-guide.md', 'Guia Executivo v2.0')">
-          📖 Ler Guia Completo
-        </button>
+    <div class="hero-banner">
+      <h2>🗺️ Trilho de Aprendizado Arquitetural & Living Architecture</h2>
+      <p>Bem-vindo à documentação viva do <strong>PromptCoreLabs_AEOS</strong>, projetada e mantida pela inteligência arquitetural <strong>Cortex</strong>. Para navegar de forma intuitiva pela plataforma, siga os 6 passos no menu flutuante acima. Clique em <strong>📖 Ler Artigo</strong> para abrir o leitor modal sobreposto ou em <strong>🌐 Abrir Interativo ↗</strong> para explorar a versão interativa do diagrama em tela flutuante (90%).</p>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- FASE 1: VISÃO MACRO & FUNDAÇÃO -->
+    <!-- ================================================== -->
+    <section id="fase-1" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 1 de 6</span>
+        <h2 class="phase-title-text"> Visão Macro & Fundação do Sistema</h2>
       </div>
 
-      <!-- ANALOGIA PARA NÃO-TÉCNICOS -->
-      <div class="analogy-box">
-        <div class="analogy-title">💡 O que é o PCL AEOS em linguagem simples?</div>
-        <p class="analogy-text">
-          Imagine ter uma <strong>equipe de consultoria técnica de elite</strong> morando dentro do seu computador. 
-          O PCL AEOS não é um simples "chat de inteligência artificial"; ele é uma <strong>fábrica autônoma</strong> onde agentes especializados leem suas regras, planejam soluções, programam, realizam testes e guardam memórias à prova de esquecimento. Tudo isso com <strong>privacidade absoluta</strong> (seus dados nunca saem da sua máquina) e <strong>custo zero de nuvem</strong> para a rotina diária.
-        </p>
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O <em>PromptCoreLabs_AEOS</em> é um sistema operacional soberano concebido para governar o desenvolvimento assistido por IA. Nesta primeira fase, você entenderá o contexto do sistema (atores e fronteira local/nuvem) e a topologia de contêineres do Harness físico.
       </div>
 
-      <!-- VISUALIZADOR CORTEX: C4 L1 CONTEXTO -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>🗺️ C4 Nível 1: Contexto Macro do Ecossistema PCL AEOS</span>
-            <span class="cortex-viewer-badge">PCL Cortex Interactive</span>
-          </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
-        </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" class="cortex-iframe" loading="lazy"></iframe>
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Fluxo do Conhecimento no AEOS</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-knowledge-flow.html" data-diagram-title="Fluxo do Conhecimento no AEOS (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">O conhecimento nasce nas diretrizes constitucionais e flui rigorosamente até os projetos ativos:</p>
+      
+      <div class="mermaid-box">
+        <pre class="mermaid">
+graph LR
+    A[Foundation / Governance] --> B[Bootstrap / Onboarding]
+    B --> C[Knowledge / Memory]
+    C --> D[Agents / Squads]
+    D --> E[Runtime / Harness]
+    E --> F[Models / Integrations]
+    F --> G[Projects / Active Apps]
+    
+    style A fill:#1a365d,stroke:#3182ce,stroke-width:2px,color:#fff
+    style D fill:#2c5282,stroke:#4299e1,stroke-width:2px,color:#fff
+    style G fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff
+        </pre>
       </div>
 
-      <!-- CARDS DE PILARES -->
-      <div class="cards-grid">
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-cyan">🏛️</div>
-            <h3 class="info-card-title">Soberania & Custo Zero</h3>
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas Fundacionais (Níveis C4 L1 e L2)</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-C4-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" alt="DIAG-C4-01 System Context Diagram">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-01 • C4 Level 1</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">System Context Diagram</h4>
+            <p class="card-exp-desc">Mapeia o operador humano, a fronteira local protegida por VPN Mesh Tailscale, as conexões de inferência na nuvem e o repositório remoto GitHub.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" class="link-doc" data-doc-title="Estratégia & Visão Corporativa">📖 Ler Artigo de Estratégia ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" data-diagram-title="System Context Diagram (C4 Level 1)">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Projetado para operar com autonomia total na infraestrutura local do desenvolvedor. A inteligência de classificação e memória roda a <strong>$0.00/mês</strong> sem depender de assinaturas ou servidores externos para existir.
-          </p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">🧠</div>
-            <h3 class="info-card-title">Memória Sem Alucinação</h3>
+
+        <!-- DIAG-C4-02 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" alt="DIAG-C4-02 Harness Container Topology">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-02 • C4 Level 2</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Harness Container Topology</h4>
+            <p class="card-exp-desc">Detalha os contêineres Docker soberanos: <code>pcl-db</code> (PostgreSQL 17 + PGVector), <code>pcl-laya</code> (Coprocessador System One :20140 CPU INT8 &lt;15ms), <code>pcl-omniroute</code> (AI Gateway) e <code>pcl-paperclip</code> (Dashboard de Orquestração).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc" data-doc-title="Runtime & Arquitetura de Contêineres">📖 Ler Artigo de Runtime ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" data-diagram-title="Harness Container Topology (C4 Level 2)">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Agentes comuns adivinham respostas. No PCL AEOS, os agentes são blindados por um fichário de afirmações auditáveis vinculadas a recibos criptográficos SHA-256. Se não houver prova canônica, o sistema acusa o fato.
-          </p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-purple">🔄</div>
-            <h3 class="info-card-title">Recuperação em 7 Segundos</h3>
+
+        <!-- DIAG-C4-03 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" alt="DIAG-C4-03 Repository Component Breakdown">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-03 • C4 Level 3</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Repository Component Breakdown</h4>
+            <p class="card-exp-desc">Exibe a decomposição dos 14 diretórios chave do repositório consolidado e o fluxo de dados entre governança, memória e execução.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" class="link-doc" data-doc-title="Modelo C4 & Especificação">📖 Ler Artigo do Modelo C4 ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" data-diagram-title="Repository Component Breakdown (C4 Level 3)">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Plano de Recuperação de Desastres (DRP) com backup frio diário cifrado militarmente em AES-256 no Cloudflare R2, com recuperação testada e cronometrada em 7,18 segundos.
-          </p>
+        </div>
+
+        <!-- DIAG-PRJ-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" alt="DIAG-PRJ-01 Projects Taxonomy">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-PRJ-01 • Component Isolation</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Projects Taxonomy & Isolation</h4>
+            <p class="card-exp-desc">Demonstra as regras de isolamento soberano dos projetos contidos no diretório <code>projects/</code> (como a Living Architecture e o Crialli).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" class="link-doc" data-doc-title="Glossário Oficial & Taxonomia">📖 Ler Glossário Oficial ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" data-diagram-title="Projects Taxonomy & Isolation">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 2: SQUAD DE IA & AGENTES -->
+    <!-- ================================================== -->
+    <section id="fase-2" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 2 de 6</span>
+        <h2 class="phase-title-text">🤖 Squad de IA & Agentes Inteligentes</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O ecossistema PCL AEOS orquestra uma squad com <strong>15 Agentes Inteligentes especialistas</strong>. Nesta etapa, você verá como o Planner, Builder, QA e Auditor colaboram no protocolo de mensagens e na governança do PaperClip.
+      </div>
+
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">UML de Sequência: Colaboração Atômica entre Agentes</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-agent-collaboration.html" data-diagram-title="Colaboração Atômica entre Agentes (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+      </div>
+
+      <div class="mermaid-box">
+        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Humano as Operador Humano
+    participant PL as Agente Planner
+    participant BL as Agente Builder
+    participant QA as Agente QA/Reviewer
+    participant AD as Agente Auditor
+    
+    Humano->>PL: Aprova specify.md (Gate 1)
+    PL->>BL: Cria e entrega tasks.md (Backlog)
+    BL->>BL: Executa edições cirúrgicas (máx 3 retentativas)
+    BL->>QA: Solicita validação (envia código e diffs)
+    QA->>QA: Executa auditoria adversária e testes por observação
+    alt Testes Falham / Adulteração Detectada
+        QA-->>BL: Emite REFUTED com logs de erro
+    else Testes e Diffs Aprovados
+        QA->>AD: Solicita auditoria de compliance (VERIFIED)
+        AD->>AD: Verifica padrões e vazamento de chaves
+        AD-->>Humano: Entrega validate.md e relatório de compliance
+        Humano->>Humano: Assina e aprova Stage Gate (STATE.md)
+    end
+        </pre>
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas da Squad e Ciclo de Vida dos Agentes</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-HOLD-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" alt="DIAG-HOLD-01 Holding Digital 3 Camadas">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-HOLD-01 • PCL-AEOS v2.0</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Holding Digital (3 Camadas)</h4>
+            <p class="card-exp-desc">Mapeamento topológico das 3 Camadas do modelo de Holding Digital: Plataforma Core, 15 Verticais B2B e Canais de Monetização.</p>
+            <div class="card-exp-footer">
+              <a href="governance/operating-model.md" class="link-doc" data-doc-title="Operating Model v2.0">📖 Ver Operating Model ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" data-diagram-title="Holding Digital 3 Camadas">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-AGT-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" alt="DIAG-AGT-01 Squad Orchestration & Roles">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-AGT-01 • Component / Squad</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">Squad Orchestration & Roles</h4>
+            <p class="card-exp-desc">Mapeia os 15 agentes organizados nas 4 camadas: Estratégia/Negócios, Engenharia/Especificação, Execução de Código e Qualidade/Segurança.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Manual dos 15 Agentes Inteligentes">📖 Manual dos 15 Agentes ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" data-diagram-title="Squad Orchestration & Roles">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-LIF-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" alt="DIAG-LIF-01 PCL Cortex Micro-Loop Lifecycle">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-LIF-01 • State Machine</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">PCL Cortex Micro-Loop Lifecycle</h4>
+            <p class="card-exp-desc">Máquina de estados de micro-execução que governa as retentativas do agente Builder e as transições de status (IDLE, PLANNING, WORKING, QA_REVIEW).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" class="link-doc" data-doc-title="Matriz RACI dos Agentes">📖 Ver Matriz RACI da Squad ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" data-diagram-title="PCL Cortex Micro-Loop Lifecycle">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-DEV-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" alt="DIAG-DEV-01 Developer Experience & IDE Loop">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-DEV-01 • Sequence Diagram</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Developer Experience & IDE Loop</h4>
+            <p class="card-exp-desc">Sequência de interação contínua entre o desenvolvedor humano, a IDE assistida por IA, os servidores MCP locais e os relatórios de validação.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Integrações & Servidores MCP">📖 Ler Artigo de Integrações MCP ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" data-diagram-title="Developer Experience & IDE Loop">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-BS-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/workflow-bootstrap-onboarding.png" alt="DIAG-BS-01 Bootstrap & Onboarding Pipeline">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-BS-01 • Workflow</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Bootstrap & Onboarding Pipeline</h4>
+            <p class="card-exp-desc">Pipeline de inicialização de novas sessões de IA e transmissão soberana de contexto entre tarefas (Handoff Protocol).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança & Onboarding">📖 Ver Guia de Onboarding ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/workflow-bootstrap-onboarding.html" data-diagram-title="Bootstrap & Onboarding Pipeline">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HARNESS-GATE-01 -->
+        <div class="card-exp">
+          <div class="card-exp-img" style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
+            📎
+          </div>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">HARNESS-GATE-01 • Confinamento</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Paperclip Agent Harness (v2.0)</h4>
+            <p class="card-exp-desc">Isolamento rigoroso de chamadas de ferramentas de agentes (Tool-Call Gating) no Gate 3 e ponto de parada humana mandatório no Gate 4 antes de qualquer ação irreversível ou deploy.</p>
+            <div class="card-exp-footer">
+              <a href="runtime/orchestration/paperclip.md" class="link-doc" data-doc-title="Paperclip Agent Harness & Governança Gate 3">📖 Ler Especificação do Harness ↗</a>
+              <span class="badge" style="font-size:0.75rem;">Gate 3 + Gate 4</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 3: CONHECIMENTO & RAG VETORIAL -->
+    <!-- ================================================== -->
+    <section id="fase-3" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 3 de 6</span>
+        <h2 class="phase-title-text">🧠 Conhecimento & Memória Persistente (RAG)</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> O AEOS opera sobre uma <strong>Memória Tripartida (Curto, Médio e Longo Prazo)</strong> integrada ao banco relacional local PostgreSQL 17 + PGVector. Esta fase cobre a ingestão, o RAG semântico (768D/1536D) e a estrutura relacional das tabelas de vetores e logs de execução.
+      </div>
+
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Modelo de Memória Tripartida & ERD PGVector</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-vector-memory-erd.html" data-diagram-title="Modelo de Memória Tripartida & ERD PGVector (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+      </div>
+
+      <div class="mermaid-box">
+        <pre class="mermaid">
+graph LR
+    classDef shortM fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef medM fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef longM fill:#1e1b4b,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef erdTable fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph Tier1["1. Memoria de Curto Prazo"]
+        S1["Contexto Ativo do Agente<br/>Conversa e Prompt Buffer"]:::shortM
+        S2["OmniRoute Prompt Cache<br/>Porta 20130 EBITDA Shield"]:::shortM
+        S1 --> S2
+    end
+
+    subgraph Tier2["2. Memoria de Medio Prazo"]
+        M1["Docs Markdown e ADRs"]:::medM
+        M2["Chunking e Embeddings 768D"]:::medM
+        M3["Busca por Cosseno HNSW"]:::medM
+        M1 --> M2 --> M3
+    end
+
+    subgraph Tier3["3. Memoria de Longo Prazo e ERD"]
+        T1["Tabela document_chunks<br/>id, source_file, embedding"]:::erdTable
+        T2["Tabela agent_execution_logs<br/>execution_id, session_id, metrics"]:::erdTable
+        T1 -.-> T2
+    end
+
+    Tier1 --> Tier2
+    Tier2 --> Tier3
+        </pre>
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas de Linhagem de Dados e Recuperação Vetorial</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-MEM-TRIPARTITE -->
+        <div class="card-exp">
+          <div class="card-exp-img" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
+            🧬
+          </div>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-MEM-TRIPARTITE • Dataflow</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Memória Tripartida & Reconciliação</h4>
+            <p class="card-exp-desc">Linhagem dos 3 níveis de memória: 199 chunks vetoriais 768D (<code>memory.document_chunks</code>), 220 afirmações atômicas (<code>memory.claims</code>) e recibos de prova imutáveis SHA-256 (<code>memory.evidence_receipts</code>).</p>
+            <div class="card-exp-footer">
+              <a href="docs/architecture-v2-executive-guide.md" class="link-doc" data-doc-title="Guia Executivo: A Metáfora do Escritório">📖 Ler Guia da Memória ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" data-diagram-title="Memória Tripartida & Reconciliação Soberana (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-LAYA-01 -->
+        <div class="card-exp">
+          <div class="card-exp-img" style="background: linear-gradient(135deg, #172554 0%, #1e1b4b 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
+            ⚡
+          </div>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-LAYA-01 • System One Coprocessor</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Coprocessador Laya (&lt;15ms na CPU INT8)</h4>
+            <p class="card-exp-desc">Inferência reflexa ultrarrápida com 0 MB de VRAM na GPU e zero custo de nuvem ($0.00). Classifica requisições instantaneamente e aplica o cache EBITDA Shield.</p>
+            <div class="card-exp-footer">
+              <span class="badge" style="font-size:0.75rem; color:#38bdf8;">0 MB GPU • &lt;15ms</span>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" data-diagram-title="Decisão do Coprocessador Laya System One & EBITDA Shield">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-STALE-01 -->
+        <div class="card-exp">
+          <div class="card-exp-img" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
+            🐕
+          </div>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-STALE-01 • Zero-Token Sentinel</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">Deterministic Staleness Daemon</h4>
+            <p class="card-exp-desc">Sentinela silencioso disparado via Git hook (<code>post-commit</code>) em 0,2s. Valida hashes SHA-256 e commits sem gastar tokens, garantindo que premissas alteradas sejam reavaliadas na hora.</p>
+            <div class="card-exp-footer">
+              <a href="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" class="link-doc" data-doc-title="Runbook: Staleness Daemon & DRP Operations">📖 Ler Runbook de Operações ↗</a>
+              <span class="badge" style="font-size:0.75rem; color:#34d399;">0.2s • 0 Tokens</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- DIAG-DAT-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory.png" alt="DIAG-DAT-01 RAG & Memory Data Lineage">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-DAT-01 • Dataflow</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">RAG & Memory Data Lineage</h4>
+            <p class="card-exp-desc">Linhagem completa dos dados: da varredura de arquivos locais Markdown/JSON até a vetorização, busca por similaridade de cosseno e injeção de contexto no prompt.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" class="link-doc" data-doc-title="Memória & RAG Vetorial PGVector">📖 Ler Artigo RAG Vetorial ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html" data-diagram-title="RAG & Memory Data Lineage">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-LEG-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" alt="DIAG-LEG-01 Legacy Migration Dataflow">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-LEG-01 • Dataflow</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">Legacy Migration Dataflow</h4>
+            <p class="card-exp-desc">Dataflow de sanitização, extração e migração do acervo de dados legados do diretório <code>legacy/</code> para o novo padrão de memória vetorial.</p>
+            <div class="card-exp-footer">
+              <a href="legacy-migration.md" class="link-doc" data-doc-title="Migração & Higienização Legada">📖 Ver Migração Legada ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" data-diagram-title="Legacy Migration Dataflow">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-OBS-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/obs-audit-trail.png" alt="DIAG-OBS-01 Observability & Audit Trail">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-OBS-01 • Observability</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Observability & Audit Trail</h4>
+            <p class="card-exp-desc">Trilha imutável de auditoria gravada na tabela <code>agent_execution_logs</code>, garantindo rastreabilidade de cada decisão tomada pela IA.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Segurança & Compliance Zero Trust">📖 Ler Guia de Compliance ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html" data-diagram-title="Observability & Audit Trail">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-MCP-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" alt="DIAG-MCP-01 MCP Server Interconnection Map">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-MCP-01 • MCP Server Map</span>
+              <span class="priority-tag p2">P2 Médio</span>
+            </div>
+            <h4 class="card-exp-title">MCP Server Interconnection Map</h4>
+            <p class="card-exp-desc">Mapa de integração via Model Context Protocol (MCP) conectando a IDE aos servidores <code>pcl-cortex</code> e <code>gemini-notebooklm</code>.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" class="link-doc" data-doc-title="Protocolo MCP & Ferramentas">📖 Ler Protocolo MCP ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" data-diagram-title="MCP Server Interconnection Map">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- FASE 4: BACKUP & DRP (DISASTER RECOVERY PLAN) -->
+    <!-- ================================================== -->
+    <section id="fase-4" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 4 de 6</span>
+        <h2 class="phase-title-text">💾 Backup & DRP (Disaster Recovery Plan)</h2>
+      </div>
+
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero (<code>$0.00/mês</code>), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO &le; 1h/24h e RTO &le; 15min.
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do DRP & Backup Engine</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Comandos PowerShell para execução de rotinas automáticas de backup e teste de desastre:</p>
+
+      <div class="mermaid-box" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #38bdf8;">
+        # Executar o backup completo da Memória de Longo Prazo (PostgreSQL pcl-db + AES-256 + Cloudflare R2)<br>
+        powershell -ExecutionPolicy Bypass -File "scripts/backup/backup-aeos-tripartido.ps1" -Mode cron<br><br>
+        # Testar o Plano de Recuperação de Desastres (DRP) em 1 comando<br>
+        powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido.ps1"
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Matriz da Memória Tripartida & SLAs de DRP</h3>
+      <table class="taxonomy-table" style="margin-bottom: 2rem;">
+        <thead>
+          <tr>
+            <th>Camada</th>
+            <th>Escopo & Tecnologia</th>
+            <th>Destino / Nuvem</th>
+            <th>SLA & Frequência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Longo Prazo (Cold SQL)</strong></td>
+            <td>Dump <code>pcl-db</code> (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum</td>
+            <td><strong>Cloudflare R2 Bucket</strong> (<code>pcl-backup-memoria-tripartida</code>)</td>
+            <td><strong>RPO &le; 24h</strong> / <strong>RTO = 7.18s (Homologado)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Médio Prazo (Event Docs)</strong></td>
+            <td>Snapshots de arquivos de estado (<code>STATE.md</code>), playbooks e documentação viva</td>
+            <td><strong>Cloudflare R2 Bucket</strong> (<code>/medium-term/</code>)</td>
+            <td><strong>RPO &le; 1h</strong> (Event-Driven)</td>
+          </tr>
+          <tr>
+            <td><strong>Borda Ativa (Hot Sync)</strong></td>
+            <td>Sincronização de metadados relacionais e índices vetoriais RAG</td>
+            <td><strong>Cloudflare D1 & Vectorize</strong></td>
+            <td><strong>RPO &lt; 5min</strong> (Edge Push)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagrama de Resiliência & Memória Tripartida</h3>
+
+      <div class="grid-expanded">
+        <!-- DIAG-MEM-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" alt="DIAG-MEM-01 Tripartite Memory & DRP">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-MEM-01 • Resiliência & DRP</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Memória Tripartida & DRP (RTO 7.18s)</h4>
+            <p class="card-exp-desc">Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês) com restauração ponta a ponta homologada e auditada em <strong>7,18 segundos</strong>.</p>
+            <div class="card-exp-footer">
+              <a href="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" class="link-doc" data-doc-title="Runbook: Staleness Daemon & DRP Operations">📖 Ler Runbook de DRP ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" data-diagram-title="Memória Tripartida & DRP (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- NÍVEL 2: A JORNADA COGNITIVA (MEMÓRIA & INTELIGÊNCIA) -->
-    <section id="nivel-2" class="level-section">
-      <div class="level-header">
-        <div class="level-title-group">
-          <span class="level-tag">Nível 2</span>
-          <h2 class="level-title">A Jornada Cognitiva: Memória Tripartida & Laya</h2>
-        </div>
-        <span class="cortex-viewer-badge">Evolução Cognitiva v2.0</span>
+    <!-- ================================================== -->
+    <!-- FASE 5: INFRAESTRUTURA, RUNTIME E GOVERNANÇA -->
+    <!-- ================================================== -->
+    <section id="fase-5" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 5 de 6</span>
+        <h2 class="phase-title-text">🛡️ Infraestrutura, Runtime & Governança</h2>
       </div>
 
-      <!-- ANALOGIA DO ESCRITÓRIO E DA BIBLIOTECA -->
-      <div class="analogy-box">
-        <div class="analogy-title">📚 A Metáfora do Escritório e do Fichário Cartorial</div>
-        <p class="analogy-text">
-          Como o PCL AEOS nunca esquece e nunca alucina? Ele divide a memória em 3 níveis como um grande escritório:
-          <br><strong>1. A Biblioteca:</strong> Todos os manuais originais guardados intactos (chunks de texto indexados).
-          <br><strong>2. O Fichário de Premissas:</strong> Um catálogo de fichas rápidas com afirmações validadas (ex.: <em>"O banco usa a porta 5432"</em>).
-          <br><strong>3. O Livro Cartorial:</strong> O carimbo com número de página e assinatura digital que prova de qual linha do manual aquela ficha nasceu. Se alguém alterar o manual, o carimbo aponta o conflito em 0,2s!
-        </p>
+      <div class="phase-intro">
+        <strong>O que você vai aprender aqui:</strong> A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
       </div>
 
-      <!-- VISUALIZADOR CORTEX: DATAFLOW MEMÓRIA TRIPARTIDA -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>🧬 Linhagem de Dados: Memória Tripartida, Claims & Recibos</span>
-            <span class="cortex-viewer-badge">PCL Cortex Showcase</span>
-          </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
-        </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" class="cortex-iframe" loading="lazy"></iframe>
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do Harness Local (Docker)</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Comandos para inicialização dos contêineres <code>pcl-db</code>, <code>pcl-omniroute</code> e <code>pcl-paperclip</code>:</p>
+
+      <div class="mermaid-box" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #38bdf8;">
+        # Inicializar todos os serviços localmente<br>
+        docker compose up -d<br><br>
+        # Acompanhar logs de inferência e governança<br>
+        docker compose logs -f<br><br>
+        # Parar contêineres preservando volumes persistentes<br>
+        docker compose down
       </div>
 
-      <!-- VISUALIZADOR CORTEX: SEQUENCE LAYA SYSTEM ONE -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>⚡ Sequência de Decisão: Coprocessador Laya (<15ms na CPU) & EBITDA Shield</span>
-            <span class="cortex-viewer-badge">PCL Cortex Sequence</span>
-          </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
-        </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" class="cortex-iframe" loading="lazy"></iframe>
-      </div>
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas de Operação, Segurança e Stage Gates</h3>
 
-      <!-- DETALHAMENTO DOS 3 MÓDULOS -->
-      <div class="cards-grid">
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-cyan">⚡</div>
-            <h3 class="info-card-title">pcl-laya (:20140)</h3>
+      <div class="grid-expanded">
+        
+        <!-- DIAG-SEQ-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tlc-execution.png" alt="DIAG-SEQ-01 TLC Spec-Driven Execution Loop">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEQ-01 • Sequence</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">TLC Spec-Driven Execution Loop</h4>
+            <p class="card-exp-desc">Garantia de qualidade por especificação prévia (TLC v3): Gate 1 (specify), Gate 2 (design), Gate 3 (tasks), Gate 4 (validate) e Gate 5 (release).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" class="link-doc" data-doc-title="Governança TLC v3 & Stage Gates">📖 Ler Matriz de Stage Gates ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html" data-diagram-title="TLC Spec-Driven Execution Loop">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Coprocessador executando modelo INT8 quantizado em CPU pura. Classifica a rota da requisição em &lt;15ms com 0 MB de VRAM da GPU, agindo como o reflexo rápido do sistema.
-          </p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">🐕</div>
-            <h3 class="info-card-title">Staleness Daemon</h3>
+
+        <!-- DIAG-SEQ-02 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" alt="DIAG-SEQ-02 OmniRoute LLM Request Lifecycle">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEQ-02 • Sequence</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">OmniRoute LLM Request Lifecycle</h4>
+            <p class="card-exp-desc">Gateway de IA (porta 20130): recebe chamadas de inferência, aplica cache de prompt (EBITDA Shield) e roteia dinamicamente entre Claude 3.5, Gemini 3.1 e modelos locais.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" class="link-doc" data-doc-title="Runtime & OmniRoute AI Gateway">📖 Ler Artigo de Runtime ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" data-diagram-title="OmniRoute LLM Request Lifecycle">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Verificador determinístico acionado por Git hook em 0,2s. Calcula hashes SHA-256 e commits sem gastar 1 token sequer para saber se a base documental foi modificada.
-          </p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-purple">📎</div>
-            <h3 class="info-card-title">Paperclip Agent Harness</h3>
+
+        <!-- DIAG-INF-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" alt="DIAG-INF-01 Network & Security Topology">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-INF-01 • Infrastructure</span>
+              <span class="priority-tag p1">P1 Alto</span>
+            </div>
+            <h4 class="card-exp-title">Network & Security Topology</h4>
+            <p class="card-exp-desc">Topologia de rede física: isolamento de contêineres na sub-rede Docker <code>pcl-network</code> e malha de criptografia perimetral via Tailscale VPN Mesh.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" class="link-doc" data-doc-title="Topologia de Rede & Criptografia">📖 Ler Topologia de Rede ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" data-diagram-title="Network & Security Topology">🌐 Abrir Interativo ↗</button>
+            </div>
           </div>
-          <p class="info-card-body">
-            Harness com isolamento de ferramentas e contenção Gate 3. Conduz a execução dos agentes de forma controlada, impedindo comandos destrutivos sem aprovação.
-          </p>
         </div>
+
+
+
+        <!-- DIAG-GOV-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" alt="DIAG-GOV-01 Governance & Stage Gates Matrix">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-GOV-01 • Governance Matrix</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Governance & Stage Gates Matrix (TLC v3 Dual-Track & ADR-0010)</h4>
+            <p class="card-exp-desc">Matriz formal de governança com Triage Gate (ADR-0009), Squad Prototyping & Antigravity Harness (ADR-0010) e triagem dinâmica entre Rota Lean e Full SDD.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md" class="link-doc" data-doc-title="ADR-0010: Squad Prototyping & Antigravity Harness">📖 Ler ADR-0010 (Nova) ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" data-diagram-title="Governance & Stage Gates Matrix (TLC v3 Dual-Track & ADR-0010)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUDIT-GATE-V2 -->
+        <div class="card-exp">
+          <div class="card-exp-img" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
+            📑
+          </div>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">AUDIT-GATE-V2 • Formal Report</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Laudo de Homologação dos Stage Gates v2.0</h4>
+            <p class="card-exp-desc">Relatório oficial de auditoria comprovando a aprovação das Fases 0 a 4 (Laya CPU &lt;15ms, Staleness Daemon em 0,2s, Reconciliação Canônica e DRP com RTO de 7,18s).</p>
+            <div class="card-exp-footer">
+              <a href="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md" class="link-doc" data-doc-title="Laudo Formal de Homologação dos Stage Gates v2.0">📖 Ler Relatório de Auditoria ↗</a>
+              <span class="badge" style="font-size:0.75rem; color:#34d399;">100% Homologado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-SEC-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" alt="DIAG-SEC-01 Secret Management & Zero Trust">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-SEC-01 • Security / Zero Trust</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Secret Management & Zero Trust</h4>
+            <p class="card-exp-desc">Diretriz Zero Secret Leak: varredura do CISO Agent contra vazamento de tokens, isolamento de chaves no <code>.env</code> e auditoria de código.</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" class="link-doc" data-doc-title="Política de Segurança Zero Trust">📖 Ler Política Zero Trust ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" data-diagram-title="Secret Management & Zero Trust">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-C4-04 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l4-cortex-engine.png" alt="DIAG-C4-04 Code-Level Class & Interface Specs">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-C4-04 • C4 Level 4</span>
+              <span class="priority-tag p3">P3 Evolutivo</span>
+            </div>
+            <h4 class="card-exp-title">Code-Level Class & Interface Specs</h4>
+            <p class="card-exp-desc">Especificação em nível de código (Nível L4 C4) do motor PCL Cortex Engine CLI (módulos <code>deliver</code>, <code>validate</code>, <code>render</code>).</p>
+            <div class="card-exp-footer">
+              <a href="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" class="link-doc" data-doc-title="ADRs & Decisões Arquiteturais">📖 Ler Registros ADR ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l4-cortex-engine.html" data-diagram-title="Code-Level Class & Interface Specs">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- NÍVEL 3: ENGENHARIA DE SISTEMAS & TOPOLOGIA -->
-    <section id="nivel-3" class="level-section">
-      <div class="level-header">
-        <div class="level-title-group">
-          <span class="level-tag">Nível 3</span>
-          <h2 class="level-title">Engenharia de Sistemas, Containers & Dados</h2>
-        </div>
-        <span class="cortex-viewer-badge">C4 Nível 2 Containers</span>
+    <!-- ================================================== -->
+    <!-- FASE 6: EXECUÇÃO REATIVA & FAILOVER SOB DEMANDA -->
+    <!-- ================================================== -->
+    <section id="fase-6" class="phase-section">
+      <div class="phase-header">
+        <span class="phase-badge-title">Passo 6 de 6</span>
+        <h2 class="phase-title-text">⚡ Execução Reativa & Failover Sob Demanda (PCL AEOS Pilha Local)</h2>
       </div>
 
-      <!-- VISUALIZADOR CORTEX: C4 L2 CONTAINERS -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>📦 Topologia de Contêineres: Core Platform, Laya & Persistência</span>
-            <span class="cortex-viewer-badge">C4-L2 Showcase</span>
-          </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
-        </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" class="cortex-iframe" loading="lazy"></iframe>
+      <div class="phase-intro">
+        <strong>Inferência Reativa e Smart Failover:</strong> A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com <strong>0 MB de VRAM alocada</strong>. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
       </div>
 
-      <!-- VISUALIZADOR CORTEX: DRP SEQUENCE -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>🛡️ Fluxo de Recuperação de Desastres (DRP) & Backup Cifrado AES-256</span>
-            <span class="cortex-viewer-badge">RTO 7.18s Homologado</span>
-          </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
-        </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" class="cortex-iframe" loading="lazy"></iframe>
+      <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
+      <div class="section-title-bar">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Arquitetura de Inferência Implementada (Fluxo de Decisão OmniRoute)</h3>
       </div>
 
-      <!-- TABELAS E SCHEMAS TÉCNICOS -->
-      <div class="cards-grid">
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-cyan">🗄️</div>
-            <h3 class="info-card-title">Esquema memory.* no PostgreSQL 17</h3>
-          </div>
-          <p class="info-card-body">
-            Isolamento de esquemas de dados no <code>pcl-db</code> (:5432):
-          </p>
-          <ul class="info-card-list">
-            <li><code>memory.document_chunks</code>: 199 blocos vetoriais 768D (índice HNSW cosseno).</li>
-            <li><code>memory.claims</code>: 220 afirmações com status e Tiers PCL (100, 80, 50, 40).</li>
-            <li><code>memory.evidence_receipts</code>: Recibos com SHA-256 e referência a linhas de arquivos.</li>
-          </ul>
-        </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">🌐</div>
-            <h3 class="info-card-title">Rede Docker Bridge (aeos-net)</h3>
-          </div>
-          <p class="info-card-body">
-            Isolamento de serviços locais sem exposição desnecessária para a internet:
-          </p>
-          <ul class="info-card-list">
-            <li><code>pcl-laya</code>: :20140 (Coprocessador CPU INT8).</li>
-            <li><code>pcl-omniroute</code>: :20130 (AI Gateway com EBITDA Shield).</li>
-            <li><code>pcl-paperclip</code>: :3100 (UI de gestão e tarefas do Squad).</li>
-            <li><code>pcl-db</code>: :5432 (PostgreSQL 17 com pgvector 0.8.1).</li>
-          </ul>
-        </div>
+      <div class="mermaid-box">
+        <pre class="mermaid">
+flowchart TD
+    Req[Requisição do PaperClip / Agente] --> OmniRoute[OmniRoute AI Gateway :20130]
+    
+    subgraph ModoOnline [1. Operação Primária Online - 0 MB VRAM]
+        OmniRoute -->|Rede Ativa| CloudAPI[Cloud Free Tier / OpenRouter]
+        CloudAPI --> SuccessCloud((Resposta Cloud))
+    end
+    
+    subgraph FailoverL1 [2. Failover Nível 1 - Alta Velocidade]
+        CloudAPI -.->|Timeout / Queda de Rede| OllamaLocal[Ollama Local :11434<br>qwen2.5-coder:7b-instruct-q4_K_M]
+        OllamaLocal -->|100% VRAM ~4.7 GB| SuccessOllama((Resposta Nível 1))
+    end
+    
+    subgraph FailoverL2 [3. Failover Nível 2 - Lógica MoE / Refatoração]
+        OllamaLocal -.->|Se Indisponível / Tarefa MoE| LMStudioLocal[LM Studio :1234<br>DeepSeek-Coder-V2-Lite MoE Q4_K_S]
+        LMStudioLocal -->|GPU Offload VRAM+RAM| SuccessLMS((Resposta Nível 2))
+    end
+        </pre>
       </div>
+
+      <div class="section-title-bar" style="margin-top: 2rem;">
+        <h3 style="color: var(--accent-cyan); margin: 0;">Máquina de Estados & Ciclo de Transição de VRAM</h3>
+        <button class="btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+      </div>
+
+      <div class="mermaid-box">
+        <pre class="mermaid">
+flowchart TD
+    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+
+    subgraph EstadoOnline [1. Estado Primário Online]
+        direction TB
+        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
+        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
+    end
+
+    subgraph EstadoOffline [2. Failover Local Sob Demanda]
+        direction TB
+        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
+        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
+        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
+    end
+
+    subgraph EstadoRestauracao [3. Restauração & Desalocação]
+        direction TB
+        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
+        TriggerOn --> Unload[lms unload --all e ollama stop]
+        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
+    end
+
+    ZeroReturn -->|GPU 100% Liberada| Router
+        </pre>
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Diagramas & Especificação da Pilha Local</h3>
+
+      <div class="grid-expanded">
+        
+        <!-- DIAG-INFER-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/arch-hybrid-inference-failover.png" alt="DIAG-INFER-01 Hybrid Inference Architecture & 2-Tier Smart Failover">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-INFER-01 • Arquitetura de Inferência</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Hybrid Inference & 2-Tier Smart Failover</h4>
+            <p class="card-exp-desc">Topologia de inferência em 3 camadas: Operação Online a Custo Zero ($0 marginal cost) via Cloud Free Tier (0 MB VRAM), Failover Nível 1 com Ollama Qwen 2.5 Coder 7B (100% VRAM) e Failover Nível 2 com LM Studio DeepSeek MoE (GPU Offload híbrido).</p>
+            <div class="card-exp-footer">
+              <a href="docs/hybrid-inference-architecture.md" class="link-doc" data-doc-title="Guia de Arquitetura de Inferência Híbrida">📖 Ler Guia de Inferência ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" data-diagram-title="Hybrid Inference Architecture & 2-Tier Smart Failover (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAG-FAILOVER-01 -->
+        <div class="card-exp">
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-trigger-based-failover.png" alt="DIAG-FAILOVER-01 Trigger-Based On-Demand Failover">
+          </a>
+          <div class="card-exp-content">
+            <div class="card-exp-meta">
+              <span class="card-exp-id">DIAG-FAILOVER-01 • Failover Reativo</span>
+              <span class="priority-tag p0">P0 Crítico</span>
+            </div>
+            <h4 class="card-exp-title">Trigger-Based On-Demand Failover</h4>
+            <p class="card-exp-desc">Ciclo de vida reativo e alternância de estado gerada pelo <em>PCL Cortex Engine</em>, demonstrando o estado online (0 MB VRAM), failover para Ollama e LM Studio sob demanda e desalocação ao retornar a rede.</p>
+            <div class="card-exp-footer">
+              <a href="docs/hardware-portability-guide.md" class="link-doc" data-doc-title="Guia de Portabilidade de Hardware">📖 Ler Guia de Portabilidade ↗</a>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" data-diagram-title="Trigger-Based On-Demand Failover (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <h3 style="color: var(--accent-cyan); margin: 2rem 0 1rem 0;">Scripts de Automação Reativa (<code>scripts/windows/</code>)</h3>
+      <table class="taxonomy-table" style="margin-bottom: 2rem;">
+        <thead>
+          <tr>
+            <th>Script PowerShell</th>
+            <th>Função Arquitetural</th>
+            <th>Comportamento de Memória</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>watch_network_trigger.ps1</code></td>
+            <td>Monitor de conectividade contínuo (Ping / Health Check a cada 10s)</td>
+            <td>Baixíssimo overhead de CPU/RAM (0 MB GPU VRAM)</td>
+          </tr>
+          <tr>
+            <td><code>on_offline_event.ps1</code></td>
+            <td>Gatilho de Failover ativado na perda de rede/VPN</td>
+            <td>Prontidão imediata de Ollama (:11434) e LM Studio (:1234) sob demanda</td>
+          </tr>
+          <tr>
+            <td><code>on_online_event.ps1</code></td>
+            <td>Gatilho de Restauração ativado ao retornar a conectividade</td>
+            <td>Executa <code>lms unload --all</code> e <code>ollama stop</code> (retorna VRAM para 0 MB)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Manuais de Engenharia de Hardware & VRAM</h3>
+      <ul style="color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; padding-left: 1.5rem;">
+        <li><a href="docs/hardware-portability-guide.md" class="link-doc" data-doc-title="Guia Oficial de Portabilidade de Hardware">📖 Guia Oficial de Portabilidade de Hardware & Especificação de Scripts</a>: Matriz de escala para qualquer máquina (4GB, 6GB, 8GB, 12GB+ VRAM ou CPU-only).</li>
+        <li><a href="docs/hardware-vram-optimization.md" class="link-doc" data-doc-title="Guia de Otimização de VRAM">📖 Guia Técnico de Otimização de VRAM & Perfil LOQ 15IAX9</a>: Parâmetros de quantização Q4_K_M e context window de 8192 tokens.</li>
+      </ul>
     </section>
 
-    <!-- NÍVEL 4: GOVERNANÇA, HOMOLOGAÇÃO & AUDITORIA -->
-    <section id="nivel-4" class="level-section">
-      <div class="level-header">
-        <div class="level-title-group">
-          <span class="level-tag">Nível 4</span>
-          <h2 class="level-title">Governança, Homologação & Auditoria</h2>
-        </div>
-        <button class="cortex-action-btn" onclick="openDocModal('governance/audits/STAGE-GATES-HOMOLOGATION-v2.md', 'Relatório de Auditoria v2.0')">
-          📑 Ver Relatório de Auditoria
-        </button>
-      </div>
+    <!-- SEÇÃO DE TAXONOMIA COMPLETA DO REPOSITÓRIO -->
+    <section style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-top: 3rem;">
+      <h3 style="color: var(--accent-cyan); margin-bottom: 1rem;">📑 Taxonomia Completa do Repositório (14 Diretórios)</h3>
+      <table class="taxonomy-table">
+        <thead>
+          <tr>
+            <th>Diretório</th>
+            <th>Responsabilidade Arquitetural</th>
+            <th>Tipo / Escopo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>foundation/</code></td><td>Diretrizes fundamentais e constitucionais do ecossistema.</td><td>Core AEOS</td></tr>
+          <tr><td><code>governance/</code></td><td>Regras operacionais, papéis de tomada de decisão e Stage Gates.</td><td>Core AEOS</td></tr>
+          <tr><td><code>bootstrap/</code></td><td>Protocolos de onboarding e handoffs de sessões.</td><td>Core AEOS</td></tr>
+          <tr><td><code>knowledge/</code></td><td>Playbooks operacionais, padrões (PCL Cortex/TLC/ADR) e catálogos.</td><td>Core AEOS</td></tr>
+          <tr><td><code>memory/</code></td><td>RAG, PGVector local, índices e histórico de Execution Cells.</td><td>Core AEOS</td></tr>
+          <tr><td><code>agents/</code></td><td>Especificações e System Prompts dos agentes da squad de IA.</td><td>Core AEOS</td></tr>
+          <tr><td><code>runtime/</code></td><td>Infraestrutura local de contêineres e logs de execução.</td><td>Core AEOS</td></tr>
+          <tr><td><code>templates/</code></td><td>Scaffolding de documentos em branco (specify, design, adr).</td><td>Core AEOS</td></tr>
+          <tr><td><code>integrations/</code></td><td>Conexões com GitHub, Tailscale e Model Context Protocol (MCP).</td><td>Core AEOS</td></tr>
+          <tr><td><code>mcp/</code></td><td>Servidores MCP locais do repositório (<code>pcl-cortex</code>) e manifesto.</td><td>Core AEOS</td></tr>
+          <tr><td><code>projects/</code></td><td>Projetos ativos em desenvolvimento assistido por IA (ex: Living Architecture).</td><td>Taxonomia</td></tr>
+          <tr><td><code>tools/</code></td><td>Utilitários locais e servidores MCP customizados.</td><td>Taxonomia</td></tr>
+          <tr><td><code>external-references/</code></td><td>Referências e links aos repositórios originais externos.</td><td>Taxonomia</td></tr>
+          <tr><td><code>legacy/</code></td><td>Histórico, diagramas e códigos antigos mantidos para referência.</td><td>Taxonomia</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-      <!-- VISUALIZADOR CORTEX: GOVERNANÇA STAGE GATES -->
-      <div class="cortex-viewer-box">
-        <div class="cortex-viewer-header">
-          <div class="cortex-viewer-title">
-            <span>⚖️ Matriz de Conformidade & Stage Gates de Engenharia</span>
-            <span class="cortex-viewer-badge">PCL Cortex Matrix</span>
+    <!-- SEÇÃO DE GLOSSÁRIO E CONVENÇÕES DE PRIORIDADES -->
+    <section style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+      <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">📚 Glossário & Convenções de Níveis de Prioridade (P0 a P3)</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Para garantir a governança e o alinhamento da squad de IA com as diretrizes do PCL-AEOS, cada entregável e diagrama é classificado por um nível estrito de prioridade e responsabilidade:</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem;">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid #ef4444; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p0">P0 Crítico</span>
           </div>
-          <div class="cortex-viewer-actions">
-            <a href="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" class="cortex-action-btn">
-              ↗️ Abrir em Tela Cheia
-            </a>
-          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Requisito constitucional fundamental, infraestrutura crítica de segurança (Zero Trust) ou Stage Gate de validação inegociável. Qualquer pendência em um item P0 paralisa os pipelines e impede o deploy em produção.</p>
         </div>
-        <iframe src="./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" class="cortex-iframe" loading="lazy"></iframe>
-      </div>
 
-      <!-- STATUS DAS FASES HOMOLOGADAS -->
-      <div class="cards-grid">
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">✅</div>
-            <h3 class="info-card-title">Fase 1: Infraestrutura & Laya</h3>
+        <div style="background: rgba(249, 115, 22, 0.08); border: 1px solid #f97316; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p1">P1 Alto</span>
           </div>
-          <p class="info-card-body">
-            Homologado via <code>test_phase1_validation.py</code>. Container <code>pcl-laya</code> saudável, schema <code>memory.*</code> ativo com pgvector 768D e GPU com 0 MB de VRAM alocada.
-          </p>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Funcionalidade prioritária de produto, módulo de orquestração de agentes ou componente essencial para a entregabilidade das Verticais B2B. Priorizado logo após a estabilização dos itens P0.</p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">✅</div>
-            <h3 class="info-card-title">Fase 2: RAG Híbrido & Staleness</h3>
+
+        <div style="background: rgba(234, 179, 8, 0.08); border: 1px solid #eab308; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p2">P2 Médio</span>
           </div>
-          <p class="info-card-body">
-            Homologado via <code>test_phase2_validation.py</code>. Staleness Daemon validado em 0,2s e formatação de sufixo com EBITDA Shield ativo no OmniRoute.
-          </p>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Melhoria de eficiência operacional, automações auxiliares de workflow ou documentações complementares. Implementado após o fechamento das entregas P0 e P1.</p>
         </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">✅</div>
-            <h3 class="info-card-title">Fase 3: Extração & Reconciliação</h3>
+
+        <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid #38bdf8; padding: 1.2rem; border-radius: 8px;">
+          <div style="margin-bottom: 0.6rem;">
+            <span class="priority-tag p3">P3 Evolutivo</span>
           </div>
-          <p class="info-card-body">
-            Homologado via <code>test_phase3_validation.py</code>. 220 claims catalogadas, classificação de conflitos com Laya &lt;35ms e contenção de status CONTESTED.
-          </p>
-        </div>
-        <div class="info-card">
-          <div class="info-card-header">
-            <div class="info-card-icon icon-emerald">✅</div>
-            <h3 class="info-card-title">Fase 4: Harness & DRP Testado</h3>
-          </div>
-          <p class="info-card-body">
-            Homologado via <code>test_phase4_validation.py</code>. Confinamento Gate 3 verificado e restauração multi-schema de desastres homologada em 7,18 segundos.
-          </p>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0; line-height: 1.5;">Melhoria contínua de longo prazo, otimização fina de performance, refinamento estético de diagramas ou refatoração de débitos técnicos não bloqueantes.</p>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- MODAL DE DOCUMENTAÇÃO (MARKDOWN) -->
-  <div id="doc-modal" class="modal-overlay" onclick="closeDocModal(event)">
-    <div class="modal-container" onclick="event.stopPropagation()">
+  <!-- ================================================== -->
+  <!-- MODAL OVERLAY COMPONENT (SUPORTA DOCS E DIAGRAMAS FLUTUANTES DE 90%) -->
+  <!-- ================================================== -->
+  <div id="doc-modal-overlay" class="modal-overlay" aria-hidden="true">
+    <div id="modal-container-box" class="modal-container">
       <div class="modal-header">
-        <div class="modal-title" id="modal-doc-title">Documento</div>
-        <button class="modal-close-btn" onclick="closeDocModal()">&times;</button>
+        <div class="modal-title-group">
+          <span id="modal-badge-tag" class="modal-badge">DOC READER</span>
+          <h3 id="modal-doc-title" class="modal-title">Documento</h3>
+        </div>
+        <div class="modal-actions">
+          <!-- Ícone de Impressora Material Symbols -->
+          <button id="modal-print-btn" class="modal-action-btn" title="Imprimir Documento">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </button>
+          <button id="modal-close-btn" class="modal-close-btn" title="Fechar (ESC)">✕</button>
+        </div>
       </div>
-      <div class="modal-body" id="modal-doc-content">
-        Carregando documento...
+      <div id="modal-doc-body" class="modal-body">
+        <!-- Conteúdo do documento Markdown ou Iframe do Diagrama -->
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <p><strong>PromptCore Labs (PCL AEOS)</strong> — AI Engineering Operating System</p>
-    <p>Arquitetura Soberana • Memória Tripartida • Release v2.0 • 2026</p>
+  <footer>
+    <p>PromptCore Labs AEOS — v1.0 Soberania — Todos os direitos reservados – 2026</p>
   </footer>
 
-  <!-- SCRIPTS DE INTERATIVIDADE -->
-  <script>
-    // Seletor de Modo Cognitivo (Dual-Track)
-    function setMode(mode) {
-      document.documentElement.setAttribute('data-mode', mode);
-      document.getElementById('btn-mode-conceptual').classList.toggle('active', mode === 'conceptual');
-      document.getElementById('btn-mode-technical').classList.toggle('active', mode === 'technical');
-      localStorage.setItem('pcl_aeos_mode', mode);
-    }
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
 
-    // Inicialização do modo a partir do cache
-    (function initMode() {
-      const savedMode = localStorage.getItem('pcl_aeos_mode') || 'conceptual';
-      setMode(savedMode);
-    })();
-
-    // Modal de Markdown
-    async function openDocModal(filePath, title) {
-      const modal = document.getElementById('doc-modal');
+    // SCRIPT DO LEITOR MODAL INTERATIVO & MENU MOBILE
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalOverlay = document.getElementById('doc-modal-overlay');
+      const modalContainer = document.getElementById('modal-container-box');
+      const modalBadge = document.getElementById('modal-badge-tag');
       const modalTitle = document.getElementById('modal-doc-title');
-      const modalContent = document.getElementById('modal-doc-content');
+      const modalBody = document.getElementById('modal-doc-body');
+      const closeBtn = document.getElementById('modal-close-btn');
+      const printBtn = document.getElementById('modal-print-btn');
 
-      modalTitle.innerText = title || filePath;
-      modalContent.innerHTML = '<p>Carregando documento...</p>';
-      modal.classList.add('active');
+      // LÓGICA DO MENU MOBILE (HAMBURGUER)
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const navPhasesMenu = document.getElementById('nav-phases-menu');
 
-      try {
-        const response = await fetch(filePath);
-        if (!response.ok) throw new Error('Não foi possível carregar o arquivo: ' + filePath);
-        const markdownText = await response.text();
-        modalContent.innerHTML = marked.parse(markdownText);
-      } catch (err) {
-        modalContent.innerHTML = '<p style="color: var(--accent-rose);">Erro ao abrir documento: ' + err.message + '</p>';
+      mobileMenuBtn.addEventListener('click', () => {
+        navPhasesMenu.classList.toggle('active');
+      });
+
+      // Fechar menu mobile ao clicar em qualquer item do menu
+      document.querySelectorAll('.phase-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          navPhasesMenu.classList.remove('active');
+        });
+      });
+
+      
+      // LÓGICA DO SELETOR DE MODO COGNITIVO DUAL-TRACK (EXECUTIVO VS TÉCNICO)
+      window.setCognitiveMode = function(mode) {
+        document.documentElement.setAttribute('data-cognitive-mode', mode);
+        const btnExec = document.getElementById('mode-btn-exec');
+        const btnTech = document.getElementById('mode-btn-tech');
+        if (btnExec && btnTech) {
+          btnExec.classList.toggle('active', mode === 'executive');
+          btnTech.classList.toggle('active', mode === 'technical');
+        }
+        localStorage.setItem('pcl_aeos_cognitive_mode', mode);
+      };
+
+      (function initCognitiveMode() {
+        const savedMode = localStorage.getItem('pcl_aeos_cognitive_mode') || 'executive';
+        setCognitiveMode(savedMode);
+      })();
+
+
+      // 1. Função para abrir o modal de documento Markdown
+      async function openDocModal(url, title) {
+        modalBadge.textContent = 'DOC READER';
+        printBtn.style.display = 'flex'; // Exibe botão de impressão
+        
+        modalContainer.style.width = '90vw';
+        modalContainer.style.maxWidth = '1260px';
+        modalContainer.style.height = '90vh';
+
+        modalBody.style.padding = '2.2rem';
+        modalBody.style.overflowY = 'auto';
+
+        // Interceptador de segurança infalível: se o título contiver "Migração" ou "Regras de Indexação" (Card 2) ou se o URL contiver "legacy-migration"
+        const isLegacyCard = (title && (title.includes('Regras de Indexação') || title.includes('Migração'))) || (url && url.includes('legacy-migration'));
+        
+        const inlineDoc = document.getElementById('doc-legacy-migration');
+        if (isLegacyCard && inlineDoc) {
+          modalTitle.textContent = 'Migração & Higienização Legada (DIAG-LEG-01)';
+          modalBody.innerHTML = marked.parse(inlineDoc.textContent.trim());
+
+          const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
+          if (mermaidBlocks.length > 0) {
+            mermaidBlocks.forEach((block) => {
+              const div = document.createElement('div');
+              div.className = 'mermaid';
+              div.textContent = block.textContent;
+              block.parentNode.replaceWith(div);
+            });
+            await mermaid.run({ nodes: modalBody.querySelectorAll('.mermaid') });
+          }
+
+          modalOverlay.classList.add('active');
+          modalOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          return;
+        }
+
+        modalTitle.textContent = title || 'Carregando documento...';
+        modalBody.innerHTML = `
+          <div style="text-align:center; padding: 4rem 1rem; color: var(--accent-cyan);">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+            <p>Carregando documentação soberana...</p>
+          </div>
+        `;
+        
+        modalOverlay.classList.add('active');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        try {
+          const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+          const response = await fetch(fetchUrl, { cache: 'no-cache' });
+          if (!response.ok) throw new Error(`Status ${response.status}`);
+          const rawText = await response.text();
+
+          if (url.endsWith('.md') || url.includes('.md?')) {
+            modalBody.innerHTML = marked.parse(rawText);
+          } else {
+            modalBody.innerHTML = rawText;
+          }
+
+          const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
+          if (mermaidBlocks.length > 0) {
+            for (const block of mermaidBlocks) {
+              try {
+                const div = document.createElement('div');
+                div.className = 'mermaid';
+                div.textContent = block.textContent;
+                block.parentNode.replaceWith(div);
+                await mermaid.run({ nodes: [div] });
+              } catch (mermaidErr) {
+                console.warn('Aviso de renderização Mermaid no modal:', mermaidErr);
+              }
+            }
+          }
+
+        } catch (err) {
+          modalBody.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 1.5rem; border-radius: 8px;">
+              <h3>⚠️ Não foi possível carregar este artigo no painel modal</h3>
+              <p style="margin-top:0.5rem;">Causa técnica: ${err.message}</p>
+              <p style="margin-top:1rem;"><a href="${url}" target="_blank" style="color:#38bdf8;">Clique aqui para abrir diretamente o arquivo em nova aba ↗</a></p>
+            </div>
+          `;
+        }
       }
-    }
 
-    function closeDocModal() {
-      document.getElementById('doc-modal').classList.remove('active');
-    }
+      // 2. Função para abrir o modal de Diagrama Interativo Cortex (90% de visualização)
+      function openDiagramModal(url, title) {
+        modalBadge.textContent = 'DIAGRAM READER';
+        printBtn.style.display = 'none'; // Não precisa de impressão para diagramas
+        
+        modalContainer.style.width = '90vw';
+        modalContainer.style.maxWidth = '90vw';
+        modalContainer.style.height = '90vh';
 
-    // Fechar modal ao pressionar ESC
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDocModal();
+        modalBody.style.padding = '0';
+        modalBody.style.overflow = 'hidden';
+
+        modalTitle.textContent = title || 'Diagrama Interativo Cortex';
+        modalBody.innerHTML = `
+          <iframe src="${url}" style="width:100%; height:100%; border:none; background: #0b0f19; border-radius: 0 0 16px 16px;"></iframe>
+        `;
+        
+        modalOverlay.classList.add('active');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Função para fechar o modal
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        modalOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        modalBody.innerHTML = ''; // Limpa iframe para economizar memória
+      }
+
+      // Intercepta cliques em todos os links `.link-doc`
+      document.querySelectorAll('.link-doc').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = link.getAttribute('href');
+          const title = link.getAttribute('data-doc-title') || link.textContent;
+          openDocModal(url, title);
+        });
+      });
+
+      // Intercepta cliques em todos os botões `.btn-diagram-modal`
+      document.querySelectorAll('.btn-diagram-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = btn.getAttribute('data-diagram-url');
+          const title = btn.getAttribute('data-diagram-title') || 'Diagrama Interativo';
+          openDiagramModal(url, title);
+        });
+      });
+
+      // Ação do Botão de Impressão (Apenas para Markdown)
+      printBtn.addEventListener('click', () => {
+        window.print();
+      });
+
+      // Fechar no botão X
+      closeBtn.addEventListener('click', closeModal);
+
+      // Fechar ao clicar fora da caixa do modal
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      // Fechar com a tecla ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
     });
+  </script>
+  <script id="doc-legacy-migration" type="text/markdown">
+# 🔄 DIAG-LEG-01: Legacy Migration Dataflow & Modernização de Dados Legados
+
+> **Especificação Técnica do Sistema Operacional PCL-AEOS**  
+> **ID**: `DIAG-LEG-01` | **Categoria**: Dataflow Architecture | **Prioridade**: `P2 Médio`  
+> **Escopo**: Sanitização, Extração, Deduplicação e Ingestão do Acervo Legado (`legacy/`)
+
+---
+
+## 📌 1. Visão Geral do Pipeline
+
+O pipeline **DIAG-LEG-01 (Legacy Migration Dataflow)** rege a transição segura e auditada de todo o acervo histórico contido no diretório `legacy/` para o modelo de memória operacional do PCL-AEOS.
+
+Ele garante que documentos legados, especificações obsoletas e artefatos não estruturados sejam higienizados, deduplicados e convertidos para os esquemas relacionais e vetoriais do banco `pcl-db` (PGVector), prevenindo alucinações e mantendo o rastreio da linhagem original.
+
+```mermaid
+graph LR
+    classDef legacy fill:#1e293b,stroke:#64748b,stroke-width:1.5px,color:#f8fafc;
+    classDef process fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    classDef security fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
+    classDef target fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph Source["1. Fonte de Dados Legados"]
+        L1["📁 Diretório legacy/"]:::legacy --> L2["📄 Arquivos .md / .json / .txt"]:::legacy
+    end
+
+    subgraph ETL["2. Pipeline ETL & Higienização"]
+        E1["🧹 Sanitização & Encoding"]:::process --> E2["🔐 Hash SHA-256 (Deduplicação)"]:::process --> E3["✂️ Chunking Estruturado"]:::process
+    end
+
+    subgraph Audit["3. Governança & Compliance"]
+        A1["🛡️ Compliance Check (Auditor Agent)"]:::security --> A2["🔑 Sanitização de Segredos"]:::security
+    end
+
+    subgraph Destination["4. Armazenamento Vetorial PCL-AEOS"]
+        D1["💾 pgvector (text-embedding-3-small)"]:::target --> D2["🗄️ Tabela document_chunks (pcl-db)"]:::target
+    end
+
+    Source --> ETL --> Audit --> Destination
+```
+
+---
+
+## 🛠️ 2. Fases do Processo de Migração
+
+### Fase 1: Extração & Sanitização
+- **Varredura Ativa**: Mapeamento completo dos arquivos do diretório `legacy/`.
+- **Limpeza de Formatação**: Remoção de caracteres de controle inválidos, correção de encodings e padronização para UTF-8.
+- **Deduplicação por Hash**: Geração de assinatura SHA-256 para cada arquivo para evitar indexação duplicada no repositório vetorial.
+
+### Fase 2: Fragmentação & Vetorização (RAG Ingestion)
+- **Chunking Semântico**: Divisão do conteúdo em blocos de até 512 tokens com overlap de 50 tokens, preservando o contexto dos parágrafos.
+- **Enriquecimento de Metadados**: Cada fragmento recebe as tags obrigatórias: `source_file`, `legacy_path`, `migrated_at` e `sha256_hash`.
+- **Geração de Embeddings**: Conversão em vetores de 768 dimensões via modelo padrão OmniRoute.
+
+### Fase 3: Auditoria de Governança (Stage Gate 3)
+- **Varredura de Segredos**: O **CISO Security Agent** intercepta o payload verificando ausência de chaves de API, senhas ou dados sensíveis (LGPD/GDPR).
+- **Selamento Constitucional**: Inserção dos registros auditados na tabela relacional `document_chunks` com marcação de proveniência legada.
+
+---
+
+## 📊 3. Modelo de Dados da Migração Legada
+
+| Campo em `document_chunks` | Tipo SQL | Função no Dataflow Legado |
+| :--- | :--- | :--- |
+| `id` | `UUID` | Identificador único do chunk migrado |
+| `source_file` | `VARCHAR(512)` | Caminho original do arquivo em `legacy/` |
+| `content` | `TEXT` | Texto higienizado do fragmento legado |
+| `embedding` | `vector(768)` | Representação vetorial densa para busca por cosseno |
+| `metadata` | `JSONB` | Contém `sha256`, `is_legacy: true` e `migrated_at` |
+
+---
+
+## 🔗 Documentos Relacionados
+- [Diagrama Interativo DIAG-LEG-01](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)
+- [Arquitetura de Memória & RAG Vetorial](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
+- [Governança & Modelo Operacional v2.0](file:///c:/PromptCore_Labs/governance/operating-model.md)
   </script>
 </body>
 </html>
