@@ -139,8 +139,8 @@ function Backup-MediumTermDocs([bool]$Force = $false) {
         Log-Info "Avaliando backup de Estado Real (Documentos, Playbooks e STATE.md)..."
         
         if (-not $Force) {
-            Log-Info "Verificando arquivos modificados nas últimas 24h em $LocalDocsDir..."
-            $modifiedFiles = Get-ChildItem -Path $LocalDocsDir -Recurse -File -ErrorAction SilentlyContinue | 
+            Log-Info "Verificando arquivos Markdown modificados nas últimas 24h em $LocalDocsDir..."
+            $modifiedFiles = Get-ChildItem -Path $LocalDocsDir -Recurse -File -Filter "*.md" -Exclude "node_modules*", ".git*", "vendor*" -ErrorAction SilentlyContinue | 
                              Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-1) }
             
             if ($modifiedFiles.Count -eq 0) {

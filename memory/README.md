@@ -54,66 +54,126 @@ PRINCÍPIOS DA MEMÓRIA
    Cada elemento indexado na memória vetorial deve apontar de volta para o arquivo fonte original do repositório, garantindo que o agente possa auditar a fonte primária.
 
 ==================================================
-DIAGRAMA DE FLUXO: PIPELINE DE RAG LOCAL
+DIAGRAMA DE FLUXO: PIPELINE DE RAG TEMPORAL AUTOCORRETIVO
 ==================================================
 
-Processamento de documentos e busca semântica na infraestrutura local do Harness:
+Processamento de documentos, busca semântica híbrida e validação determinística de staleness:
 
 ```mermaid
-graph LR
-    A[Módulos Core .md] --> B[Segmentação / Chunking]
-    B --> C[Ollama / nomic-embed-text]
-    C -->|Vetor de 768 dim| D[PGVector / pcl-db]
-    
-    E[Prompt do Agente] --> F[Busca Cosseno Similaridade]
-    D --> F
-    F -->|Contexto Extraído| G[Prompt Enriquecido]
-    G --> H[OmniRoute / LLM]
+graph TD
+    A[Módulos Core .md] -->|Hierarchical Vectorless Parsing| B[Seções e Títulos]
+    B -->|Local Ollama / nomic-embed-text| C[Embeddings 768D]
+    C -->|Schema memory.*| D[(pcl-db / PGVector HNSW)]
+    A -->|SHA-256 + Git Hash| E[(memory.evidence_receipts)]
+
+    Q[Prompt / Pergunta do Agente] --> F[PCLHybridRAGEngine]
+    F -->|Busca Híbrida 768D| D
+    D -->|Candidatos Top-K| G[pcl-laya / System One Reranker]
+    G -->|Cross-Encoder INT8 CPU <15ms| H{Score >= 0.40?}
+    H -->|Não: Fora de Domínio| I[Fast Exit: 0 Tokens Gastos]
+    H -->|Sim: Evidência Forte| J[Formatação de Bloco de Evidência]
+    J -->|Injeção Sufixo / EBITDA Shield| K[OmniRoute :20130 / LLM]
+
+    Daemon[DeterministicStalenessVerifier] -->|Crontab / Daemon| E
+    Daemon -->|SHA-256 Drift Detection| L{Arquivo Fonte Mudou?}
+    L -->|Sim| M[Status = STALE sem gastar tokens]
+    L -->|Não| N[Status = TRUSTED]
 ```
 
 ==================================================
-DIAGRAMA ERD: METADADOS DE VETORES E LOGS
+DIAGRAMA ERD: SCHEMA MEMORY (ISOLAMENTO TOTAL)
 ==================================================
 
-Modelagem lógica das estruturas armazenadas na memória persistente:
+O schema `memory.*` isola totalmente as estruturas de memória do schema operacional `public` do Paperclip:
 
 ```mermaid
 erDiagram
+    entities ||--o{ claims : "possui"
+    claims ||--o{ evidence_receipts : "comprovada por"
+    
+    entities {
+        uuid id PK
+        varchar name
+        varchar entity_type
+        jsonb metadata
+        timestamp created_at
+    }
+    claims {
+        uuid id PK
+        uuid subject_id FK
+        varchar predicate
+        text value_text
+        varchar status
+        int authority_tier
+        uuid superseded_by FK
+        varchar source_model
+        timestamp asserted_at
+    }
+    evidence_receipts {
+        uuid id PK
+        uuid claim_id FK
+        varchar source_file
+        varchar file_sha256
+        varchar git_commit_hash
+        varchar section_anchor
+        timestamp verified_at
+    }
     document_chunks {
         uuid id PK
         varchar source_file
-        varchar section
-        timestamp last_modified
+        varchar section_title
+        int chunk_index
+        text content
         vector embedding
-    }
-    agent_execution_logs {
-        uuid execution_id PK
-        uuid session_id
-        timestamp timestamp
-        varchar agent_role
-        varchar status
-        jsonb metrics
+        varchar file_sha256
+        timestamp created_at
     }
 ```
 
 ==================================================
-GUIA QUICKSTART: DIAGNÓSTICO DO BANCO VETORIAL
+GUIA OPERACIONAL: TESTES E EXECUÇÃO (FASES 1, 2, 3 E 4)
 ==================================================
 
-### Passo 1 — Verificar se a Extensão pgvector está Habilitada
-Para garantir que o `pcl-db` está pronto para busca vetorial, execute no terminal do host (ou dentro do container):
+### 1. Ingestão de Documentos Arquiteturais (Fase 2)
+Indexa os documentos no schema `memory` com hashing SHA-256, Git hash e embeddings nomic-embed-text (768D):
 ```bash
-# Conecte ao banco de dados do contêiner:
-docker exec -it pcl-db psql -U paperclip -d paperclip -c "SELECT extname FROM pg_extension WHERE extname = 'vector';"
+python scripts/memory/ingest_docs.py
 ```
 
-### Passo 2 — Testar Embedding via Ollama Local
-Para testar a conversão de um texto em representação vetorial utilizando a API do Ollama local:
+### 2. Extração Multimodelo de Claims com Proveniência (Fase 3)
+Extrai claims ontológicas categorizadas por níveis de autoridade formal (Tiers 1 a 4):
 ```bash
-curl http://localhost:11434/api/embeddings -d '{
-  "model": "nomic-embed-text",
-  "prompt": "Princípios fundamentais do ecossistema AEOS"
-}'
+python scripts/memory/claim_extractor.py
+```
+
+### 3. Motor de Reconciliação Canônica & SSOT (Fase 3)
+Harmoniza contradições multimodelo aplicando a Máquina de Estados da Hierarquia de Verdade PCL:
+```bash
+python scripts/memory/reconciliation_engine.py
+```
+
+### 4. Confinamento Agêntico & Tool Call Gating (Fase 4)
+Executa o harness do worker daemon confinado ao Gate 3 com interceptação de comandos perigosos via Laya:
+```bash
+python scripts/agent/worker_daemon.py
+```
+
+### 5. Plano de Recuperação de Desastres (DRP) Tripartido (Fase 4)
+Restaura os schemas `public` e `memory` em tempo recorde (< 10 segundos) com auditoria de integridade:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/backup/restore-aeos-tripartido.ps1
+```
+
+### 6. Execução da Suite de Validação do Stage Gate 4
+Valida confinamento ao Gate 3, tool call gating, parada no Gate 4 e disaster recovery RTO <= 15 min:
+```bash
+python scripts/tests/test_phase4_validation.py
+```
+
+### 7. Execução Manual do Staleness Daemon
+Verifica a integridade de todas as claims contra os hashes atuais dos arquivos no repositório:
+```bash
+python scripts/memory/staleness_verifier.py
 ```
 
 ==================================================
@@ -121,8 +181,10 @@ FONTES DE REFERÊNCIA
 ==================================================
 
 foundation/FOUNDATION.md
-
 architecture/modules.md
-
 architecture/principles.md
+architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md
+specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md
+
+
 

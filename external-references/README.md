@@ -22,6 +22,12 @@ LISTA DE REFERÊNCIAS EXTERNAS
    • Repositório Original: https://github.com/EnterDufter/promptcore-project-os
    • Finalidade: Gateway de roteamento de APIs e EBITDA Shield.
 
+4. Mira Animator
+   • Repositório Original: https://github.com/sandeco/mira-animator
+   • Diretório Local: external-references/mira-animator
+   • Licença: PolyForm Noncommercial License 1.0.0
+   • Finalidade: Agentes e templates para criação de slides animados com D3.js em HTML (Uso Interno/Educacional).
+
 ==================================================
 FONTES DE REFERÊNCIA
 ==================================================

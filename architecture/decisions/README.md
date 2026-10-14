@@ -34,6 +34,7 @@ LISTA DE ADRS
 | ADR-0002 | Bootstrap as Official First-Level Entry Point | Accepted |
 | ADR-0003 | Foundation Documentation Hygiene v1.0 | Accepted |
 | ADR-0004 | Knowledge and Runtime Concurrent Implementation | Accepted |
+| ADR-0005 | Evolução da Memória Cognitiva Tripartida, Temporal Graph-RAG e Coprocessador System One (Laya) | Accepted |
 
 ==================================================
 FONTES DE REFERÊNCIA

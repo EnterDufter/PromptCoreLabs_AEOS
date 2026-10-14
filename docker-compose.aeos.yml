@@ -69,6 +69,21 @@ services:
     networks:
       - aeos-net
 
+  laya:
+    build:
+      context: ./services/pcl-laya
+      dockerfile: Dockerfile
+    image: pcl-laya:latest
+    container_name: pcl-laya
+    restart: always
+    ports:
+      - "20140:20140"
+    environment:
+      - PORT=20140
+      - ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider
+    networks:
+      - aeos-net
+
 networks:
   aeos-net:
     driver: bridge

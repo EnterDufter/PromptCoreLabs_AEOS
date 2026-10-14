@@ -8,3 +8,7 @@ paperclip-storage/
 backups/
 *.enc
 *.dump
+.tmp.driveupload/
+__pycache__/
+*.pyc
+.vscode/

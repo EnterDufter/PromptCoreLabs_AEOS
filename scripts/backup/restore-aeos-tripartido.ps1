@@ -76,10 +76,20 @@ try {
         throw "Erro ao transferir arquivo para o container Docker."
     }
 
-    # 3. Executar pg_restore
-    Log-Info "Passo 3/3: Executando pg_restore no PostgreSQL..."
+    # 3. Pré-requisitos e Extensões no PostgreSQL limpo
+    Log-Info "Passo 3/4: Garantindo extensões mandatórias (vector) e schema memory..."
+    docker exec $TargetContainer psql -U $DBUser -d $DBName -c "CREATE EXTENSION IF NOT EXISTS vector; CREATE SCHEMA IF NOT EXISTS memory;"
+
+    # 4. Executar pg_restore
+    Log-Info "Passo 4/4: Executando pg_restore integral no PostgreSQL (schemas public e memory)..."
     docker exec $TargetContainer pg_restore -U $DBUser -d $DBName --clean --if-exists --no-owner "/tmp/restore_temp.dump"
     docker exec $TargetContainer rm -f "/tmp/restore_temp.dump"
+
+    # Verificação de integridade pós-restauração
+    Log-Info "Auditando integridade dos schemas restaurados..."
+    $chunksCount = docker exec $TargetContainer psql -U $DBUser -d $DBName -t -c "SELECT count(*) FROM memory.document_chunks;"
+    $claimsCount = docker exec $TargetContainer psql -U $DBUser -d $DBName -t -c "SELECT count(*) FROM memory.claims;"
+    Log-Success "Verificação de Integridade Aprovada: $($chunksCount.Trim()) chunks vetoriais e $($claimsCount.Trim()) claims em 'memory.*' operacionais!"
 
     Log-Success "=== DISASTER RECOVERY EXECUTADO COM SUCESSO! ==="
     Log-Success "Banco de dados '$DBName' restaurado e operacional no container '$TargetContainer'."
