@@ -1,18 +1,35 @@
-# PromptCoreLabs_AEOS (AI Engineering Operating System)
+# PromptCoreLabs_AEOS (AI Engineering Operating System) — v2.0
 
 ==================================================
-🌟 TRILHO DE APRENDIZADO ARQUITETURAL & LIVING ARCHITECTURE
+🌟 PLATAFORMA DE CONHECIMENTO & LIVING ARCHITECTURE v2.0
 ==================================================
 
-Este portal é a **Única Fonte de Verdade (Single Source of Truth)** e a **Living Documentation (Documentação Viva e Dinâmica)** para o ecossistema **PromptCoreLabs_AEOS** (AI Engineering Operating System), conduzido pela inteligência arquitetural **Cortex**.
+O **PCL AEOS v2.0** é a **Plataforma de Conhecimento e Sistema Operacional Soberano de Engenharia de IA** do ecossistema PromptCore Labs.
 
-> 💡 **Guia Narrativo**: Para navegar intuitivamente pela plataforma, siga os **6 Passos Sequenciais** abaixo. Clique sobre qualquer card visual para **abrir uma nova aba no seu navegador** com a aplicação gráfica interativa do **PCL Cortex Engine**.
+> 🌐 **Portal Público Interativo (GitHub Pages):**  
+> Acesse o novo portal com alternância de visão (👔 Conceitual vs. 🛠️ Técnica) e visualizadores integrados do **PCL Cortex**:  
+> **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)**
+>
+> 📖 **Guia Executivo (3 Minutos):** Leia o [Guia Conceitual para Liderança e Leigos](docs/architecture-v2-executive-guide.md).  
+> 📑 **Relatório Formal de Auditoria:** Consulte o [Laudo de Homologação dos Stage Gates v2.0](governance/audits/STAGE-GATES-HOMOLOGATION-v2.md).
 
 ---
 
-## 🏢 PCL-AEOS v2.0: Holding Digital (AI-as-a-Service)
+### 📊 Indicadores Soberanos Homologados (v2.0)
 
-A nossa arquitetura operacional evoluiu para um modelo de **Holding Digital (3 Camadas)**, operando com **15 Verticais de Negócio B2B (Profit Centers)** apoiados em infraestrutura de **custo marginal zero ($0 marginal cost)**.
+| Indicador | Medição Auditada | Benefício Arquitetural |
+|---|:---:|---|
+| **Custo Operacional de Infra** | **$0.00 / mês** | 100% autônomo na infraestrutura local do operador |
+| **Latência Coprocessador (Laya)** | **< 15 ms** | Classificação rápida em CPU INT8 com zero tokens de nuvem |
+| **Alocação de GPU VRAM** | **0 MB** | Placa de vídeo dedicada livre para cargas massivas |
+| **Recuperação de Desastres (RTO)** | **7.18 segundos** | Restauração multi-schema validada em Stage Gate 4 |
+| **Base de Claims Ativas** | **220 afirmações** | Fatos atômicos catalogados com recibos criptográficos SHA-256 |
+
+---
+
+## 🏢 PCL-AEOS v2.0: Holding Digital & Memória Tripartida
+
+A arquitetura do PCL AEOS opera sobre o modelo de **Holding Digital (3 Camadas)**, alimentada por um motor de **Memória Tripartida** isolado no PostgreSQL 17 (`memory.*`) e governado pelo **Paperclip Agent Harness**:
 
 ```mermaid
 flowchart TD

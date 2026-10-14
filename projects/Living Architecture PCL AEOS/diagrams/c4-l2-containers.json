@@ -2,27 +2,28 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "C4 Nível 2 — Contêineres do System Harness & Memória Tripartida",
-    "subtitle": "Topologia da Plataforma Core (Harness), Persistência Externa (ADR-0008) & Resiliência Cloudflare R2",
+    "title": "C4 Nível 2 — Contêineres do System Harness, Coprocessador Laya & Memória Tripartida",
+    "subtitle": "Topologia da Plataforma Core Docker, Coprocessador System One (:20140) & Persistência Externa (ADR-0008)",
     "output": "c4-l2-containers.html",
     "quality_profile": "showcase",
     "views": [
       {
         "id": "docker-harness",
-        "label": "Plataforma Core Docker",
-        "focus": ["paperclip", "omniroute", "db"],
-        "note": "Contêineres locais com binding obrigatório de volume externo (ADR-0008)."
+        "label": "Plataforma Core Docker & Laya",
+        "focus": ["paperclip", "omniroute", "laya", "db"],
+        "note": "Contêineres locais na rede aeos-net com Laya em CPU INT8 (<15ms) e binding de volume."
       },
       {
         "id": "tripartite-memory",
         "label": "Memória Tripartida & R2",
         "focus": ["db", "backup_engine", "r2_storage", "cloudflare_mcp"],
-        "note": "Backup frio cifrado em AES-256 no R2 com SLAs RPO <= 1h/24h e RTO <= 15min."
+        "note": "Backup frio cifrado em AES-256 no R2 com SLAs RPO <= 1h/24h e RTO de 7,18s homologado."
       }
     ]
   },
   "components": [
     { "id": "workspace", "type": "cloud", "label": "Workspace Git", "sublabel": "Código das Verticais PCL", "pos": [50, 100], "size": [160, 60] },
+    { "id": "laya", "type": "security", "label": "pcl-laya", "sublabel": "CPU INT8 :20140", "pos": [500, 100], "size": [150, 60], "tag": "System One <15ms" },
     { "id": "paperclip", "type": "backend", "label": "PaperClip UI", "sublabel": "Node.js :3100", "pos": [260, 240], "size": [140, 60], "tag": "Squad Dashboard" },
     { "id": "omniroute", "type": "backend", "label": "OmniRoute Gateway", "sublabel": "AI Proxy :20130", "pos": [500, 240], "size": [150, 60], "tag": "EBITDA Shield" },
     { "id": "db", "type": "database", "label": "pcl-db", "sublabel": "PostgreSQL 17 :5432", "pos": [260, 420], "size": [140, 60], "tag": "PGVector RAG" },
@@ -32,21 +33,22 @@
     { "id": "tailscale", "type": "security", "label": "Tailscale VPN", "sublabel": "Mesh Network", "pos": [50, 360], "size": [140, 60] }
   ],
   "boundaries": [
-    { "kind": "region", "label": "Docker Compose Bridge Network (pcl-aeos_aeos-net)", "wraps": ["paperclip", "omniroute", "db"] },
+    { "kind": "region", "label": "Docker Compose Bridge Network (pcl-aeos_aeos-net)", "wraps": ["paperclip", "omniroute", "laya", "db"] },
     { "kind": "security-group", "label": "Host Infrastructure & Edge Cloudflare Zero Trust", "wraps": ["backup_engine", "r2_storage", "cloudflare_mcp"] }
   ],
   "connections": [
     { "id": "paperclip-workspace", "from": "paperclip", "to": "workspace", "label": "Processa Projetos", "variant": "dashed" },
     { "id": "paperclip-db", "from": "paperclip", "to": "db", "label": "Memória Holding", "fromSide": "bottom", "toSide": "top", "labelDy": 30 },
     { "id": "paperclip-omniroute", "from": "paperclip", "to": "omniroute", "label": "Reqs de Inferência", "variant": "emphasis" },
+    { "id": "omniroute-laya", "from": "omniroute", "to": "laya", "label": "Triage <15ms", "variant": "security", "fromSide": "top", "toSide": "bottom" },
     { "id": "db-backup", "from": "db", "to": "backup_engine", "label": "pg_dump -Fc", "variant": "security" },
     { "id": "backup-r2", "from": "backup_engine", "to": "r2_storage", "label": "AES-256 Push", "variant": "emphasis" },
     { "id": "mcp-cloudflare", "from": "cloudflare_mcp", "to": "r2_storage", "label": "API Audit & Control", "variant": "dashed", "labelDy": 30 },
     { "id": "tailscale-host", "from": "tailscale", "to": "paperclip", "label": "Túnel Seguro", "variant": "security" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Orquestração Core & Persistência (ADR-0008)", "items": ["Binding externo obrigatório dos volumes legados (promptcore_labs_db-data)", "PostgreSQL 17 atuando como Memória RAG central da holding PROAA"] },
-    { "dot": "emerald", "title": "Memória Tripartida & R2", "items": ["Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)", "Plano de Recuperação de Desastres (DRP) com RTO <= 15min"] },
+    { "dot": "cyan", "title": "Orquestração Core & Laya System One", "items": ["pcl-laya (:20140) responde em CPU INT8 consumindo 0 MB de VRAM", "OmniRoute AI Gateway faz triagem e cache com sufixo EBITDA Shield"] },
+    { "dot": "emerald", "title": "Memória Tripartida & R2", "items": ["Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)", "Plano de Recuperação de Desastres (DRP) com RTO homologado em 7,18s"] },
     { "dot": "rose", "title": "Segurança & MCP", "items": ["Rede Mesh Tailscale garante acesso remoto criptografado", "Cloudflare MCP Server viabiliza gestão Zero Trust via IDE"] }
   ]
 }

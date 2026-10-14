@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="archify 2.12.0">
-  <title>C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida Diagram</title>
+  <title>C4 Nível 2 — Contêineres do System Harness, Coprocessador Laya &amp; Memória Tripartida Diagram</title>
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
@@ -4496,12 +4496,12 @@
     <div class="header">
       <div class="header-row">
         <div class="pulse-dot"></div>
-        <h1>C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida</h1>
+        <h1>C4 Nível 2 — Contêineres do System Harness, Coprocessador Laya &amp; Memória Tripartida</h1>
       </div>
-      <p class="subtitle">Topologia da Plataforma Core (Harness), Persistência Externa (ADR-0008) &amp; Resiliência Cloudflare R2</p>
+      <p class="subtitle">Topologia da Plataforma Core Docker, Coprocessador System One (:20140) &amp; Persistência Externa (ADR-0008)</p>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[{"id":"docker-harness","label":"Plataforma Core Docker","focus":["paperclip","omniroute","db"],"note":"Contêineres locais com binding obrigatório de volume externo (ADR-0008)."},{"id":"tripartite-memory","label":"Memória Tripartida \u0026 R2","focus":["db","backup_engine","r2_storage","cloudflare_mcp"],"note":"Backup frio cifrado em AES-256 no R2 com SLAs RPO \u003c= 1h/24h e RTO \u003c= 15min."}]</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"docker-harness","label":"Plataforma Core Docker \u0026 Laya","focus":["paperclip","omniroute","laya","db"],"note":"Contêineres locais na rede aeos-net com Laya em CPU INT8 (\u003c15ms) e binding de volume."},{"id":"tripartite-memory","label":"Memória Tripartida \u0026 R2","focus":["db","backup_engine","r2_storage","cloudflare_mcp"],"note":"Backup frio cifrado em AES-256 no R2 com SLAs RPO \u003c= 1h/24h e RTO de 7,18s homologado."}]</script>
 
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -4545,8 +4545,8 @@
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read">
       <svg viewBox="0 0 960 568" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
-        <title id="archify-diagram-title">C4 Nível 2 — Contêineres do System Harness &amp; Memória Tripartida</title>
-        <desc id="archify-diagram-description">Topologia da Plataforma Core (Harness), Persistência Externa (ADR-0008) &amp; Resiliência Cloudflare R2</desc>
+        <title id="archify-diagram-title">C4 Nível 2 — Contêineres do System Harness, Coprocessador Laya &amp; Memória Tripartida</title>
+        <desc id="archify-diagram-description">Topologia da Plataforma Core Docker, Coprocessador System One (:20140) &amp; Persistência Externa (ADR-0008)</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4570,8 +4570,8 @@
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Boundaries (behind everything) -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="230" y="210" width="450" height="290" rx="12" class="c-region" stroke-width="1"/>
-        <text x="238" y="228" class="t-cloud" font-size="9" font-weight="600">Docker Compose Bridge Network (pcl-aeos_aeos-net)</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" x="230" y="70" width="450" height="430" rx="12" class="c-region" stroke-width="1"/>
+        <text x="238" y="88" class="t-cloud" font-size="9" font-weight="600">Docker Compose Bridge Network (pcl-aeos_aeos-net)</text>
 
         <rect data-graph-role="structural-frame" data-composition-frame-kind="security-group" data-composition-frame-id="1" x="470" y="210" width="450" height="290" rx="8" class="c-security-group" stroke-width="1"/>
         <text x="478" y="228" class="t-security" font-size="9" font-weight="600">Host Infrastructure &amp; Edge Cloudflare Zero Trust</text>
@@ -4580,10 +4580,11 @@
         <path data-edge-from="paperclip" data-edge-to="workspace" data-edge-label="Processa Projetos" data-edge-key="0" data-edge-id="paperclip-workspace" data-composition-points="260,263;235,263;235,130;210,130" d="M 260 263 L 243 263 Q 235 263 235 255 L 235 138 Q 235 130 227 130 L 210 130" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
         <path data-edge-from="paperclip" data-edge-to="db" data-edge-label="Memória Holding" data-edge-key="1" data-edge-id="paperclip-db" data-composition-points="330,300;330,420" d="M 330 300 L 330 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="paperclip" data-edge-to="omniroute" data-edge-label="Reqs de Inferência" data-edge-key="2" data-edge-id="paperclip-omniroute" data-composition-points="400,270;500,270" d="M 400 270 L 500 270" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="3" data-edge-id="db-backup" data-composition-points="400,450;500,450" d="M 400 450 L 500 450" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="4" data-edge-id="backup-r2" data-composition-points="650,450;740,450" d="M 650 450 L 740 450" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="5" data-edge-id="mcp-cloudflare" data-composition-points="815,300;815,420" d="M 815 300 L 815 420" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="6" data-edge-id="tailscale-host" data-composition-points="190,390;225,390;225,277;260,277" d="M 190 390 L 217 390 Q 225 390 225 382 L 225 285 Q 225 277 233 277 L 260 277" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="omniroute" data-edge-to="laya" data-edge-label="Triage &lt;15ms" data-edge-key="3" data-edge-id="omniroute-laya" data-composition-points="575,240;575,160" d="M 575 240 L 575 160" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="4" data-edge-id="db-backup" data-composition-points="400,450;500,450" d="M 400 450 L 500 450" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="5" data-edge-id="backup-r2" data-composition-points="650,450;740,450" d="M 650 450 L 740 450" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="6" data-edge-id="mcp-cloudflare" data-composition-points="815,300;815,420" d="M 815 300 L 815 420" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="7" data-edge-id="tailscale-host" data-composition-points="190,390;225,390;225,277;260,277" d="M 190 390 L 217 390 Q 225 390 225 382 L 225 285 Q 225 277 233 277 L 260 277" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
 
         <!-- Components -->
         <g id="node-workspace" data-node-id="workspace" data-node-label="Workspace Git" tabindex="0" role="button" aria-label="Focus Workspace Git, Código das Verticais PCL, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Código das Verticais PCL" data-node-context="Architecture component">
@@ -4595,6 +4596,19 @@
           </g>
           <text data-detail-anchor x="130" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Workspace Git</text>
         <text data-detail="context" x="130" y="144" class="t-muted" font-size="9" text-anchor="middle">Código das Verticais PCL</text>
+        </g>
+
+        <g id="node-laya" data-node-id="laya" data-node-label="pcl-laya" tabindex="0" role="button" aria-label="Focus pcl-laya, CPU INT8 :20140, Docker Compose Bridge Network (pcl-aeos_aeos-net)" aria-pressed="false" data-node-kind="security" data-node-sublabel="CPU INT8 :20140" data-node-tag="System One &lt;15ms" data-node-context="Docker Compose Bridge Network (pcl-aeos_aeos-net)">
+          <title>pcl-laya · CPU INT8 :20140 · Docker Compose Bridge Network (pcl-aeos_aeos-net) · System One &lt;15ms</title>
+          <rect x="500" y="100" width="150" height="60" rx="6" class="c-mask"/>
+          <rect x="500" y="100" width="150" height="60" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(506 106) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="575" y="128" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">pcl-laya</text>
+        <text data-detail="context" x="575" y="144" class="t-muted" font-size="9" text-anchor="middle">CPU INT8 :20140</text>
+        <text data-detail="fine" x="575" y="152" class="t-security" font-size="7" text-anchor="middle">System One &lt;15ms</text>
         </g>
 
         <g id="node-paperclip" data-node-id="paperclip" data-node-label="PaperClip UI" tabindex="0" role="button" aria-label="Focus PaperClip UI, Node.js :3100, Docker Compose Bridge Network (pcl-aeos_aeos-net)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Node.js :3100" data-node-tag="Squad Dashboard" data-node-context="Docker Compose Bridge Network (pcl-aeos_aeos-net)">
@@ -4696,19 +4710,23 @@
           <rect x="401.8" y="250" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
           <text x="450" y="260" class="t-backend" font-size="8" text-anchor="middle">Reqs de Inferência</text>
         </g>
-        <g data-detail="context" data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="3" data-edge-id="db-backup">
+        <g data-detail="context" data-edge-from="omniroute" data-edge-to="laya" data-edge-label="Triage &lt;15ms" data-edge-key="3" data-edge-id="omniroute-laya">
+          <rect x="541.2" y="220" width="67.6" height="14" rx="3" class="c-mask"/>
+          <text x="575" y="230" class="t-security" font-size="8" text-anchor="middle">Triage &lt;15ms</text>
+        </g>
+        <g data-detail="context" data-edge-from="db" data-edge-to="backup_engine" data-edge-label="pg_dump -Fc" data-edge-key="4" data-edge-id="db-backup">
           <rect x="418.6" y="430" width="62.8" height="14" rx="3" class="c-mask"/>
           <text x="450" y="440" class="t-security" font-size="8" text-anchor="middle">pg_dump -Fc</text>
         </g>
-        <g data-detail="context" data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="4" data-edge-id="backup-r2">
+        <g data-detail="context" data-edge-from="backup_engine" data-edge-to="r2_storage" data-edge-label="AES-256 Push" data-edge-key="5" data-edge-id="backup-r2">
           <rect x="661.2" y="430" width="67.6" height="14" rx="3" class="c-mask"/>
           <text x="695" y="440" class="t-backend" font-size="8" text-anchor="middle">AES-256 Push</text>
         </g>
-        <g data-detail="context" data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="5" data-edge-id="mcp-cloudflare">
+        <g data-detail="context" data-edge-from="cloudflare_mcp" data-edge-to="r2_storage" data-edge-label="API Audit &amp; Control" data-edge-key="6" data-edge-id="mcp-cloudflare">
           <rect x="764.4" y="310" width="101.2" height="14" rx="3" class="c-mask"/>
           <text x="815" y="320" class="t-messagebus" font-size="8" text-anchor="middle">API Audit &amp; Control</text>
         </g>
-        <g data-detail="context" data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="6" data-edge-id="tailscale-host">
+        <g data-detail="context" data-edge-from="tailscale" data-edge-to="paperclip" data-edge-label="Túnel Seguro" data-edge-key="7" data-edge-id="tailscale-host">
           <rect x="191.2" y="313.5" width="67.6" height="14" rx="3" class="c-mask"/>
           <text x="225" y="323.5" class="t-security" font-size="8" text-anchor="middle">Túnel Seguro</text>
         </g>
@@ -4720,17 +4738,17 @@
             <rect x="40" y="544" width="14" height="9" rx="2" class="c-cloud" stroke-width="1"/>
             <text x="60" y="552" class="t-muted" font-size="8">Cloud</text>
           </g>
+          <g data-legend-kind="security">
+            <rect x="129" y="544" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="149" y="552" class="t-muted" font-size="8">Security</text>
+          </g>
           <g data-legend-kind="backend">
-            <rect x="129" y="544" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
-            <text x="149" y="552" class="t-muted" font-size="8">Backend</text>
+            <rect x="233" y="544" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="253" y="552" class="t-muted" font-size="8">Backend</text>
           </g>
           <g data-legend-kind="database">
-            <rect x="228" y="544" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
-            <text x="248" y="552" class="t-muted" font-size="8">Database</text>
-          </g>
-          <g data-legend-kind="security">
-            <rect x="332" y="544" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
-            <text x="352" y="552" class="t-muted" font-size="8">Security</text>
+            <rect x="332" y="544" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="352" y="552" class="t-muted" font-size="8">Database</text>
           </g>
         </g>
       </svg>
@@ -4919,11 +4937,11 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Orquestração Core &amp; Persistência (ADR-0008)</h3>
+          <h3>Orquestração Core &amp; Laya System One</h3>
         </div>
         <ul>
-          <li>&bull; Binding externo obrigatório dos volumes legados (promptcore_labs_db-data)</li>
-          <li>&bull; PostgreSQL 17 atuando como Memória RAG central da holding PROAA</li>
+          <li>&bull; pcl-laya (:20140) responde em CPU INT8 consumindo 0 MB de VRAM</li>
+          <li>&bull; OmniRoute AI Gateway faz triagem e cache com sufixo EBITDA Shield</li>
         </ul>
       </div>
 
@@ -4934,7 +4952,7 @@
         </div>
         <ul>
           <li>&bull; Backup frio em AES-256 enviado ao Cloudflare R2 ($0.00/mês)</li>
-          <li>&bull; Plano de Recuperação de Desastres (DRP) com RTO &lt;= 15min</li>
+          <li>&bull; Plano de Recuperação de Desastres (DRP) com RTO homologado em 7,18s</li>
         </ul>
       </div>
 

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Arquitetura da Memória Tripartida e Reconciliação Soberana",
+    "subtitle": "Linhagem de Ingestão de Documentos, Extração de Claims, Recibos Criptográficos e Harness dos Agentes",
+    "output": "data-rag-memory-tripartite.html",
+    "viewBox": [1180, 760],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ingestion-and-staleness",
+        "label": "1. Ingestão e Verificação Rápida",
+        "focus": ["specs", "staleness", "doc_chunks"],
+        "note": "Documentos Git validados por SHA-256 determinístico em 0,2s com zero custo de tokens."
+      },
+      {
+        "id": "claims-and-receipts",
+        "label": "2. Claims e Recibos Criptográficos",
+        "focus": ["doc_chunks", "claim_extractor", "claims_table", "receipts_table"],
+        "note": "Extração de afirmações atômicas com nível de confiança e recibos de evidência."
+      },
+      {
+        "id": "harness-consumption",
+        "label": "3. Consumo Protegido pelo Harness",
+        "focus": ["claims_table", "reconciliation", "paperclip_harness", "squad_agents"],
+        "note": "Confinamento Gate 3 que impede alucinações e protege a execução autônoma."
+      }
+    ]
+  },
+  "stages": [
+    { "label": "Fontes Canônicas" },
+    { "label": "Ingestão & Vetores" },
+    { "label": "Claims & Confiança" },
+    { "label": "Recibos & Provas" },
+    { "label": "Consumo Confinado" }
+  ],
+  "nodes": [
+    { "id": "specs", "type": "frontend", "label": "Git Docs & Specs", "sublabel": "repositório master", "stage": 0, "row": 1, "tag": "markdown" },
+    { "id": "staleness", "type": "security", "label": "Staleness Daemon", "sublabel": "SHA-256 + Git hash", "stage": 1, "row": 0, "tag": "0 tokens" },
+    { "id": "doc_chunks", "type": "database", "label": "document_chunks", "sublabel": "pgvector 768d :5432", "stage": 1, "row": 1, "tag": "199 chunks" },
+    { "id": "claim_extractor", "type": "backend", "label": "Claim Extractor", "sublabel": "Laya + Llama CPU", "stage": 2, "row": 0, "tag": "atômico" },
+    { "id": "claims_table", "type": "database", "label": "memory.claims", "sublabel": "220 claims ativas", "stage": 2, "row": 1, "tag": "tiers PCL" },
+    { "id": "reconciliation", "type": "backend", "label": "Reconciliação", "sublabel": "arbitragem de fatos", "stage": 3, "row": 0, "tag": "verdade" },
+    { "id": "receipts_table", "type": "security", "label": "evidence_receipts", "sublabel": "recibos SHA-256", "stage": 3, "row": 1, "tag": "imutável" },
+    { "id": "paperclip_harness", "type": "backend", "label": "Paperclip Harness", "sublabel": "Gate 3 Confinado", "stage": 4, "row": 0, "tag": "sandbox" },
+    { "id": "squad_agents", "type": "frontend", "label": "Squad IA Local", "sublabel": "Builder & QA", "stage": 4, "row": 1, "tag": "soberano" }
+  ],
+  "flows": [
+    { "id": "specs-to-staleness", "from": "specs", "to": "staleness", "label": "valida hash", "classification": "verificação git", "variant": "security", "fromSide": "top", "toSide": "left" },
+    { "id": "specs-to-chunks", "from": "specs", "to": "doc_chunks", "label": "chunks 768d", "classification": "nomic-embed", "variant": "emphasis", "route": "straight" },
+    { "id": "chunks-to-extractor", "from": "doc_chunks", "to": "claim_extractor", "label": "análise fatos", "classification": "extração", "variant": "emphasis", "fromSide": "top", "toSide": "left", "labelDy": 12 },
+    { "id": "chunks-to-claims", "from": "doc_chunks", "to": "claims_table", "label": "fatos atômicos", "classification": "hierarquia tiers", "variant": "emphasis", "route": "straight" },
+    { "id": "claims-to-reconciliation", "from": "claims_table", "to": "reconciliation", "label": "conflitos", "classification": "arbitragem", "variant": "security", "fromSide": "top", "toSide": "left", "labelDy": 12 },
+    { "id": "claims-to-receipts", "from": "claims_table", "to": "receipts_table", "label": "recibo sha256", "classification": "auditoria", "variant": "emphasis", "route": "straight" },
+    { "id": "reconciliation-to-harness", "from": "reconciliation", "to": "paperclip_harness", "label": "contexto puro", "classification": "RAG validado", "variant": "emphasis", "route": "straight" },
+    { "id": "receipts-to-squad", "from": "receipts_table", "to": "squad_agents", "label": "provas verdade", "classification": "evidências", "variant": "security", "route": "straight" },
+    { "id": "harness-to-squad", "from": "paperclip_harness", "to": "squad_agents", "label": "gate 3 confinado", "classification": "execução", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Nível 1: Chunks & Staleness Zero-Token",
+      "items": [
+        "199 blocos semânticos indexados em pgvector 768D no PostgreSQL 17",
+        "Staleness Daemon detecta alterações em 0,2s via SHA-256 sem gastar tokens"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Nível 2 e 3: Claims & Recibos Criptográficos",
+      "items": [
+        "220 afirmações com hierarquia de confiança auditável (Tiers 100, 80, 50, 40)",
+        "Recibos imutáveis vinculam cada claim ao hash do arquivo e commit original"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Confinamento Gate 3 & Resiliência",
+      "items": [
+        "Harness isola ferramentas e bloqueia saídas alucinadas ou não homologadas",
+        "DRP multi-schema validado com restauração completa em 7,18 segundos"
+      ]
+    }
+  ]
+}

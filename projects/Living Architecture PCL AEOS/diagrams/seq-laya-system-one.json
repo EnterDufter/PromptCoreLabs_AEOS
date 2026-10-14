@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Decisão do Coprocessador Laya System One & EBITDA Shield",
+    "subtitle": "Classificação Rápida em CPU INT8 (<15ms), Cache de Prompts e Roteamento de Inferência Soberana",
+    "output": "seq-laya-system-one.html",
+    "viewBox": [840, 880],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "fast-track-reflex",
+        "label": "1. Rota Reflexa (Laya CPU <15ms)",
+        "focus": ["agent", "omniroute", "laya", "cache"],
+        "note": "Perguntas factuais, saudações e verificações resolvidas localmente com zero tokens de nuvem."
+      },
+      {
+        "id": "deep-reasoning-path",
+        "label": "2. Rota de Raciocínio Profundo",
+        "focus": ["agent", "omniroute", "laya", "cloud_llm"],
+        "note": "Raciocínios complexos roteados para modelos de ponta com sufixo EBITDA Shield injetado."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "agent", "type": "frontend", "label": "Agente / IDE", "sublabel": "Paperclip / CLI" },
+    { "id": "omniroute", "type": "backend", "label": "OmniRoute", "sublabel": "Gateway :20130" },
+    { "id": "laya", "type": "security", "label": "pcl-laya", "sublabel": "CPU INT8 :20140" },
+    { "id": "cache", "type": "database", "label": "EBITDA Shield", "sublabel": "Cache de Prompts" },
+    { "id": "cloud_llm", "type": "cloud", "label": "Cloud LLM", "sublabel": "Gemini / Claude" }
+  ],
+  "segments": [
+    { "from": 150, "to": 450, "label": "Trilha 1: Decisão Rápida Reflexa ($0.00 / 0 VRAM)" },
+    { "from": 480, "to": 780, "label": "Trilha 2: Inferência Profunda & Raciocínio Complexo" }
+  ],
+  "messages": [
+    { "from": "agent", "to": "omniroute", "y": 180, "label": "1. Requisição de inferência", "variant": "emphasis" },
+    { "from": "omniroute", "to": "laya", "y": 240, "label": "2. POST /classify (CPU INT8)", "variant": "security" },
+    { "from": "laya", "to": "omniroute", "y": 300, "label": "3. Rota Reflexo em <15ms", "variant": "return" },
+    { "from": "omniroute", "to": "cache", "y": 360, "label": "4. Consulta resposta em cache", "variant": "emphasis" },
+    { "from": "cache", "to": "agent", "y": 420, "label": "5. Retorno instantâneo (0 tokens)", "variant": "return" },
+    { "from": "agent", "to": "omniroute", "y": 510, "label": "6. Requisição com lógica complexa", "variant": "emphasis" },
+    { "from": "omniroute", "to": "laya", "y": 570, "label": "7. POST /classify (CPU INT8)", "variant": "security" },
+    { "from": "laya", "to": "omniroute", "y": 630, "label": "8. Rota Profunda classificada", "variant": "return" },
+    { "from": "omniroute", "to": "cloud_llm", "y": 690, "label": "9. Chamada formatada + sufixo cache", "variant": "emphasis" },
+    { "from": "cloud_llm", "to": "agent", "y": 750, "label": "10. Resposta sintética e validada", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "omniroute", "from": 170, "to": 430, "type": "backend" },
+    { "participant": "laya", "from": 230, "to": 310, "type": "security" },
+    { "participant": "omniroute", "from": 500, "to": 760, "type": "backend" },
+    { "participant": "laya", "from": 560, "to": 640, "type": "security" },
+    { "participant": "cloud_llm", "from": 680, "to": 750, "type": "cloud" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Coprocessador Laya (<15ms)",
+      "items": [
+        "Executa localmente em CPU INT8 consumindo 0 MB de VRAM da placa de vídeo",
+        "Classifica a intenção antes de qualquer chamada externa, blindando o orçamento"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "EBITDA Shield & Cache de Prompts",
+      "items": [
+        "Consultas repetidas ou factuais são resolvidas em cache com custo $0.00",
+        "Formatação de sufixos padronizados maximiza taxa de acerto do cache da API"
+      ]
+    }
+  ]
+}
