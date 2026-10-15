@@ -1289,9 +1289,9 @@ sequenceDiagram
 
         <!-- HARNESS-GATE-01 -->
         <div class="card-exp">
-          <div class="card-exp-img" style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
-            📎
-          </div>
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-paperclip-agent-harness.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-paperclip-agent-harness.svg" alt="HARNESS-GATE-01 Paperclip Agent Harness v2.0">
+          </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
               <span class="card-exp-id">HARNESS-GATE-01 • Confinamento</span>
@@ -1301,7 +1301,7 @@ sequenceDiagram
             <p class="card-exp-desc">Isolamento rigoroso de chamadas de ferramentas de agentes (Tool-Call Gating) no Gate 3 e ponto de parada humana mandatório no Gate 4 antes de qualquer ação irreversível ou deploy.</p>
             <div class="card-exp-footer">
               <a href="runtime/orchestration/paperclip.md" class="link-doc" data-doc-title="Paperclip Agent Harness & Governança Gate 3">📖 Ler Especificação do Harness ↗</a>
-              <span class="badge" style="font-size:0.75rem;">Gate 3 + Gate 4</span>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-paperclip-agent-harness.html" data-diagram-title="Paperclip Agent Harness v2.0 (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1366,9 +1366,9 @@ graph LR
         
         <!-- DIAG-MEM-TRIPARTITE -->
         <div class="card-exp">
-          <div class="card-exp-img" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
-            🧬
-          </div>
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/data-rag-memory-tripartite.svg" alt="DIAG-MEM-TRIPARTITE Memória Tripartida & Reconciliação">
+          </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
               <span class="card-exp-id">DIAG-MEM-TRIPARTITE • Dataflow</span>
@@ -1385,9 +1385,9 @@ graph LR
 
         <!-- DIAG-LAYA-01 -->
         <div class="card-exp">
-          <div class="card-exp-img" style="background: linear-gradient(135deg, #172554 0%, #1e1b4b 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
-            ⚡
-          </div>
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-laya-system-one.svg" alt="DIAG-LAYA-01 Coprocessador Laya System One">
+          </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
               <span class="card-exp-id">DIAG-LAYA-01 • System One Coprocessor</span>
@@ -1396,7 +1396,7 @@ graph LR
             <h4 class="card-exp-title">Coprocessador Laya (&lt;15ms na CPU INT8)</h4>
             <p class="card-exp-desc">Inferência reflexa ultrarrápida com 0 MB de VRAM na GPU e zero custo de nuvem ($0.00). Classifica requisições instantaneamente e aplica o cache EBITDA Shield.</p>
             <div class="card-exp-footer">
-              <span class="badge" style="font-size:0.75rem; color:#38bdf8;">0 MB GPU • &lt;15ms</span>
+              <a href="specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md" class="link-doc" data-doc-title="Especificação do Coprocessador Laya">📖 Ler Spec do Laya ↗</a>
               <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" data-diagram-title="Decisão do Coprocessador Laya System One & EBITDA Shield">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
@@ -1404,9 +1404,9 @@ graph LR
 
         <!-- DIAG-STALE-01 -->
         <div class="card-exp">
-          <div class="card-exp-img" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
-            🐕
-          </div>
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/life-cortex-micro-loop.png" alt="DIAG-STALE-01 Deterministic Staleness Daemon">
+          </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
               <span class="card-exp-id">DIAG-STALE-01 • Zero-Token Sentinel</span>
@@ -1416,7 +1416,7 @@ graph LR
             <p class="card-exp-desc">Sentinela silencioso disparado via Git hook (<code>post-commit</code>) em 0,2s. Valida hashes SHA-256 e commits sem gastar tokens, garantindo que premissas alteradas sejam reavaliadas na hora.</p>
             <div class="card-exp-footer">
               <a href="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" class="link-doc" data-doc-title="Runbook: Staleness Daemon & DRP Operations">📖 Ler Runbook de Operações ↗</a>
-              <span class="badge" style="font-size:0.75rem; color:#34d399;">0.2s • 0 Tokens</span>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" data-diagram-title="Deterministic Staleness Sentinel & Micro-Loop">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1688,9 +1688,9 @@ graph LR
 
         <!-- AUDIT-GATE-V2 -->
         <div class="card-exp">
-          <div class="card-exp-img" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); display:flex; align-items:center; justify-content:center; font-size:3rem;">
-            📑
-          </div>
+          <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/gov-stage-gates-matrix.png" alt="AUDIT-GATE-V2 Laudo de Homologação dos Stage Gates v2.0">
+          </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
               <span class="card-exp-id">AUDIT-GATE-V2 • Formal Report</span>
@@ -1700,7 +1700,7 @@ graph LR
             <p class="card-exp-desc">Relatório oficial de auditoria comprovando a aprovação das Fases 0 a 4 (Laya CPU &lt;15ms, Staleness Daemon em 0,2s, Reconciliação Canônica e DRP com RTO de 7,18s).</p>
             <div class="card-exp-footer">
               <a href="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md" class="link-doc" data-doc-title="Laudo Formal de Homologação dos Stage Gates v2.0">📖 Ler Relatório de Auditoria ↗</a>
-              <span class="badge" style="font-size:0.75rem; color:#34d399;">100% Homologado</span>
+              <button class="btn-primary btn-diagram-modal" data-diagram-url="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" data-diagram-title="Stage-Gates Homologation Matrix (PCL Cortex Engine)">🌐 Abrir Interativo ↗</button>
             </div>
           </div>
         </div>
@@ -1996,7 +1996,7 @@ flowchart TD
   </div>
 
   <footer>
-    <p>PromptCore Labs AEOS — v1.0 Soberania — Todos os direitos reservados – 2026</p>
+    <p>PromptCore Labs AEOS — v2.0 Soberania Cognitiva & Living Architecture — Todos os direitos reservados – 2026</p>
   </footer>
 
   <script type="module">
@@ -2097,6 +2097,22 @@ flowchart TD
         document.body.style.overflow = 'hidden';
 
         try {
+          if (window.location.protocol === 'file:') {
+            // Em ambiente local file:///, carrega o documento via iframe nativo sem restrição de CORS
+            modalBody.style.padding = '0';
+            modalBody.style.overflow = 'hidden';
+            modalBody.innerHTML = `
+              <div style="height:100%; display:flex; flex-direction:column;">
+                <div style="padding:0.6rem 1.2rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border-color); font-size:0.82rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">Modo Local Soberano</span>
+                  <a href="${url}" target="_blank" style="color:var(--accent-cyan); text-decoration:none; font-weight:600;">Abrir arquivo em nova aba ↗</a>
+                </div>
+                <iframe src="${url}" style="flex:1; width:100%; border:none; background:#0b0f19; color:#f8fafc; padding:1.5rem; box-sizing:border-box;"></iframe>
+              </div>
+            `;
+            return;
+          }
+
           const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
           const response = await fetch(fetchUrl, { cache: 'no-cache' });
           if (!response.ok) throw new Error(`Status ${response.status}`);
@@ -2124,11 +2140,16 @@ flowchart TD
           }
 
         } catch (err) {
+          // Fallback gracioso caso fetch falhe
+          modalBody.style.padding = '0';
+          modalBody.style.overflow = 'hidden';
           modalBody.innerHTML = `
-            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 1.5rem; border-radius: 8px;">
-              <h3>⚠️ Não foi possível carregar este artigo no painel modal</h3>
-              <p style="margin-top:0.5rem;">Causa técnica: ${err.message}</p>
-              <p style="margin-top:1rem;"><a href="${url}" target="_blank" style="color:#38bdf8;">Clique aqui para abrir diretamente o arquivo em nova aba ↗</a></p>
+            <div style="height:100%; display:flex; flex-direction:column;">
+              <div style="padding:0.6rem 1.2rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border-color); font-size:0.82rem; display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">Modo Leitor Direto</span>
+                <a href="${url}" target="_blank" style="color:var(--accent-cyan); text-decoration:none; font-weight:600;">Abrir arquivo em nova aba ↗</a>
+              </div>
+              <iframe src="${url}" style="flex:1; width:100%; border:none; background:#0b0f19; color:#f8fafc; padding:1.5rem; box-sizing:border-box;"></iframe>
             </div>
           `;
         }

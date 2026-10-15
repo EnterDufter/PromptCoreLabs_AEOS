@@ -1,0 +1,231 @@
+<svg viewBox="0 0 820 880" role="img" aria-labelledby="archify-diagram-title archify-diagram-description" data-animation="trace" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Paperclip Agent Harness (v2.0) — Confinamento &amp; Gates</title>
+        <desc id="archify-diagram-description">Confinamento em Sandbox, Gate 3 (Tool Gating) e Gate 4 (Human Signoff)</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Time Segments -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="150" width="724" height="170" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="340" width="724" height="220" rx="10" class="c-lane" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="580" width="724" height="200" rx="10" class="c-lane" stroke-width="1"/>
+
+        <!-- Lifelines -->
+        <path d="M 62 142 L 62 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 170 142 L 170 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 278 142 L 278 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 386 142 L 386 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 494 142 L 494 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 602 142 L 602 815" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+
+        <!-- Activations -->
+        <rect x="165" y="170" width="10" height="570" rx="3" class="c-mask"/>
+        <rect x="165" y="170" width="10" height="570" rx="3" class="c-backend" stroke-width="1"/>
+        <rect x="273" y="220" width="10" height="70" rx="3" class="c-mask"/>
+        <rect x="273" y="220" width="10" height="70" rx="3" class="c-security" stroke-width="1"/>
+        <rect x="381" y="360" width="10" height="170" rx="3" class="c-mask"/>
+        <rect x="381" y="360" width="10" height="170" rx="3" class="c-security" stroke-width="1"/>
+        <rect x="489" y="410" width="10" height="80" rx="3" class="c-mask"/>
+        <rect x="489" y="410" width="10" height="80" rx="3" class="c-external" stroke-width="1"/>
+        <rect x="597" y="600" width="10" height="80" rx="3" class="c-mask"/>
+        <rect x="597" y="600" width="10" height="80" rx="3" class="c-backend" stroke-width="1"/>
+
+        <!-- Messages -->
+        <g data-edge-from="agent" data-edge-to="harness" data-edge-label="Solicita Execução de Tool (ex: git, sql, shell)" data-edge-key="0">
+          <path data-composition-edge-from="agent" data-composition-edge-to="harness" data-composition-points="69,180;163,180" d="M 69 180 L 163 180" class="a-emphasis" data-animate="edge" style="--step:0" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="-12.199999999999989" y="160" width="256.4" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="170" class="t-backend" font-size="9" text-anchor="middle">Solicita Execução de Tool (ex: git, sql, shell)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="harness" data-edge-to="gate3" data-edge-label="Avalia Perfil de Permissão &amp; Risco" data-edge-key="1">
+          <path data-composition-edge-from="harness" data-composition-edge-to="gate3" data-composition-points="177,230;271,230" d="M 177 230 L 271 230" class="a-emphasis" data-animate="edge" style="--step:1" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="129.6" y="210" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="220" class="t-backend" font-size="9" text-anchor="middle">Avalia Perfil de Permissão &amp; Risco</text>
+        </g>
+        </g>
+
+        <g data-edge-from="gate3" data-edge-to="harness" data-edge-label="Ação Crítica Detectada (Modificação de Estado)" data-edge-key="2">
+          <path data-composition-edge-from="gate3" data-composition-edge-to="harness" data-composition-points="271,280;177,280" d="M 271 280 L 177 280" class="a-default" data-animate="edge" style="--step:2" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="98.39999999999999" y="260" width="251.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="224" y="270" class="t-muted" font-size="9" text-anchor="middle">Ação Crítica Detectada (Modificação de Estado)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="harness" data-edge-to="gate4" data-edge-label="Envia Proposta de Mudança &amp; Diffs" data-edge-key="3">
+          <path data-composition-edge-from="harness" data-composition-edge-to="gate4" data-composition-points="177,370;379,370" d="M 177 370 L 379 370" class="a-emphasis" data-animate="edge" style="--step:3" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="186.2" y="350" width="183.6" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="360" class="t-backend" font-size="9" text-anchor="middle">Envia Proposta de Mudança &amp; Diffs</text>
+        </g>
+        </g>
+
+        <g data-edge-from="gate4" data-edge-to="operador" data-edge-label="Solicita Confirmação Humana Explícita" data-edge-key="4">
+          <path data-composition-edge-from="gate4" data-composition-edge-to="operador" data-composition-points="393,420;487,420" d="M 393 420 L 487 420" class="a-emphasis" data-animate="edge" style="--step:4" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="337.8" y="400" width="204.4" height="16" rx="3" class="c-mask"/>
+          <text x="440" y="410" class="t-backend" font-size="9" text-anchor="middle">Solicita Confirmação Humana Explícita</text>
+        </g>
+        </g>
+
+        <g data-edge-from="operador" data-edge-to="gate4" data-edge-label="Aprova Execução (OK / Assinatura)" data-edge-key="5">
+          <path data-composition-edge-from="operador" data-composition-edge-to="gate4" data-composition-points="487,480;393,480" d="M 487 480 L 393 480" class="a-default" data-animate="edge" style="--step:5" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="348.2" y="460" width="183.6" height="16" rx="3" class="c-mask"/>
+          <text x="440" y="470" class="t-muted" font-size="9" text-anchor="middle">Aprova Execução (OK / Assinatura)</text>
+        </g>
+        </g>
+
+        <g data-edge-from="gate4" data-edge-to="harness" data-edge-label="Libera Execução Autorizada" data-edge-key="6">
+          <path data-composition-edge-from="gate4" data-composition-edge-to="harness" data-composition-points="379,520;177,520" d="M 379 520 L 177 520" class="a-default" data-animate="edge" style="--step:6" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="204.39999999999998" y="500" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="278" y="510" class="t-muted" font-size="9" text-anchor="middle">Libera Execução Autorizada</text>
+        </g>
+        </g>
+
+        <g data-edge-from="harness" data-edge-to="sandbox" data-edge-label="Executa Comando em Contêiner Isolado" data-edge-key="7">
+          <path data-composition-edge-from="harness" data-composition-edge-to="sandbox" data-composition-points="177,610;595,610" d="M 177 610 L 595 610" class="a-emphasis" data-animate="edge" style="--step:7" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="286.4" y="590" width="199.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="386" y="600" class="t-backend" font-size="9" text-anchor="middle">Executa Comando em Contêiner Isolado</text>
+        </g>
+        </g>
+
+        <g data-edge-from="sandbox" data-edge-to="harness" data-edge-label="Retorna Saída Padronizada" data-edge-key="8">
+          <path data-composition-edge-from="sandbox" data-composition-edge-to="harness" data-composition-points="595,670;177,670" d="M 595 670 L 177 670" class="a-default" data-animate="edge" style="--step:8" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <g data-detail="context">
+          <rect x="315" y="650" width="142" height="16" rx="3" class="c-mask"/>
+          <text x="386" y="660" class="t-muted" font-size="9" text-anchor="middle">Retorna Saída Padronizada</text>
+        </g>
+        </g>
+
+        <g data-edge-from="harness" data-edge-to="agent" data-edge-label="Entrega Resultado com Log Auditado" data-edge-key="9">
+          <path data-composition-edge-from="harness" data-composition-edge-to="agent" data-composition-points="163,730;69,730" d="M 163 730 L 69 730" class="a-emphasis" data-animate="edge" style="--step:9" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <g data-detail="context">
+          <rect x="21.599999999999994" y="710" width="188.8" height="16" rx="3" class="c-mask"/>
+          <text x="116" y="720" class="t-backend" font-size="9" text-anchor="middle">Entrega Resultado com Log Auditado</text>
+        </g>
+        </g>
+
+        <!-- Segment Labels -->
+        <g data-graph-role="segment-label" data-segment-id="0">
+          <rect x="56" y="128" width="206.4" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="141" class="t-dim" font-size="9" font-weight="600">Interceptação de Ferramentas (Gate 3)</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="1">
+          <rect x="56" y="318" width="253.20000000000002" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="331" class="t-dim" font-size="9" font-weight="600">Gating Estrutural &amp; Assinatura Humana (Gate 4)</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="2">
+          <rect x="56" y="558" width="222" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="571" class="t-dim" font-size="9" font-weight="600">Execução Confinada &amp; Recibo de Auditoria</text>
+        </g>
+
+        <!-- Participants -->
+        <g id="node-agent" data-node-id="agent" data-node-label="Agente IA" tabindex="0" role="button" aria-label="Focus Agente IA, Paperclip Agent, Sequence participant" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="Paperclip Agent" data-node-context="Sequence participant">
+          <title>Agente IA · Paperclip Agent · Sequence participant</title>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="19" y="72" width="86" height="54" rx="6" class="c-frontend" data-animate="node" style="--step:0" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(25 78) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-detail-anchor x="62" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Agente IA</text>
+          <text data-detail="context" x="62" y="111" class="t-muted" font-size="7" text-anchor="middle">Paperclip Agent</text>
+        </g>
+
+        <g id="node-harness" data-node-id="harness" data-node-label="PCL Harness" tabindex="0" role="button" aria-label="Focus PCL Harness, Security Jail, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Security Jail" data-node-context="Sequence participant">
+          <title>PCL Harness · Security Jail · Sequence participant</title>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="127" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:1" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(133 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="170" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">PCL Harness</text>
+          <text data-detail="context" x="170" y="111" class="t-muted" font-size="7" text-anchor="middle">Security Jail</text>
+        </g>
+
+        <g id="node-gate3" data-node-id="gate3" data-node-label="Gate 3" tabindex="0" role="button" aria-label="Focus Gate 3, Tool Gating, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="Tool Gating" data-node-context="Sequence participant">
+          <title>Gate 3 · Tool Gating · Sequence participant</title>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="235" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:2" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(241 78) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="278" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Gate 3</text>
+          <text data-detail="context" x="278" y="111" class="t-muted" font-size="7" text-anchor="middle">Tool Gating</text>
+        </g>
+
+        <g id="node-gate4" data-node-id="gate4" data-node-label="Gate 4" tabindex="0" role="button" aria-label="Focus Gate 4, Human Signoff, Sequence participant" aria-pressed="false" data-node-kind="security" data-node-sublabel="Human Signoff" data-node-context="Sequence participant">
+          <title>Gate 4 · Human Signoff · Sequence participant</title>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="343" y="72" width="86" height="54" rx="6" class="c-security" data-animate="node" style="--step:3" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(349 78) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-detail-anchor x="386" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Gate 4</text>
+          <text data-detail="context" x="386" y="111" class="t-muted" font-size="7" text-anchor="middle">Human Signoff</text>
+        </g>
+
+        <g id="node-operador" data-node-id="operador" data-node-label="Operador" tabindex="0" role="button" aria-label="Focus Operador, Humano, Sequence participant" aria-pressed="false" data-node-kind="external" data-node-sublabel="Humano" data-node-context="Sequence participant">
+          <title>Operador · Humano · Sequence participant</title>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="451" y="72" width="86" height="54" rx="6" class="c-external" data-animate="node" style="--step:4" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(457 78) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-detail-anchor x="494" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Operador</text>
+          <text data-detail="context" x="494" y="111" class="t-muted" font-size="7" text-anchor="middle">Humano</text>
+        </g>
+
+        <g id="node-sandbox" data-node-id="sandbox" data-node-label="Sandbox" tabindex="0" role="button" aria-label="Focus Sandbox, Docker Container, Sequence participant" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Docker Container" data-node-context="Sequence participant">
+          <title>Sandbox · Docker Container · Sequence participant</title>
+          <rect x="559" y="72" width="86" height="54" rx="6" class="c-mask"/>
+          <rect x="559" y="72" width="86" height="54" rx="6" class="c-backend" data-animate="node" style="--step:5" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(565 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-detail-anchor x="602" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Sandbox</text>
+          <text data-detail="context" x="602" y="111" class="t-muted" font-size="7" text-anchor="middle">Docker Container</text>
+        </g>
+
+        <!-- Legend -->
+        <text x="150" y="806" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <path d="M 150 826 L 184 826" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <text x="193" y="829" class="t-muted" font-size="8">request</text>
+        <path d="M 270 826 L 304 826" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
+        <text x="313" y="829" class="t-muted" font-size="8">return</text>
+        <path d="M 385 826 L 419 826" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <text x="428" y="829" class="t-muted" font-size="8">security</text>
+        <path d="M 530 826 L 564 826" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <text x="573" y="829" class="t-muted" font-size="8">async trace</text>
+      </svg>

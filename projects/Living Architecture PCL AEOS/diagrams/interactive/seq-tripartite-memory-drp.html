@@ -4526,24 +4526,7 @@
         </div>
       </div>
       <button id="guided-view-next" type="button" aria-label="Next guided view" title="Next guided view (])">&#8594;</button>
-      <div class="guided-view-actions" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-        <button class="guided-view-play" id="guided-view-play" type="button" aria-label="Play guided story" aria-pressed="false" title="Play guided story (P)">
-          <span id="guided-view-play-icon" aria-hidden="true">&#9654;</span>
-          <span id="guided-view-play-label">Play story</span>
-        </button>
-        <button id="guided-story-step-prev" type="button" title="Passo anterior da história" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:inherit; border-radius:6px; padding:4px 8px; cursor:pointer; font-size:0.82rem; font-weight:600;">⏮️ Anterior</button>
-        <button id="guided-story-step-next" type="button" title="Próximo passo da história" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:inherit; border-radius:6px; padding:4px 8px; cursor:pointer; font-size:0.82rem; font-weight:600;">Próximo ⏭️</button>
-        <div style="display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:2px;">
-          <button id="btn-speed-slow" type="button" style="background:none; border:none; color:inherit; padding:3px 6px; border-radius:4px; font-size:0.75rem; cursor:pointer;">0.5x</button>
-          <button id="btn-speed-normal" type="button" style="background:rgba(56,189,248,0.3); border:none; color:#38bdf8; font-weight:bold; padding:3px 6px; border-radius:4px; font-size:0.75rem; cursor:pointer;">1.0x</button>
-          <button id="btn-speed-fast" type="button" style="background:none; border:none; color:inherit; padding:3px 6px; border-radius:4px; font-size:0.75rem; cursor:pointer;">2.0x</button>
-        </div>
-        <button class="guided-view-beat-link" id="guided-view-beat-link" type="button" aria-label="Select a Story Beat to copy its exact link" title="Select a Story Beat to copy its exact link" disabled>
-          <span aria-hidden="true">&#35;</span>
-          <span id="guided-view-beat-link-label">Copy moment</span>
-        </button>
-        <button class="guided-view-all" id="guided-view-all" type="button" aria-label="Show entire diagram">Show all</button>
-      </div>
+                  <div class="guided-view-actions">
         <button class="guided-view-play" id="guided-view-play" type="button" aria-label="Play guided story" aria-pressed="false" title="Play guided story (P)">
           <span id="guided-view-play-icon" aria-hidden="true">&#9654;</span>
           <span id="guided-view-play-label">Play story</span>
@@ -8551,8 +8534,8 @@
       var storyPulseOwnerToken = 0;
       var storyPulseGeneration = 0;
       var autoplayPending = false;
-      var VIEW_INTERVAL_MS = 6500;
-      var STORY_FOLLOW_MIN_DWELL_MS = 3500;
+      var VIEW_INTERVAL_MS = 4500;
+      var STORY_FOLLOW_MIN_DWELL_MS = 2500;
       var STORY_FOLLOW_DURATION_MS = 320;
       var chapterButtons = [];
       var handoffGeneration = 0;
@@ -11281,7 +11264,7 @@
       var journeyStartedAt = 0;
       var journeyElapsedMs = 0;
       var journeyOwnerToken = 0;
-      var JOURNEY_DWELL_MS = 3800;
+      var JOURNEY_DWELL_MS = 2500;
 
       function nodes() {
         return Array.prototype.slice.call(svg.querySelectorAll('[data-node-id]'));

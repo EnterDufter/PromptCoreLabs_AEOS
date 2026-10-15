@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Paperclip Agent Harness (v2.0) — Confinamento & Gates",
+    "subtitle": "Confinamento em Sandbox, Gate 3 (Tool Gating) e Gate 4 (Human Signoff)",
+    "output": "seq-paperclip-agent-harness.html",
+    "viewBox": [820, 880],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "tool-interception",
+        "label": "Gate 3: Interceptação & Política",
+        "focus": ["agent", "harness", "gate3"],
+        "note": "Chamada interceptada antes de tocar no sistema operacional ou banco de dados."
+      },
+      {
+        "id": "human-signoff",
+        "label": "Gate 4: Homologação Humana",
+        "focus": ["harness", "gate4", "operador"],
+        "note": "Ações com impacto estrutural exigem aprovação explícita do operador humano."
+      },
+      {
+        "id": "isolated-execution",
+        "label": "Execução Confinada & Auditoria",
+        "focus": ["harness", "sandbox", "agent"],
+        "note": "Execução segura em contêiner isolado com registro imutável de auditoria."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "agent", "type": "frontend", "label": "Agente IA", "sublabel": "Paperclip Agent" },
+    { "id": "harness", "type": "backend", "label": "PCL Harness", "sublabel": "Security Jail" },
+    { "id": "gate3", "type": "security", "label": "Gate 3", "sublabel": "Tool Gating" },
+    { "id": "gate4", "type": "security", "label": "Gate 4", "sublabel": "Human Signoff" },
+    { "id": "operador", "type": "external", "label": "Operador", "sublabel": "Humano" },
+    { "id": "sandbox", "type": "backend", "label": "Sandbox", "sublabel": "Docker Container" }
+  ],
+  "segments": [
+    { "from": 150, "to": 320, "label": "Interceptação de Ferramentas (Gate 3)" },
+    { "from": 340, "to": 560, "label": "Gating Estrutural & Assinatura Humana (Gate 4)" },
+    { "from": 580, "to": 780, "label": "Execução Confinada & Recibo de Auditoria" }
+  ],
+  "messages": [
+    { "from": "agent", "to": "harness", "y": 180, "label": "Solicita Execução de Tool (ex: git, sql, shell)", "variant": "emphasis" },
+    { "from": "harness", "to": "gate3", "y": 230, "label": "Avalia Perfil de Permissão & Risco", "variant": "emphasis" },
+    { "from": "gate3", "to": "harness", "y": 280, "label": "Ação Crítica Detectada (Modificação de Estado)", "variant": "return" },
+    { "from": "harness", "to": "gate4", "y": 370, "label": "Envia Proposta de Mudança & Diffs", "variant": "emphasis" },
+    { "from": "gate4", "to": "operador", "y": 420, "label": "Solicita Confirmação Humana Explícita", "variant": "emphasis" },
+    { "from": "operador", "to": "gate4", "y": 480, "label": "Aprova Execução (OK / Assinatura)", "variant": "return" },
+    { "from": "gate4", "to": "harness", "y": 520, "label": "Libera Execução Autorizada", "variant": "return" },
+    { "from": "harness", "to": "sandbox", "y": 610, "label": "Executa Comando em Contêiner Isolado", "variant": "emphasis" },
+    { "from": "sandbox", "to": "harness", "y": 670, "label": "Retorna Saída Padronizada", "variant": "return" },
+    { "from": "harness", "to": "agent", "y": 730, "label": "Entrega Resultado com Log Auditado", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "harness", "from": 170, "to": 740, "type": "backend" },
+    { "participant": "gate3", "from": 220, "to": 290, "type": "security" },
+    { "participant": "gate4", "from": 360, "to": 530, "type": "security" },
+    { "participant": "operador", "from": 410, "to": 490, "type": "external" },
+    { "participant": "sandbox", "from": 600, "to": 680, "type": "backend" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Confinamento em Sandbox", "items": ["Agentes não possuem acesso direto ao host", "Execução restrita a contêineres Docker com volumes monitorados"] },
+    { "dot": "amber", "title": "Gate 3 — Tool Gating", "items": ["Interceptação de chamadas perigosas", "Filtragem determinística sem alucinação"] },
+    { "dot": "violet", "title": "Gate 4 — Human Signoff", "items": ["Nenhuma alteração de código ou banco ocorre sem aval", "Zero risco de destruição acidental de dados"] }
+  ]
+}
