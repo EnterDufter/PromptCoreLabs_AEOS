@@ -1290,7 +1290,7 @@ sequenceDiagram
         <!-- HARNESS-GATE-01 -->
         <div class="card-exp">
           <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-paperclip-agent-harness.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-paperclip-agent-harness.svg" alt="HARNESS-GATE-01 Paperclip Agent Harness v2.0">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-paperclip-agent-harness.png" alt="HARNESS-GATE-01 Paperclip Agent Harness v2.0">
           </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
@@ -1367,7 +1367,7 @@ graph LR
         <!-- DIAG-MEM-TRIPARTITE -->
         <div class="card-exp">
           <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/data-rag-memory-tripartite.svg" alt="DIAG-MEM-TRIPARTITE Memória Tripartida & Reconciliação">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/data-rag-memory-tripartite.png" alt="DIAG-MEM-TRIPARTITE Memória Tripartida & Reconciliação">
           </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
@@ -1386,7 +1386,7 @@ graph LR
         <!-- DIAG-LAYA-01 -->
         <div class="card-exp">
           <a href="projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer" class="card-exp-img">
-            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-laya-system-one.svg" alt="DIAG-LAYA-01 Coprocessador Laya System One">
+            <img src="projects/Living Architecture PCL AEOS/diagrams/assets/seq-laya-system-one.png" alt="DIAG-LAYA-01 Coprocessador Laya System One">
           </a>
           <div class="card-exp-content">
             <div class="card-exp-meta">
@@ -2048,9 +2048,9 @@ flowchart TD
 
 
       // 1. Função para abrir o modal de documento Markdown
-      async function openDocModal(url, title) {
+            async function openDocModal(url, title) {
         modalBadge.textContent = 'DOC READER';
-        printBtn.style.display = 'flex'; // Exibe botão de impressão
+        printBtn.style.display = 'flex';
         
         modalContainer.style.width = '90vw';
         modalContainer.style.maxWidth = '1260px';
@@ -2058,71 +2058,29 @@ flowchart TD
 
         modalBody.style.padding = '2.2rem';
         modalBody.style.overflowY = 'auto';
+        modalTitle.textContent = title || 'Documentação Técnica';
 
-        // Interceptador de segurança infalível: se o título contiver "Migração" ou "Regras de Indexação" (Card 2) ou se o URL contiver "legacy-migration"
-        const isLegacyCard = (title && (title.includes('Regras de Indexação') || title.includes('Migração'))) || (url && url.includes('legacy-migration'));
-        
-        const inlineDoc = document.getElementById('doc-legacy-migration');
-        if (isLegacyCard && inlineDoc) {
-          modalTitle.textContent = 'Migração & Higienização Legada (DIAG-LEG-01)';
-          modalBody.innerHTML = marked.parse(inlineDoc.textContent.trim());
+        const decodedUrl = decodeURIComponent(url);
+        let rawText = '';
 
-          const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
-          if (mermaidBlocks.length > 0) {
-            mermaidBlocks.forEach((block) => {
-              const div = document.createElement('div');
-              div.className = 'mermaid';
-              div.textContent = block.textContent;
-              block.parentNode.replaceWith(div);
-            });
-            await mermaid.run({ nodes: modalBody.querySelectorAll('.mermaid') });
-          }
-
-          modalOverlay.classList.add('active');
-          modalOverlay.setAttribute('aria-hidden', 'false');
-          document.body.style.overflow = 'hidden';
-          return;
+        // 1. Busca primeiro nos scripts embutidos na própria página
+        const selector = 'script[data-doc-path="' + url + '"], script[data-doc-decoded="' + decodedUrl + '"], script[data-doc-path="' + decodedUrl + '"]';
+        const inlineScript = document.querySelector(selector);
+        if (inlineScript) {
+          rawText = inlineScript.textContent.trim();
         }
 
-        modalTitle.textContent = title || 'Carregando documento...';
-        modalBody.innerHTML = `
-          <div style="text-align:center; padding: 4rem 1rem; color: var(--accent-cyan);">
-            <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
-            <p>Carregando documentação soberana...</p>
-          </div>
-        `;
-        
-        modalOverlay.classList.add('active');
-        modalOverlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        // 2. Se não encontrou no inline e estiver em ambiente web HTTP/HTTPS, tenta fetch
+        if (!rawText && window.location.protocol !== 'file:') {
+          try {
+            const resp = await fetch(url + '?t=' + Date.now(), { cache: 'no-cache' });
+            if (resp.ok) rawText = await resp.text();
+          } catch (_) {}
+        }
 
-        try {
-          if (window.location.protocol === 'file:') {
-            // Em ambiente local file:///, carrega o documento via iframe nativo sem restrição de CORS
-            modalBody.style.padding = '0';
-            modalBody.style.overflow = 'hidden';
-            modalBody.innerHTML = `
-              <div style="height:100%; display:flex; flex-direction:column;">
-                <div style="padding:0.6rem 1.2rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border-color); font-size:0.82rem; display:flex; justify-content:space-between; align-items:center;">
-                  <span style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">Modo Local Soberano</span>
-                  <a href="${url}" target="_blank" style="color:var(--accent-cyan); text-decoration:none; font-weight:600;">Abrir arquivo em nova aba ↗</a>
-                </div>
-                <iframe src="${url}" style="flex:1; width:100%; border:none; background:#0b0f19; color:#f8fafc; padding:1.5rem; box-sizing:border-box;"></iframe>
-              </div>
-            `;
-            return;
-          }
-
-          const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
-          const response = await fetch(fetchUrl, { cache: 'no-cache' });
-          if (!response.ok) throw new Error(`Status ${response.status}`);
-          const rawText = await response.text();
-
-          if (url.endsWith('.md') || url.includes('.md?')) {
-            modalBody.innerHTML = marked.parse(rawText);
-          } else {
-            modalBody.innerHTML = rawText;
-          }
+        // 3. Renderização rica idêntica à Versão 1 com marked.js e Mermaid
+        if (rawText) {
+          modalBody.innerHTML = marked.parse(rawText);
 
           const mermaidBlocks = modalBody.querySelectorAll('.language-mermaid, pre code.language-mermaid');
           if (mermaidBlocks.length > 0) {
@@ -2138,21 +2096,18 @@ flowchart TD
               }
             }
           }
-
-        } catch (err) {
-          // Fallback gracioso caso fetch falhe
-          modalBody.style.padding = '0';
-          modalBody.style.overflow = 'hidden';
+        } else {
           modalBody.innerHTML = `
-            <div style="height:100%; display:flex; flex-direction:column;">
-              <div style="padding:0.6rem 1.2rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border-color); font-size:0.82rem; display:flex; justify-content:space-between; align-items:center;">
-                <span style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">Modo Leitor Direto</span>
-                <a href="${url}" target="_blank" style="color:var(--accent-cyan); text-decoration:none; font-weight:600;">Abrir arquivo em nova aba ↗</a>
-              </div>
-              <iframe src="${url}" style="flex:1; width:100%; border:none; background:#0b0f19; color:#f8fafc; padding:1.5rem; box-sizing:border-box;"></iframe>
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 1.5rem; border-radius: 8px;">
+              <h3>⚠️ Não foi possível carregar este artigo no painel modal</h3>
+              <p style="margin-top:0.5rem;"><a href="${url}" target="_blank" style="color:#38bdf8;">Clique aqui para abrir diretamente o arquivo em nova aba ↗</a></p>
             </div>
           `;
         }
+
+        modalOverlay.classList.add('active');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
       }
 
       // 2. Função para abrir o modal de Diagrama Interativo Cortex (90% de visualização)
@@ -2304,5 +2259,2220 @@ graph LR
 - [Arquitetura de Memória & RAG Vetorial](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
 - [Governança & Modelo Operacional v2.0](file:///c:/PromptCore_Labs/governance/operating-model.md)
   </script>
+
+  <!-- EMBEDDED MARKDOWN DOCS PARA RENDERIZAÇÃO IMEDIATA VIA MARKED.JS (SANDBOX LOCAL & ONLINE) -->
+  <script id="doc-architecture-v2-executive-guide" type="text/markdown" data-doc-path="docs/architecture-v2-executive-guide.md" data-doc-decoded="docs/architecture-v2-executive-guide.md">
+# Guia Executivo e Conceitual — PCL AEOS v2.0
+> **Público:** Liderança, Executivos, Novos Membros da Equipe e Curiosos  
+> **Tempo Estimado de Leitura:** 3 minutos  
+> **Objetivo:** Compreender a inteligência, o propósito e o funcionamento do PCL AEOS sem jargões desnecessários.
+
+---
+
+## 1. O que é o PCL AEOS em poucas palavras?
+
+O **PCL AEOS** (*AI Engineering Operating System*) é como um **sistema nervoso autônomo** para o desenvolvimento de software e inteligência artificial. 
+
+Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica digital inteligente** que roda localmente no seu computador, unindo agentes de inteligência artificial especializados para arquitetar, programar, testar e proteger suas aplicações de forma contínua, com **soberania total sobre seus dados** e **custo zero de nuvem para operações corriqueiras**.
+
+---
+
+## 2. A Metáfora do Escritório e da Biblioteca
+
+Para entender como a **Memória Tripartida** do PCL AEOS funciona na prática, imagine um escritório de consultoria de alto padrão:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        COMO FUNCIONA O ESCRITÓRIO                     │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. A BIBLIOTECA (Documentos Brutos)                                    │
+│    Onde ficam guardados os livros, manuais e projetos originais.       │
+│    No PCL AEOS: São os textos do seu repositório Git organizados em    │
+│    pequenos blocos indexados (chunks 768D).                           │
+├────────────────────────────────────────────────────────────────────────┤
+│ 2. O FICHÁRIO DE PREMISSAS (As Claims Atômicas)                        │
+│    Em vez de reler um livro inteiro de 500 páginas a cada dúvida, um   │
+│    assistente mantém fichas catalogadas com afirmações comprovadas:     │
+│    "A porta de banco é :5432", "A política de backup é diária".        │
+│    No PCL AEOS: memory.claims com selos de autoridade e confiança.     │
+├────────────────────────────────────────────────────────────────────────┤
+│ 3. O LIVRO CARTORIAL (Os Recibos Criptográficos de Evidência)          │
+│    Cada ficha do fichário possui um carimbo cartorial que aponta para  │
+│    a página e linha exatas do livro de onde ela saiu. Se alguém tentar │
+│    alterar o livro, o carimbo detecta a divergência instantaneamente. │
+│    No PCL AEOS: memory.evidence_receipts com hashes SHA-256 e commits. │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Por que essa abordagem elimina as "alucinações"?
+Quando uma inteligência artificial comum é questionada, ela tenta "adivinhar" o que soa verossímil.  
+No PCL AEOS, os agentes são proibidos de inventar: eles consultam o fichário e exigem o carimbo cartorial da evidência. Se uma informação for contraditória ou não estiver comprovada, o sistema acusa o conflito de forma transparente.
+
+---
+
+## 3. O Coprocessador Laya: O "Reflexo Rápido" que Protege o Bolso
+
+No cérebro humano, quando você encosta a mão em uma chapa quente, seu braço recua antes mesmo de você raciocinar: isso é um **reflexo involuntário**.
+
+O **Laya System One** é o reflexo involuntário do PCL AEOS:
+* Ele é um microsserviço ultrarrápido que roda no processador comum (CPU) em **menos de 15 milissegundos**.
+* Ele **não gasta 1 megabyte sequer da placa de vídeo (GPU)**, deixando todo o hardware livre para trabalho pesado.
+* Se você disser um simples *"Bom dia"* ou perguntar *"Qual é a porta do banco?"*, o Laya responde de imediato no computador local, **sem gastar tokens de nuvem nem um centavo de dólar ($0.00)**.
+* Se a solicitação exigir raciocínio complexo ou programação sofisticada, o Laya direciona a tarefa para os modelos mais potentes com cache inteligente padronizado (**EBITDA Shield**).
+
+---
+
+## 4. O Cão de Guarda Determinístico (*Staleness Daemon*)
+
+Imagine que você editou uma única linha de um documento no Git. Sistemas tradicionais gastariam minutos e dinheiro lendo e reprocessando todo o acervo.
+
+O PCL AEOS possui um sentinela silencioso:
+* A cada alteração no código, ele calcula a "impressão digital" (hash SHA-256) do arquivo em **0,2 segundo**.
+* Se nada mudou, ele gasta **zero tokens**.
+* Se houve alteração, ele atualiza cirurgicamente apenas aquela página do livro.
+
+---
+
+## 5. Resiliência Absoluta: Recuperação de Desastres em 7 Segundos
+
+Se o computador queimar ou o disco for formatado, o PCL AEOS foi projetado e **auditado formalmente** para:
+* Executar backup cifrado militarmente (AES-256) para nuvem gratuita Cloudflare R2.
+* Restaurar toda a base de dados, inteligência e memórias em **apenas 7,18 segundos (RTO)**.
+
+---
+
+## 6. Resumo dos Indicadores Soberanos da Versão 2.0
+
+| Indicador | Valor Aferido em Auditoria | Benefício Real |
+|:---|:---:|:---|
+| **Custo Mensal de Infraestrutura** | **$0.00 / mês** | Zero dependência de servidores pagos |
+| **Alocação de VRAM na GPU** | **0 MB** | Placa de vídeo 100% livre |
+| **Latência de Decisão (Laya)** | **< 15 ms** | Resposta instantânea e sem engasgos |
+| **Tempo de Recuperação (RTO)** | **7,18 s** | Continuidade de negócio inabalável |
+| **Integridade de Fatos** | **100% Criptografado** | Rastreabilidade do commit à resposta |
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/strategy/README.md">
+# Artigo Técnico: Estratégia Corporativa & Visão PCL AEOS
+
+==================================================
+1. A VISÃO DO PROMPTCORE LABS (AEOS)
+==================================================
+
+O **PromptCoreLabs_AEOS** (AI Engineering Operating System) é um sistema operacional de engenharia orientado a inteligência artificial, desenhado para orquestrar agentes autônomos, squads especializadas e plataformas de software sob uma governança rigorosa, reprodutível e soberana.
+
+---
+
+## 2. PRINCÍPIOS FUNDACIONAIS DO AEOS
+
+1. **Soberania e Execução Local**: Prioridade para modelos e bancos locais mantendo total controle do capital intelectual e privacidade dos dados.
+2. **Disciplinaridade Spec-Driven**: Especificar antes de construir; validar antes de promover.
+3. **Living Documentation**: A arquitetura deve evoluir com o código, produzindo visualizações dinâmicas atualizadas em tempo real pela persona Cortex.
+4. **Eficiência de Capital (EBITDA Shield)**: Otimização rigorosa do uso de modelos de linguagem via prompt caching e roteamento eficiente no OmniRoute Gateway.
+
+---
+
+## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 🟢 **[c4-l1-context.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html)**: System Context Diagram Nível C4 Level 1.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/runtime/README.md">
+# Artigo Técnico: Runtime & AI Gateway OmniRoute — PCL AEOS
+
+==================================================
+1. VISÃO GERAL DO RUNTIME DE INFERÊNCIA E ORQUESTRAÇÃO
+==================================================
+
+O Runtime do **PCL AEOS** é a camada responsável pela execução das chamadas de inferência de IA, roteamento dinâmico de prompts, prompt caching e exibição do painel de orquestração de agentes.
+
+---
+
+## 2. COMPONENTES CHAVE DO RUNTIME
+
+### 1. **OmniRoute AI Gateway** (Porta `:20130`)
+- **EBITDA Shield**: Cache semântico de prompts para evitar re-computação de contextos idênticos e economizar custos de tokens.
+- **Fallback Dinâmico**: Roteamento transparente. Se uma GPU local falhar ou estourar a memória (OOM), o OmniRoute direciona a requisição para provedores de nuvem (Gemini / Claude / OpenAI) sem quebrar a sessão do agente.
+- **Token Budgeting**: Limite de tokens por agente e sessão com logs de telemetria enviados ao `pcl-db`.
+
+### 2. **PaperClip Dashboard** (Porta `:3100`)
+- Painel web de orquestração em tempo real dos 15 papéis de agentes.
+- Visualização de estados dos agentes, logs de execução por Execution Cell e triggers de tarefas.
+
+---
+
+## 3. CICLO DE VIDA DA REQUISIÇÃO DE INFERÊNCIA
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Agent as Agente IA
+    participant Omni as OmniRoute Gateway (:20130)
+    participant Cache as EBITDA Shield Cache
+    participant GPU as GPU Local (Ollama/LM Studio)
+    participant Cloud as Cloud LLM (Gemini/Claude)
+
+    Agent->>Omni: POST /v1/chat/completions (Prompt)
+    Omni->>Cache: Checa Hash de Prompt no Cache
+    alt Cache Hit (EBITDA Shield)
+        Cache-->>Omni: Retorna Resposta Cacheada (0 Cost)
+        Omni-->>Agent: Resposta Instantânea
+    else Cache Miss
+        Omni->>GPU: Tenta Inferência na GPU Local
+        alt GPU Sucesso
+            GPU-->>Omni: Retorna Tokens Gerados
+        else GPU OOM / Off-line (Fallback)
+            Omni->>Cloud: Roteia para Provider Cloud
+            Cloud-->>Omni: Retorna Resposta Cloud
+        end
+        Omni->>Cache: Salva Resposta no Cache
+        Omni-->>Agent: Resposta Final + Métricas
+    end
+```
+
+---
+
+## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 🟡 **[seq-omniroute-routing.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
+- 🟡 **[seq-tripartite-memory-drp.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
+- 🟡 **[life-cortex-micro-loop.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
+
+---
+
+## 5. RESILIÊNCIA & MEMÓRIA TRIPARTIDA
+- **Cold SQL Backup (Longo Prazo)**: Snapshots de `pcl-db` compactados e criptografados em AES-256 enviados para o Cloudflare R2 (`pcl-backup-memoria-tripartida`).
+- **Disaster Recovery Plan (DRP)**: SLAs de RPO $\le$ 1h/24h e RTO $\le$ 15min. Restauração executada via `restore-aeos-tripartido.ps1`.
+- **MCP Server Cloudflare**: Integração com a IDE para monitoramento e gestão do ecossistema.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/c4-model/README.md">
+# C4 Model Specification — Living Architecture PCL AEOS
+
+==================================================
+NOTAÇÃO C4 MODEL E ARQUITETURA MULTINÍVEL
+==================================================
+
+O modelo C4 organiza a visualização do PCL AEOS em quatro níveis de abstração progressiva:
+
+| Nível C4 | Nome | Arquivo de Especificação | Diagrama Interativo Cortex |
+|---|---|---|---|
+| **C4 Level 1** | System Context | [l1-context.md](l1-context.md) | [c4-l1-context.html](../../diagrams/interactive/c4-l1-context.html) |
+| **C4 Level 2** | Containers | [l2-containers.md](l2-containers.md) | [c4-l2-containers.html](../../diagrams/interactive/c4-l2-containers.html) |
+| **C4 Level 3** | Components | [l3-components.md](l3-components.md) | [c4-l3-components.html](../../diagrams/interactive/c4-l3-components.html) |
+| **C4 Level 4** | Code & Specs | [l4-code-specs.md](l4-code-specs.md) | [c4-l4-cortex-engine.html](../../diagrams/interactive/c4-l4-cortex-engine.html) |
+
+---
+*PromptCore Labs — Living Architecture PCL AEOS*
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/glossary/README.md">
+# Glossário de Termos & Taxonomia — PCL AEOS
+
+==================================================
+DICIONÁRIO DE TERMOS TÉCNICOS DA ARQUITETURA
+==================================================
+
+| Termo | Definição no Ecossistema PCL AEOS |
+|---|---|
+| **AEOS** | AI Engineering Operating System — O sistema operacional de engenharia para gestão de agentes e software. |
+| **Cortex Visual Engine** | Motor de renderização visual interativa desenvolvido na persona Cortex para compilação de diagramas HTML standalone com SVG inline. |
+| **Cortex** | Persona especializada em inteligência de sistemas e visualização arquitetural do PCL AEOS. |
+| **EBITDA Shield** | Mecanismo de prompt caching e roteamento de custos no AI Gateway OmniRoute para otimização do uso de tokens. |
+| **Execution Cell** | Unidade atômica de execução e log de tarefas processadas por um agente de IA no runtime. |
+| **Harness** | Ambiente de desenvolvimento e execução contido no Docker Compose (`pcl-db`, `pcl-omniroute`, `pcl-paperclip`). |
+| **Living Architecture** | Conceito de documentação viva e dinâmica onde diagramas e especificações evoluem em tempo real com o código. |
+| **OmniRoute** | AI Gateway e proxy de inferência unificado (porta `:20130`) com fallback dinâmico entre modelos locais e nuvem. |
+| **PaperClip** | Dashboard web de orquestração visual dos 15 papéis de agentes do PCL AEOS (porta `:3100`). |
+| **PGVector** | Extensão de banco de dados vetorial para PostgreSQL 17 usada no `pcl-db` para buscas por cosseno em RAG. |
+| **Stage Gates** | A suíte de 5 portas de aprovação sequenciais (Specify, Design, Tasks, Execute/QA, Signoff) da metodologia TLC v3. |
+| **TLC Spec-Driven** | Metodologia de desenvolvimento orientada a especificações (`specify.md`, `design.md`, `tasks.md`, `validate.md`). |
+| **Zero Secret Leak** | Política de segurança perimetral que proíbe a presença de segredos ou chaves sensíveis em código, logs ou diagramas. |
+| **Coprocessador Laya** | Motor de inferência reflexa ultrarrápida (porta `:20140`, CPU INT8, <15ms) consumindo 0 MB de VRAM da GPU para classificação imediata de intenções e blindagem de custos. |
+| **Memória Tripartida** | Arquitetura de persistência e RAG isolada no schema `memory.*` do PostgreSQL 17, dividida em chunks vetoriais (`document_chunks`), afirmações atômicas (`claims`) e recibos de prova (`evidence_receipts`). |
+| **Claims Atômicas** | Afirmações conceituais e operacionais atômicas catalogadas com status e Tiers de confiança PCL (100 a 40), blindando os agentes contra alucinações. |
+| **Evidence Receipts** | Recibos imutáveis com hashes criptográficos SHA-256 e commits que comprovam a origem documental e a linha exata de cada claim. |
+| **Deterministic Staleness Daemon** | Sentinela que audita os 220 claims em 0,2s através de Git hook (`post-commit`) com custo computacional de 0 tokens de nuvem. |
+| **Paperclip Agent Harness** | Sandbox de execução segura com confinamento Gate 3 (tool-call gating) e ponto de parada humana mandatória no Gate 4 antes de ações de risco. |
+| **Reconciliação Canônica** | Algoritmo determinístico de arbitragem que resolve conflitos entre especificações e código utilizando a hierarquia de autoridade da verdade PCL. |
+| **RTO Homologado (7.18s)** | Recovery Time Objective atestado em Stage Gate 4 para restauração completa da memória e base de dados a partir de snapshot frio AES-256 no Cloudflare R2. |
+
+
+  </script>
+  <script id="doc-operating-model" type="text/markdown" data-doc-path="governance/operating-model.md" data-doc-decoded="governance/operating-model.md">
+# GOVERNANCE — Operating Model
+
+## Metadados
+
+| Campo | Valor |
+|--------|-------|
+| Documento | governance/operating-model.md |
+| Tipo | Documento Fundacional de Governança |
+| Status | Aprovado pelo Usuário |
+| Versão | 2.0 |
+| Camada | Governance |
+| Autoridade | Fonte Oficial de Verdade |
+
+---
+
+# Objetivo
+
+Este documento define o modelo operacional oficial do PromptCoreLabs_AEOS.
+
+Seu propósito é estabelecer como iniciativas evoluem desde sua concepção até sua operação contínua através da colaboração coordenada entre pessoas, agentes, modelos de IA e ferramentas.
+
+O Operating Model define **como o AEOS trabalha**.
+
+Metodologias definem **como cada iniciativa é conduzida**.
+
+---
+
+# Missão Operacional
+
+Permitir que qualquer iniciativa seja desenvolvida de forma estruturada, rastreável, auditável e evolutiva, utilizando Inteligência Artificial como aceleradora da engenharia, nunca como substituta da responsabilidade arquitetural.
+
+---
+
+## 📐 Padrão Oficial de Legibilidade e Impressão de Diagramas (Standard)
+
+Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamente seguir este padrão inviolável:
+
+1. **Quebra de Linha em Rótulos (`<br/>`)**: Rótulos e descrições de nós no Mermaid devem utilizar quebras de linha explícitas (`<br/>`) e formatação em itálico/subtítulos para expandir a altura das caixas e garantir que as fontes sejam renderizadas em tamanho amplo e legível sem extrapolar margens.
+2. **Orientação por Domínio**:
+   - Organogramas, árvores hierárquicas e matrizes de agentes devem utilizar estritamente **orientação vertical (`graph TD`)**.
+   - Pipelines lineares de precedência e etapas de ciclo de vida devem utilizar **orientação horizontal (`graph LR`)**.
+3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da fol# Princípios Operacionais
+
+Toda operação deverá obedecer rigorosamente à seguinte precedência:
+
+```mermaid
+graph LR
+    classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    
+    A["1. Architecture"]:::step --> B["2. Governance"]:::step --> C["3. Knowledge"]:::step --> D["4. Memory"]:::step --> E["5. Execution"]:::step --> F["6. Validation"]:::step --> G["7. Learning"]:::step
+```
+
+Nenhuma automação poderá inverter esta ordem.
+
+---
+
+# Modelo Operacional
+
+O AEOS opera sobre sete capacidades permanentes:
+
+```mermaid
+graph LR
+    classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+
+    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap --> C3["3. Knowledge"]:::cap --> C4["4. Memory"]:::cap --> C5["5. Agents"]:::cap --> C6["6. Runtime"]:::cap --> C7["7. Projects & Verticals"]:::cap
+```
+
+Cada camada fornece capacidades para a camada seguinte.
+
+Nenhuma camada inferior redefine responsabilidades das superiores.
+
+Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
+
+## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
+
+```mermaid
+graph TD
+    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    classDef verticals fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+    classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
+        C1["🧠 Cortex Engine"]:::platform
+        C2["⚡ OmniRoute :20130"]:::platform
+        C3["🤖 Paperclip :3100"]:::platform
+        C4["💾 PGVector RAG"]:::platform
+        C5["🛠️ TLC Agent Skills"]:::platform
+    end
+
+    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
+        V1["1. Software Studio"]:::verticals
+        V2["2. Marketing & Growth"]:::verticals
+        V3["3. RevOps & CRM"]:::verticals
+        V4["4. AI Consulting"]:::verticals
+        V5["5. Data & Analytics"]:::verticals
+        V6["6. AI Academy"]:::verticals
+        V7["7. Jurídico & Compliance"]:::verticals
+        V8["8. RH & People Ops"]:::verticals
+        V9["9. FinOps & Pricing"]:::verticals
+        V10["10. Customer Success"]:::verticals
+        V11["11. Mídia & Podcasts"]:::verticals
+        V12["12. Venture Studio"]:::verticals
+        V13["13. DevSecOps Studio"]:::verticals
+        V14["14. E-Commerce Pricing"]:::verticals
+        V15["15. GovTech & RFP"]:::verticals
+        
+        V1 --- V2 --- V3 --- V4 --- V5
+        V6 --- V7 --- V8 --- V9 --- V10
+        V11 --- V12 --- V13 --- V14 --- V15
+    end
+
+    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
+        P1["📦 Proposta Fechada"]:::products
+        P2["🔄 Retainers Mensais"]:::products
+        P3["🚀 Micro-SaaS White-Label"]:::products
+        P4["🔌 APIs & Agentes"]:::products
+        P5["🎓 Assinaturas Academy"]:::products
+    end
+
+    Layer1 --> Layer2
+    Layer2 --> Layer3
+```
+
+---
+
+# Unidade Operacional
+
+A menor unidade operacional do PromptCoreLabs_AEOS é denominada **Execution Cell**.
+
+Uma Execution Cell representa um ambiente operacional completo e governado, responsável por executar uma iniciativa, módulo ou etapa do ciclo de vida da plataforma.
+
+Ela encapsula:
+
+- responsabilidade humana;
+- agentes especializados;
+- modelos de IA;
+- contexto compartilhado;
+- metodologia ativa;
+- artefatos;
+- memória operacional;
+- observabilidade.
+
+Toda execução do AEOS deverá ocorrer dentro de uma Execution Cell.
+
+A especificação completa das Execution Cells pertence à camada Runtime.
+
+---
+
+# Papéis Operacionais
+
+O modelo operacional reconhece cinco categorias de participantes.
+
+## Sponsor
+
+Define objetivos.
+
+Prioridades.
+
+Critérios de sucesso.
+
+Aprova resultados.
+
+---
+
+## Architect
+
+Mantém:
+
+- Vision
+- Principles
+- Modules
+- ADRs
+- Decision Framework
+
+Possui autoridade arquitetural.
+
+---
+
+## Builder
+
+Constrói soluções aprovadas.
+
+Nunca altera arquitetura.
+
+---
+
+## Reviewer
+
+Audita qualidade.
+
+Conformidade.
+
+Segurança.
+
+Rastreabilidade.
+
+---
+
+## Operator
+
+Mantém operação contínua.
+
+Observabilidade.
+
+Aprendizado.
+
+Retroalimentação do sistema.
+
+---
+
+# Colaboração Operacional
+
+Humanos, agentes e modelos nunca trabalham isoladamente.
+
+Eles colaboram através de Execution Cells.
+
+A Execution Cell fornece:
+
+- isolamento de contexto;
+- governança;
+- memória compartilhada;
+- metodologia ativa;
+- rastreabilidade;
+- continuidade operacional.
+
+Isso elimina dependência da memória individual de um agente ou modelo.
+
+---
+
+# Papéis da Inteligência Artificial
+
+Os modelos de IA assumem papéis especializados.
+
+Exemplos:
+
+- Planner
+- Architect Assistant
+- Builder Assistant
+- Reviewer Assistant
+- QA Assistant
+- Documentation Assistant
+- RAG Assistant
+- Orchestrator
+
+Esses papéis podem variar conforme a metodologia utilizada.
+
+Nenhum agente possui autoridade arquitetural.
+
+---
+
+## Mapeamento de Agentes, Sub-Agentes e Distribuição de Skills
+
+A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
+
+1. **Squad Core de Engenharia (Spec-Driven Loop)**:
+   - **Planner Agent**: Decomposição de especificações (`specify.md`) e planejamento de backlog (`tasks.md`).
+   - **Builder Agent**: Escrita cirúrgica de código, refatoração e geração de diffs.
+   - **Reviewer QA**: Testes adversários, execução de suítes de teste e validação de regressão.
+   - **Auditor Agent**: Compliance constitucional, verificação de segredos e selamento dos Stage Gates.
+
+2. **Squad de Estratégia & Arquitetura**:
+   - **Strategist_One**: OKRs corporativos, visão do produto e métricas North Star.
+   - **Lead TLC Engineer**: Manutenção da arquitetura viva, governança C4 e motor PCL Cortex Visual Engine.
+
+3. **Squad SecOps, FinOps & Infraestrutura**:
+   - **CISO Security Agent**: Segurança Zero Trust, sanitização de chaves e imunização Mesh Tailscale.
+   - **BizOps Controller**: Monitoramento da cadência de sprints e gargalos de fluxo no Paperclip.
+   - **Financial Advisor**: Auditoria de FinOps e controle de custos de inferência (EBITDA Shield no OmniRoute).
+
+4. **Squad Data, Growth, LegalOps & People**:
+   - **RevOps Architect**: Funil de aquisição GTM, conversão de Micro-SaaS e retenção B2B.
+   - **Data Insight Agent**: RAG relacional, indexação de vetores (PGVector) e pipelines de ML.
+   - **Neuromarketing Strategist**: Branding, copywriting de auto-conversão e identidade visual.
+   - **Compliance Steward**: Jurídico, normas de privacidade (LGPD/GDPR) e governança contratual.
+   - **Skills Manager**: Gestão da matriz de competências dos agentes, skills e onboarding.
+
+
+---
+
+# Responsabilidades
+
+## Humanos
+
+- definir objetivos;
+- aprovar arquitetura;
+- aprovar governança;
+- aprovar entregas;
+- aceitar riscos.
+
+---
+
+## Agentes
+
+- executar tarefas;
+- produzir documentação;
+- gerar código;
+- revisar artefatos;
+- sugerir melhorias;
+- detectar inconsistências.
+
+---
+
+## Runtime
+
+- criar Execution Cells;
+- coordenar workflows;
+- distribuir tarefas;
+- executar pipelines;
+- registrar eventos;
+- controlar fallback;
+- preservar contexto.
+
+---
+
+# Modelo de Autoridade
+
+Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
+
+```mermaid
+graph LR
+    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
+
+    U["👑 Operador Humano"]:::top --> Arc["1. Architecture"]:::auth --> Gov["2. Governance"]:::auth --> Spec["3. Specifications"]:::auth --> EC["4. Execution Cell"]:::auth --> RT["5. Runtime"]:::auth --> Agt["6. Agentes"]:::auth --> Mdl["7. Modelos de IA"]:::auth
+```
+
+Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
+
+---
+
+# Fluxo Operacional
+
+Toda iniciativa percorre o seguinte fluxo em 3 fases:
+
+```mermaid
+graph TD
+    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
+    classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
+    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+
+    subgraph P1["Fase 1: Concepção & Governança"]
+        direction LR
+        O["1. Opportunity"]:::phase1 --> AC["2. Arch Check"]:::phase1 --> GC["3. Gov Check"]:::phase1 --> ECC["4. Cell Creation"]:::phase1 --> MS["5. Method Selection"]:::phase1
+    end
+
+    subgraph P2["Fase 2: Especificação & Execução"]
+        direction LR
+        SP["6. Specification"]:::phase2 --> DS["7. Design"]:::phase2 --> PL["8. Planning"]:::phase2 --> EX["9. Execution"]:::phase2 --> VA["10. Validation"]:::phase2
+    end
+
+    subgraph P3["Fase 3: Implantação & Aprendizado"]
+        direction LR
+        DP["11. Deployment"]:::phase3 --> OP["12. Operation"]:::phase3 --> LE["13. Learning"]:::phase3 --> KU["14. Knowledge"]:::phase3 --> MU["15. Memory"]:::phase3
+    end
+
+    P1 --> P2 --> P3
+```
+
+Cada transição exige critérios explícitos.
+
+---
+
+# Seleção de Metodologia
+
+O AEOS suporta múltiplas metodologias.
+
+Exemplos:
+
+- TLC Spec-Driven v3
+- Shape Up
+- Architecture Kata
+- Event Storming
+- futuras metodologias
+
+A metodologia é um componente operacional.
+
+Nunca um fundamento arquitetural.
+
+---
+
+# Modelo de Conhecimento
+
+Durante toda a operação coexistem dois fluxos.
+
+## Conhecimento Explícito
+
+Documentação.
+
+Templates.
+
+Playbooks.
+
+Guias.
+
+Padrões.
+
+---
+
+## Conhecimento Computacional
+
+Embeddings.
+
+RAG.
+
+Memória contextual.
+
+Histórico operacional.
+
+Índices.
+
+Ambos devem permanecer sincronizados.
+
+---
+
+# Modelo de Execução
+
+O Runtime coordena.
+
+As Execution Cells executam.
+
+Os agentes colaboram.
+
+Os modelos raciocinam.
+
+As integrações conectam.
+
+Os projetos recebem valor.
+
+---
+
+# Modelo de Aprendizado
+
+Ao término de cada iniciativa deverão ser avaliados:
+
+- novos ADRs;
+- novos padrões;
+- novos templates;
+- novos playbooks;
+- melhorias metodológicas;
+- evolução da arquitetura.
+
+Todo aprendizado retorna para:
+
+- Knowledge;
+- Memory;
+- Governance;
+- Architecture.
+
+---
+
+# Estratégia Multi-Modelo
+
+O AEOS é completamente agnóstico quanto aos modelos de IA.
+
+Modelos cloud, locais ou híbridos poderão coexistir.
+
+A substituição de um modelo nunca deverá exigir alterações arquiteturais.
+
+---
+
+# Estratégia de Fallback
+
+Quando um modelo não puder atender uma solicitação:
+
+1. preservar o contexto da Execution Cell;
+2. registrar o evento;
+3. selecionar modelo alternativo;
+4. manter rastreabilidade;
+5. continuar a execução.
+
+O fallback nunca poderá modificar arquitetura, escopo ou aprovações.
+
+---
+
+# Observabilidade
+
+Toda operação deverá gerar evidências.
+
+Exemplos:
+
+- logs;
+- eventos;
+- decisões;
+- aprovações;
+- métricas;
+- auditorias.
+
+Nenhuma informação crítica deverá depender exclusivamente da memória de um agente ou modelo.
+
+---
+
+# Estado Operacional
+
+Este documento estabelece o modelo operacional oficial do PromptCoreLabs_AEOS.
+
+Toda metodologia, Runtime, agente, integração, projeto ou ferramenta deverá operar dentro de uma Execution Cell e em conformidade com os princípios definidos neste documento.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/agents-squads/README.md">
+# Manual de Especificação dos 15 Agentes e Squads do PCL AEOS
+
+==================================================
+1. VISÃO GERAL DA SQUAD DE AGENTES
+==================================================
+
+O **PromptCoreLabs_AEOS** opera sob uma arquitetura de múltiplos agentes autônomos e especializados (**Multi-Agent System - MAS**). Cada agente possui um contrato operacional estrito, limites de autonomia delimitados, entradas/saídas padronizadas e uma atribuição clara na matriz de responsabilidade da plataforma.
+
+A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (porta `:3100`), e a inteligência de visualização de arquitetura é conduzida pela persona **Cortex** através do **PCL Cortex Visual Engine**.
+
+---
+
+## 2. MATRIZ DE RESPONSABILIDADE DOS 15 AGENTES
+
+```mermaid
+graph TD
+    subgraph StratSquad["Squad de Estratégia & Governança Executiva"]
+        S1["Strategist_One<br/><i>(Visão & OKRs)</i>"]
+        LEAD["Lead_TLC_Engineer<br/><i>(Arquitetura Viva)</i>"]
+        AUD["Auditor Agent<br/><i>(Compliance & Signoff)</i>"]
+    end
+
+    subgraph CoreSquad["Squad Core de Engenharia TLC"]
+        PLN["Planner Agent<br/><i>(Decomposição & Backlog)</i>"]
+        BLD["Builder Agent<br/><i>(Escrita de Código & Diffs)</i>"]
+        QA["Reviewer QA<br/><i>(Testes Adversários & Cobertura)</i>"]
+    end
+
+    subgraph SecOpsSquad["Squad SecOps, FinOps & Infra"]
+        CISO["CISO Security Agent<br/><i>(Zero Trust & Mesh)</i>"]
+        BIZ["BizOps Controller<br/><i>(Processos & Sprints)</i>"]
+        FIN["Financial Advisor<br/><i>(FinOps & EBITDA Shield)</i>"]
+    end
+
+    subgraph GrowthDataSquad["Squad Data, Growth & People"]
+        REV["RevOps Architect<br/><i>(GTM & Conversão B2B)</i>"]
+        DATA["Data Insight Agent<br/><i>(RAG Relacional & ML)</i>"]
+        NEURO["Neuromarketing Strategist<br/><i>(Branding & Copywriting)</i>"]
+        COMP["Compliance Steward<br/><i>(LegalOps & LGPD)</i>"]
+        SKILL["Skills Manager<br/><i>(People & Competências)</i>"]
+    end
+
+    StratSquad --> CoreSquad
+    CoreSquad --> SecOpsSquad
+    SecOpsSquad --> GrowthDataSquad
+```
+
+---
+
+## 2.1. ESTRUTURA ORGANIZACIONAL NO PAPERCLIP (ORG CHART DA HOLDING)
+
+```mermaid
+graph TD
+    classDef board fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
+    classDef squadEstra fill:#181825,stroke:#f9e2af,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadRev fill:#181825,stroke:#a6e3a1,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadDev fill:#181825,stroke:#89dceb,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadOps fill:#181825,stroke:#cba6f7,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadSec fill:#181825,stroke:#f38ba8,stroke-width:1.5px,color:#cdd6f4;
+    classDef squadFin fill:#181825,stroke:#fab387,stroke-width:1.5px,color:#cdd6f4;
+
+    CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing • create-rfc • tlc-spec-driven</i>"]:::board
+
+    subgraph Vert_Software["Frente 1: Software Studio & DevSecOps"]
+        LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven • create-adr • best-practices</i>"]:::squadDev
+        CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor • best-practices</i>"]:::squadSec
+        AgileBot["bot-agile-master (Agile QA)"]:::squadOps
+        LeadEng --> CISO --> AgileBot
+    end
+
+    subgraph Vert_Growth["Frente 2: Marketing, RevOps & Growth"]
+        RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr • ai-cold-outreach</i>"]:::squadRev
+        CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo • ai-ugc-ads</i>"]:::squadRev
+        GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo • best-practices</i>"]:::squadRev
+        RevOps --> CMO --> GrowthDS
+    end
+
+    subgraph Vert_Consulting["Frente 3: Consultoria, FinOps & People Ops"]
+        Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing • create-rfc</i>"]:::squadEstra
+        FinAdv["Financial_Advisor (CFO Lead)<br/><i>ai-pricing</i>"]:::squadFin
+        Compliance["Compliance_Steward (Legal/Compliance)<br/><i>create-adr</i>"]:::squadFin
+        SkillsMgr["Skills_Manager (People Ops)<br/><i>agent-skills-cli</i>"]:::squadFin
+        BizOps["BizOps_Controller (BizOps/Processes)<br/><i>tlc-spec-driven • best-practices</i>"]:::squadOps
+        FinBot["bot-financial (FinOps Bot)"]:::squadFin
+        Strategist --> FinAdv --> Compliance --> SkillsMgr --> BizOps --> FinBot
+    end
+
+    CEO --> LeadEng
+    CEO --> RevOps
+    CEO --> Strategist
+```
+
+---
+
+## 2.2. MATRIZ DE DISTRIBUIÇÃO DE SKILLS (PAPERCLIP + TLC SKILLS)
+
+| Agente / Papel | Liderança / Atuação nas Verticais | Skills Originais (Paperclip) | Novas TLC Skills Adicionadas |
+|---|---|---|---|
+| **CEO** | Orquestração Geral PCL, Venture Studio | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `summarize-meeting` | `ai-pricing`, `create-rfc`, `tlc-spec-driven` |
+| **Strategist_One** | Head de AI Consulting, GovTech & Estratégia | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `swot-analysis`, `lean-canvas`, `competitor-analysis`, `business-model`, `competitive-battlecard` | `ai-pricing`, `create-rfc` |
+| **RevOps_Architect** | Head de RevOps, CRM, Automação & Vendas B2B | `ideal-customer-profile`, `gtm-strategy`, `gtm-motions`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `customer-journey-map` | `ai-sdr`, `ai-cold-outreach` |
+| **Neuromarketing_Strategist** | Head de Marketing Digital, Branding & Mídia | `marketing-ideas`, `positioning-ideas`, `product-name`, `value-prop-statements`, `customer-journey-map`, `user-personas` | `ai-seo`, `ai-ugc-ads` |
+| **Data_Insight_Agent** | Lead de Data & Analytics, BI e Customer Success | `ab-test-analysis`, `metrics-dashboard`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `product-vision` | `ai-seo`, `best-practices` |
+| **Lead_TLC_Engineer** | Head de Software Studio & Prototipagem | `user-stories`, `create-prd`, `sprint-plan`, `test-scenarios`, `prioritize-features`, `outcome-roadmap` | `tlc-spec-driven`, `create-adr`, `best-practices`, `perf-astro` |
+| **BizOps_Controller** | Lead de Operações, Qualidade e Processos | `sprint-plan`, `prioritization-frameworks`, `prioritize-features`, `release-notes`, `summarize-meeting`, `retro` | `tlc-spec-driven`, `best-practices` |
+| **CISO_Security_Agent** | Head de DevSecOps, CyberSecurity & Cloud | `pre-mortem`, `privacy-policy`, `test-scenarios` | `aws-advisor`, `best-practices` |
+| **Financial_Advisor** | Head de Financeiro, FinOps, Pricing & E-Commerce | `pricing-strategy`, `monetization-strategy`, `market-sizing`, `summarize-interview`, `draft-nda` | `ai-pricing` |
+| **Compliance_Steward** | Lead de Jurídico, LGPD & Compliance | `draft-nda`, `privacy-policy` | `create-adr` |
+| **Skills_Manager** | Lead de RH, People Ops & AI Academy | `review-resume`, `interview-script`, `summarize-interview`, `grammar-check` | `agent-skills-cli` |
+
+---
+
+## 2.3. MATRIZ DE FUNCIONAMENTO DOS COMANDOS SLASH & GOVERNANÇA (ANTIGRAVITY IDE)
+
+```mermaid
+flowchart TD
+    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
+        GrillMe["/grill-me (Entrevista & Alinhamento de Design)"]
+        Boost["/boost (Análise Profunda & Refatoração de Arquitetura)"]
+    end
+
+    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
+        HitL["Human-in-the-Loop (Aprovação do Implementation Plan)"]
+    end
+
+    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
+        Goal["/goal (Execução Autônoma Contínua & Testes)"]
+        Subagents["Subagentes em Paralelo (Prototyping, InfraSec, Data)"]
+    end
+
+    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
+        Walkthrough["Walkthrough & Evidências de Teste"]
+        Learn["/learn (Gravação de Aprendizados nos KIs)"]
+    end
+
+    GrillMe --> HitL
+    Boost --> HitL
+    HitL --> Goal
+    Goal --> Subagents
+    Subagents --> Walkthrough
+    Walkthrough --> Learn
+```
+
+---
+
+## 3. ESPECIFICAÇÃO DETALHADA DOS 15 AGENTES
+
+### 🛠️ Squad Core de Engenharia (Spec-Driven Loop)
+
+#### 1. **Planner Agent** (`planner.md`)
+- **Propósito**: Decomposição de especificações aprovadas (`specify.md` e `design.md`) em planos de tarefas atômicos e ordenados em `tasks.md`.
+- **Limites de Autonomia**: Não escreve código de produção; não modifica o arquivo `specify.md` sem autorização.
+- **Entradas**: `specify.md`, `design.md`, `FOUNDATION.md`.
+- **Saídas**: `tasks.md`, checklist de validação por tarefas.
+
+#### 2. **Builder Agent** (`builder.md`)
+- **Propósito**: Escrita cirúrgica de código-fonte, criação de arquivos e refatoração respeitando estritamente o backlog do `tasks.md`.
+- **Limites de Autonomia**: Não altera dependências globais sem consultar o Planner; não remove testes sem autorização do QA.
+- **Entradas**: `tasks.md`, arquivos existentes no workspace.
+- **Saídas**: Código modificado, novos arquivos, diffs em markdown.
+
+#### 3. **Reviewer QA** (`reviewer-qa.md`)
+- **Propósito**: Testes adversários, execução de testes unitários/integrados, auditoria de cobertura de código e verificação de regressão.
+- **Limites de Autonomia**: Não aprova código com testes falhando; não aceita mocks genéricos para mascarar erros.
+- **Entradas**: Código gerado pelo Builder, suíte de testes.
+- **Saídas**: `validate.md`, relatórios de erros, aprovação do gate de testes.
+
+#### 4. **Auditor Agent** (`auditor.md`)
+- **Propósito**: Validação de compliance constitucional com a `Foundation` e selamento dos Stage Gates de governança.
+- **Limites de Autonomia**: Não altera regras constitucionais; possui poder de veto no Stage Gate 5.
+- **Entradas**: `validate.md`, `FOUNDATION.md`, logs de execução.
+- **Saídas**: Assinatura final do gate e selamento em `STATE.md`.
+
+---
+
+### 🏛️ Squad Executiva & Departamental
+
+#### 5. **Strategist_One** (`strategist-one.md`)
+- **Liderança**: Departamento de Estratégia & Visão Corporativa.
+- **Propósito**: Definição da North Star Metric, desdobramento de OKRs estratégicos e alinhamento do portfólio de produtos.
+
+#### 6. **Lead TLC Engineer** (`lead-tlc-engineer.md`)
+- **Liderança**: Departamento de Engenharia de Sistemas & Arquitetura.
+- **Propósito**: Garantia da integridade arquitetural do PCL AEOS, padronização da metodologia TLC v3 e resolução de débitos técnicos.
+
+#### 7. **CISO Security Agent** (`ciso-security-agent.md`)
+- **Liderança**: Departamento de Segurança & Infraestrutura Zero Trust.
+- **Propósito**: Sanitização de chaves de API, varredura adversária contra vazamento de segredos e imunização da rede mesh.
+
+#### 8. **BizOps Controller** (`bizops-controller.md`)
+- **Liderança**: Departamento de BizOps & Processos Ágeis.
+- **Propósito**: Monitoramento do fluxo de entrega, cadência de sprints dos agentes e eliminação de gargalos no pipeline.
+
+#### 9. **RevOps Architect** (`revops-architect.md`)
+- **Liderança**: Departamento de Growth & Funil GTM.
+- **Propósito**: Arquitetura do funil de conversão, integração de rotas de aquisição e métricas de retenção de usuários.
+
+#### 10. **Financial Advisor** (`financial-advisor.md`)
+- **Liderança**: Departamento de FinOps & Back Office.
+- **Propósito**: Controle do EBITDA Shield, precificação de inferências de IA, contagem de tokens e DRE real-time.
+
+#### 11. **Neuromarketing Strategist** (`neuromarketing-strategist.md`)
+- **Liderança**: Departamento de Branding & Percepção de Valor.
+- **Propósito**: Design de experiência visual, gatilhos de engajamento, Sexy Canvas e linguagem de alta percepção de valor.
+
+#### 12. **Data Insight Agent** (`data-insight-agent.md`)
+- **Liderança**: Departamento de Data Science & RAG.
+- **Propósito**: Análise de embeddings vetoriais no PostgreSQL (`pcl-db`), otimização de busca vetorial e modelos preditivos.
+
+#### 13. **Compliance Steward** (`compliance-steward.md`)
+- **Liderança**: Departamento LegalOps & Compliance Regulatório.
+- **Propósito**: Proteção de Propriedade Intelectual (PI), alinhamento com a LGPD e governança contratual.
+
+#### 14. **Skills Manager** (`skills-manager.md`)
+- **Liderança**: Departamento de People Ops & Gestão de Conhecimento.
+- **Propósito**: Curadoria do repositório de skills dos agentes, onboarding de novos integrantes e handoff de sessão.
+
+#### 15. **Persona Cortex** (Inteligência & Arquitetura Viva)
+- **Liderança**: Núcleo de Visualização & PCL Cortex Visual Engine.
+- **Propósito**: Ingestão de metadados do repositório, validação de limites de layout, compilação de diagramas interativos HTML e manutenção do Portal Mestre.
+
+---
+
+## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+Esta especificação detalhada conecta-se diretamente aos diagramas do Portal Mestre:
+- 🔵 **[agents-squad-map.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
+- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/integrations-mcp/README.md">
+# Artigo Técnico: Integrações & Protocolo MCP (Model Context Protocol) — PCL AEOS
+
+==================================================
+1. VISÃO GERAL DO PROTOCOLO MCP NO PCL AEOS
+==================================================
+
+O **Model Context Protocol (MCP)** é o padrão de integração assíncrona baseado em JSON-RPC via stdio que conecta a IDE do desenvolvedor (Antigravity) aos servidores de ferramentas especializadas no host.
+
+---
+
+## 2. SERVIDORES MCP REGISTRADOS
+
+1. **`pcl-cortex` MCP Server**: Servidor nativo do Cortex para validação, renderização e compilação da suíte visual do motor PCL Cortex Engine CLI (`cortex.mjs`).
+2. **`gemini-notebooklm` MCP Server**: Servidor de pesquisa, síntese de documentos e consulta a cadernos de conhecimento.
+
+---
+
+## 3. TOPOLOGIA DE CONEXÃO MCP
+
+```mermaid
+graph TD
+    subgraph ClientLayer["IDE / Cliente Agente"]
+        IDE["Antigravity IDE / Terminal Agent"]
+    end
+
+    subgraph ConfigLayer["Manifesto MCP"]
+        CONF["mcp.config.json / Registros stdo"]
+    end
+
+    subgraph MCPServers["Servidores MCP Ativos"]
+        CX_MCP["pcl-cortex MCP Server\n(Cortex Engine v2.12)"]
+        NLM_MCP["gemini-notebooklm MCP Server\n(Pesquisa & RAG)"]
+    end
+
+    subgraph TargetWorkspace["Host Filesystem & Workspace"]
+        WS["Repositório PCL AEOS\nprojects/Living Architecture PCL AEOS"]
+    end
+
+    IDE --> CONF
+    IDE -->|Invoca Ferramentas Visualização| CX_MCP
+    IDE -->|Invoca Consultas Pesquisa| NLM_MCP
+    CX_MCP -->|Renderiza HTML Interativo| WS
+    NLM_MCP -->|Leitura de Contexto| WS
+```
+
+---
+
+## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 🔵 **[mcp-interconnection.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html)**: Mapa de interconexão entre o cliente de IA, servidores MCP e o workspace.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/governance/README.md">
+# Artigo Técnico: Governança TLC Spec-Driven v3 & 5 Stage Gates — PCL AEOS
+
+==================================================
+1. PRINCÍPIOS DA GOVERNANÇA SPEC-DRIVEN
+==================================================
+
+A governança do **PCL AEOS** garante que nenhuma linha de código de produção seja escrita sem especificações prévias aprovadas e validadas por testes adversários de QA e verificações de segurança do CISO.
+
+---
+
+## 2. MATRIZ DOS 5 STAGE GATES SEQUENCIAIS
+
+```mermaid
+graph LR
+    G1["Gate 1: Specify Gate\n(specify.md)"] --> G2["Gate 2: Design Gate\n(design.md)"]
+    G2 --> G3["Gate 3: Tasks Gate\n(tasks.md)"]
+    G3 --> G4["Gate 4: Execute & QA\n(validate.md)"]
+    G4 --> G5["Gate 5: Signoff Final\n(STATE.md)"]
+
+    style G1 fill:#2b6cb0,color:#fff
+    style G2 fill:#2b6cb0,color:#fff
+    style G3 fill:#2b6cb0,color:#fff
+    style G4 fill:#2c5282,color:#fff
+    style G5 fill:#1a365d,color:#fff
+```
+
+### Detalhamento dos Gates:
+1. **Gate 1 — Specify Gate (`specify.md`)**: Definição do escopo, problemas, Requisitos Funcionais (FR-001+) e Requisitos Não Funcionais (NFR-001+). Autoridade: *Planner Agent / Strategist_One*.
+2. **Gate 2 — Design Gate (`design.md`)**: Arquitetura de software, diagramação C4 Model e Matriz de Rastreabilidade. Autoridade: *Lead TLC Engineer / Cortex*.
+3. **Gate 3 — Tasks Gate (`tasks.md`)**: Decomposição em tarefas atômicas executáveis (`TASK-001+`) com critérios claros de aceite. Autoridade: *Planner Agent*.
+4. **Gate 4 — Execute & QA Gate (`validate.md`)**: Execução de código pelo Builder, suíte de testes adversários pelo Reviewer QA e varredura Zero Secret Leak pelo CISO. Autoridade: *Reviewer QA / CISO Agent*.
+5. **Gate 5 — Signoff Final (`STATE.md`)**: Validação de compliance constitucional da Foundation e autorização de fechamento pelo Operador Humano. Autoridade: *Auditor Agent / Operador Humano*.
+
+---
+
+## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
+- 🔵 **[gov-stage-gates-matrix.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.
+
+  </script>
+  <script id="doc-paperclip" type="text/markdown" data-doc-path="runtime/orchestration/paperclip.md" data-doc-decoded="runtime/orchestration/paperclip.md">
+==================================================
+OBJETIVO
+==================================================
+
+Descrever a integração, os fluxos operacionais, o gerenciamento de squads de agentes e a disciplina PCL Cortex Micro-Loop na plataforma PaperClip dentro do PromptCoreLabs_AEOS.
+
+==================================================
+PAPERCLIP COMO ORQUESTRADOR
+==================================================
+
+O PaperClip atua como o motor de orquestração de squads de agentes da PromptCore Labs. Ele é implantado via Docker como serviço `pcl-paperclip` e se conecta ao banco relacional `pcl-db` para persistir dados de tarefas e sessões.
+
+Principais Responsabilidades:
+• Hospedar a interface de acompanhamento visual de tarefas.
+• Gerenciar o ciclo de vida de squads de agentes.
+• Encaminhar requisições de prompts de agentes para o OmniRoute Gateway.
+• Executar a micro-disciplina PCL Cortex Micro-Loop nas tarefas atômicas dos squads.
+
+==================================================
+SQUADS E PAPÉIS NO PAPERCLIP
+==================================================
+
+Os agentes configurados no PaperClip cooperam em squads estruturados alinhados às especificações de papéis do AEOS:
+
+• Strategist (Estratégia)
+  Analisa os objetivos de negócios do usuário e propõe iniciativas gerais (`strategist-one.md`).
+
+• Tech Lead / Planner (Liderança Técnica)
+  Verifica se a iniciativa segue a governança do AEOS, alinha especificações e cria tarefas no specify.md/design.md (`planner.md`).
+
+• Builder/Developer (Implementador)
+  Escreve código fonte e realiza alterações cirúrgicas respeitando o limite de 3 retentativas (`builder.md`).
+
+• Reviewer/QA (Validador & Auditor Adversário)
+  Testa e avalia a qualidade do código entregue pelo Builder, inspecionando diffs contra fraude (*reward hacking*) e emitindo vereditos no validate.md (`reviewer-qa.md`).
+
+==================================================
+INTEGRAÇÃO COM O OMNIROUTE & PCL CORTEX MICRO-LOOP
+==================================================
+
+Todas as requisições de agentes no PaperClip utilizam o OmniRoute Gateway para abstração de modelos, aplicação do EBITDA Shield e roteamento por Tiers:
+
+• Variável de ambiente configurada no container:
+  OMNI_ROUTE_URL=http://omniroute:20130
+
+• Mapeamento de Tiers por Papel e Etapa:
+  - Strategist / Tech Lead (Fase Specify/Design): TIER-1 (Cloud High Logic - Claude 3.5 Sonnet / Gemini 3.1 Pro).
+  - Builder (Fase Execute): TIER-2 (Cloud Fast Execution - Gemini 3 Flash / GPT-4o-mini).
+  - Reviewer/QA & Micro-Loop Evidence/Trivial Gate: TIER-3 (Cloud Fast Fallback - Gemini 3 Flash / GPT-4o-mini).
+
+==================================================
+PAPERCLIP AGENT HARNESS (v2.0 CONFINAMENTO)
+==================================================
+
+O Paperclip Agent Harness (`scripts/agent/paperclip_agent_harness.py`) é o motor de execução segura e confinamento de agentes autônomos do PCL AEOS v2.0:
+
+• Confinamento Gate 3 (Tool-Call Gating):
+  - Isola as ferramentas executáveis dos agentes em sandbox controlado.
+  - Bloqueia chamadas de sistema inseguras ou mutações não autorizadas.
+  - Alimenta o contexto do agente apenas com Claims atômicas validadas (`memory.claims`) e recibos criptográficos auditáveis (`memory.evidence_receipts`).
+
+• Ponto de Parada Humana no Gate 4 (Human-in-the-Loop):
+  - Qualquer ação com potencial de impacto estrutural (deploy em produção, migração destrutiva ou gasto de infraestrutura) exige aprovação manual formal no Gate 4.
+  - O agente é obrigado a pausar a execução e aguardar o veredito humano antes de avançar.
+
+• Protocolo de Tolerância a Falhas:
+  - Bounded retries limitados a 3 tentativas por tarefa atômica.
+  - Reversão imediata em caso de rejeição de evidências pelo Reviewer/QA.
+
+==================================================
+PERSISTÊNCIA E SOBERANIA DE DADOS
+==================================================
+
+O PaperClip é executado com mapeamento de volume físico:
+
+./PaperClip-Companies:/app/companies
+
+Isso garante que toda a estrutura de squads, histórico de sessões e dados sensíveis de clientes ou empresas permaneçam sob soberania física do desenvolvedor, nunca sendo salvos exclusivamente na nuvem ou dentro da memória efêmera do contêiner.
+
+==================================================
+FONTES DE REFERÊNCIA
+==================================================
+
+PCL_INFRA_STACK_v2.md
+
+knowledge/patterns/pcl-cortex-micro-loop.md
+
+runtime/models/routing.md
+
+docker-compose.yml
+
+  </script>
+  <script id="doc-spec-pcl-aeos-classifier-engine" type="text/markdown" data-doc-path="specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md" data-doc-decoded="specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md">
+# SPEC-PCL-AEOS-CLASSIFIER-01: PCL Triage & System 1 Classifier Engine Specification
+
+**Versão:** 2.0-Agnostic  
+**Status:** Approved for Implementation (Ports & Adapters Architecture)  
+**Autor:** Forward Deployed Architecture (FDA) / PCL AI Squad  
+**Escopo:** OmniRoute AI Gateway (:20130), Antigravity IDE, PCL Core Engine  
+**Padrão Arquitetural:** Hexagonal Architecture (Ports & Adapters) / Strategy Pattern  
+**Normas de Governança:** ISO/IEC 27001 & ISO/IEC 42001  
+
+---
+
+## 1. Diretriz Arquitetural: Abstração & Independência de Provedor
+
+Para garantir que o **PCL AEOS** permaneça um Sistema Operacional de IA Soberano e totalmente agnóstico, o componente de decisão e triagem ultra-rápida é especificado como um **Porto de Classificação do Sistema 1 (`PCL Classifier Port`)**.
+
+A arquitetura do AEOS **não depende de um fornecedor único**. O contrato de interface é genérico e permite plugar diferentes **Provedores de Classificação (Classifier Adapters)** conforme a necessidade do projeto de cada cliente.
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 PCL AEOS CORE / HARNESS                                │
+└──────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                           │
+                                  REST / gRPC Interface
+                                           │
+                                           ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        OMNIROUTE AI GATEWAY (:20130)                                   │
+│                        `/v1/classifier/evaluate`                                       │
+│                                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
+│  │ PCL CLASSIFIER PORT (CONTRATO ABSTRATO)                                          │  │
+│  │  - Primitivas: `binary` (no/nul), `choice` (enum), `score` (numeric)             │  │
+│  │  - SLA de Latência: < 100ms                                                       │  │
+│  │  - Saída Tipada & Custo Marginal de Output = $0.00                               │  │
+│  └───────────────────────────────────────┬──────────────────────────────────────────┘  │
+│                                          │                                             │
+│                  ┌───────────────────────┼───────────────────────┐                     │
+│                  │ (Default)             │ (Alternative)         │ (Fallback)          │
+│                  ▼                       ▼                       ▼                     │
+│  ┌────────────────────────┐  ┌───────────────────────┐  ┌──────────────────────────┐ │
+│  │ Provider Adapter: JEV  │  │ Provider Adapter:     │  │ Provider Adapter:        │ │
+│  │ (TypeSafe AI)          │  │ Local Rust Classifier │  │ Structured LLM Fallback  │ │
+│  └────────────────────────┘  └───────────────────────┘  └──────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 2. Contrato da Interface Abstrata (`PCL Classifier Port`)
+
+Qualquer provedor de classificação integrado ao PCL AEOS deve implementar rigorosamente as três primitivas determinísticas abaixo:
+
+1. **`evaluate_binary(state, query) -> { result: boolean, confidence: float }`**
+   - Respostas estritas de sim/não ou verdadeiro/falso sem geração de texto.
+2. **`evaluate_choice(state, query, options[]) -> { selected: string, confidence: float }`**
+   - Seleção determinística dentre uma lista fixa de opções.
+3. **`evaluate_score(state, query, min, max) -> { score: float, confidence: float }`**
+   - Atribuição de pontuação numérica dentro de um intervalo calibrado.
+
+### Requisitos Inegociáveis do Porto
+- **Latência:** Resposta entre **50ms e 200ms**.
+- **Segurança de Tipos (Type Safety):** Garantia absoluta de conformidade ao schema JSON, eliminando quebras de pipeline e alucinações de texto.
+- **EBITDA Shield / Economia de Tokens:** Isenção de cobrança de tokens de saída (*zero output token generation*).
+
+---
+
+## 3. Mapeamento de Provedores (Adapters)
+
+### **3.1. Provedor Padrão (Reference Implementation): JEV (TypeSafe AI)**
+- **Descrição:** Modelo do Sistema 1 treinado por RLCD (Reinforcement Learning for Calibrated Decisions) da TypeSafe AI [102, 104].
+- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, classificação de intenções em milissegundos e guardrails pré-execução [119, 161].
+- **Custo:** \$0.042 / 1M input tokens. \$0.00 output.
+
+### **3.2. Provedor Alternativo A: Local Compiled Classifier (Rust / ONNX)**
+- **Descrição:** Classificador embarcado compilado em Rust rodando via ONNX Runtime diretamente no contêiner local do AEOS [33, 112].
+- **Caso de Uso:** Ambiência de borda com *air-gap* total ou requisitos de latência <20ms (ex: detecção de fraudes ou filtros de segurança pesados).
+
+### **3.3. Provedor Alternativo B: Cloud Enterprise Structured Classifier**
+- **Descrição:** Adaptador para saídas estruturadas via Amazon Bedrock, Google Vertex AI ou OpenAI Structured Outputs.
+- **Caso de Uso:** Clientes corporativos com restrições normativas de uso exclusivo de nuvem pública contratada.
+
+---
+
+## 4. Configuração no OmniRoute AI Gateway (:20130)
+
+O OmniRoute gerencia a troca dinâmica do provedor através de variáveis de ambiente no `docker-compose.aeos.yml`:
+
+```yaml
+# Trecho de configuração no OmniRoute Gateway
+OMNIROUTE_CLASSIFIER_PROVIDER: "jev" # Opções: "jev", "local_rust", "bedrock_structured"
+OMNIROUTE_CLASSIFIER_JEV_API_KEY: "${JEV_API_KEY}"
+OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED: "true"
+```
+
+---
+
+## 5. Próximos Passos de Integração
+1. A rota `/v1/classifier/evaluate` do OmniRoute deve expor a interface genérica.
+2. O Antigravity IDE chamará o endpoint agnóstico, sem acoplamento direto com a SDK do JEV.
+
+  </script>
+  <script id="doc-staleness-daemon-and-drp-operations" type="text/markdown" data-doc-path="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" data-doc-decoded="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md">
+# Runbook de Operações: Deterministic Staleness Daemon & DRP
+> **Código de Referência:** RUNBOOK-PCL-OPS-001  
+> **Classificação:** Governança Operacional & Resiliência Contínua  
+> **Versão:** 2.0.0 (Soberana)
+
+---
+
+## 1. Deterministic Staleness Daemon (Sentinela de Conhecimento)
+
+### 1.1 Objetivo e Funcionamento
+O **Deterministic Staleness Daemon** monitora continuamente a integridade das 220 premissas atômicas (`memory.claims`) cadastradas no PostgreSQL 17 (`pcl-db`), garantindo que nenhuma alteração em arquivos de especificação ou código passe despercebida pelos agentes de IA.
+
+* **Tempo de Execução:** ~0,2 segundo.
+* **Custo Computacional:** 0 tokens de nuvem ($0.00).
+* **Mecanismo:** Cálculo do hash criptográfico SHA-256 do arquivo-fonte e comparação direta com o recibo de evidência registrado em `memory.evidence_receipts`.
+
+### 1.2 Gatilho Automático via Git Hook
+Sempre que um desenvolvedor ou agente realiza um commit no repositório, o hook `.git/hooks/post-commit` dispara automaticamente a verificação:
+
+```bash
+# Executado automaticamente após cada commit Git:
+powershell.exe -ExecutionPolicy Bypass -File scripts/memory/run_staleness_daemon.ps1
+```
+
+**Resultado Esperado:**
+```
+--- [PCL AEOS] Deterministic Staleness Verification Summary ---
+Total de Claims Verificados: 220
+Claims Válidos Mantidos (TRUSTED): 220
+Claims Obsoletos Marcados (STALE): 0
+Arquivos Não Encontrados: 0
+```
+
+Se um arquivo de especificação foi modificado e um claim foi impactado, o status da premissa é imediatamente marcado como `STALE`, forçando o RAG a despriorizar aquela informação até que o `claim_extractor.py` atualize a evidência.
+
+---
+
+## 2. Rotina Automatizada de Backup & DRP (Disaster Recovery Plan)
+
+### 2.1 Agendamento no Sistema Operacional
+O backup frio da Memória Tripartida é executado diariamente às **03:00 da madrugada** via Windows Task Scheduler através da tarefa `PCL_AEOS_DRP_DailyBackup`.
+
+* **Script de Instalação e Auditoria:** `scripts/backup/setup-drp-scheduled-task.ps1`
+* **Escopo do Backup:** Schemas `public` e `memory` do banco PostgreSQL 17 (`pcl-db`).
+* **Criptografia:** Simétrica AES-256-CBC com derivação PBKDF2 (100.000 iterações).
+* **Destino:** Bucket S3 soberano no Cloudflare R2 (`pcl-backup-memoria-tripartida`) com custo $0.00 e zero taxa de egresso (*Zero Egress*).
+
+### 2.2 Procedimento de Restauração em Caso de Desastre
+Caso ocorra pane de hardware, corrupção de disco ou exclusão acidental:
+
+1. **Garantir que os containers básicos estejam rodando:**
+   ```powershell
+   docker compose up -d pcl-db pcl-laya pcl-omniroute pcl-paperclip
+   ```
+
+2. **Disparar o script de restauração com chave mestra:**
+   ```powershell
+   powershell.exe -ExecutionPolicy Bypass -File scripts/backup/restore-aeos-tripartido.ps1
+   ```
+
+3. **Métricas de Homologação Auditadas:**
+   * **RTO (Recovery Time Objective):** **7,18 segundos** (tempo medido entre o download do snapshot, descriptografia AES-256 e `pg_restore --clean` completo).
+   * **RPO (Recovery Point Objective):** <= 24h para backup frio SQL e <= 1h para eventos e especificações versionadas no Git.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/memory-rag/README.md">
+# Módulo RAG Vetorial & Memory Dataflow — PCL AEOS
+
+> ℹ️ **Documentação de Migração Legada (DIAG-LEG-01)**: Se você deseja consultar a especificação de sanitização e migração do acervo `legacy/`, [clique aqui para abrir o artigo oficial de Migração Legada](../legacy-migration/README.md).
+
+==================================================
+1. ARQUITETURA DA MEMÓRIA ORGANIZACIONAL
+==================================================
+
+O módulo **Memory** do **PromptCoreLabs_AEOS** é a camada responsável pela persistência computacional, indexação vetorial, gerenciamento de contexto e cache semântico de toda a plataforma.
+
+Ao contrário do módulo `knowledge/` (que armazena documentação legível por humanos em markdown estático), o módulo `memory/` armazena e consulta índices vetoriais, embeddings e métricas legíveis por máquinas e interpretados por agentes de IA via **RAG (Retrieval-Augmented Generation)**.
+
+## 1.1. ARQUITETURA DE MEMÓRIA TRIPARTIDA DA PROMPCORE LABS
+
+A inteligência operacional do **PCL-AEOS** opera sobre uma estrutura de memória tripartida e multi-temporal:
+
+```mermaid
+graph TD
+    classDef shortM fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef medM fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef longM fill:#1e1b4b,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef db fill:#312e81,stroke:#a855f7,stroke-width:1.5px,color:#fff;
+
+    subgraph L1["1. Memória de Curto Prazo (Sessão & Runtime)"]
+        direction LR
+        S1["Active Agent Context<br/><i>(Conversa & Prompt)</i>"]:::shortM
+        S2["Sub-Agent Scratchpads<br/><i>(Execução Temporária)</i>"]:::shortM
+        S3["OmniRoute Prompt Cache<br/><i>(Cache de KV-Tokens)</i>"]:::shortM
+    end
+
+    subgraph L2["2. Memória de Médio Prazo (PGVector RAG Semântico)"]
+        direction LR
+        M1["Markdown Docs & ADRs<br/><i>(specify.md, design.md)</i>"]:::medM
+        M2["Vector Embeddings<br/><i>(768D / nomic-embed-text)</i>"]:::medM
+        M3["Cosine Similarity Search<br/><i>(pgvector <=> HNSW)</i>"]:::medM
+    end
+
+    subgraph L3["3. Memória de Longo Prazo (Estado & Governança)"]
+        direction LR
+        H1["Paperclip Sprint History<br/><i>(COMPANY.md :3100)</i>"]:::longM
+        H2["FOUNDATION.md & Rules<br/><i>(Regras Constitucionais)</i>"]:::longM
+        H3["Constitutional STATE.md<br/><i>(Assinaturas de Gates)</i>"]:::longM
+    end
+
+    subgraph DB["Base de Dados Relacional & Vetorial (pcl-db PostgreSQL :5432)"]
+        T1[("Tabela documents")]:::db
+        T2[("Tabela document_chunks")]:::db
+        T3[("Tabela embeddings (pgvector)")]:::db
+        T4[("Tabela execution_memory_logs")]:::db
+    end
+
+    L1 -->|Flush & Summarize| L2
+    L2 -->|Persistência no Banco| DB
+    L3 -->|Governança & Veto| L1
+```
+
+### Matriz Comparativa das Camadas de Memória
+
+| Camada | Escopo | Retenção / Vida Útil | Latência | Tecnologia / Repositório |
+|---|---|---|---|---|
+| **Curto Prazo** | Contexto ativo do agente durante a tarefa | Duração da sessão (`< 1h`) | `< 10ms` | Memory Buffer / OmniRoute KV-Cache |
+| **Médio Prazo** | Conhecimento semântico do projeto (RAG) | Duração do ciclo de vida do repositório | `< 150ms` | PGVector (PostgreSQL 17 :5432) |
+| **Longo Prazo** | Histórico executivo, ADRs e Constituição | Permanente (Imutável) | `< 50ms` | Paperclip (`COMPANY.md`), `STATE.md`, Git |
+
+---
+
+## 2. PIPELINE DE RAG LOCAL & BUSCA VETORIAL
+
+```mermaid
+graph TD
+    subgraph IngestionPipeline["1. Ingestão & Chunking"]
+        SRC["Módulos Markdown (.md)"] --> PARSE["Context Parser & Hashing"]
+        PARSE --> CHUNK["Chunking Inteligente (800-1200 chars, overlap 150-200)"]
+    end
+
+    subgraph EmbeddingPipeline["2. Geração de Embeddings & Banco"]
+        CHUNK --> EMBED["Ollama API / nomic-embed-text (768 dimensões)"]
+        EMBED --> PG["PostgreSQL 17 / pcl-db (Extensão pgvector)"]
+    end
+
+    subgraph RetrievalPipeline["3. Consulta & Injeção de Contexto"]
+        USER["Prompt do Agente"] --> SIM["Search Cosseno / HNSW Index"]
+        PG --> SIM
+        SIM --> CTX["Payload de Contexto Enriquecido"]
+        CTX --> OMNI["OmniRoute AI Gateway (:20130)"]
+        OMNI --> LLM["Modelo de Linguagem (Cloud / GPU Local)"]
+    end
+
+    IngestionPipeline --> EmbeddingPipeline
+    EmbeddingPipeline --> RetrievalPipeline
+```
+
+---
+
+## 3. ESPECIFICAÇÃO DE CHUNKING & REGRAS DE INDEXAÇÃO
+
+### Regras de Segmentação de Texto
+- **Tamanho do Chunk**: 800 a 1200 caracteres (~200 a 300 tokens por fatia).
+- **Sobreposição (Overlap)**: 150 a 200 caracteres para preservação de contexto contíguo.
+- **Divisão Semântica**: Respeita a estrutura do documento utilizando delimitadores de linha (`===`) ou títulos Markdown (`#`, `##`, `###`).
+
+### Estrutura de Payload e Metadados do Vetor (`JSONB`)
+Cada vetor armazenado no `pcl-db` contém a seguinte estrutura de metadados obrigatórios:
+
+```json
+{
+  "source_file": "foundation/FOUNDATION.md",
+  "section": "1. PRINCÍPIOS FUNDAMENTAIS",
+  "last_modified": "2026-07-30T21:40:00Z",
+  "taxonomy": "AEOS",
+  "layer": "Foundation",
+  "sha_commit": "a1b2c3d4e5f67890",
+  "tokens": 245
+}
+```
+
+---
+
+## 4. INFRAESTRUTURA DE BANCO VETORIAL (`pcl-db`)
+
+A persistência vetorial roda dentro do contêiner Docker `pcl-db` (PostgreSQL 17 com extensão `pgvector` habilitada):
+
+- **Porta do Banco**: `5432`
+- **Banco de Dados**: `paperclip`
+- **Tabela de Vetores**: `document_chunks`
+- **Tabela de Logs e Telemetria**: `agent_execution_logs`
+- **Algoritmo de Similaridade**: Distância por Cosseno (`<=>`)
+- **Aceleração de Índice**: Índice HNSW (`m=16`, `ef_construction=64`)
+
+### Tabela Relacional E-R (`document_chunks` & `agent_execution_logs`)
+
+```mermaid
+erDiagram
+    document_chunks {
+        uuid id PK
+        varchar source_file
+        varchar section
+        timestamp last_modified
+        vector_768 embedding
+        jsonb metadata
+    }
+    agent_execution_logs {
+        uuid execution_id PK
+        uuid session_id
+        timestamp timestamp
+        varchar agent_role
+        varchar status
+        integer prompt_tokens
+        integer completion_tokens
+        jsonb metrics
+    }
+```
+
+---
+
+## 5. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+Este módulo refere-se diretamente aos diagramas do Portal Mestre:
+- 🟡 **[data-rag-memory.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html)**: Lineage do pipeline de ingestão e busca vetorial RAG.
+- 🔄 **[data-legacy-migration.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)**: Dataflow de sanitização e migração do acervo legado (Ver **[Documentação de Migração Legada](../legacy-migration/README.md)**).
+- 💜 **[obs-audit-trail.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html)**: Coleta de logs de execução e métricas de tokens no `pcl-db`.
+
+  </script>
+  <script id="doc-legacy-migration" type="text/markdown" data-doc-path="legacy-migration.md" data-doc-decoded="legacy-migration.md">
+# 🔄 DIAG-LEG-01: Legacy Migration Dataflow & Modernização de Dados Legados
+
+> **Especificação Técnica do Sistema Operacional PCL-AEOS**  
+> **ID**: `DIAG-LEG-01` | **Categoria**: Dataflow Architecture | **Prioridade**: `P2 Médio`  
+> **Escopo**: Sanitização, Extração, Deduplicação e Ingestão do Acervo Legado (`legacy/`)
+
+---
+
+## 📌 1. Visão Geral do Pipeline
+
+O pipeline **DIAG-LEG-01 (Legacy Migration Dataflow)** rege a transição segura e auditada de todo o acervo histórico contido no diretório `legacy/` para o modelo de memória operacional do PCL-AEOS.
+
+Ele garante que documentos legados, especificações obsoletas e artefatos não estruturados sejam higienizados, deduplicados e convertidos para os esquemas relacionais e vetoriais do banco `pcl-db` (PGVector), prevenindo alucinações e mantendo o rastreio da linhagem original.
+
+```mermaid
+graph LR
+    classDef legacy fill:#1e293b,stroke:#64748b,stroke-width:1.5px,color:#f8fafc;
+    classDef process fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    classDef security fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
+    classDef target fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph Source["1. Fonte de Dados Legados"]
+        L1["📁 Diretório legacy/"]:::legacy --> L2["📄 Arquivos .md / .json / .txt"]:::legacy
+    end
+
+    subgraph ETL["2. Pipeline ETL & Higienização"]
+        E1["🧹 Sanitização & Encoding"]:::process --> E2["🔐 Hash SHA-256 (Deduplicação)"]:::process --> E3["✂️ Chunking Estruturado"]:::process
+    end
+
+    subgraph Audit["3. Governança & Compliance"]
+        A1["🛡️ Compliance Check (Auditor Agent)"]:::security --> A2["🔑 Sanitização de Segredos"]:::security
+    end
+
+    subgraph Destination["4. Armazenamento Vetorial PCL-AEOS"]
+        D1["💾 pgvector (text-embedding-3-small)"]:::target --> D2["🗄️ Tabela document_chunks (pcl-db)"]:::target
+    end
+
+    Source --> ETL --> Audit --> Destination
+```
+
+---
+
+## 🛠️ 2. Fases do Processo de Migração
+
+### Fase 1: Extração & Sanitização
+- **Varredura Ativa**: Mapeamento completo dos arquivos do diretório `legacy/`.
+- **Limpeza de Formatação**: Remoção de caracteres de controle inválidos, correção de encodings e padronização para UTF-8.
+- **Deduplicação por Hash**: Geração de assinatura SHA-256 para cada arquivo para evitar indexação duplicada no repositório vetorial.
+
+### Fase 2: Fragmentação & Vetorização (RAG Ingestion)
+- **Chunking Semântico**: Divisão do conteúdo em blocos de até 512 tokens com overlap de 50 tokens, preservando o contexto dos parágrafos.
+- **Enriquecimento de Metadados**: Cada fragmento recebe as tags obrigatórias: `source_file`, `legacy_path`, `migrated_at` e `sha256_hash`.
+- **Geração de Embeddings**: Conversão em vetores de 768 dimensões via modelo padrão OmniRoute.
+
+### Fase 3: Auditoria de Governança (Stage Gate 3)
+- **Varredura de Segredos**: O **CISO Security Agent** intercepta o payload verificando ausência de chaves de API, senhas ou dados sensíveis (LGPD/GDPR).
+- **Selamento Constitucional**: Inserção dos registros auditados na tabela relacional `document_chunks` com marcação de proveniência legada.
+
+---
+
+## 📊 3. Modelo de Dados da Migração Legada
+
+| Campo em `document_chunks` | Tipo SQL | Função no Dataflow Legado |
+| :--- | :--- | :--- |
+| `id` | `UUID` | Identificador único do chunk migrado |
+| `source_file` | `VARCHAR(512)` | Caminho original do arquivo em `legacy/` |
+| `content` | `TEXT` | Texto higienizado do fragmento legado |
+| `embedding` | `vector(768)` | Representação vetorial densa para busca por cosseno |
+| `metadata` | `JSONB` | Contém `sha256`, `is_legacy: true` e `migrated_at` |
+
+---
+
+## 🔗 Documentos Relacionados
+- [Diagrama Interativo DIAG-LEG-01](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)
+- [Arquitetura de Memória & RAG Vetorial](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
+- [Governança & Modelo Operacional v2.0](file:///c:/PromptCore_Labs/governance/operating-model.md)
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/security-compliance/README.md">
+# Artigo Técnico: Segurança & Compliance Zero Trust — PCL AEOS
+
+==================================================
+1. DIRETRIZES DE SEGURANÇA ZERO TRUST
+==================================================
+
+A postura de segurança do **PCL AEOS** é pautada no modelo **Zero Trust (Confiança Zero)**. Nenhum componente interno, contêiner ou requisição é considerado seguro por padrão sem verificação contínua.
+
+---
+
+## 2. PILARES DA SEGURANÇA NO AEOS
+
+1. **Zero Secret Leak**: Garantia absoluta de que nenhuma chave de API, senha de banco de dados, token JWT ou segredo `.env` seja exposto nos logs, artefatos markdown ou diagramas.
+2. **Varredura Adversária CISO**: O agente **CISO Security Agent** executa varreduras com expressões regulares sobre cada commit e output de agente antes da aprovação do Stage Gate 4.
+3. **Isolamento de Contêineres**: A rede Docker Bridge (`pcl-net`) proíbe a exposição de portas administrativas para a internet pública, restringindo acesso via WireGuard / Tailscale VPN Mesh.
+
+---
+
+## 3. FLUXO DE SANITIZAÇÃO DE SEGREDOS
+
+```mermaid
+graph TD
+    INP["Prompt / Entrada de Dados"] --> VAR["Varredura CISO RegEx Scanner"]
+    VAR --> CHECK{"Segredo Identificado?"}
+    CHECK -->|Sim| REDACT["Substituição por Placeholder [REDACTED_SECRET]"]
+    REDACT --> AUDIT["Log de Incidente de Segurança"]
+    CHECK -->|Não| PASS["Autorização do Gate de Segurança"]
+    PASS --> PERSIST["Persistência Segura no Workspace"]
+```
+
+---
+
+## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 💜 **[sec-zero-trust-flow.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html)**: Fluxo de gerenciamento de segredos e imunização Zero Trust.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/infrastructure/README.md">
+# Artigo Técnico: Infraestrutura & Docker Harness — PCL AEOS
+
+==================================================
+1. ARQUITETURA DA INFRAESTRUTURA FÍSICA E VIRTUAL
+==================================================
+
+A infraestrutura do **PromptCoreLabs_AEOS** é projetada sob o princípio de **Soberania Local (Local-First Architecture)**, onde todos os serviços essenciais de banco de dados, roteamento de inferência e orquestração de agentes funcionam em contêineres Docker locais isolados.
+
+---
+
+## 2. TOPOLOGIA DOS CONTÊINERES DOCKER (`docker-compose.yml`)
+
+```mermaid
+graph TD
+    subgraph HostEnvironment["Host Local (Windows / Linux / macOS)"]
+        subgraph DockerBridgeNetwork["Rede Interna Docker (pcl-net / 172.28.0.0/16)"]
+            DB["pcl-db (PostgreSQL 17 + pgvector)\nPorta: 5432"]
+            OMNI["pcl-omniroute (AI Gateway)\nPorta: 20130"]
+            PCLIP["pcl-paperclip (Dashboard Agent)\nPorta: 3100"]
+        end
+
+        subgraph LocalAcceleration["Aceleração GPU Local"]
+            OLLAMA["Ollama Service / nomic-embed-text\nPorta: 11434"]
+            LMSTUDIO["LM Studio / Local LLM Models\nPorta: 1234"]
+        end
+
+        subgraph PerimetricMesh["Rede Mesh de Segurança Perimetral"]
+            TAILSCALE["Tailscale VPN (WireGuard Mesh Tunneling)"]
+        end
+    end
+
+    TAILSCALE --> DockerBridgeNetwork
+    OMNI --> DB
+    PCLIP --> DB
+    OMNI --> LocalAcceleration
+```
+
+---
+
+## 3. TABELA DE SERVIÇOS, PORTAS E RECURSOS DO HARNESS
+
+| Nome do Serviço | Contêiner Docker | Porta Host | Função Arquitetural | Dependências |
+|---|---|---|---|---|
+| **pcl-db** | `pcl-db` | `5432` | Banco de Dados PostgreSQL 17 + PGVector para RAG e audit logs. | Nenhum (Volume `pcl-db-data`) |
+| **pcl-omniroute** | `pcl-omniroute` | `20130` | AI Gateway, proxy de inferência, prompt caching e fallback LLM. | `pcl-db`, GPUs locais |
+| **pcl-paperclip** | `pcl-paperclip` | `3100` | Dashboard web de orquestração visual dos 15 papéis de agentes. | `pcl-db` |
+| **Ollama Local** | Processo Host | `11434` | Provedor local de embeddings (`nomic-embed-text`) e LLMs open-source. | GPU CUDA / ROCm |
+| **LM Studio** | Processo Host | `1234` | Provedor local de inferência em formato OpenAI-compatible. | GPU CUDA / ROCm |
+| **Tailscale VPN** | Processo Host | `41641/UDP` | Tunelamento criptografado WireGuard para acesso remoto seguro aos contêineres. | Modulo Kernel WireGuard |
+
+---
+
+## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
+- 🟢 **[c4-l2-containers.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html)**: Topologia C4 Level 2 dos Contêineres Docker.
+- 🟡 **[infra-network-security.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html)**: Rede de segurança perimetral WireGuard / Tailscale VPN Mesh.
+
+  </script>
+  <script id="doc-ADR-0010-squad-prototyping-and-antigravity-harness-integration" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md">
+# ADR-0010: Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness
+
+* **Status**: Accepted
+* **Data**: 17/09/2026
+* **Decisores**: Arquitetura PCL AEOS, Eduardo Machado & Antigravity Harness
+* **Domínio**: Governança de Agentes, Estrutura de Squads, Harness IDE, Auditabilidade ISO 42001 / ISO 27001
+* **Refines / Extends**: ADR-0007 (Metodologia TLC v3) e ADR-0009 (Triage Gate Dual-Track SDD)
+
+---
+
+## 1. Contexto e Problema
+
+Com a maturação da governança **TLC v3 (Spec-Driven Development)** no PCL AEOS, o termo legacy `squad-vibe-coding` tornou-se desalinhado com os princípios formais de Engenharia de Software e arquitetura corporativa. A prática informal de "vibe coding" foi substituída pelo rigor de especificações (Lean Specs e Full SDD), tornando necessária a evolução conceitual da squad para **`squad-prototyping`** (Squad de Prototipagem de Aplicações).
+
+Adicionalmente, havia a necessidade de integrar as **ferramentas e capacidades nativas do Antigravity IDE** (como Browser Subagent com gravação de vídeos WebP, Geração de Imagens/Mockups, Ciência de Dados GCP e comandos slash `/goal`, `/boost`, `/grill-me`) diretamente ao ecossistema do PCL AEOS, garantindo **rastreabilidade total e auditabilidade sob as normas ISO 42001 e ISO 27001**.
+
+---
+
+## 2. Decisão Arquitetural
+
+Decidiu-se pelas seguintes ações constitutivas no ecossistema PCL AEOS:
+
+1. **Renomeação e Re-estruturação de Squad**:
+   * Substituição oficial de `squad-vibe-coding` por **`squad-prototyping`** em todo o repositório, Paperclip (`.paperclip.yaml`), ADRs e documentação.
+   * A `squad-prototyping` assume a responsabilidade de construir Provas de Conceito (PoCs), protótipos de alta fidelidade e MVPs de aplicações sob rigor TLC v3.
+
+2. **Acoplamento dos Colaboradores Nativos Antigravity às Squads**:
+   * **`squad-prototyping`**: Recebe `generate_image` (Design de UI), `StitchMCP` (Design System Engine) e padrões `building-data-apps`.
+   * **`squad-infra-sec`**: Recebe `browser_subagent` (Testes E2E reais com evidências em vídeo WebP) e scans de segurança GCS/Docker.
+   * **`squad-growth-ds`**: Recebe a suíte BigData GCP (`bigquery-sql`, `bigquery-ai-ml`, `gcp-spark`, `gcp-dataflow`).
+   * **`bot-agile-master` & Governança**: Recebe a gestão de Planning Mode (`implementation_plan.md`, `walkthrough.md`) e o comando `/learn` para preservação contínua de memória nos Knowledge Items (KIs).
+
+3. **Mapeamento de Comandos Slash ao Ciclo TLC v3**:
+   * **`/grill-me`**: Ativado no Stage Gate 1 / 2 para alinhamento e aprovação do Tech Lead.
+   * **`/boost`**: Ativado para raciocínio profundo e solução de problemas de arquitetura complexos.
+   * **`/goal`**: Ativado nos Stage Gates 3 a 5 para execução contínua com auto-correção e bateria de testes automatizados.
+
+```mermaid
+flowchart TD
+    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
+        GrillMe["/grill-me (Entrevista & Alinhamento de Design)"]
+        Boost["/boost (Análise Profunda & Refatoração de Arquitetura)"]
+    end
+
+    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
+        HitL["Human-in-the-Loop (Aprovação do Implementation Plan)"]
+    end
+
+    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
+        Goal["/goal (Execução Autônoma Contínua & Testes)"]
+        Subagents["Subagentes em Paralelo (Prototyping, InfraSec, Data)"]
+    end
+
+    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
+        Walkthrough["Walkthrough & Evidências de Teste"]
+        Learn["/learn (Gravação de Aprendizados nos KIs)"]
+    end
+
+    GrillMe --> HitL
+    Boost --> HitL
+    HitL --> Goal
+    Goal --> Subagents
+    Subagents --> Walkthrough
+    Walkthrough --> Learn
+```
+
+4. **Auditabilidade & Compliance ISO 42001 / 27001**:
+   * Todos os logs de execução de subagentes, comandos de terminal e alterações são gravados em arquivos auditáveis em formato JSONL (`transcript_full.jsonl`).
+   * O artefato `implementation_plan.md` com autorização explícita constitui o registro de *Human-in-the-Loop (HitL)* para a ISO 42001.
+
+---
+
+## 3. Consequências e Validação
+
+* **Vantagens**:
+  * **Alinhamento Conceitual**: Eliminação do termo informal "vibe coding", elevando o padrão para Engenharia de Software e Prototipagem de nível corporativo.
+  * **PCL AEOS como Fonte Única de Verdade**: O Antigravity IDE atua como o motor de execução das Squads sem criar regras paralelas ou fragmentadas.
+  * **Auditabilidade Completa**: Atendimento imediato a requisitos de compliance e auditoria interna/externa (ISO 42001/27001).
+
+  </script>
+  <script id="doc-STAGE-GATES-HOMOLOGATION-v2" type="text/markdown" data-doc-path="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md" data-doc-decoded="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md">
+# PCL AEOS — Relatório Oficial de Homologação dos Stage Gates (v2.0)
+**Projeto:** Evolução Cognitiva PCL AEOS (Memória Tripartida, System One & RAG Temporal)  
+**Governança:** TLC Spec-Driven v3 | Normas ISO 42001 & ISO 27001  
+**Data de Homologação:** 2026-10-14  
+**Autoridade:** EnterDufter / Tech Lead & Arquiteto PCL AEOS  
+
+---
+
+## 1. Sumário Executivo
+
+O presente documento atesta a conclusão, auditoria e aprovação formal de todos os **Stage Gates (0 a 4)** da arquitetura cognitiva do **PCL AEOS**. O sistema atende rigorosamente às invariantes fundacionais:
+* **0 MB de VRAM na GPU NVIDIA RTX 3050:** O coprocessador de System One (`pcl-laya`) opera 100% em CPU com ONNX Runtime INT8.
+* **$0.00 de Custo Operacional Recorrente:** Inferência, embeddings e banco vetorial rodam em infraestrutura sovereign local.
+* **Isolamento Total de Dados:** O schema `memory.*` protege o banco operacional `public` do Paperclip contra corrupção ou colisão.
+* **Disaster Recovery (DRP) em Tempo Recorde:** Restauração multi-schema validada em **7.18 segundos** (superando com folga a meta de SLA RTO $\le$ 15 minutos).
+
+---
+
+## 2. Matriz Consolidada de Homologação dos Stage Gates
+
+| Stage Gate | Escopo Arquitetural | Status | Artefatos & Evidências Auditadas |
+|---|---|---|---|
+| **Gate 0** | Governança & Especificações Formais | **APROVADO (100%)** | `architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md`<br/>`specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md` |
+| **Gate 1** | Infraestrutura & System One (`pcl-laya`) | **APROVADO (100%)** | `services/pcl-laya/` (porta :20140, CPU INT8)<br/>`docker-compose.aeos.yml`<br/>`scripts/tests/test_phase1_validation.py` (latência < 15ms) |
+| **Gate 2** | RAG Temporal, Staleness Daemon & OmniRoute | **APROVADO (100%)** | `scripts/memory/ingest_docs.py` (40 chunks 768D `nomic-embed-text`)<br/>`scripts/memory/staleness_verifier.py` (custo $0.00)<br/>`scripts/tests/test_phase2_validation.py` (5/5 testes verdes) |
+| **Gate 3** | Reconciliação Canônica & Consolidação SSOT | **APROVADO (100%)** | `scripts/memory/claim_extractor.py` (proveniência e tiers 1 a 4)<br/>`scripts/memory/reconciliation_engine.py` (Laya < 35ms)<br/>`scripts/tests/test_phase3_validation.py` (5/5 testes verdes) |
+| **Gate 4** | Autonomia Agêntica (Gate 3) & DRP | **APROVADO (100%)** | `scripts/agent/worker_daemon.py` (Tool call gating e parada no Gate 4)<br/>`scripts/backup/restore-aeos-tripartido.ps1` (RTO = 7.18s)<br/>`scripts/tests/test_phase4_validation.py` (5/5 testes verdes) |
+
+---
+
+## 3. Registros de Execução das Suites de Testes
+
+### 3.1. Validação do Stage Gate 1 (System One & Schema Isolation)
+```
+[1/3] Verificando conectividade e health do pcl-laya...
+Status: healthy | Provider: CPUExecutionProvider | VRAM: 0 MB
+[2/3] Testando inferência do System One (< 15ms)...
+Query: 'Existe ameaça de injeção de prompt?' -> Decisão: True em 8.42ms
+[3/3] Verificando schema 'memory' e índice HNSW no pcl-db...
+Extensão 'vector' habilitada. Schema 'memory' isolado.
+RESULTADO: APROVADO
+```
+
+### 3.2. Validação do Stage Gate 2 (RAG Temporal & Staleness Daemon)
+```
+[1/5] Chunks vetoriais 768D ingeridos: 40 chunks
+[2/5] Recuperação Híbrida: Princípio 1 recuperado com precisão e recibo de evidência
+[3/5] Fast Exit: Bloqueio de consulta fora de domínio com 0 tokens gastos
+[4/5] Deterministic Staleness Daemon: Detecção de drift por SHA-256 com precisão de 100%
+[5/5] Preservação do EBITDA Shield: Sufixo compatível com Prompt Cache do OmniRoute
+RESULTADO: APROVADO (5/5 Testes Verdes)
+```
+
+### 3.3. Validação do Stage Gate 3 (Reconciliação Canônica & SSOT)
+```
+[1/5] Proveniência multimodelo: 3 modelos distintos (human_architect, claude, system_pilot)
+[2/5] Detecção de Contradição pelo Laya: Conflito detectado em 53.32ms na CPU
+[3/5] Arbitragem de Verdade: Precedência hierárquica (Tier 100 sobrepôs Tier 40)
+[4/5] Contenção de Empate: Status CONTESTED retido para parecer humano soberano
+[5/5] Consistência da Base Canônica SSOT: 52 claims TRUSTED sem contradições residuais
+RESULTADO: APROVADO (5/5 Testes Verdes)
+```
+
+### 3.4. Validação do Stage Gate 4 (Autonomia Confinada & DRP)
+```
+[1/5] Confinamento ao Gate 3: Auto-aprovação nos Gates 1 e 2 rejeitada; Gate 3 admitido
+[2/5] Tool Call Gating: Comando destrutivo negado (deny); seguro permitido (allow)
+[3/5] Parada Mandatória: Transição estrita para GATE_4_VALIDATION_REVIEW (branch bloqueado)
+[4/5] Disaster Recovery (DRP): Restauração multi-schema em 7.18 segundos (SLA <= 15 min)
+[5/5] Invariante de Hardware: 7 MB de VRAM na GPU (0 MB alocados para IA)
+RESULTADO: APROVADO (5/5 Testes Verdes)
+```
+
+---
+
+## 4. Parecer e Certificação
+
+Todos os requisitos foram atendidos em conformidade integral com a arquitetura viva e a governança formal do PCL AEOS. O ecossistema está homologado e pronto para implantação em produção soberana.
+
+**Assinatura Digital / Git Hash:** Auditável via branch `master` e tag `v2.0.0-cognitive-memory-sovereign`.
+
+  </script>
+  <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/adrs/README.md">
+# Registros de Decisões Arquiteturais (ADRs) — PCL AEOS
+
+==================================================
+1. VISÃO GERAL DOS ADRS
+==================================================
+
+Os **Architecture Decision Records (ADRs)** registram todas as decisões arquiteturais permanentes que alteram a estrutura, módulos, princípios, governança e escolhas tecnológicas da plataforma **PromptCoreLabs_AEOS**.
+
+Cada ADR é imutável: uma decisão aceita nunca é excluída, apenas substituída por uma decisão posterior (`Superseded`) se os requisitos mudarem.
+
+---
+
+## 2. REGRAS DE CONVENÇÃO E GOVERNANÇA
+
+- **Formato do Arquivo**: `ADR-[4-DÍGITOS]-[titulo-em-kebab-case].md`
+- **Ciclo de Vida do Status**:
+  - `Proposed` — Em análise pelo arquiteto / persona Cortex.
+  - `Accepted` — Decisão aprovada e em vigor no PCL AEOS.
+  - `Superseded` — Substituído por uma decisão mais recente.
+  - `Deprecated` — Obsoleto por mudança de paradigma.
+  - `Rejected` — Recusado após avaliação técnica.
+
+---
+
+## 3. CATÁLOGO COMPLETO DE DECISÕES ARQUITETURAIS (ADR-0001 A ADR-0009)
+
+| ID | Título da Decisão Arquitetural | Status | Data | Impacto Principal |
+|---|---|---|---|---|
+| **ADR-0001** | Segregação do Módulo Memory do Módulo Knowledge | **Accepted** | 2026-07-08 | Separação entre documentação legível por humanos (`knowledge/`) e banco vetorial/embeddings (`memory/`). |
+| **ADR-0002** | Bootstrap como Ponto de Entrada Oficial de Primeiro Nível | **Accepted** | 2026-07-08 | Padronização de onboarding e instanciação Spec-Driven via diretório `bootstrap/`. |
+| **ADR-0003** | Higiene da Documentação Constitucional da Foundation v1.0 | **Accepted** | 2026-07-08 | Estabelecimento do `FOUNDATION.md` como constituição imutável da plataforma. |
+| **ADR-0004** | Implementação Concorrente de Knowledge e Runtime | **Accepted** | 2026-07-08 | Paralelismo na construção de playbooks e contêineres do Harness local. |
+| **ADR-0005** | Unificação do AI Gateway via OmniRoute no Harness | **Accepted** | 2026-07-15 | Proxy unificado de inferência (porta `:20130`), prompt caching e fallback dinâmico. |
+| **ADR-0006** | Adoção do PCL Cortex Visual Engine para Living Architecture | **Accepted** | 2026-07-25 | Motor visual Cortex para validação e compilação de diagramas interativos HTML. |
+| **ADR-0007** | Metodologia Governança TLC Spec-Driven v3 & 5 Stage Gates | **Accepted** | 2026-07-30 | Exigência da suíte `.specs/` (`specify.md`, `design.md`, `tasks.md`, `validate.md`) para todo projeto. |
+| **ADR-0008** | Governança de Persistência de Volumes Docker e Namespace Isolation | **Accepted** | 2026-09-12 | Obrigatoriedade de binding externo nos volumes do Docker Compose e trava de segurança para o agente. |
+| **ADR-0009** | Governança do Triage Gate e Abordagem Dual-Track SDD (Lean vs Full) | **Accepted** | 2026-09-12 | Triagem dinâmica entre Rota Lean (tlc-spec-lean) e Rota Full SDD (5 Stage Gates). |
+| **ADR-0010** | Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness | **Accepted** | 2026-09-17 | Substituição de squad-vibe-coding por squad-prototyping e acoplamento do Antigravity IDE às squads sob ISO 42001/27001. |
+
+---
+
+## 4. DETALHAMENTO DAS DECISÕES CHAVE
+
+### 📍 **ADR-0001: Memory vs. Knowledge Segregation**
+- **Contexto**: Evitar acoplamento entre a documentação em markdown estático e o armazenamento vetorial de embeddings (PGVector no PostgreSQL).
+- **Justificativa**: Alta coesão e independência tecnológica. Permitir troca do motor de busca vetorial sem alterar a documentação.
+
+### 📍 **ADR-0005: OmniRoute AI Gateway Unification**
+- **Contexto**: Necessidade de controlar custos de token, latência e disponibilidade entre modelos locais (Ollama/LM Studio) e Cloud (Gemini/Claude).
+- **Justificativa**: EBITDA Shield (cache de prompt), fallback automático sem quebrar a sessão do agente e auditoria centralizada.
+
+### 📍 **ADR-0006: PCL Cortex Visual Engine & Living Architecture**
+- **Contexto**: Documentações em imagem estática se tornam obsoletas rapidamente.
+- **Justificativa**: Renderização visual dinâmica 100% soberana em HTML interativo autocontido com SVG inline e validação de regras de composição em tempo de build.
+
+### 📍 **ADR-0007: TLC Spec-Driven v3 Governance**
+- **Contexto**: Prevenção de escrita direta de código de produção sem alinhamento de escopo, design e validação QA.
+- **Justificativa**: Disciplinaridade atômica via 5 Stage Gates sequenciais e rastreabilidade bidirecional.
+
+  </script>
+  <script id="doc-hybrid-inference-architecture" type="text/markdown" data-doc-path="docs/hybrid-inference-architecture.md" data-doc-decoded="docs/hybrid-inference-architecture.md">
+# Guia de Arquitetura: Inferência Híbrida & Failover em 2 Níveis (PCL AEOS)
+
+---
+
+## 🌟 Visão Geral & Filosofia de Engenharia
+
+O **PromptCoreLabs_AEOS** opera sob um paradigma pioneiro de **Custo Marginal Zero ($0 Marginal Cost)** aliado à **Soberania Operacional Total**.
+
+A infraestrutura de inferência foi projetada para eliminar o desperdício de energia e memória local quando há conexão com a internet, sem jamais comprometer a execução autônoma dos 15 agentes do PaperClip na ocorrência de interrupções de rede, bloqueios perimetrais ou falhas de APIs externas.
+
+```mermaid
+flowchart TD
+    Req[Requisição do Agente PaperClip] --> OmniRoute[OmniRoute AI Gateway :20130]
+    
+    subgraph ModoOnline [1. Operação Primária Online - 0 MB VRAM]
+        OmniRoute -->|Rede Ativa / Latência Normal| CloudAPI[Cloud Free Tier / OpenRouter]
+        CloudAPI --> SuccessCloud((Resposta Cloud))
+    end
+    
+    subgraph FailoverL1 [2. Failover Nível 1 - Alta Velocidade]
+        CloudAPI -.->|Timeout / Queda de Rede| OllamaLocal[Ollama Local :11434<br>qwen2.5-coder:7b-instruct-q4_K_M]
+        OllamaLocal -->|100% VRAM ~4.7 GB| SuccessOllama((Resposta Nível 1))
+    end
+    
+    subgraph FailoverL2 [3. Failover Nível 2 - Lógica MoE / Refatoração]
+        OllamaLocal -.->|Se Indisponível / Tarefa MoE| LMStudioLocal[LM Studio :1234<br>DeepSeek-Coder-V2-Lite MoE Q4_K_S]
+        LMStudioLocal -->|GPU Offload VRAM+RAM| SuccessLMS((Resposta Nível 2))
+    end
+```
+
+---
+
+## 🏛️ Estrutura da Estratégia em 3 Camadas
+
+### 1️⃣ Camada 1: Modo Online (Operação Contínua a Custo Zero)
+* **Provedores Ativos**: Cloud Free Tier (OpenRouter, Groq, Ollama Cloud).
+* **Consumo de Hardware Local**: **0 MB de VRAM Alocada** na GPU dedicada.
+* **Mecanismo EBITDA Shield**: O gateway OmniRoute armazena hashes semânticos das requisições frequentes. Chamadas idênticas retornam direto do cache em memória sem consumo de tokens externos.
+
+### 2️⃣ Camada 2: Failover Nível 1 — Ollama Local (Alta Velocidade)
+* **Endpoint**: `http://localhost:11434/v1` (compatível com OpenAI API).
+* **Modelo Homologado**: `qwen2.5-coder:7b-instruct-q4_K_M` (~4.7 GB GGUF).
+* **Alocação de Hardware**: **100% alocado na VRAM** de 6 GB da NVIDIA GeForce RTX 3050.
+* **Finalidade**: Respostas ultra-rápidas para autocompletar código, triagem de tarefas e execução de agentes secundários.
+
+### 3️⃣ Camada 3: Failover Nível 2 — LM Studio (Lógica MoE & Refatoração Profunda)
+* **Endpoint**: `http://localhost:1234/v1` (compatível com OpenAI API).
+* **Modelo Homologado**: `deepseek-coder-v2-lite-instruct` (~8.88 GiB GGUF).
+* **Arquitetura**: Mixture of Experts (16B parâmetros totais / 2.4B parâmetros ativos por token).
+* **Alocação de Hardware**: **GPU Offload híbrido** (camadas iniciais aceleradas na VRAM de 6 GB e camadas de transição alocadas na memória RAM DDR5 do sistema de 16 GB), com Flash Attention ativado e janela de contexto em 8192 tokens.
+* **Finalidade**: Refatorações arquiteturais extensas, escrita de testes ponta a ponta e geração de código complexo.
+
+---
+
+## 🔄 Ciclo de Vida Reativo & Governança de Memória (VRAM)
+
+O estado de alocação da GPU transita dinamicamente entre zero e máxima performance:
+
+```mermaid
+flowchart TD
+    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+
+    subgraph EstadoOnline [1. Estado Primário Online]
+        direction TB
+        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
+        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
+    end
+
+    subgraph EstadoOffline [2. Failover Local Sob Demanda]
+        direction TB
+        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
+        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
+        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
+    end
+
+    subgraph EstadoRestauracao [3. Restauração & Desalocação]
+        direction TB
+        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
+        TriggerOn --> Unload[lms unload --all e ollama stop]
+        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
+    end
+
+    ZeroReturn -->|GPU 100% Liberada| Router
+```
+
+### Automação via PowerShell (`scripts/windows/`):
+
+1. **`watch_network_trigger.ps1`**: Monitor contínuo de conectividade (amostragem a cada 10 segundos).
+2. **`on_offline_event.ps1`**: Disparado no instante da queda de sinal, garante a prontidão imediata do Ollama na porta `11434` e a inicialização do LM Studio Server na porta `1234`.
+3. **`on_online_event.ps1`**: Disparado no instante em que o sinal de internet/VPN retorna, invoca `lms unload --all` e `ollama stop qwen2.5-coder:7b-instruct-q4_K_M`, liberando integralmente a GPU para **0 MB de VRAM**.
+
+---
+
+## 🛠️ Comandos de Auditoria e Inspeção no Host
+
+```powershell
+# 1. Verificar modelos instalados no Ollama Local
+ollama list
+
+# 2. Verificar modelos registrados no LM Studio
+lms ls
+
+# 3. Testar inferência direta no Nível 1 (Ollama)
+curl.exe -s -X POST http://localhost:11434/v1/chat/completions `
+  -H "Content-Type: application/json" `
+  -d '{"model": "qwen2.5-coder:7b-instruct-q4_K_M", "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}'
+
+# 4. Descarregar todos os modelos e restaurar baseline de 0 MB VRAM
+powershell -ExecutionPolicy Bypass -File "scripts/windows/on_online_event.ps1"
+```
+
+---
+
+## 🖥️ Requisitos para Portabilidade em Outro Hardware
+
+| Perfil de Máquina | VRAM / RAM Mínima | Configuração Recomendada |
+| :--- | :--- | :--- |
+| **Standard Laptop (Alvo LOQ)** | **6 GB VRAM / 16 GB RAM DDR5** | Nível 1: `qwen2.5-coder:7b` (100% VRAM) + Nível 2: `deepseek-coder-v2-lite` (GPU Offload) |
+| **Workstation / PC Gamer** | 12 GB VRAM / 32 GB RAM | Nível 1: `qwen2.5-coder:14b` + Nível 2: `DeepSeek-Coder-V2` completo em VRAM |
+| **Servidor Sem GPU Dedicada** | 0 GB VRAM / 32 GB RAM | Execução em CPU multi-threading via Ollama com quantizações `Q4_K_M` |
+
+  </script>
+  <script id="doc-hardware-portability-guide" type="text/markdown" data-doc-path="docs/hardware-portability-guide.md" data-doc-decoded="docs/hardware-portability-guide.md">
+# Guia Oficial de Portabilidade de Hardware & Especificação de Scripts (PCL AEOS)
+
+**Documento**: `docs/hardware-portability-guide.md`  
+**Tipo**: Guia de Engenharia & Especificação de Portabilidade  
+**Ecossistema**: PromptCoreLabs_AEOS v2.0 Sovereign  
+
+---
+
+## 🧭 Visão Geral
+
+Este documento fornece as especificações completas de engenharia para implantar e executar o **PCL AEOS** em qualquer perfil de hardware (laptops, desktops, workstations e servidores). 
+
+Ele detalha a arquitetura **Trigger-Based On-Demand Failover**, que garante **0 MB de VRAM alocada durante a execução online normal** e aciona o carregamento local de inferência apenas quando uma queda de rede/VPN for detectada.
+
+---
+
+## 🖥️ Matriz de Portabilidade e Perfis de Hardware (Hardware Scaling Matrix)
+
+O PCL AEOS adapta-se dinamicamente ao perfil de hardware disponível. A tabela abaixo fornece os parâmetros ideais de quantização, contexto e alocação:
+
+| Perfil de Hardware | VRAM / RAM | Modelo Local Indicado | Quantização | Context Window | Configuração de Load (`lms load`) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Perfil 1: Ultra-Light** | 0-4 GB VRAM / 8-16 GB RAM | `gemma3:4b` / `Qwen2.5-Coder-1.5B` | `Q4_K_M` | 4096 tokens | `--gpu 0` (CPU Multi-thread) |
+| **Perfil 2: Standard Laptop (Target LOQ)** | **6 GB VRAM** / **16 GB RAM DDR5** | **`Qwen2.5-Coder-7B-Instruct`** | **`Q4_K_M`** | **8192 tokens** | **`--gpu max --ttl 1800`** |
+| **Perfil 3: Workstation** | 8-12 GB VRAM / 32 GB RAM | `Qwen2.5-Coder-14B` / `DeepSeek-Lite` | `Q5_K_M` | 16384 tokens | `--gpu max --ttl 3600` |
+| **Perfil 4: High-End Server** | 16-24+ GB VRAM / 64+ GB RAM | `Qwen2.5-Coder-32B` / `DeepSeek-V2.5` | `Q6_K` / `fp16` | 32768 tokens | `--gpu max --ttl 0` |
+
+---
+
+## ⚡ Ciclo de Vida Reativo (Trigger-Based Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Watcher as Network Watcher (.ps1)
+    participant Cloud as APIs Nuvem / Ollama Cloud
+    participant Gateway as OmniRoute (Gateway)
+    participant LMStudio as LM Studio Server (Port 1234)
+    participant GPU as NVIDIA RTX 3050 (VRAM)
+
+    Note over Watcher, GPU: ESTADO NORMAL (ONLINE) — 0 MB VRAM ALOCADA
+    Watcher->>Cloud: Ping / Health Check (Cada 10s)
+    Cloud-->>Watcher: HTTP 200 OK (Rede Ativa)
+    Gateway->>Cloud: Requisição de Inferência (Model *)
+    
+    Note over Watcher, GPU: EVENTO 1: QUEDA DE REDE DETECTADA (OFFLINE)
+    Watcher->>Cloud: Ping Fail / Timeout
+    Watcher->>Watcher: Transição de Estado -> OFFLINE
+    Watcher->>LMStudio: Executa on_offline_event.ps1
+    LMStudio->>GPU: lms load qwen2.5-coder-7b --gpu max
+    GPU-->>LMStudio: Modelo Carregado em VRAM (~5.3 GB)
+    Gateway->>LMStudio: Smart Failover -> Inferência Local (1234)
+
+    Note over Watcher, GPU: EVENTO 2: RESTAURAÇÃO DA CONEXÃO (ONLINE)
+    Watcher->>Cloud: Ping OK (Rede Restabelecida)
+    Watcher->>Watcher: Transição de Estado -> ONLINE
+    Watcher->>LMStudio: Executa on_online_event.ps1
+    LMStudio->>GPU: lms unload --all
+    GPU-->>LMStudio: VRAM Liberada (Retorna a 0 MB Alocados)
+```
+
+### 🔄 Máquina de Estados de Transição de VRAM (State Diagram)
+
+```mermaid
+flowchart TD
+    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+
+    subgraph EstadoOnline [1. Estado Primário Online]
+        direction TB
+        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
+        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
+    end
+
+    subgraph EstadoOffline [2. Failover Local Sob Demanda]
+        direction TB
+        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
+        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
+        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
+    end
+
+    subgraph EstadoRestauracao [3. Restauração & Desalocação]
+        direction TB
+        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
+        TriggerOn --> Unload[lms unload --all e ollama stop]
+        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
+    end
+
+    ZeroReturn -->|GPU 100% Liberada| Router
+```
+
+---
+
+## 📜 Especificação Detalhada dos Scripts de Automação (`scripts/windows/`)
+
+### 1. `scripts/windows/watch_network_trigger.ps1`
+* **Responsabilidade**: Daemon ultra-leve de monitoramento reativo da interface de rede.
+* **Parâmetros**:
+  * `-CheckIntervalSeconds` (Padrão: `10`): Intervalo de amostragem de ping.
+  * `-TestEndpoints` (Padrão: `@("1.1.1.1", "8.8.8.8", "openrouter.ai")`): Endpoints testados para validação de conectividade.
+  * `-LogFile`: Caminho do log em `logs/network_watcher.log`.
+* **Execução**:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1" -CheckIntervalSeconds 10
+  ```
+
+### 2. `scripts/windows/on_offline_event.ps1`
+* **Responsabilidade**: Gatilho de failover executado exclusivamente na perda de rede para orquestrar o failover local em 2 níveis.
+* **Ações**:
+  1. **Nível 1 (Alta Velocidade)**: Valida e garante prontidão do serviço Ollama na porta `11434` rodando `qwen2.5-coder:7b-instruct-q4_K_M` (100% alocado na VRAM de 6 GB).
+  2. **Nível 2 (MoE / Refatoração)**: Garante prontidão do LM Studio Server na porta `1234` com suporte ao modelo `DeepSeek-Coder-V2-Lite-Instruct` com GPU Offload (VRAM + RAM DDR5).
+* **Parâmetros**:
+  * `-OllamaPort` (Padrão: `11434`)
+  * `-OllamaModel` (Padrão: `"qwen2.5-coder:7b-instruct-q4_K_M"`)
+  * `-LMSPort` (Padrão: `1234`)
+  * `-LMSModel` (Padrão: `"deepseek-coder-v2-lite-instruct"`)
+
+### 3. `scripts/windows/on_online_event.ps1`
+* **Responsabilidade**: Gatilho de restauração executado ao retornar a conectividade de rede.
+* **Ações**:
+  1. Executa `lms unload --all` para descarregar instâncias do LM Studio.
+  2. Executa `ollama stop <OllamaModel>` para descarregar modelos em memória no Ollama.
+  3. Garante o retorno estrito de **0 MB de VRAM alocada** na GPU física (RTX 3050).
+  4. Registra o evento de desalocação no log `logs/network_failover.log`.
+
+---
+
+## 🛠️ Guia de Portabilidade para Outros Ambientes
+
+Ao migrar a pilha PCL AEOS para outra máquina:
+
+1. **Ajuste de Modelo no Script**: Altere a variável `-ModelId` em `on_offline_event.ps1` para coincidir com a quantização suportada no seu hardware (conforme a Matriz de Portabilidade acima).
+2. **Execução no Linux / MacOS**: Utilize scripts equivalentes em Bash (`watch_network_trigger.sh`) mantendo as mesmas chamadas à CLI do LM Studio (`lms`) ou Ollama (`ollama run`).
+
+  </script>
+  <script id="doc-hardware-vram-optimization" type="text/markdown" data-doc-path="docs/hardware-vram-optimization.md" data-doc-decoded="docs/hardware-vram-optimization.md">
+# Guia Técnico de Otimização de VRAM & Ciclo de Vida Reativo (PCL AEOS)
+
+**Host Target**: Lenovo LOQ 15IAX9  
+**Especificações do Host**:
+* **CPU**: Intel Core i5-12450HX (8 núcleos / 12 threads)
+* **RAM**: 16 GB DDR5 4800MHz
+* **GPU**: NVIDIA GeForce RTX 3050 Laptop (6 GB VRAM GDDR6 Dedicada)
+* **Armazenamento SSD**: ~78 GB livres
+* **OS**: Windows 11 64-bit + Docker Desktop (WSL2 Engine)
+
+---
+
+## 1. Princípio Arquitetural: Alocação Reativa Sob Demanda (Trigger-Based)
+
+Diferente de abordagens tradicionais que mantêm modelos pesados constantemente alocados na GPU (consumindo recursos do sistema durante a navegação/trabalho convencional), o **PCL AEOS** adota um **Ciclo de Vida Reativo baseado em Gatilhos de Estado**:
+
+```mermaid
+flowchart TD
+    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+
+    subgraph EstadoOnline [1. Estado Primário Online]
+        direction TB
+        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
+        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
+    end
+
+    subgraph EstadoOffline [2. Failover Local Sob Demanda]
+        direction TB
+        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
+        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
+        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
+    end
+
+    subgraph EstadoRestauracao [3. Restauração & Desalocação]
+        direction TB
+        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
+        TriggerOn --> Unload[lms unload --all e ollama stop]
+        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
+    end
+
+    ZeroReturn -->|GPU 100% Liberada| Router
+```
+
+---
+
+## 2. Dimensionamento de VRAM quando acionado no modo Offline
+
+Quando o gatilho offline é disparado, a governança em 2 níveis garante estabilidade total sem estouro de VRAM na RTX 3050 (6 GB):
+
+### Nível 1: `Qwen2.5-Coder-7B-Instruct (Q4_K_M)` no Ollama Local
+* **Tamanho do Peso**: ~4.7 GB (Quantização `Q4_K_M`)
+* **Camadas Offloaded para GPU**: 100% na VRAM (RTX 3050)
+* **Context Window Ideal**: **8192 tokens** (~640 MB KV Cache)
+* **Consumo Total VRAM**: ~4.7 GB / 6.00 GB (🟢 100% Seguro e Rápido)
+
+### Nível 2: `DeepSeek-Coder-V2-Lite-Instruct (Q4_K_S)` no LM Studio
+* **Tamanho do Peso**: ~8.88 GiB (Arquitetura MoE: 16B parâmetros totais / 2.4B ativos)
+* **Alocação de Memória**: GPU Offload híbrido (camadas iniciais na VRAM e camadas complementares nos 16 GB de RAM DDR5)
+* **Context Window Ideal**: **8192 tokens** com Flash Attention habilitado
+* **Finalidade**: Refatorações extensas, arquitetura complexa e raciocínio profundo quando o Nível 1 não bastar
+
+---
+
+## 3. Scripts de Controle de Estado (`scripts/windows/`)
+
+Os scripts automatizam a governança de hardware sem necessidade de intervenção humana:
+
+1. **`watch_network_trigger.ps1`**: Monitor de conectividade em tempo real (amostragem a cada 10 segundos).
+2. **`on_offline_event.ps1`**: Assegura a prontidão do Ollama (Porta 11434) e do LM Studio Server (Porta 1234).
+3. **`on_online_event.ps1`**: Descarrega instantaneamente todos os modelos (`lms unload --all` e `ollama stop`), restaurando **0 MB de VRAM**.
+
+  </script>
+
 </body>
 </html>
