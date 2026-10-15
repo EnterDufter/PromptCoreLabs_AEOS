@@ -73,8 +73,8 @@ Como desfazer ou reverter esta decisão caso ela se mostre ineficaz ou cause imp
 Quais outros módulos, playbooks ou diretórios do repositório precisarão ser alterados em função desta decisão.
 
 ## 9. Documentos Relacionados
-• [Link para a Foundation](file:///c:/PromptCore_Labs/foundation/FOUNDATION.md)
-• [Link para outro ADR](file:///c:/PromptCore_Labs/...)
+• [Link para a Foundation](../../foundation/FOUNDATION.md)
+• [Link para outro ADR](../../)
 
 ==================================================
 CONFORMIDADE E VALIDAÇÃO

@@ -18,4 +18,4 @@ O **PromptCoreLabs_AEOS** (AI Engineering Operating System) é um sistema operac
 ---
 
 ## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[c4-l1-context.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html)**: System Context Diagram Nível C4 Level 1.
+- 🟢 **[c4-l1-context.html](../../diagrams/interactive/c4-l1-context.html)**: System Context Diagram Nível C4 Level 1.

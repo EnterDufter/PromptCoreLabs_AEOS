@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Status Normativo:** Documento de políticas operacionais subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> Para a hierarquia formal de políticas soberanas aprovadas, a fonte canônica prevalente é a Seção 2 de `normative-hierarchy.md`.
+
 ==================================================
 OBJETIVO
 ==================================================
@@ -16,7 +20,7 @@ Devem ser suficientemente estáveis para permanecer válidas independentemente d
 O QUE É UMA POLICY
 ==================================================
 
-Explicar que uma Policy é uma regra obrigatória que governa o comportamento do ecossistema AEOS.
+Uma Policy é uma regra obrigatória que governa o comportamento do ecossistema AEOS.
 
 Uma Policy:
 
@@ -33,7 +37,7 @@ As Policies ocupam o nível intermediário entre os princípios constitucionais 
 ESTRUTURA DAS POLICIES
 ==================================================
 
-Definir que toda Policy deve possuir, no mínimo:
+Toda Policy possui obrigatoriamente:
 
 • ID único
 • Nome

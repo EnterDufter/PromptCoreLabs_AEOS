@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Status Normativo:** Documento de papéis e responsabilidades subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> Para a matriz RACI consolidada e distinção de autoridade soberana humana vs. execução agêntica, a fonte canônica prevalente é a Seção 3 de `normative-hierarchy.md`.
+
 =========================================================
 OBJETIVO
 =========================================================

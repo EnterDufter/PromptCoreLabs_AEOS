@@ -41,7 +41,7 @@ c:\PromptCore_Labs\
 
 ## 3. Manifesto `mcp.config.json`
 
-O arquivo [`mcp.config.json`](file:///c:/PromptCore_Labs/mcp.config.json) na raiz do repositório registra os servidores locais:
+O arquivo [`mcp.config.json`](../../mcp.config.json) na raiz do repositório registra os servidores locais:
 
 ```json
 {

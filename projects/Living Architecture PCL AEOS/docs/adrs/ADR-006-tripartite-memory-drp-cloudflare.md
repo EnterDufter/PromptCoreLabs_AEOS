@@ -46,7 +46,7 @@ flowchart LR
 
 4. **Automação MCP & DRP**:
    * Criação do servidor **`CloudflareMCP`** (`@promptcore-labs/mcp-cloudflare`) para permitir que o assistente de IA consulte buckets, status de builds no Cloudflare Pages e registros DNS.
-   * Automação de Disaster Recovery via script [`restore-aeos-tripartido.ps1`](file:///c:/PromptCore_Labs/scripts/backup/restore-aeos-tripartido.ps1).
+   * Automação de Disaster Recovery via script [`restore-aeos-tripartido.ps1`](../../../../scripts/backup/restore-aeos-tripartido.ps1).
 
 ---
 

@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Status Normativo:** Documento de diretrizes subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> Para a numeração oficial de Stage Gates unificados (G-00 a G-04) e critérios formais de autoridade humana soberana, a fonte canônica prevalente é a Seção 5 de `normative-hierarchy.md`.
+
 =========================================================
 OBJETIVO
 =========================================================
@@ -42,115 +46,49 @@ Toda aprovação deve possuir rastreabilidade.
 CONCEITO
 =========================================================
 
-Explicar claramente que:
+Conceito Operacional:
 
-Workflow
+Workflow é uma sequência de atividades e entregas técnicas.
 
-é
+Stage Gate é um ponto formal de controle e decisão de passagem entre etapas.
 
-uma sequência de atividades.
-
-Stage Gate
-
-é
-
-um ponto formal de decisão entre atividades.
-
-O Gate não executa trabalho.
-
-O Gate valida se o trabalho está apto para prosseguir.
+O Gate não executa trabalho de implementação; ele avalia a conformidade e autoriza ou bloqueia o avanço.
 
 =========================================================
 MODELO PADRÃO
 =========================================================
 
-Definir o fluxo genérico do AEOS.
+Fluxo de Trabalho Canônico do AEOS:
 
-Idea
+Idea → Discovery → Specification → Design → Planning → Execution → Validation → Release → Operation → Continuous Improvement
 
-↓
-
-Discovery
-
-↓
-
-Specification
-
-↓
-
-Design
-
-↓
-
-Planning
-
-↓
-
-Execution
-
-↓
-
-Validation
-
-↓
-
-Release
-
-↓
-
-Operation
-
-↓
-
-Continuous Improvement
-
-Entre cada etapa existe um Stage Gate.
+Entre cada transição de etapa existe um Stage Gate obrigatório.
 
 =========================================================
 ESTRUTURA PADRÃO DE UM GATE
 =========================================================
 
-Cada Gate deve conter:
-
-Nome
-
-Objetivo
-
-Entradas obrigatórias
-
-Artefatos esperados
-
-Critérios de aceite
-
-Autoridade responsável
-
-Papéis envolvidos
-
-Possíveis resultados
-
-Ações pós-decisão
+Cada Gate contém:
+- Nome e Identificador Único
+- Objetivo Estratégico
+- Entradas e Pré-requisitos
+- Artefatos e Entregáveis Verificáveis
+- Critérios de Aceite Objetivos
+- Autoridade Decisora Humana Soberana
+- Ações Mandatórias Pós-Decisão
 
 =========================================================
 RESULTADOS POSSÍVEIS
 =========================================================
 
-Todo Gate pode resultar em:
-
-Approved
-
-Approved with Conditions
-
-Rejected
-
-Return to Previous Stage
-
-Escalate
-
-Blocked
-
-Deferred
-
-Cada estado deve ser explicado.
+Todo Gate produz uma das seguintes decisões formais:
+- **Approved**: Critérios atendidos integralmente; transição liberada.
+- **Approved with Conditions**: Critérios críticos atendidos; pendências menores com prazo e owner.
+- **Rejected**: Critérios violados; trabalho reprovado.
+- **Return to Previous Stage**: Trabalho incompleto; retorna à etapa anterior para saneamento.
+- **Escalate**: Conflito de escopo ou autoridade; requer deliberação do Patrocinador.
+- **Blocked**: Impedimento externo ou dependência não resolvida.
+- **Deferred**: Decisão postergada para momento ou marco futuro.
 
 =========================================================
 RASTREABILIDADE

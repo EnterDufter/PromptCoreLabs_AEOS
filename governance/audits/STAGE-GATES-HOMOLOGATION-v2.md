@@ -1,8 +1,14 @@
 # PCL AEOS — Relatório Oficial de Homologação dos Stage Gates (v2.0)
 **Projeto:** Evolução Cognitiva PCL AEOS (Memória Tripartida, System One & RAG Temporal)  
-**Governança:** TLC Spec-Driven v3 | Normas ISO 42001 & ISO 27001  
-**Data de Homologação:** 2026-10-14  
+**Governança:** TLC Spec-Driven v3 | Autoavaliação Técnica Interna inspirada em ISO 42001 e ISO 27001  
+**Data de Homologação Original:** 2026-10-14 | **Calibração Canônica:** 2026-10-15  
 **Autoridade:** EnterDufter / Tech Lead & Arquiteto PCL AEOS  
+
+> [!NOTE]
+> **Status Normativo e Calibração de Escopo:**  
+> Este documento constitui um registro histórico de **Autoavaliação Técnica em Laboratório**. Em conformidade com o [Registro Canônico de Claims e Métricas](../../projects/pcl-aeos-harmonization/design/claims-register.md) (`PCL-AEOS-CLAIM-01`) e a [Auditoria Documental](DOCUMENTATION-AUDIT-2026-10-15.md):
+> 1. Os resultados quantitativos aqui reportados (ex.: RTO de 7.18s e latências do Laya entre 8.42ms e 53.32ms) são **Baselines Históricos de Laboratório** obtidos sob hardware e scripts locais específicos. O SLA contratual de recuperação do sistema é formalmente estipulado em **$\le$ 15 minutos**.
+> 2. O escopo das normas ISO e princípios Zero Trust reflete alinhamento arquitetural por autoavaliação do operador, não constituindo certificação emitida por organismo externo independente credenciado.
 
 ---
 

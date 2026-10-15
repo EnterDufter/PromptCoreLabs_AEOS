@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Status Normativo:** Documento subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> Para a matriz RACI formal de governança e papéis soberanos de aprovação, a fonte canônica prevalente é a Seção 3 de `normative-hierarchy.md`.
+
 =========================================
 OBJETIVO
 =========================================
@@ -360,7 +364,7 @@ A ferramenta muda.
 EXECUTION CELL
 =========================================
 
-Explicar que a Execution Cell opera por delegação.
+A Execution Cell opera estritamente por delegação formal do Chief Architect.
 
 Ela coordena.
 
@@ -396,7 +400,7 @@ ADR relacionado (quando existir)
 RELAÇÃO COM OUTROS DOCUMENTOS
 =========================================
 
-Explicar que este documento será utilizado por:
+Este modelo de autoridade vincula e rege a aplicação dos seguintes artefatos:
 
 operating-model.md
 

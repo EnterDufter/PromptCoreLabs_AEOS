@@ -34,5 +34,5 @@ graph LR
 ---
 
 ## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
-- 🔵 **[gov-stage-gates-matrix.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.
+- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
+- 🔵 **[gov-stage-gates-matrix.html](../../diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.

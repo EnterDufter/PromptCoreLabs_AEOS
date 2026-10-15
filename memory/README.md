@@ -68,8 +68,8 @@ graph TD
 
     Q[Prompt / Pergunta do Agente] --> F[PCLHybridRAGEngine]
     F -->|Busca Híbrida 768D| D
-    D -->|Candidatos Top-K| G[pcl-laya / System One Reranker]
-    G -->|Cross-Encoder INT8 CPU <15ms| H{Score >= 0.40?}
+    D -->|Candidatos Top-K| G[pcl-laya / System One (MCP stdio & Docker)]
+    G -->|Classificador CPU <35ms (MCP: 0.014ms)| H{Score >= 0.40?}
     H -->|Não: Fora de Domínio| I[Fast Exit: 0 Tokens Gastos]
     H -->|Sim: Evidência Forte| J[Formatação de Bloco de Evidência]
     J -->|Injeção Sufixo / EBITDA Shield| K[OmniRoute :20130 / LLM]

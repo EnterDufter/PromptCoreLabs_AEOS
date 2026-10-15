@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "pcl-laya": {
+      "command": "python",
+      "args": [
+        "C:\\PromptCore_Labs\\services\\pcl-laya\\src\\mcp_server.py"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

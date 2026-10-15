@@ -51,5 +51,5 @@ graph TD
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[c4-l2-containers.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html)**: Topologia C4 Level 2 dos Contêineres Docker.
-- 🟡 **[infra-network-security.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html)**: Rede de segurança perimetral WireGuard / Tailscale VPN Mesh.
+- 🟢 **[c4-l2-containers.html](../../diagrams/interactive/c4-l2-containers.html)**: Topologia C4 Level 2 dos Contêineres Docker.
+- 🟡 **[infra-network-security.html](../../diagrams/interactive/infra-network-security.html)**: Rede de segurança perimetral WireGuard / Tailscale VPN Mesh.

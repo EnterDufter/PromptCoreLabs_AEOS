@@ -5,7 +5,7 @@
 **Autor:** Forward Deployed Architecture (FDA) & Cortex Intelligence  
 **Escopo:** `pcl-db` (PostgreSQL 17), `memory/`, `OmniRoute/`, `pcl-laya`  
 **Padrão Arquitetural:** Hexagonal Architecture (Ports & Adapters) / Living Architecture  
-**Normas de Governança:** ISO/IEC 27001 & ISO/IEC 42001 | [ADR-0005](file:///c:/PromptCore_Labs/architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md) & [ADR-006](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md)  
+**Normas de Governança:** ISO/IEC 27001 & ISO/IEC 42001 | [ADR-0005](../../architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md) & [ADR-006](../../projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md)  
 
 ---
 
@@ -14,7 +14,7 @@
 Esta especificação define a implementação técnica da **Memória Semântica e Cognitiva** do PCL AEOS, resolvendo os problemas de:
 1. **Memory Drift & Poisoning:** Crenças desatualizadas servidas com alta confiança após alterações de código.
 2. **Reconciliação Multi-Modelo:** Conflitos conceituais entre artefatos gerados por diferentes LLMs (Claude, GPT, Gemini, Llama) em momentos distintos do projeto.
-3. **Triagem de Ultra-Baixa Latência:** Uso do Coprocessador System One (Laya em CPU) via contrato abstrato `PCL Classifier Port` ([`SPEC-PCL-AEOS-CLASSIFIER-01`](file:///c:/PromptCore_Labs/specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md)).
+3. **Triagem de Ultra-Baixa Latência:** Uso do Coprocessador System One (Laya em CPU) via contrato abstrato `PCL Classifier Port` ([`SPEC-PCL-AEOS-CLASSIFIER-01`](./spec-pcl-aeos-classifier-engine.md)).
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -59,7 +59,7 @@ Esta especificação define a implementação técnica da **Memória Semântica 
 
 ## 2. Esquema Físico de Dados: PostgreSQL (`schema: memory`)
 
-Para atender ao [ADR-0005](file:///c:/PromptCore_Labs/architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md) e blindar o schema `public` gerenciado pelo Drizzle ORM do Paperclip ([ADR-0008](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-008-docker-volume-persistence-governance.md)), todas as estruturas residem estritamente dentro do schema `memory`:
+Para atender ao [ADR-0005](../../architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md) e blindar o schema `public` gerenciado pelo Drizzle ORM do Paperclip ([ADR-0008](../../architecture/decisions/ADR-0008-docker-volume-persistence-governance.md)), todas as estruturas residem estritamente dentro do schema `memory`:
 
 ```sql
 -- Habilitação preventiva de extensões no banco 'paperclip'
@@ -175,7 +175,7 @@ Para assegurar conformidade estrita com a **invariante de 0 MB de VRAM na GPU NV
 * **VRAM Alocada:** **0 MB garantido**
 
 ### 5.2. Mapeamento com o `PCL Classifier Port`
-O `pcl-laya` atua como o **Adapter Primário Local** da especificação [`SPEC-PCL-AEOS-CLASSIFIER-01`](file:///c:/PromptCore_Labs/specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md):
+O `pcl-laya` atua como o **Adapter Primário Local** da especificação [`SPEC-PCL-AEOS-CLASSIFIER-01`](./spec-pcl-aeos-classifier-engine.md):
 * Endpoint exposto: `POST http://pcl-laya:20140/v1/classifier/evaluate`
 * Suporta primitivas `binary`, `choice` e `score`.
 * Fallback: Se o contêiner `pcl-laya` estiver indisponível, o OmniRoute redireciona a chamada para o fallback estruturado do LLM ou bypass transparente.
@@ -185,8 +185,8 @@ O `pcl-laya` atua como o **Adapter Primário Local** da especificação [`SPEC-P
 ## 6. Governança e Validação de DRP (ADR-006)
 
 Em conformidade com o Plano de Recuperação de Desastres:
-1. O script [`scripts/backup/backup-aeos-tripartido.ps1`](file:///c:/PromptCore_Labs/scripts/backup/backup-aeos-tripartido.ps1) deve executar `pg_dump -Fc` cobrindo explicitamente ambos os schemas: `-n public -n memory`.
-2. O script [`scripts/backup/restore-aeos-tripartido.ps1`](file:///c:/PromptCore_Labs/scripts/backup/restore-aeos-tripartido.ps1) deve executar `CREATE EXTENSION IF NOT EXISTS vector;` antes do restore físico, assegurando que o SLA de **RTO $\le$ 15 minutos** seja cumprido com integridade de 100%.
+1. O script [`scripts/backup/backup-aeos-tripartido.ps1`](../../scripts/backup/backup-aeos-tripartido.ps1) deve executar `pg_dump -Fc` cobrindo explicitamente ambos os schemas: `-n public -n memory`.
+2. O script [`scripts/backup/restore-aeos-tripartido.ps1`](../../scripts/backup/restore-aeos-tripartido.ps1) deve executar `CREATE EXTENSION IF NOT EXISTS vector;` antes do restore físico, assegurando que o SLA de **RTO $\le$ 15 minutos** seja cumprido com integridade de 100%.
 
 ---
 

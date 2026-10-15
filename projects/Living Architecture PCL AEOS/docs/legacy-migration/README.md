@@ -71,6 +71,6 @@ graph LR
 ---
 
 ## 🔗 Documentos Relacionados
-- [Diagrama Interativo DIAG-LEG-01](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)
-- [Arquitetura de Memória & RAG Vetorial](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
-- [Governança & Modelo Operacional v2.0](file:///c:/PromptCore_Labs/governance/operating-model.md)
+- [Diagrama Interativo DIAG-LEG-01](../../diagrams/interactive/data-legacy-migration.html)
+- [Arquitetura de Memória & RAG Vetorial](../memory-rag/README.md)
+- [Governança & Modelo Operacional v2.0](../../../../governance/operating-model.md)

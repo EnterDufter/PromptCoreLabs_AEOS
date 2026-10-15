@@ -46,4 +46,4 @@ graph TD
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🔵 **[mcp-interconnection.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html)**: Mapa de interconexão entre o cliente de IA, servidores MCP e o workspace.
+- 🔵 **[mcp-interconnection.html](../../diagrams/interactive/mcp-interconnection.html)**: Mapa de interconexão entre o cliente de IA, servidores MCP e o workspace.

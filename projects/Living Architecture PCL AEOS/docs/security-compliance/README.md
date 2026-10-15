@@ -31,4 +31,4 @@ graph TD
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 💜 **[sec-zero-trust-flow.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html)**: Fluxo de gerenciamento de segredos e imunização Zero Trust.
+- 💜 **[sec-zero-trust-flow.html](../../diagrams/interactive/sec-zero-trust-flow.html)**: Fluxo de gerenciamento de segredos e imunização Zero Trust.

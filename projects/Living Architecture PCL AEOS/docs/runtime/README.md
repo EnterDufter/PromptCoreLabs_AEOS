@@ -53,9 +53,9 @@ sequenceDiagram
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟡 **[seq-omniroute-routing.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
-- 🟡 **[seq-tripartite-memory-drp.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
-- 🟡 **[life-cortex-micro-loop.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
+- 🟡 **[seq-omniroute-routing.html](../../diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
+- 🟡 **[seq-tripartite-memory-drp.html](../../diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
+- 🟡 **[life-cortex-micro-loop.html](../../diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
 
 ---
 

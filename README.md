@@ -10,20 +10,21 @@ O **PCL AEOS v2.0** é a **Plataforma de Conhecimento e Sistema Operacional Sobe
 > Acesse o novo portal com alternância de visão (👔 Conceitual vs. 🛠️ Técnica) e visualizadores integrados do **PCL Cortex**:  
 > **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)**
 >
-> 📖 **Guia Executivo (3 Minutos):** Leia o [Guia Conceitual para Liderança e Leigos](docs/architecture-v2-executive-guide.md).  
-> 📑 **Relatório Formal de Auditoria:** Consulte o [Laudo de Homologação dos Stage Gates v2.0](governance/audits/STAGE-GATES-HOMOLOGATION-v2.md).
+> 📖 **Guia Executivo:** Leia o [Guia Conceitual para Liderança](docs/architecture-v2-executive-guide.md).  
+> 📑 **Governança Canônica:** Consulte a [Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md) e a [Arquitetura Canônica](projects/pcl-aeos-harmonization/design/canonical-architecture.md).  
+> ⚖️ **Métricas Calibradas:** Consulte o [Registro Oficial de Claims e Métricas](projects/pcl-aeos-harmonization/design/claims-register.md).
 
 ---
 
-### 📊 Indicadores Soberanos Homologados (v2.0)
+### 📊 Indicadores e Métricas Canônicas (v2.0 Harmonizado)
 
-| Indicador | Medição Auditada | Benefício Arquitetural |
-|---|:---:|---|
-| **Custo Operacional de Infra** | **$0.00 / mês** | 100% autônomo na infraestrutura local do operador |
-| **Latência Coprocessador (Laya)** | **< 15 ms** | Classificação rápida em CPU INT8 com zero tokens de nuvem |
-| **Alocação de GPU VRAM** | **0 MB** | Placa de vídeo dedicada livre para cargas massivas |
-| **Recuperação de Desastres (RTO)** | **7.18 segundos** | Restauração multi-schema validada em Stage Gate 4 |
-| **Base de Claims Ativas** | **220 afirmações** | Fatos atômicos catalogados com recibos criptográficos SHA-256 |
+| Indicador | Classificação Normativa | Valor Canônico | Benefício Arquitetural |
+|---|:---:|:---:|---|
+| **Custo Operacional de Infra** | Modo Soberano Local | **$0.00 / mês** | 100% autônomo na infraestrutura local do operador |
+| **Coprocessador LAYA (System One)** | Target / Benchmark MCP | **< 35 ms** (MCP: ~0.014 ms) | Decisões tipadas em CPU, 0 tokens de nuvem e integração MCP stdio |
+| **Alocação de GPU VRAM (Laya)** | Invariante de Hardware | **0 MB (100% CPU)** | GPU dedicada livre para inferência de modelos LLM e SLMs |
+| **Recuperação de Desastres (RTO)** | SLA / Baseline Histórico | **SLA < 15 min** (Lab: 7.18s) | Restauração multi-schema resiliente e validada |
+| **Base de Claims Críticos** | Prioritários Canônicos | **52 afirmações atômicas** | Fatos atômicos estruturais catalogados e rastreáveis |
 
 ---
 
@@ -64,7 +65,7 @@ flowchart TD
 
 | Previsualização (Interativa) | Diagrama & Detalhes | Ações & Documentação |
 |:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="300" alt="DIAG-HOLD-01"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *Cortex Engine*, mapeando a Plataforma Core (Cortex, OmniRoute, Paperclip), os 15 clusters B2B e a saída de monetização. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Operating Model](ADR-005) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="300" alt="DIAG-HOLD-01"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *Cortex Engine*, mapeando a Plataforma Core (Cortex, OmniRoute, Paperclip), os 15 clusters B2B e a saída de monetização. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo (Nova Aba)**</a><br><br>[📖 Operating Model](governance/operating-model.md) |
 
 ---
 

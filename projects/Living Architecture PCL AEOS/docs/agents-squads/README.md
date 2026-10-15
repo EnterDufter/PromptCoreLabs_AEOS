@@ -223,5 +223,5 @@ flowchart TD
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
 Esta especificação detalhada conecta-se diretamente aos diagramas do Portal Mestre:
-- 🔵 **[agents-squad-map.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
-- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.
+- 🔵 **[agents-squad-map.html](../../diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
+- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.

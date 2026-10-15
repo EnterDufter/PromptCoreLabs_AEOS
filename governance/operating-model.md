@@ -69,7 +69,7 @@ Cada camada fornece capacidades para a camada seguinte.
 
 Nenhuma camada inferior redefine responsabilidades das superiores.
 
-Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
+Conforme registrado no [ADR-005](../docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
 
 ## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
 
@@ -250,7 +250,7 @@ Nenhum agente possui autoridade arquitetural.
 
 ## Mapeamento de Agentes, Sub-Agentes e Distribuição de Skills
 
-A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
+A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](../projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
 
 1. **Squad Core de Engenharia (Spec-Driven Loop)**:
    - **Planner Agent**: Decomposição de especificações (`specify.md`) e planejamento de backlog (`tasks.md`).
