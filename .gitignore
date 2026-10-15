@@ -12,3 +12,10 @@ backups/
 __pycache__/
 *.pyc
 .vscode/
+
+# Local submodules / external repos (untracked in portal repo to prevent CI clone failures)
+PaperClip/
+PaperClip-Companies/
+projects/crialli/
+tools/notebooklm-mcp-antigravity/
+
