@@ -2,8 +2,8 @@
 
 **Última atualização:** 2026-10-15  
 **Etapa TLC:** RELEASE / FOUNDATION READY  
-**Status:** CONCLUÍDO E HOMOLOGADO PELO PATROCINADOR  
-**Baseline:** master / 7764976672696c19cabfeec19c17ec4b31331a0a  
+**Status:** CONCLUÍDO, HOMOLOGADO E PUBLICADO NO GITHUB  
+**Baseline:** master / 4feb6391d4e7b415a773aee10f635aafe115e5a2  
 **Repo:** EnterDufter/PromptCoreLabs_AEOS  
 **Pasta:** C:\PromptCore_Labs\projects\pcl-aeos-harmonization
 
