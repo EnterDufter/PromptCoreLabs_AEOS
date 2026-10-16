@@ -1,9 +1,12 @@
 # Estado do projeto — Harmonização PCL AEOS
 
-**Última atualização:** 2026-10-15  
-**Etapa TLC:** RELEASE / FOUNDATION READY  
-**Status:** CONCLUÍDO, HOMOLOGADO E PUBLICADO NO GITHUB  
-**Baseline:** master / 4feb6391d4e7b415a773aee10f635aafe115e5a2  
+**Última atualização:** 2026-10-16  
+**Etapa TLC declarada pelo projeto:** RELEASE / FOUNDATION READY  
+**Status declarado anteriormente:** CONCLUÍDO, HOMOLOGADO E PUBLICADO NO GITHUB  
+**Parecer independente mais recente:** Foundation Ready não confirmado pela reauditoria local de 2026-10-16; achados P1 e ações recomendadas em audits/DOCUMENTATION-AUDIT-2026-10-16.md.  
+**Baseline declarado pelo certificado anterior:** 7764976672696c19cabfeec19c17ec4b31331a0a  
+**HEAD local reauditado:** master / 158156429cbe88a408331e22d0ceced3d5b77163  
+**Baseline publicado informado pela versão anterior deste STATE:** 4feb6391d4e7b415a773aee10f635aafe115e5a2; não reconferido contra o GitHub remoto nesta auditoria.  
 **Repo:** EnterDufter/PromptCoreLabs_AEOS  
 **Pasta:** C:\PromptCore_Labs\projects\pcl-aeos-harmonization
 
@@ -72,4 +75,5 @@ A fundação do PCL AEOS está **FOUNDATION READY**. O patrocinador pode autoriz
 | 2026-10-15 | Plano inicial e SPECIFY persistidos com base na auditoria. |
 | 2026-10-15 | Implementação e homologação do Laya MCP Server e Skill .agents/skills/laya/SKILL.md. |
 | 2026-10-15 | Aprovação do Implementation Plan e execução completa das Etapas 1 a 5 da Harmonização. Emissão do Certificado Foundation Ready (foundation-readiness.md). |
+| 2026-10-16 | Reauditoria documental independente do checkout local; progresso de apresentação confirmado, Foundation Ready não confirmado devido a conflitos normativos, semântica/capacidade do Laya, reconciliação automática, controles do Compose, baseline e cobertura de aceite. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16.md. |
 

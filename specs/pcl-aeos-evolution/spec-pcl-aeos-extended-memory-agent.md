@@ -69,7 +69,7 @@ flowchart TD
 
 Qualquer mecanismo de agente de plano de fundo integrado ao AEOS deve obrigatoriamente satisfazer os seguintes pilares:
 
-1. **Memória Persistente Dialética:** Armazenar e recuperar preferências, fatos e decisões históricas de sessões passadas sem inflar o contexto das chamadas ativas, validando contradições através do Coprocessador Laya (`laya_check_contradiction`).
+1. **Memória Persistente Dialética:** Armazenar e recuperar preferências, fatos e decisões históricas de sessões passadas sem inflar o contexto das chamadas ativas, validando contradições e supersessões através do Coprocessador Laya (`laya_check_contradiction` / `laya_evaluate_nli` com motor neural `cross-encoder/nli-MiniLM-2-L6-H768` em CPU).
 2. **Criação e Execução de Habilidades Portáveis (`SKILL.md`):** Consolidar soluções de problemas complexos em arquivos de habilidades reutilizáveis no formato padronizado markdown (`SKILL.md`), armazenados em `.agents/skills/`.
 3. **Gateway Multicanal Desvinculado:** Suporte a canais de mensagens assíncronas (Slack, Telegram, WhatsApp, Email ou Webhook) com controle perimetral Zero Trust via Tailscale.
 4. **Isolamento de Execução (Sandbox):** Execução de código e comandos em ambiente isolado (Docker / Sandbox) para prevenção de vazamento de credenciais e elevação de privilégios.

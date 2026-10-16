@@ -78,12 +78,13 @@ Qualquer provedor de classificação integrado ao PCL AEOS implementa rigorosame
 ## 3. Mapeamento de Provedores (Adapters)
 
 ### **3.1. Provedor Canônico Soberano: Laya System One Coprocessor**
-- **Descrição:** Motor do Sistema 1 local treinado e calibrado para decisões reflexas ultrarrápidas, sem dependência de nuvem.
-- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, verificação instantânea de contradições no RAG de memória, classificação de intenções em microssegundos e guardrails pré-execução no pipeline TLC.
+- **Descrição:** Motor neural do Sistema 1 local baseado no modelo **`cross-encoder/nli-MiniLM-2-L6-H768`** em formato ONNX quantizado (INT8 / AVX2, ~78.9 MB), calibrado para inferência em linguagem natural (NLI - 3 classes: *contradiction*, *entailment*, *neutral*) e decisões reflexas ultrarrápidas, sem dependência de nuvem.
+- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, verificação instantânea de contradições no RAG e na reconciliação de memória (supersessão automática de claims), classificação de intenções em microssegundos e guardrails pré-execução no pipeline TLC.
+- **Arquitetura Dual-Engine:** Opera nativamente com o motor neural ONNX Runtime em CPU (`CPUExecutionProvider`). Caso os binários ONNX não estejam disponíveis no ambiente mínimo, reverte com transparência absoluta para o motor determinístico simbólico (*Graceful Fallback*), garantindo tolerância zero a falhas (zero erro 500).
 - **Interfaces:**
-  - **Canal Local:** MCP Server (`services/pcl-laya/src/mcp_server.py`) via `stdio`.
-  - **Canal de Rede:** Endpoint HTTP REST no container `pcl-laya:20140`.
-- **Custo:** \$0.00 / 0 MB GPU VRAM / 100% Offline.
+  - **Canal Local:** MCP Server (`services/pcl-laya/src/mcp_server.py`) via `stdio` (tools: `laya_evaluate_nli`, `laya_evaluate_binary`, `laya_check_contradiction`, `laya_evaluate_choice`, `laya_evaluate_score`, `laya_evaluate_batch`, `laya_health`).
+  - **Canal de Rede:** Endpoint HTTP REST no container `pcl-laya:20140` (`/v1/classifier/evaluate`, `/v1/classifier/evaluate/nli`, `/health`).
+- **Custo:** \$0.00 / 0 MB GPU VRAM / 100% Offline em CPU.
 
 ### **3.2. Provedor Alternativo de Borda: Local Compiled ONNX Runtime**
 - **Descrição:** Classificador embarcado compilado para ambientes bare-metal de baixíssimo consumo energético.

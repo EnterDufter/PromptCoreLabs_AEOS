@@ -1,6 +1,7 @@
 """
 PCL AEOS - Microserviço pcl-laya
 Conformidade: SPEC-PCL-AEOS-CLASSIFIER-01 & SPEC-PCL-AEOS-MEMORY-03
+Motor Neural Canônico: cross-encoder/nli-MiniLM-2-L6-H768 (ONNX INT8 / AVX2)
 Porta: 20140 (Rede interna Docker aeos-net)
 """
 
@@ -11,6 +12,7 @@ from typing import List, Dict, Any, Optional
 
 from classifier import (
     LayaClassifierEngine,
+    NLIEvaluationRequest,
     BinaryEvaluationRequest,
     ChoiceEvaluationRequest,
     ScoreEvaluationRequest,
@@ -19,8 +21,8 @@ from classifier import (
 
 app = FastAPI(
     title="PCL AEOS System One Classifier (Laya)",
-    description="Coprocessador não-autoregressivo de alta velocidade (~35ms) para decisões tipadas em CPU.",
-    version="1.0.0"
+    description="Coprocessador não-autoregressivo de alta velocidade (~20-35ms) com inferência neural NLI (cross-encoder/nli-MiniLM-2-L6-H768 ONNX INT8) em CPU com 0 MB VRAM.",
+    version="1.1.0"
 )
 
 engine = LayaClassifierEngine()
@@ -28,7 +30,7 @@ engine = LayaClassifierEngine()
 class UnifiedEvaluateRequest(BaseModel):
     state: str
     query: str
-    mode: str = "binary" # 'binary', 'choice', 'score'
+    mode: str = "binary" # 'binary', 'nli', 'choice', 'score'
     options: Optional[List[str]] = None
     min_val: Optional[float] = 0.0
     max_val: Optional[float] = 1.0
@@ -38,7 +40,9 @@ def health():
     return {
         "status": "healthy",
         "service": "pcl-laya",
-        "version": "1.0.0",
+        "version": "1.1.0",
+        "engine_mode": engine.nli_engine.engine_mode,
+        "model_id": engine.nli_engine.model_id,
         "execution_provider": "CPUExecutionProvider",
         "vram_allocated_mb": 0,
         "conformance": ["SPEC-PCL-AEOS-CLASSIFIER-01", "SPEC-PCL-AEOS-MEMORY-03"]
@@ -48,6 +52,8 @@ def health():
 def evaluate_unified(req: UnifiedEvaluateRequest):
     if req.mode == "binary":
         return engine.evaluate_binary(req.state, req.query)
+    elif req.mode == "nli":
+        return engine.evaluate_nli(premise=req.state, hypothesis=req.query)
     elif req.mode == "choice":
         if not req.options:
             raise HTTPException(status_code=400, detail="Modo 'choice' requer o campo 'options'.")
@@ -55,7 +61,11 @@ def evaluate_unified(req: UnifiedEvaluateRequest):
     elif req.mode == "score":
         return engine.evaluate_score(req.state, req.query, req.min_val or 0.0, req.max_val or 1.0)
     else:
-        raise HTTPException(status_code=400, detail=f"Modo inválido: {req.mode}. Use 'binary', 'choice' ou 'score'.")
+        raise HTTPException(status_code=400, detail=f"Modo inválido: {req.mode}. Use 'binary', 'nli', 'choice' ou 'score'.")
+
+@app.post("/v1/classifier/evaluate/nli")
+def evaluate_nli(req: NLIEvaluationRequest):
+    return engine.evaluate_nli(req.premise, req.hypothesis)
 
 @app.post("/v1/classifier/evaluate/binary")
 def evaluate_binary(req: BinaryEvaluationRequest):

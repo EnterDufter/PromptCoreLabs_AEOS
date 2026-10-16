@@ -5,6 +5,7 @@ LABEL maintainer="PromptCore Labs <architecture@promptcore.com.br>"
 LABEL compliance="ISO/IEC 27001 & ISO/IEC 42001"
 LABEL service="pcl-laya"
 LABEL device="CPUExecutionProvider"
+LABEL model="cross-encoder/nli-MiniLM-2-L6-H768"
 
 WORKDIR /app
 
@@ -12,6 +13,8 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider \
+    LAYA_MODEL_DIR=/app/models/nli-minilm \
+    LAYA_CPU_THREADS=2 \
     PORT=20140
 
 # Instalação de dependências
@@ -21,6 +24,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Criação de usuário seguro desprivilegiado (Zero Trust / Non-Root)
 RUN groupadd -g 10001 appgroup && \
     useradd -u 10001 -g appgroup -s /bin/sh -m appuser
+
+# Cópia de scripts e modelos com garantia de modelo neural pré-carregado
+COPY scripts/ ./scripts/
+COPY models/ ./models/
+RUN python scripts/download_model.py
 
 # Cópia do código-fonte
 COPY src/ ./src/

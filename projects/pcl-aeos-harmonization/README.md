@@ -29,5 +29,6 @@ O resultado não é apenas revisar arquivos: é instituir um processo permanente
 - [Estado do projeto](STATE.md)
 - [Continuidade entre sessões](CONTINUATION.md)
 - Auditoria de origem: [DOCUMENTATION-AUDIT-2026-10-15.md](../../governance/audits/DOCUMENTATION-AUDIT-2026-10-15.md)
+- Reauditoria local: [DOCUMENTATION-AUDIT-2026-10-16.md](audits/DOCUMENTATION-AUDIT-2026-10-16.md)
 
 Antes de encerrar cada sessão, atualizar STATE.md com etapa, mudanças, evidências, decisões, bloqueios e próximo passo. Só registrar decisão como aprovada com aprovação humana explícita, autoridade, data e escopo.

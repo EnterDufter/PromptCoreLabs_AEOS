@@ -21,4 +21,6 @@ tools/notebooklm-mcp-antigravity/
 .agents/skills/cloudflare/
 external-references/mira-animator/
 projects/PromptCoreLabs_AEOS_Dashboard/
+# Machine Learning Models (Downloaded via scripts/download_model.py)
+*.onnx
 
