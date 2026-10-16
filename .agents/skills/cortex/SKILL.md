@@ -78,27 +78,84 @@ Leia entradas em Mermaid ou UML para extrair a topologia e o significado semânt
 
 ---
 
-## Diretriz Canônica de Diagramas Mermaid na Documentação (Padrão Cortex)
+## Diretriz Canônica de Diagramas Mermaid na Documentação (Padrão Cortex v7 Aprovado)
 
-Quando solicitado a redigir, otimizar, validar ou manter diagramas Mermaid em arquivos Markdown (`.md`) ou no Portal GitHub Pages (`index.html`) do PCL AEOS, o Cortex atua como **guardião de qualidade visual e conformidade técnica**, aplicando rigorosamente as seguintes regras invariantes:
+Quando solicitado a redigir, otimizar, validar ou manter diagramas Mermaid em arquivos Markdown (`.md`) ou no Portal GitHub Pages (`index.html`) do PCL AEOS, o Cortex atua como **guardião de qualidade visual, legibilidade e conformidade técnica**, aplicando rigorosamente as seguintes regras invariantes consolidadas na **Revisão Calibrada v7**:
 
-### 1. Garantia de Proporção Visual & Caixas Horizontais (Anti-Torre)
-- **Proporção Harmônica (Aspect Ratio ~16:9 ou ~4:3)**: É estritamente desaconselhada a criação de diagramas verticais ultra-compridos (proporção 1:4 ou superior). Em vez de empilhar nós verticalmente em linha reta, o diagrama deve ser balanceado em subgrafos horizontais paralelos (`direction LR`, colunas concorrentes de responsabilidade ou pipelines lineares `flowchart LR`).
-- **Largura Generosa em Caixas de Diálogo**: As caixas de texto e cartões devem ser ampliados horizontalmente, permitindo linhas com frases fluidas de 40 a 80 caracteres. Quebras de linha a cada 1 ou 2 palavras são proibidas, pois comprimem os nós em pilares estreitos e deformam a hierarquia visual.
-- **Nós de Decisão (Losangos `{ }`) Concisos**: Rótulos dentro de `{ }` devem ter no máximo 2 a 3 palavras curtas (ex: `{Condição?}`). Rótulos longos deformam o losango e provocam clipping severo.
+### 1. Garantia de Proporção Panorâmica & Caixas Largas em 2 Linhas (Anti-Torre)
+- **Orientação Padrão Panorâmica (`flowchart LR`)**: É estritamente desaconselhada a criação de diagramas verticais compridos ("estilo torre" em 1:4). O layout padrão para esteiras e fluxos com 3 ou mais etapas é horizontal (`flowchart LR`).
+- **Padrão Retangular Amplo em 2 Linhas**: Os nós devem conter caixas largas e retangulares com no máximo 2 linhas estruturadas:
+  `["<b>Título Principal em Negrito</b><br/>Subtítulo Técnico ou de Negócio Conciso"]`
+  Isso elimina quebras de linha excessivas, mantendo nós simétricos, elegantes e de leitura horizontal suave.
+- **Nós de Decisão (Losangos `{ }`) Concisos**: Rótulos dentro de `{ }` devem ter no máximo 2 a 3 palavras curtas (ex: `{Fato validado<br/>no acervo?}`). Rótulos prolixos deformam o losango e causam sobreposições.
 
-### 2. Paleta de Cores de Alto Contraste (WCAG AAA)
-É estritamente proibido o uso de tons pastéis desbotados com texto cinza ou classes sem definição de `color`. Todos os diagramas devem declarar explicitamente suas classes com texto claro/branco (`#ffffff` ou `#f8fafc`) e bordas contrastantes:
-- **Core / Executivo / Humano (`gov`)**: `fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff`
-- **Engenharia / Arquitetura / Spec (`eng`)**: `fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff`
-- **Sucesso / Laya System One / Execução (`sys`)**: `fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff`
-- **Memória / Estratégia / Audit (`audit`)**: `fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff`
-- **Alerta / Risco / Segurança (`alert`)**: `fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff`
+### 2. Padrão de Distribuição Colunar por Subgrafos (Padrão de Referência do Diagrama 7)
+- Para arquiteturas com múltiplas frentes, camadas ou squads (ex.: Holding em 3 Camadas, Fluxo em 3 Fases, Matriz de Agentes):
+  - Estruturar em **colunas verticais lado a lado** onde cada coluna é um `subgraph` com `direction TB` (elementos empilhados com `-->`).
+  - Conectar os subgraphs sequencialmente no eixo horizontal com links fortes (`==>`).
+  - Esse padrão (aprovado no Diagrama 7 e aplicado aos Diagramas 4, 6 e 11) equilibra perfeitamente o espaço visual e elimina grafismos excessivamente verticais ou dispersos.
 
-### 3. Integração com o Renderer Web e Preservação de Impressão (`@media print`)
-O Cortex garante que o portal master aplique as regras universais de renderização e exportação:
-- **Anti-Clipping**: `clip-path: none !important;` e `overflow: visible !important;` em todos os SVGs gerados pelo Mermaid v10.
-- **Preservação de Escala em Impressão PDF**: É proibido o uso de `max-height` restritivo em `@media print`. O diagrama deve expandir para 100% da largura útil da folha A4 com `-webkit-print-color-adjust: exact`, assegurando que o grafismo mantenha tamanho legível, contraste vívido e diagramação profissional quando impresso ou salvo em PDF.
+### 3. Alinhamento Vertical e Convergência de Rotas Paralelas (Padrão do Diagrama 14)
+- Em fluxos com bifurcação para rotas paralelas ou contingência (ex.: Nuvem vs Local):
+  - A rota primária (Nuvem) deve ser posicionada **ACIMA** da rota de contingência (Local), com alinhamento vertical perfeito.
+  - **Invariante de Convergência**: Ambas as rotas devem obrigatoriamente convergir para um nó de saída comum à direita (`Saida["🎯 Execução Concluída"]`). Sem esse nó de ancoragem à direita, o layout Dagre inverte a ordem vertical baseando-se no comprimento dos subgrafos.
+
+### 4. Calibração Tipográfica e Espaçamento Global (`mermaid.initialize`)
+Ao renderizar diagramas no catálogo ou em páginas HTML, o Cortex exige as seguintes métricas calibradas:
+```javascript
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'dark',
+  securityLevel: 'loose',
+  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontSize: 10.5,
+  flowchart: {
+    htmlLabels: true,
+    useMaxWidth: true,
+    curve: 'basis',
+    padding: 10,
+    nodeSpacing: 26,
+    rankSpacing: 30,
+    subGraphTitleMargin: { top: 10, bottom: 12 }
+  },
+  themeVariables: {
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontSize: '10.5px',
+    primaryTextColor: '#f8fafc',
+    primaryColor: '#0f172a',
+    primaryBorderColor: '#38bdf8',
+    lineColor: '#64748b',
+    secondaryColor: '#064e3b',
+    tertiaryColor: '#2e1065',
+    clusterBkg: 'rgba(13, 19, 34, 0.75)',
+    clusterBorder: '#1e293b'
+  }
+});
+```
+
+### 5. Regra de Ouro Anti-Clipping CSS & Preservação de Títulos de Subgraph
+- **NUNCA aplicar `transform: translateY(...) !important;` em CSS no SVG do Mermaid**: Essa propriedade sobrescreve os atributos de translação nativos `<g class="cluster-label" transform="translate(x, y)">`, zerando as coordenadas calculadas pelo Mermaid e colidindo os títulos dos subgrafos em `(0, 0)` em cima dos primeiros nós.
+- **Regras CSS Obrigatórias**:
+  ```css
+  .mermaid svg [clip-path] { clip-path: none !important; }
+  .mermaid svg .node foreignObject { overflow: visible !important; }
+  .mermaid svg .node foreignObject div {
+    overflow: visible !important;
+    word-break: normal !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.35 !important;
+    font-size: 10.5px !important;
+  }
+  ```
+
+### 6. Paleta de Cores de Alto Contraste (WCAG AAA)
+É estritamente proibido o uso de tons pastéis desbotados ou classes sem definição de `color`. Todos os diagramas devem declarar explicitamente suas classes com texto claro/branco (`#ffffff` ou `#f8fafc`) e bordas contrastantes:
+- **Core / Executivo / Humano (`gov`)**: `fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;`
+- **Engenharia / Arquitetura / Spec (`eng`)**: `fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;`
+- **Sucesso / Laya System One / Execução (`sys`)**: `fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;`
+- **Memória / Estratégia / Audit (`audit`)**: `fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;`
+- **Alerta / Risco / Segurança / FinOps (`alert`)**: `fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;`
 
 ---
 

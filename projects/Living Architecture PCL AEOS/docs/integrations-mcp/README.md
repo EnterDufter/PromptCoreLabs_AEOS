@@ -19,40 +19,38 @@ O **Model Context Protocol (MCP)** é o padrão de integração assíncrona base
 ## 3. TOPOLOGIA DE CONEXÃO MCP
 
 ```mermaid
-graph TD
-    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    classDef config fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff
-    classDef server fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
-    classDef target fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff
+flowchart LR
+    classDef ide fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef srv fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef db fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
 
-    subgraph ClientLayer["IDE / Cliente Agente"]
-        IDE["Antigravity IDE / Terminal Agent<br/>(Engenharia & Orquestração)"]:::client
+    subgraph Cliente ["1. Interface & Agentes"]
+        direction TB
+        IDE["<b>Antigravity IDE & Terminal</b><br/>Console Operacional do Arquiteto"]:::ide
+        Config["<b>mcp.config.json</b><br/>Manifesto de Barramento MCP"]:::ide
+        IDE --> Config
     end
 
-    subgraph ConfigLayer["Manifesto MCP"]
-        CONF["mcp.config.json<br/>(Registros stdio & HTTP SSE)"]:::config
+    subgraph Servidores ["2. Servidores MCP"]
+        direction TB
+        MCP_Cortex["<b>pcl-cortex :20150</b><br/>Geração de Diagramas & Specs"]:::srv
+        MCP_Ntb["<b>gemini-notebooklm</b><br/>Pesquisa Profunda & Síntese RAG"]:::srv
+        MCP_Laya["<b>pcl-laya :20140</b><br/>NLI System One em CPU INT8"]:::srv
     end
 
-    subgraph MCPServers["Servidores MCP Ativos"]
-        direction LR
-        CX_MCP["pcl-cortex MCP Server<br/>(Cortex Visual Engine v2.12)"]:::server
-        LAYA_MCP["pcl-laya MCP Server<br/>(System One & NLI Neural :20140)"]:::server
-        NLM_MCP["gemini-notebooklm MCP Server<br/>(Pesquisa & RAG Context)"]:::server
+    subgraph Dados ["3. Acervo & Persistência"]
+        direction TB
+        Repo["<b>Repositório Git PCL AEOS</b><br/>Código Fonte, RFCs & Documentos"]:::db
+        PG["<b>PostgreSQL / PGVector :5432</b><br/>Memória Tripartida & Embeddings"]:::db
     end
 
-    subgraph TargetWorkspace["Host Filesystem & Runtime"]
-        direction LR
-        WS["Repositório PCL AEOS<br/>(Workspace & Documentação Viva)"]:::target
-        MEM["Memória Híbrida & Vector DB<br/>(pcl-db PostgreSQL / pgvector)"]:::target
-    end
+    Config -->|"Visualização"| MCP_Cortex
+    Config -->|"Pesquisa"| MCP_Ntb
+    Config -->|"Classificação"| MCP_Laya
 
-    IDE --> CONF
-    IDE -->|Invoca Ferramentas Visuais| CX_MCP
-    IDE -->|Classificação & Contradições| LAYA_MCP
-    IDE -->|Consultas de Pesquisa| NLM_MCP
-    CX_MCP -->|Gera HTML Interativo & SVG| WS
-    LAYA_MCP -->|Validação Semântica Rápida| MEM
-    NLM_MCP -->|Leitura de Contexto & KIs| WS
+    MCP_Cortex -->|"Armazena Docs"| Repo
+    MCP_Ntb -->|"Consulta Acervo"| Repo
+    MCP_Laya -->|"Grava Vetores"| PG
 ```
 
 ---

@@ -39,15 +39,17 @@ Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamen
 2. **Orientação por Domínio**:
    - Organogramas, árvores hierárquicas e matrizes de agentes devem utilizar estritamente **orientação vertical (`graph TD`)**.
    - Pipelines lineares de precedência e etapas de ciclo de vida devem utilizar **orientação horizontal (`graph LR`)**.
-3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da fol# Princípios Operacionais
+3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da folha.
+
+# Princípios Operacionais
 
 Toda operação deverá obedecer rigorosamente à seguinte precedência:
 
 ```mermaid
-graph LR
-    classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef step fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
     
-    A["1. Architecture"]:::step --> B["2. Governance"]:::step --> C["3. Knowledge"]:::step --> D["4. Memory"]:::step --> E["5. Execution"]:::step --> F["6. Validation"]:::step --> G["7. Learning"]:::step
+    A["<b>1. Architecture</b><br/>Fundação & Specs"]:::step --> B["<b>2. Governance</b><br/>Regras & Políticas"]:::step --> C["<b>3. Knowledge</b><br/>Acervo & KIs"]:::step --> D["<b>4. Memory</b><br/>Fatos & Receipts"]:::step --> E["<b>5. Execution</b><br/>Células & TDD"]:::step --> F["<b>6. Validation</b><br/>QA & Stage Gates"]:::step --> G["<b>7. Learning</b><br/>Feedback & Melhoria"]:::step
 ```
 
 Nenhuma automação poderá inverter esta ordem.
@@ -59,10 +61,10 @@ Nenhuma automação poderá inverter esta ordem.
 O AEOS opera sobre sete capacidades permanentes:
 
 ```mermaid
-graph LR
-    classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef cap fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
 
-    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap --> C3["3. Knowledge"]:::cap --> C4["4. Memory"]:::cap --> C5["5. Agents"]:::cap --> C6["6. Runtime"]:::cap --> C7["7. Projects & Verticals"]:::cap
+    C1["<b>1. Architecture</b><br/>Specs & RFCs"]:::cap --> C2["<b>2. Governance</b><br/>Auditoria & Gates"]:::cap --> C3["<b>3. Knowledge</b><br/>Base & Manuais"]:::cap --> C4["<b>4. Memory</b><br/>Tripartida & PG"]:::cap --> C5["<b>5. Agents</b><br/>15 Agentes TLC"]:::cap --> C6["<b>6. Runtime</b><br/>Híbrido & Failover"]:::cap --> C7["<b>7. Verticals</b><br/>15 Frentes B2B"]:::cap
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
@@ -74,55 +76,37 @@ Conforme registrado no [ADR-005](../docs/adr/ADR-005-multi-vertical-ai-holding-m
 ## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
-graph TD
-    classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
-    classDef products fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+flowchart LR
+    classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef products fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
 
-    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
-        direction LR
-        C1["🧠 Cortex Engine"]:::platform
-        C2["⚡ OmniRoute :20130"]:::platform
-        C3["⭐ Laya System One :20140"]:::platform
-        C4["💾 PGVector RAG :5432"]:::platform
-        C5["🤖 Paperclip :3100"]:::platform
-        C6["🛠️ TLC Agent Skills"]:::platform
+    subgraph Layer1 ["Camada 1: Plataforma Core ($0)"]
+        direction TB
+        C1["🧠 <b>Cortex Engine & OmniRoute</b><br/>Orquestração :20130"]:::platform
+        C2["⭐ <b>Laya System One :20140</b><br/>Classificador NLI em CPU"]:::platform
+        C3["💾 <b>PGVector RAG & Paperclip</b><br/>Memória :5432 & Tasks :3100"]:::platform
+        C1 --> C2 --> C3
     end
 
-    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        V1["1. Software Studio"]:::verticals
-        V2["2. Marketing & Growth"]:::verticals
-        V3["3. RevOps & CRM"]:::verticals
-        V4["4. AI Consulting"]:::verticals
-        V5["5. Data & Analytics"]:::verticals
-        V6["6. AI Academy"]:::verticals
-        V7["7. Jurídico & Compliance"]:::verticals
-        V8["8. RH & People Ops"]:::verticals
-        V9["9. FinOps & Pricing"]:::verticals
-        V10["10. Customer Success"]:::verticals
-        V11["11. Mídia & Podcasts"]:::verticals
-        V12["12. Venture Studio"]:::verticals
-        V13["13. DevSecOps Studio"]:::verticals
-        V14["14. E-Commerce Pricing"]:::verticals
-        V15["15. GovTech & RFP"]:::verticals
-        
-        V1 --- V2 --- V3 --- V4 --- V5
-        V6 --- V7 --- V8 --- V9 --- V10
-        V11 --- V12 --- V13 --- V14 --- V15
+    subgraph Layer2 ["Camada 2: 15 Verticais de Negócio B2B"]
+        direction TB
+        V1["💻 <b>Engenharia & Dados</b><br/>Studio • AI Consulting • DevSecOps"]:::verticals
+        V2["📈 <b>Marketing & Receita</b><br/>RevOps • Mídia/Podcasts • E-Commerce"]:::verticals
+        V3["⚖️ <b>Governança & Pessoas</b><br/>AI Academy • Compliance • FinOps • CS"]:::verticals
+        V1 --> V2 --> V3
     end
 
-    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
-        direction LR
-        P1["📦 Proposta Fechada"]:::products
-        P2["🔄 Retainers Mensais"]:::products
-        P3["🚀 Micro-SaaS White-Label"]:::products
-        P4["🔌 APIs & Agentes"]:::products
-        P5["🎓 Assinaturas Academy"]:::products
+    subgraph Layer3 ["Camada 3: Monetização & Produtos"]
+        direction TB
+        P1["📦 <b>Proposta Fechada & Retainers</b><br/>Contratos Corporativos Mensais"]:::products
+        P2["🚀 <b>Micro-SaaS White-Label</b><br/>Plataformas de IA Customizadas"]:::products
+        P3["🔌 <b>APIs, Agentes & Academy</b><br/>Assinaturas & Serviços Especializados"]:::products
+        P1 --> P2 --> P3
     end
 
-    Layer1 --> Layer2
-    Layer2 --> Layer3
+    Layer1 ==>|"Infraestrutura Core"| Layer2
+    Layer2 ==>|"Monetização & Escala"| Layer3
 ```
 
 
@@ -322,11 +306,11 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
 
 ```mermaid
-graph LR
-    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
-    classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef auth fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
 
-    U["👑 Operador Humano"]:::top --> Arc["1. Architecture"]:::auth --> Gov["2. Governance"]:::auth --> Spec["3. Specifications"]:::auth --> EC["4. Execution Cell"]:::auth --> RT["5. Runtime"]:::auth --> Agt["6. Agentes"]:::auth --> Mdl["7. Modelos de IA"]:::auth
+    U["👑 <b>Operador Humano</b><br/>Liderança Soberana"]:::top --> Arc["<b>1. Architecture</b><br/>Arquitetura Viva"]:::auth --> Gov["<b>2. Governance</b><br/>Políticas & Limites"]:::auth --> Spec["<b>3. Specifications</b><br/>RFCs & Contratos"]:::auth --> EC["<b>4. Execution Cell</b><br/>Célula Confinada"]:::auth --> RT["<b>5. Runtime</b><br/>Híbrido :20130"]:::auth --> Agt["<b>6. Agentes</b><br/>Squads TLC"]:::auth --> Mdl["<b>7. Modelos IA</b><br/>LLMs & SLMs"]:::auth
 ```
 
 Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
@@ -338,27 +322,43 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 Toda iniciativa percorre o seguinte fluxo em 3 fases:
 
 ```mermaid
-graph TD
-    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
-    classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
-    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+flowchart LR
+    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef phase2 fill:#2e1065,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
 
-    subgraph P1["Fase 1: Concepção & Governança"]
-        direction LR
-        O["1. Opportunity"]:::phase1 --> AC["2. Arch Check"]:::phase1 --> GC["3. Gov Check"]:::phase1 --> ECC["4. Cell Creation"]:::phase1 --> MS["5. Method Selection"]:::phase1
+    subgraph Fase1 ["Fase 1: Concepção & Governança"]
+        direction TB
+        F1_1["<b>1. Opportunity</b><br/>Identificação & Demanda"]:::phase1
+        F1_2["<b>2. Arch Check</b><br/>Alinhamento Arquitetural"]:::phase1
+        F1_3["<b>3. Gov Check</b><br/>Auditoria de Governança"]:::phase1
+        F1_4["<b>4. Cell Creation</b><br/>Instanciação da Célula"]:::phase1
+        F1_5["<b>5. Method Selection</b><br/>Definição do Método"]:::phase1
+        F1_1 --> F1_2 --> F1_3 --> F1_4 --> F1_5
     end
 
-    subgraph P2["Fase 2: Especificação & Execução"]
-        direction LR
-        SP["6. Specification"]:::phase2 --> DS["7. Design"]:::phase2 --> PL["8. Planning"]:::phase2 --> EX["9. Execution"]:::phase2 --> VA["10. Validation"]:::phase2
+    subgraph Fase2 ["Fase 2: Especificação & Execução"]
+        direction TB
+        F2_1["<b>6. Specification</b><br/>RFC & Contratos de Spec"]:::phase2
+        F2_2["<b>7. Design</b><br/>Arquitetura da Solução"]:::phase2
+        F2_3["<b>8. Planning</b><br/>Backlog & Tasks Detalhadas"]:::phase2
+        F2_4["<b>9. Execution</b><br/>Construção & TDD Confinado"]:::phase2
+        F2_5["<b>10. Validation</b><br/>Bateria de Testes & QA"]:::phase2
+        F2_1 --> F2_2 --> F2_3 --> F2_4 --> F2_5
     end
 
-    subgraph P3["Fase 3: Implantação & Aprendizado"]
-        direction LR
-        DP["11. Deployment"]:::phase3 --> OP["12. Operation"]:::phase3 --> LE["13. Learning"]:::phase3 --> KU["14. Knowledge"]:::phase3 --> MU["15. Memory"]:::phase3
+    subgraph Fase3 ["Fase 3: Implantação & Aprendizado"]
+        direction TB
+        F3_1["<b>11. Deployment</b><br/>Entrega & Homologação"]:::phase3
+        F3_2["<b>12. Operation</b><br/>Operação Contínua 24/7"]:::phase3
+        F3_3["<b>13. Learning</b><br/>Captura de Aprendizados"]:::phase3
+        F3_4["<b>14. Knowledge</b><br/>Gravação no Acervo Digital"]:::phase3
+        F3_5["<b>15. Memory</b><br/>Indexação em PGVector"]:::phase3
+        F3_1 --> F3_2 --> F3_3 --> F3_4 --> F3_5
     end
 
-    P1 --> P2 --> P3
+    Fase1 ==>|"Aprovação do Gate"| Fase2
+    Fase2 ==>|"Validação Concluída"| Fase3
 ```
 
 Cada transição exige critérios explícitos.

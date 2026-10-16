@@ -64,25 +64,35 @@ Total Avaliado                 39                   21                 60
 Em sistemas corporativos operando com agentes autônomos, o volume de verificações de consistência factual, triagem de intenções e reconciliação de memória atinge facilmente centenas de milhares de operações por mês.
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px', 'fontFamily': 'Inter, sans-serif' }}%%
-flowchart TD
-    subgraph NuvemTradicional["❌ Paradigma Tradicional: Dreno de Capital"]
-        Req1["500.000 Reconciliações / Ano"] --> Cloud["Chamadas para APIs de Nuvem"]
-        Cloud --> Fatura["Fatura Anual: <b>$1.500 a $15.000 USD</b>"]
-        Cloud --> Fila["Fila de Espera: <b>187 horas</b> acumuladas"]
+flowchart LR
+    classDef input fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef llm fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#ffffff;
+    classDef result fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+
+    Entrada["<b>Premissa & Hipótese</b><br/>Verificação de Fato"]:::input
+
+    subgraph RotaLaya ["⚡ Laya System One (CPU INT8)"]
+        direction TB
+        ONNX["<b>Cross-Encoder ONNX</b><br/>22.3 ms • 0 MB VRAM • $0.00"]:::laya
+        DecLaya["<b>Decisão Tipada</b><br/>Entailment / Contradiction"]:::laya
+        ONNX --> DecLaya
     end
 
-    subgraph PCL_Soberano["⭐ Paradigma PCL AEOS: EBITDA Shield"]
-        Req2["500.000 Reconciliações / Ano"] --> Laya["Coprocessador Laya NLI (CPU)"]
-        Laya --> CustoZero["Fatura Anual: <b>$0.00 USD</b>"]
-        Laya --> TempoZero["Tempo Total: <b>~3,8 horas</b> (98% mais ágil)"]
+    subgraph RotaLLM ["☁️ LLM Nuvem (Autoregressivo)"]
+        direction TB
+        API["<b>Chamada API Nuvem</b><br/>1.840 ms • $0.015 / req"]:::llm
+        DecLLM["<b>Parsing de JSON</b><br/>Risco de Alucinação"]:::llm
+        API --> DecLLM
     end
 
-    classDef nuvem fill:#450a0a,stroke:#f87171,stroke-width:2px,color:#fff;
-    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#fff;
+    Saida["🎯 <b>Resultado Auditado</b><br/>Governança PCL AEOS"]:::result
 
-    class Req1,Cloud,Fatura,Fila nuvem;
-    class Req2,Laya,CustoZero,TempoZero laya;
+    Entrada ==>|"Pipeline Padrão (< 30ms)"| ONNX
+    Entrada -.->|"Fallback Raciocínio"| API
+
+    DecLaya ==>|"Homologação Imediata"| Saida
+    DecLLM -.->|"Homologação Assíncrona"| Saida
 ```
 
 ### Projeção para 500.000 Operações/Ano:

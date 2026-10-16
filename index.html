@@ -1019,6 +1019,9 @@
             </svg>
             GitHub
           </a>
+          <a href="catalogo_diagramas_mermaid.html" target="_blank" rel="noopener noreferrer" class="badge badge-link" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.2); color: #fff;">
+            📊 Catálogo de Diagramas Mermaid (v7) ↗
+          </a>
           <a href="docs/architecture-v2-executive-guide.md" class="badge badge-link link-doc" data-doc-title="Guia Executivo e Conceitual v2.0 (3 Minutos)" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.15);">
             📖 Guia Executivo (3 Minutos) ↗
           </a>
@@ -1048,6 +1051,7 @@
       <a href="#fase-4" class="phase-tab"><span class="phase-num">4</span> Backup & DRP</a>
       <a href="#fase-5" class="phase-tab"><span class="phase-num">5</span> Infra & Governança</a>
       <a href="#fase-6" class="phase-tab"><span class="phase-num">6</span> Failover Local</a>
+      <a href="catalogo_diagramas_mermaid.html" target="_blank" rel="noopener noreferrer" class="phase-tab" style="border-color: rgba(56, 189, 248, 0.6); color: #38bdf8;"><span class="phase-num" style="background:#38bdf8; color:#0b0f19;">📊</span> Diagramas v7</a>
     </div>
   </nav>
 
@@ -1202,24 +1206,24 @@ graph LR
         <pre class="mermaid">
 sequenceDiagram
     autonumber
-    actor Humano as Operador Humano
-    participant PL as Agente Planner
-    participant BL as Agente Builder
-    participant QA as Agente QA/Reviewer
-    participant AD as Agente Auditor
-    
-    Humano->>PL: Aprova specify.md (Gate 1)
-    PL->>BL: Cria e entrega tasks.md (Backlog)
-    BL->>BL: Executa edições cirúrgicas (máx 3 retentativas)
-    BL->>QA: Solicita validação (envia código e diffs)
-    QA->>QA: Executa auditoria adversária e testes por observação
-    alt Testes Falham / Adulteração Detectada
-        QA-->>BL: Emite REFUTED com logs de erro
-    else Testes e Diffs Aprovados
-        QA->>AD: Solicita auditoria de compliance (VERIFIED)
-        AD->>AD: Verifica padrões e vazamento de chaves
-        AD-->>Humano: Entrega validate.md e relatório de compliance
-        Humano->>Humano: Assina e aprova Stage Gate (STATE.md)
+    actor Operador as 👑 Operador Humano (Soberano)
+    participant Planner as 📋 Planner
+    participant Builder as 🛠️ Builder
+    participant QA as 🧪 QA / Reviewer
+    participant Auditor as ⚖️ Auditor
+
+    Operador->>Planner: Aprova especificação e plano
+    Planner->>Builder: Entrega backlog detalhado (tasks.md)
+    loop Executa edições no código (máx. 3 retries)
+        Builder->>QA: Submete diffs para validação
+        QA->>QA: Executa suíte de testes
+    end
+    alt Sucesso: Aprovado
+        QA->>Auditor: Submete relatório de auditoria
+        Auditor->>Operador: Solicita assinatura final do Gate
+        Operador->>Auditor: Assina selamento em STATE.md
+    else Falha: Rejeitado
+        QA->>Builder: Retorna logs de erro para correção
     end
         </pre>
       </div>
@@ -1806,23 +1810,43 @@ graph LR
 
       <div class="mermaid-box">
         <pre class="mermaid">
-flowchart TD
-    Req[Requisição do PaperClip / Agente] --> OmniRoute[OmniRoute AI Gateway :20130]
-    
-    subgraph ModoOnline [1. Operação Primária Online - 0 MB VRAM]
-        OmniRoute -->|Rede Ativa| CloudAPI[Cloud Free Tier / OpenRouter]
-        CloudAPI --> SuccessCloud((Resposta Cloud))
+flowchart LR
+    classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef c0 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef c1 fill:#78350f,stroke:#f59e0b,stroke-width:1.5px,color:#ffffff;
+    classDef c2 fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef out fill:#022c22,stroke:#10b981,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Entrada ["1. Ponto de Entrada"]
+        direction TB
+        Harness["<b>Agente PCL</b><br/>Antigravity IDE & Terminal"]:::req
+        Gateway["<b>OmniRoute Gateway</b><br/>Porta :20130"]:::req
+        Harness --> Gateway
     end
-    
-    subgraph FailoverL1 [2. Failover Nível 1 - Alta Velocidade]
-        CloudAPI -.->|Timeout / Queda de Rede| OllamaLocal[Ollama Local :11434<br>qwen2.5-coder:7b-instruct-q4_K_M]
-        OllamaLocal -->|100% VRAM ~4.7 GB| SuccessOllama((Resposta Nível 1))
+
+    subgraph Tier0 ["2. Rota Primária: Nuvem"]
+        direction LR
+        APIs["<b>APIs Soberanas Free Tier</b><br/>Gemini 2.5 Pro / DeepSeek V3"]:::c0
+        RespCloud["<b>Resposta Nuvem</b><br/>Latência: ~1.5s • Zero Custo"]:::out
+        APIs --> RespCloud
     end
-    
-    subgraph FailoverL2 [3. Failover Nível 2 - Lógica MoE / Refatoração]
-        OllamaLocal -.->|Se Indisponível / Tarefa MoE| LMStudioLocal[LM Studio :1234<br>DeepSeek-Coder-V2-Lite MoE Q4_K_S]
-        LMStudioLocal -->|GPU Offload VRAM+RAM| SuccessLMS((Resposta Nível 2))
+
+    subgraph TierLocal ["3. Contingência: Local (0 MB VRAM)"]
+        direction LR
+        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (CPU)"]:::c1
+        L2["<b>LM Studio :1234</b><br/>DeepSeek-Coder-V2 (CPU)"]:::c2
+        RespLocal["<b>Resposta Local</b><br/>0 MB VRAM • 100% Offline"]:::out
+        L1 -.->|"Fallback L2"| L2
+        L2 --> RespLocal
     end
+
+    Saida["🎯 <b>Execução Concluída</b><br/>Retorno ao Agente IDE"]:::out
+
+    Gateway ==>|"1. Conexão Normal"| APIs
+    Gateway -.->|"2. Failover Timeout"| L1
+
+    RespCloud ==>|"Resposta Nuvem"| Saida
+    RespLocal -.->|"Resposta Offline"| Saida
         </pre>
       </div>
 
@@ -2353,49 +2377,46 @@ Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica di
 Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
-flowchart TD
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
-    classDef memRota fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef auditRota fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#ffffff;
-    classDef biblioRota fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef especRota fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#ffffff;
-    classDef shield fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
+flowchart LR
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef mem fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef audit fill:#4c1d95,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef llm fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#ffffff;
+    classDef shield fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef output fill:#032830,stroke:#22d3ee,stroke-width:1.5px,color:#ffffff;
 
-    Cliente(["👤 Operador Humano / Liderança (Comando Soberano)"]):::cliente
+    User["👤 <b>Operador Humano</b><br/>Liderança & Decisão Soberana"]:::cliente
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ LÓGICO NLI (Coprocessador Laya)"]
-        Laya["<b>Juiz Lógico NLI & Triagem Semântica Express</b><br/>Inferência ultrarrápida em CPU local (22.3ms • 0 MB VRAM • Custo $0.00)<br/>Classifica a intenção e audita contradições com 93.3% de precisão"]:::portaria
-        Filtro{"Fato já validado ou<br/>exige raciocínio inédito?"}:::portaria
-        Laya --> Filtro
+    subgraph Triagem ["⚡ Triagem Express Laya (CPU 22ms)"]
+        direction TB
+        Laya["<b>Laya System One</b><br/>NLI em CPU INT8 & Guardrails"]:::laya
+        Decisao{"Fato validado<br/>no acervo?"}:::laya
+        Laya --> Decisao
     end
 
-    subgraph Execucao["🏢 CENTRAL DE OPERAÇÕES: DUAS ROTAS CONCORRENTES DE EXECUÇÃO"]
-        subgraph MemoriaPCL["📋 ROTA RÁPIDA: MEMÓRIA TRIPARTIDA SOBERANA (Instantâneo • Custo $0.00)"]
-            direction TB
-            Claims["<b>1. Fichas Técnicas de Fatos Validados (memory.claims)</b><br/>Parâmetros homologados para consulta imediata ('Porta :5432', 'Backup R2')"]:::memRota
-            Recibos["<b>2. Trilha de Auditoria Criptográfica (memory.evidence_receipts)</b><br/>Hash SHA-256 e commit Git vinculando a evidência sem risco de alucinação"]:::auditRota
-            Docs["<b>3. Base de Conhecimento Central (Acervo Digital PCL)</b><br/>Código-fonte, manuais, políticas e normas indexados em blocos vetoriais 768D"]:::biblioRota
-            Claims <-->|"Valida Selo Digital"| Recibos
-            Recibos <-->|"Rastreia Documento-Fonte"| Docs
-        end
-
-        subgraph Especialistas["🧠 ROTA CRIATIVA: TIME DE ESPECIALISTAS SENIORES (Modelos de Fronteira)"]
-            direction TB
-            LLM["<b>Engenharia de Soluções & Raciocínio Profundo</b><br/>Modelos LLM acionados sob demanda para desenhar novas soluções e códigos complexos"]:::especRota
-            Shield["<b>EBITDA Shield & Governança de FinOps</b><br/>Proteção algorítmica contra consumo desnecessário de tokens e inferências de nuvem"]:::shield
-            LLM --- Shield
-        end
+    subgraph RotaRapida ["📋 Rota Rápida: Memória Tripartida ($0.00)"]
+        direction LR
+        Claims["<b>1. Fichas de Fatos</b><br/>memory.claims validados"]:::mem
+        Receipts["<b>2. Trilha Digital</b><br/>Evidências SHA-256"]:::audit
+        Kb["<b>3. Base Acervo</b><br/>Documentos & Código"]:::mem
+        Claims --- Receipts --- Kb
     end
 
-    %% Fluxos Operacionais Claros
-    Cliente -->|"Instrução ou Pergunta"| Laya
-    Filtro -->|"Sim: Fato Homologado"| Claims
-    Recibos -->|"Resposta Auditada em < 50ms"| Cliente
+    subgraph RotaCriativa ["🧠 Rota Criativa: LLMs & FinOps"]
+        direction LR
+        Modelos["<b>Engenharia & Soluções</b><br/>Raciocínio Profundo Multi-Agente"]:::llm
+        FinOps["<b>EBITDA Shield</b><br/>Governança de Custos & Tokens"]:::shield
+        Modelos --- FinOps
+    end
 
-    Filtro -->|"Não: Exige Raciocínio"| LLM
-    Shield -->|"Nova Solução Homologada"| Cliente
+    Output["🚀 <b>Entrega Homologada</b><br/>Retorno Imediato ao Operador"]:::output
+
+    User -->|"Instrução"| Laya
+    Decisao -->|"Sim: Fato"| Claims
+    Decisao -->|"Não: Criativo"| Modelos
+    Receipts -->|"< 50ms"| Output
+    FinOps -->|"Solução Validada"| Output
 ```
 
 
@@ -2450,6 +2471,8 @@ Se o computador queimar ou o disco for formatado, o PCL AEOS foi projetado e **a
 | **Latência & Eficácia Laya NLI** | **22.3 ms (93.3% Recall)** | Juiz lógico em CPU com 0 MB VRAM (60x speedup) |
 | **Tempo de Recuperação (RTO)** | **7,18 s (SLA $\le$ 15min)** | Continuidade de negócio inabalável |
 | **Integridade de Fatos** | **100% Criptografado** | Rastreabilidade do commit à resposta |
+
+
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/strategy/README.md">
 # Artigo Técnico: Estratégia Corporativa & Visão PCL AEOS
@@ -2472,7 +2495,7 @@ O **PromptCoreLabs_AEOS** (AI Engineering Operating System) é um sistema operac
 ---
 
 ## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[c4-l1-context.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html)**: System Context Diagram Nível C4 Level 1.
+- 🟢 **[c4-l1-context.html](../../diagrams/interactive/c4-l1-context.html)**: System Context Diagram Nível C4 Level 1.
 
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/runtime/README.md">
@@ -2531,9 +2554,9 @@ sequenceDiagram
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟡 **[seq-omniroute-routing.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
-- 🟡 **[seq-tripartite-memory-drp.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
-- 🟡 **[life-cortex-micro-loop.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
+- 🟡 **[seq-omniroute-routing.html](../../diagrams/interactive/seq-omniroute-routing.html)**: Ciclo de vida da requisição no OmniRoute.
+- 🟡 **[seq-tripartite-memory-drp.html](../../diagrams/interactive/seq-tripartite-memory-drp.html)**: Ciclo de vida da Memória Tripartida & DRP.
+- 🟡 **[life-cortex-micro-loop.html](../../diagrams/interactive/life-cortex-micro-loop.html)**: Ciclo de vida do micro-loop de execução dos agentes.
 
 ---
 
@@ -2552,12 +2575,15 @@ NOTAÇÃO C4 MODEL E ARQUITETURA MULTINÍVEL
 
 O modelo C4 organiza a visualização do PCL AEOS em quatro níveis de abstração progressiva:
 
-| Nível C4 | Nome | Arquivo de Especificação | Diagrama Interativo Cortex |
+| Nível C4 | Nome | Modelo Estruturado (JSON) | Diagrama Interativo Cortex |
 |---|---|---|---|
-| **C4 Level 1** | System Context | [l1-context.md](l1-context.md) | [c4-l1-context.html](../../diagrams/interactive/c4-l1-context.html) |
-| **C4 Level 2** | Containers | [l2-containers.md](l2-containers.md) | [c4-l2-containers.html](../../diagrams/interactive/c4-l2-containers.html) |
-| **C4 Level 3** | Components | [l3-components.md](l3-components.md) | [c4-l3-components.html](../../diagrams/interactive/c4-l3-components.html) |
-| **C4 Level 4** | Code & Specs | [l4-code-specs.md](l4-code-specs.md) | [c4-l4-cortex-engine.html](../../diagrams/interactive/c4-l4-cortex-engine.html) |
+| **C4 Level 1** | System Context | [c4-l1-context.json](../../diagrams/c4-l1-context.json) | [c4-l1-context.html](../../diagrams/interactive/c4-l1-context.html) |
+| **C4 Level 2** | Containers | [c4-l2-containers.json](../../diagrams/c4-l2-containers.json) | [c4-l2-containers.html](../../diagrams/interactive/c4-l2-containers.html) |
+| **C4 Level 3** | Components | [c4-l3-components.json](../../diagrams/c4-l3-components.json) | [c4-l3-components.html](../../diagrams/interactive/c4-l3-components.html) |
+| **C4 Level 4** | Code & Specs | [c4-l4-cortex-engine.json](../../diagrams/c4-l4-cortex-engine.json) | [c4-l4-cortex-engine.html](../../diagrams/interactive/c4-l4-cortex-engine.html) |
+
+> 📑 **Especificação Arquitetural Canônica:**  
+> A especificação formal e unificada de contêineres e limites de módulos do ecossistema é regida pelo [Boundary Register Canônico](../../../pcl-aeos-harmonization/design/canonical-architecture.md).
 
 ---
 *PromptCore Labs — Living Architecture PCL AEOS*
@@ -2638,15 +2664,17 @@ Todo artefato visual e diagramação no ecossistema PCL-AEOS deve obrigatoriamen
 2. **Orientação por Domínio**:
    - Organogramas, árvores hierárquicas e matrizes de agentes devem utilizar estritamente **orientação vertical (`graph TD`)**.
    - Pipelines lineares de precedência e etapas de ciclo de vida devem utilizar **orientação horizontal (`graph LR`)**.
-3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da fol# Princípios Operacionais
+3. **Normalização de Escala de Impressão (`@media print`)**: As regras de exportação/impressão em PDF não podem clamping arbitrários de altura (`max-height`). O layout visual deve expandir a 100% da largura útil da folha.
+
+# Princípios Operacionais
 
 Toda operação deverá obedecer rigorosamente à seguinte precedência:
 
 ```mermaid
-graph LR
-    classDef step fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef step fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
     
-    A["1. Architecture"]:::step --> B["2. Governance"]:::step --> C["3. Knowledge"]:::step --> D["4. Memory"]:::step --> E["5. Execution"]:::step --> F["6. Validation"]:::step --> G["7. Learning"]:::step
+    A["<b>1. Architecture</b><br/>Fundação & Specs"]:::step --> B["<b>2. Governance</b><br/>Regras & Políticas"]:::step --> C["<b>3. Knowledge</b><br/>Acervo & KIs"]:::step --> D["<b>4. Memory</b><br/>Fatos & Receipts"]:::step --> E["<b>5. Execution</b><br/>Células & TDD"]:::step --> F["<b>6. Validation</b><br/>QA & Stage Gates"]:::step --> G["<b>7. Learning</b><br/>Feedback & Melhoria"]:::step
 ```
 
 Nenhuma automação poderá inverter esta ordem.
@@ -2658,67 +2686,54 @@ Nenhuma automação poderá inverter esta ordem.
 O AEOS opera sobre sete capacidades permanentes:
 
 ```mermaid
-graph LR
-    classDef cap fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef cap fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
 
-    C1["1. Architecture"]:::cap --> C2["2. Governance"]:::cap --> C3["3. Knowledge"]:::cap --> C4["4. Memory"]:::cap --> C5["5. Agents"]:::cap --> C6["6. Runtime"]:::cap --> C7["7. Projects & Verticals"]:::cap
+    C1["<b>1. Architecture</b><br/>Specs & RFCs"]:::cap --> C2["<b>2. Governance</b><br/>Auditoria & Gates"]:::cap --> C3["<b>3. Knowledge</b><br/>Base & Manuais"]:::cap --> C4["<b>4. Memory</b><br/>Tripartida & PG"]:::cap --> C5["<b>5. Agents</b><br/>15 Agentes TLC"]:::cap --> C6["<b>6. Runtime</b><br/>Híbrido & Failover"]:::cap --> C7["<b>7. Verticals</b><br/>15 Frentes B2B"]:::cap
 ```
 
 Cada camada fornece capacidades para a camada seguinte.
 
 Nenhuma camada inferior redefine responsabilidades das superiores.
 
-Conforme registrado no [ADR-005](file:///c:/PromptCore_Labs/docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
+Conforme registrado no [ADR-005](../docs/adr/ADR-005-multi-vertical-ai-holding-monetization-model.md), a Camada 7 (`Projects & Verticals`) opera no modelo de **Holding Digital AI-Orchestrated (3 Camadas: Plataforma -> 15 Verticais B2B -> Produtos/SaaS)**, alavancando os clusters de agentes especializados para entregar serviços e produtos recorrentes com custo marginal zero.
 
 ## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
 
 ```mermaid
-graph TD
-    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
-    classDef verticals fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
-    classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef products fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
 
-    subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
-        C1["🧠 Cortex Engine"]:::platform
-        C2["⚡ OmniRoute :20130"]:::platform
-        C3["🤖 Paperclip :3100"]:::platform
-        C4["💾 PGVector RAG"]:::platform
-        C5["🛠️ TLC Agent Skills"]:::platform
+    subgraph Layer1 ["Camada 1: Plataforma Core ($0)"]
+        direction TB
+        C1["🧠 <b>Cortex Engine & OmniRoute</b><br/>Orquestração :20130"]:::platform
+        C2["⭐ <b>Laya System One :20140</b><br/>Classificador NLI em CPU"]:::platform
+        C3["💾 <b>PGVector RAG & Paperclip</b><br/>Memória :5432 & Tasks :3100"]:::platform
+        C1 --> C2 --> C3
     end
 
-    subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
-        V1["1. Software Studio"]:::verticals
-        V2["2. Marketing & Growth"]:::verticals
-        V3["3. RevOps & CRM"]:::verticals
-        V4["4. AI Consulting"]:::verticals
-        V5["5. Data & Analytics"]:::verticals
-        V6["6. AI Academy"]:::verticals
-        V7["7. Jurídico & Compliance"]:::verticals
-        V8["8. RH & People Ops"]:::verticals
-        V9["9. FinOps & Pricing"]:::verticals
-        V10["10. Customer Success"]:::verticals
-        V11["11. Mídia & Podcasts"]:::verticals
-        V12["12. Venture Studio"]:::verticals
-        V13["13. DevSecOps Studio"]:::verticals
-        V14["14. E-Commerce Pricing"]:::verticals
-        V15["15. GovTech & RFP"]:::verticals
-        
-        V1 --- V2 --- V3 --- V4 --- V5
-        V6 --- V7 --- V8 --- V9 --- V10
-        V11 --- V12 --- V13 --- V14 --- V15
+    subgraph Layer2 ["Camada 2: 15 Verticais de Negócio B2B"]
+        direction TB
+        V1["💻 <b>Engenharia & Dados</b><br/>Studio • AI Consulting • DevSecOps"]:::verticals
+        V2["📈 <b>Marketing & Receita</b><br/>RevOps • Mídia/Podcasts • E-Commerce"]:::verticals
+        V3["⚖️ <b>Governança & Pessoas</b><br/>AI Academy • Compliance • FinOps • CS"]:::verticals
+        V1 --> V2 --> V3
     end
 
-    subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
-        P1["📦 Proposta Fechada"]:::products
-        P2["🔄 Retainers Mensais"]:::products
-        P3["🚀 Micro-SaaS White-Label"]:::products
-        P4["🔌 APIs & Agentes"]:::products
-        P5["🎓 Assinaturas Academy"]:::products
+    subgraph Layer3 ["Camada 3: Monetização & Produtos"]
+        direction TB
+        P1["📦 <b>Proposta Fechada & Retainers</b><br/>Contratos Corporativos Mensais"]:::products
+        P2["🚀 <b>Micro-SaaS White-Label</b><br/>Plataformas de IA Customizadas"]:::products
+        P3["🔌 <b>APIs, Agentes & Academy</b><br/>Assinaturas & Serviços Especializados"]:::products
+        P1 --> P2 --> P3
     end
 
-    Layer1 --> Layer2
-    Layer2 --> Layer3
+    Layer1 ==>|"Infraestrutura Core"| Layer2
+    Layer2 ==>|"Monetização & Escala"| Layer3
 ```
+
 
 ---
 
@@ -2849,7 +2864,7 @@ Nenhum agente possui autoridade arquitetural.
 
 ## Mapeamento de Agentes, Sub-Agentes e Distribuição de Skills
 
-A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
+A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes Especialistas**, cujas responsabilidades e habilidades são distribuídas em 4 camadas funcionais (para consulta detalhada, veja o [Manual dos Agentes](../projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md)):
 
 1. **Squad Core de Engenharia (Spec-Driven Loop)**:
    - **Planner Agent**: Decomposição de especificações (`specify.md`) e planejamento de backlog (`tasks.md`).
@@ -2916,11 +2931,11 @@ A execução operacional do PCL-AEOS é conduzida por uma Squad de **15 Agentes 
 Toda decisão segue obrigatoriamente a hierarquia horizontal de autoridade soberana abaixo:
 
 ```mermaid
-graph LR
-    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#fff;
-    classDef auth fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
+flowchart LR
+    classDef top fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef auth fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
 
-    U["👑 Operador Humano"]:::top --> Arc["1. Architecture"]:::auth --> Gov["2. Governance"]:::auth --> Spec["3. Specifications"]:::auth --> EC["4. Execution Cell"]:::auth --> RT["5. Runtime"]:::auth --> Agt["6. Agentes"]:::auth --> Mdl["7. Modelos de IA"]:::auth
+    U["👑 <b>Operador Humano</b><br/>Liderança Soberana"]:::top --> Arc["<b>1. Architecture</b><br/>Arquitetura Viva"]:::auth --> Gov["<b>2. Governance</b><br/>Políticas & Limites"]:::auth --> Spec["<b>3. Specifications</b><br/>RFCs & Contratos"]:::auth --> EC["<b>4. Execution Cell</b><br/>Célula Confinada"]:::auth --> RT["<b>5. Runtime</b><br/>Híbrido :20130"]:::auth --> Agt["<b>6. Agentes</b><br/>Squads TLC"]:::auth --> Mdl["<b>7. Modelos IA</b><br/>LLMs & SLMs"]:::auth
 ```
 
 Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
@@ -2932,27 +2947,43 @@ Nenhuma camada inferior poderá ultrapassar a autoridade de uma camada superior.
 Toda iniciativa percorre o seguinte fluxo em 3 fases:
 
 ```mermaid
-graph TD
-    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
-    classDef phase2 fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#fff;
-    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+flowchart LR
+    classDef phase1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef phase2 fill:#2e1065,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+    classDef phase3 fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
 
-    subgraph P1["Fase 1: Concepção & Governança"]
-        direction LR
-        O["1. Opportunity"]:::phase1 --> AC["2. Arch Check"]:::phase1 --> GC["3. Gov Check"]:::phase1 --> ECC["4. Cell Creation"]:::phase1 --> MS["5. Method Selection"]:::phase1
+    subgraph Fase1 ["Fase 1: Concepção & Governança"]
+        direction TB
+        F1_1["<b>1. Opportunity</b><br/>Identificação & Demanda"]:::phase1
+        F1_2["<b>2. Arch Check</b><br/>Alinhamento Arquitetural"]:::phase1
+        F1_3["<b>3. Gov Check</b><br/>Auditoria de Governança"]:::phase1
+        F1_4["<b>4. Cell Creation</b><br/>Instanciação da Célula"]:::phase1
+        F1_5["<b>5. Method Selection</b><br/>Definição do Método"]:::phase1
+        F1_1 --> F1_2 --> F1_3 --> F1_4 --> F1_5
     end
 
-    subgraph P2["Fase 2: Especificação & Execução"]
-        direction LR
-        SP["6. Specification"]:::phase2 --> DS["7. Design"]:::phase2 --> PL["8. Planning"]:::phase2 --> EX["9. Execution"]:::phase2 --> VA["10. Validation"]:::phase2
+    subgraph Fase2 ["Fase 2: Especificação & Execução"]
+        direction TB
+        F2_1["<b>6. Specification</b><br/>RFC & Contratos de Spec"]:::phase2
+        F2_2["<b>7. Design</b><br/>Arquitetura da Solução"]:::phase2
+        F2_3["<b>8. Planning</b><br/>Backlog & Tasks Detalhadas"]:::phase2
+        F2_4["<b>9. Execution</b><br/>Construção & TDD Confinado"]:::phase2
+        F2_5["<b>10. Validation</b><br/>Bateria de Testes & QA"]:::phase2
+        F2_1 --> F2_2 --> F2_3 --> F2_4 --> F2_5
     end
 
-    subgraph P3["Fase 3: Implantação & Aprendizado"]
-        direction LR
-        DP["11. Deployment"]:::phase3 --> OP["12. Operation"]:::phase3 --> LE["13. Learning"]:::phase3 --> KU["14. Knowledge"]:::phase3 --> MU["15. Memory"]:::phase3
+    subgraph Fase3 ["Fase 3: Implantação & Aprendizado"]
+        direction TB
+        F3_1["<b>11. Deployment</b><br/>Entrega & Homologação"]:::phase3
+        F3_2["<b>12. Operation</b><br/>Operação Contínua 24/7"]:::phase3
+        F3_3["<b>13. Learning</b><br/>Captura de Aprendizados"]:::phase3
+        F3_4["<b>14. Knowledge</b><br/>Gravação no Acervo Digital"]:::phase3
+        F3_5["<b>15. Memory</b><br/>Indexação em PGVector"]:::phase3
+        F3_1 --> F3_2 --> F3_3 --> F3_4 --> F3_5
     end
 
-    P1 --> P2 --> P3
+    Fase1 ==>|"Aprovação do Gate"| Fase2
+    Fase2 ==>|"Validação Concluída"| Fase3
 ```
 
 Cada transição exige critérios explícitos.
@@ -3111,36 +3142,49 @@ A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (port
 ## 2. MATRIZ DE RESPONSABILIDADE DOS 15 AGENTES
 
 ```mermaid
-graph TD
-    subgraph StratSquad["Squad de Estratégia & Governança Executiva"]
-        S1["Strategist_One<br/><i>(Visão & OKRs)</i>"]
-        LEAD["Lead_TLC_Engineer<br/><i>(Arquitetura Viva)</i>"]
-        AUD["Auditor Agent<br/><i>(Compliance & Signoff)</i>"]
+flowchart LR
+    classDef s1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef s2 fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef s3 fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
+    classDef s4 fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+
+    subgraph Squad1 ["1. Estratégia & Governança"]
+        direction TB
+        A1["<b>Strategist_One</b><br/>Visão & OKRs"]:::s1
+        A2["<b>Lead_TLC_Engineer</b><br/>Arquitetura Viva"]:::s1
+        A3["<b>Auditor_Agent</b><br/>Compliance & Gates"]:::s1
+        A1 --> A2 --> A3
     end
 
-    subgraph CoreSquad["Squad Core de Engenharia TLC"]
-        PLN["Planner Agent<br/><i>(Decomposição & Backlog)</i>"]
-        BLD["Builder Agent<br/><i>(Escrita de Código & Diffs)</i>"]
-        QA["Reviewer QA<br/><i>(Testes Adversários & Cobertura)</i>"]
+    subgraph Squad2 ["2. Engenharia TLC"]
+        direction TB
+        A4["<b>Planner_Agent</b><br/>Tasks & Backlog"]:::s2
+        A5["<b>Builder_Agent</b><br/>Código & Diffs"]:::s2
+        A6["<b>Reviewer_QA</b><br/>Testes & Cobertura"]:::s2
+        A4 --> A5 --> A6
     end
 
-    subgraph SecOpsSquad["Squad SecOps, FinOps & Infra"]
-        CISO["CISO Security Agent<br/><i>(Zero Trust & Mesh)</i>"]
-        BIZ["BizOps Controller<br/><i>(Processos & Sprints)</i>"]
-        FIN["Financial Advisor<br/><i>(FinOps & EBITDA Shield)</i>"]
+    subgraph Squad3 ["3. SecOps & FinOps"]
+        direction TB
+        A7["<b>CISO_Security</b><br/>Zero Trust & Mesh"]:::s3
+        A8["<b>BizOps_Controller</b><br/>Processos & Métricas"]:::s3
+        A9["<b>Financial_Advisor</b><br/>FinOps & EBITDA"]:::s3
+        A7 --> A8 --> A9
     end
 
-    subgraph GrowthDataSquad["Squad Data, Growth & People"]
-        REV["RevOps Architect<br/><i>(GTM & Conversão B2B)</i>"]
-        DATA["Data Insight Agent<br/><i>(RAG Relacional & ML)</i>"]
-        NEURO["Neuromarketing Strategist<br/><i>(Branding & Copywriting)</i>"]
-        COMP["Compliance Steward<br/><i>(LegalOps & LGPD)</i>"]
-        SKILL["Skills Manager<br/><i>(People & Competências)</i>"]
+    subgraph Squad4 ["4. Data & Growth"]
+        direction TB
+        A10["<b>RevOps_Architect</b><br/>GTM & Vendas"]:::s4
+        A11["<b>Data_Insight</b><br/>RAG & Vetores"]:::s4
+        A12["<b>Neuromarketing</b><br/>Branding & Canvas"]:::s4
+        A13["<b>Compliance_Steward</b><br/>LegalOps & LGPD"]:::s4
+        A14["<b>Skills_Manager</b><br/>People Ops & Skills"]:::s4
+        A10 --> A11 --> A12 --> A13 --> A14
     end
 
-    StratSquad --> CoreSquad
-    CoreSquad --> SecOpsSquad
-    SecOpsSquad --> GrowthDataSquad
+    Squad1 ==>|"Diretrizes"| Squad2
+    Squad2 ==>|"Segurança"| Squad3
+    Squad3 ==>|"Escala"| Squad4
 ```
 
 ---
@@ -3148,45 +3192,44 @@ graph TD
 ## 2.1. ESTRUTURA ORGANIZACIONAL NO PAPERCLIP (ORG CHART DA HOLDING)
 
 ```mermaid
-graph TD
-    classDef board fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
-    classDef squadEstra fill:#181825,stroke:#f9e2af,stroke-width:1.5px,color:#cdd6f4;
-    classDef squadRev fill:#181825,stroke:#a6e3a1,stroke-width:1.5px,color:#cdd6f4;
-    classDef squadDev fill:#181825,stroke:#89dceb,stroke-width:1.5px,color:#cdd6f4;
-    classDef squadOps fill:#181825,stroke:#cba6f7,stroke-width:1.5px,color:#cdd6f4;
-    classDef squadSec fill:#181825,stroke:#f38ba8,stroke-width:1.5px,color:#cdd6f4;
-    classDef squadFin fill:#181825,stroke:#fab387,stroke-width:1.5px,color:#cdd6f4;
+flowchart TD
+    classDef ceo fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef tlc fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef biz fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
 
-    CEO["👑 CEO (PromptCore Labs)<br/><i>ai-pricing • create-rfc • tlc-spec-driven</i>"]:::board
+    CEO["👑 <b>CEO PromptCore Labs</b><br/>ai-pricing • create-rfc • tlc-spec-driven"]:::ceo
 
-    subgraph Vert_Software["Frente 1: Software Studio & DevSecOps"]
-        LeadEng["Lead_TLC_Engineer (Head Software)<br/><i>tlc-spec-driven • create-adr • best-practices</i>"]:::squadDev
-        CISO["CISO_Security_Agent (DevSecOps)<br/><i>aws-advisor • best-practices</i>"]:::squadSec
-        AgileBot["bot-agile-master (Agile QA)"]:::squadOps
-        LeadEng --> CISO --> AgileBot
+    subgraph F1 ["Frente 1: Software & DevSecOps"]
+        direction TB
+        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software"]:::tlc
+        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps"]:::sec
+        Agile["<b>bot-agile-master</b><br/>Agile QA"]:::tlc
+        TLC --> CISO --> Agile
     end
 
-    subgraph Vert_Growth["Frente 2: Marketing, RevOps & Growth"]
-        RevOps["RevOps_Architect (Head Growth)<br/><i>ai-sdr • ai-cold-outreach</i>"]:::squadRev
-        CMO["Neuromarketing_Strategist (CMO)<br/><i>ai-seo • ai-ugc-ads</i>"]:::squadRev
-        GrowthDS["Data_Insight_Agent (Data Science)<br/><i>ai-seo • best-practices</i>"]:::squadRev
-        RevOps --> CMO --> GrowthDS
+    subgraph F2 ["Frente 2: Marketing & Growth"]
+        direction TB
+        RevOps["<b>RevOps_Architect</b><br/>Head Growth"]:::mkt
+        Neuro["<b>Neuromarketing</b><br/>CMO Lead"]:::mkt
+        Data["<b>Data_Insight</b><br/>Data Science"]:::mkt
+        RevOps --> Neuro --> Data
     end
 
-    subgraph Vert_Consulting["Frente 3: Consultoria, FinOps & People Ops"]
-        Strategist["Strategist_One (Head AI Consulting)<br/><i>ai-pricing • create-rfc</i>"]:::squadEstra
-        FinAdv["Financial_Advisor (CFO Lead)<br/><i>ai-pricing</i>"]:::squadFin
-        Compliance["Compliance_Steward (Legal/Compliance)<br/><i>create-adr</i>"]:::squadFin
-        SkillsMgr["Skills_Manager (People Ops)<br/><i>agent-skills-cli</i>"]:::squadFin
-        BizOps["BizOps_Controller (BizOps/Processes)<br/><i>tlc-spec-driven • best-practices</i>"]:::squadOps
-        FinBot["bot-financial (FinOps Bot)"]:::squadFin
-        Strategist --> FinAdv --> Compliance --> SkillsMgr --> BizOps --> FinBot
+    subgraph F3 ["Frente 3: Consultoria & FinOps"]
+        direction TB
+        Strat["<b>Strategist_One</b><br/>Head Consulting"]:::biz
+        Fin["<b>Financial_Advisor</b><br/>CFO Lead"]:::biz
+        Legal["<b>Compliance_Steward</b><br/>LegalOps"]:::biz
+        Strat --> Fin --> Legal
     end
 
-    CEO --> LeadEng
-    CEO --> RevOps
-    CEO --> Strategist
+    CEO ==> F1
+    CEO ==> F2
+    CEO ==> F3
 ```
+
 
 ---
 
@@ -3211,32 +3254,38 @@ graph TD
 ## 2.3. MATRIZ DE FUNCIONAMENTO DOS COMANDOS SLASH & GOVERNANÇA (ANTIGRAVITY IDE)
 
 ```mermaid
-flowchart TD
-    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
-        GrillMe["/grill-me (Entrevista & Alinhamento de Design)"]
-        Boost["/boost (Análise Profunda & Refatoração de Arquitetura)"]
+flowchart LR
+    classDef gate fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef cmd fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef app fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef sub fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+
+    subgraph G1 ["Gate 1: Inception"]
+        direction TB
+        C_Grill["<b>/grill-me</b><br/>Entrevista & Design"]:::cmd
+        C_Boost["<b>/boost</b><br/>Refatoração Arch"]:::cmd
     end
 
-    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
-        HitL["Human-in-the-Loop (Aprovação do Implementation Plan)"]
+    subgraph G2 ["Gate 2: Aprovação"]
+        direction TB
+        C_Plan["<b>Human-in-the-Loop</b><br/>Assinatura do Plano"]:::app
     end
 
-    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
-        Goal["/goal (Execução Autônoma Contínua & Testes)"]
-        Subagents["Subagentes em Paralelo (Prototyping, InfraSec, Data)"]
+    subgraph G3 ["Gates 3-5: Construção"]
+        direction TB
+        C_Goal["<b>/goal</b><br/>Execução Autônoma"]:::app
+        C_Subs["<b>Subagentes</b><br/>Testes & Infra"]:::sub
     end
 
-    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
-        Walkthrough["Walkthrough & Evidências de Teste"]
-        Learn["/learn (Gravação de Aprendizados nos KIs)"]
+    subgraph G6 ["Gate 6: Auditoria"]
+        direction TB
+        C_Walk["<b>Walkthrough</b><br/>Validação QA"]:::cmd
+        C_Learn["<b>/learn</b><br/>Gravação nos KIs"]:::sub
     end
 
-    GrillMe --> HitL
-    Boost --> HitL
-    HitL --> Goal
-    Goal --> Subagents
-    Subagents --> Walkthrough
-    Walkthrough --> Learn
+    G1 ==>|"Specs Aprovadas"| G2
+    G2 ==>|"Autorização Soberana"| G3
+    G3 ==>|"Código Validado"| G6
 ```
 
 ---
@@ -3321,8 +3370,8 @@ flowchart TD
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
 Esta especificação detalhada conecta-se diretamente aos diagramas do Portal Mestre:
-- 🔵 **[agents-squad-map.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
-- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.
+- 🔵 **[agents-squad-map.html](../../diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
+- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.
 
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/integrations-mcp/README.md">
@@ -3339,42 +3388,52 @@ O **Model Context Protocol (MCP)** é o padrão de integração assíncrona base
 ## 2. SERVIDORES MCP REGISTRADOS
 
 1. **`pcl-cortex` MCP Server**: Servidor nativo do Cortex para validação, renderização e compilação da suíte visual do motor PCL Cortex Engine CLI (`cortex.mjs`).
-2. **`gemini-notebooklm` MCP Server**: Servidor de pesquisa, síntese de documentos e consulta a cadernos de conhecimento.
+2. **`pcl-laya` MCP Server**: Servidor nativo do coprocessador System One e motor neural NLI INT8 para classificação ultrarrápida, detecção de contradições e roteamento (`http://localhost:20140`).
+3. **`gemini-notebooklm` MCP Server**: Servidor de pesquisa, síntese de documentos e consulta a cadernos de conhecimento.
 
 ---
 
 ## 3. TOPOLOGIA DE CONEXÃO MCP
 
 ```mermaid
-graph TD
-    subgraph ClientLayer["IDE / Cliente Agente"]
-        IDE["Antigravity IDE / Terminal Agent"]
+flowchart LR
+    classDef ide fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef srv fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef db fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+
+    subgraph Cliente ["1. Interface & Agentes"]
+        direction TB
+        IDE["<b>Antigravity IDE & Terminal</b><br/>Console Operacional do Arquiteto"]:::ide
+        Config["<b>mcp.config.json</b><br/>Manifesto de Barramento MCP"]:::ide
+        IDE --> Config
     end
 
-    subgraph ConfigLayer["Manifesto MCP"]
-        CONF["mcp.config.json / Registros stdo"]
+    subgraph Servidores ["2. Servidores MCP"]
+        direction TB
+        MCP_Cortex["<b>pcl-cortex :20150</b><br/>Geração de Diagramas & Specs"]:::srv
+        MCP_Ntb["<b>gemini-notebooklm</b><br/>Pesquisa Profunda & Síntese RAG"]:::srv
+        MCP_Laya["<b>pcl-laya :20140</b><br/>NLI System One em CPU INT8"]:::srv
     end
 
-    subgraph MCPServers["Servidores MCP Ativos"]
-        CX_MCP["pcl-cortex MCP Server\n(Cortex Engine v2.12)"]
-        NLM_MCP["gemini-notebooklm MCP Server\n(Pesquisa & RAG)"]
+    subgraph Dados ["3. Acervo & Persistência"]
+        direction TB
+        Repo["<b>Repositório Git PCL AEOS</b><br/>Código Fonte, RFCs & Documentos"]:::db
+        PG["<b>PostgreSQL / PGVector :5432</b><br/>Memória Tripartida & Embeddings"]:::db
     end
 
-    subgraph TargetWorkspace["Host Filesystem & Workspace"]
-        WS["Repositório PCL AEOS\nprojects/Living Architecture PCL AEOS"]
-    end
+    Config -->|"Visualização"| MCP_Cortex
+    Config -->|"Pesquisa"| MCP_Ntb
+    Config -->|"Classificação"| MCP_Laya
 
-    IDE --> CONF
-    IDE -->|Invoca Ferramentas Visualização| CX_MCP
-    IDE -->|Invoca Consultas Pesquisa| NLM_MCP
-    CX_MCP -->|Renderiza HTML Interativo| WS
-    NLM_MCP -->|Leitura de Contexto| WS
+    MCP_Cortex -->|"Armazena Docs"| Repo
+    MCP_Ntb -->|"Consulta Acervo"| Repo
+    MCP_Laya -->|"Grava Vetores"| PG
 ```
 
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🔵 **[mcp-interconnection.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html)**: Mapa de interconexão entre o cliente de IA, servidores MCP e o workspace.
+- 🔵 **[mcp-interconnection.html](../../diagrams/interactive/mcp-interconnection.html)**: Mapa de interconexão entre o cliente de IA, servidores MCP e o workspace.
 
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/governance/README.md">
@@ -3414,8 +3473,8 @@ graph LR
 ---
 
 ## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[seq-tlc-execution.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
-- 🔵 **[gov-stage-gates-matrix.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.
+- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
+- 🔵 **[gov-stage-gates-matrix.html](../../diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.
 
   </script>
   <script id="doc-paperclip" type="text/markdown" data-doc-path="runtime/orchestration/paperclip.md" data-doc-decoded="runtime/orchestration/paperclip.md">
@@ -3627,6 +3686,7 @@ OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED: "true"
 
 1. O **Antigravity IDE** acessa diretamente o Laya MCP Server registrado em `.agents/mcp_config.json`, garantindo decisão instantânea em CPU antes de qualquer inferência de modelo pesado.
 2. O **OmniRoute Gateway** consome o Laya na porta `:20140` como firewall semântico e protetor de custos (*EBITDA Shield*).
+
   </script>
   <script id="doc-staleness-daemon-and-drp-operations" type="text/markdown" data-doc-path="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" data-doc-decoded="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md">
 # Runbook de Operações: Deterministic Staleness Daemon & DRP
@@ -3852,9 +3912,9 @@ erDiagram
 
 ## 5. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
 Este módulo refere-se diretamente aos diagramas do Portal Mestre:
-- 🟡 **[data-rag-memory.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory.html)**: Lineage do pipeline de ingestão e busca vetorial RAG.
-- 🔄 **[data-legacy-migration.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)**: Dataflow de sanitização e migração do acervo legado (Ver **[Documentação de Migração Legada](../legacy-migration/README.md)**).
-- 💜 **[obs-audit-trail.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/obs-audit-trail.html)**: Coleta de logs de execução e métricas de tokens no `pcl-db`.
+- 🟡 **[data-rag-memory.html](../../diagrams/interactive/data-rag-memory.html)**: Lineage do pipeline de ingestão e busca vetorial RAG.
+- 🔄 **[data-legacy-migration.html](../../diagrams/interactive/data-legacy-migration.html)**: Dataflow de sanitização e migração do acervo legado (Ver **[Documentação de Migração Legada](../legacy-migration/README.md)**).
+- 💜 **[obs-audit-trail.html](../../diagrams/interactive/obs-audit-trail.html)**: Coleta de logs de execução e métricas de tokens no `pcl-db`.
 
   </script>
   <script id="doc-legacy-migration" type="text/markdown" data-doc-path="legacy-migration.md" data-doc-decoded="legacy-migration.md">
@@ -3931,9 +3991,9 @@ graph LR
 ---
 
 ## 🔗 Documentos Relacionados
-- [Diagrama Interativo DIAG-LEG-01](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)
-- [Arquitetura de Memória & RAG Vetorial](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
-- [Governança & Modelo Operacional v2.0](file:///c:/PromptCore_Labs/governance/operating-model.md)
+- [Diagrama Interativo DIAG-LEG-01](./projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html)
+- [Arquitetura de Memória & RAG Vetorial](./projects/Living%20Architecture%20PCL%20AEOS/docs/memory-rag/README.md)
+- [Governança & Modelo Operacional v2.0](./governance/operating-model.md)
 
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/security-compliance/README.md">
@@ -3970,7 +4030,7 @@ graph TD
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 💜 **[sec-zero-trust-flow.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html)**: Fluxo de gerenciamento de segredos e imunização Zero Trust.
+- 💜 **[sec-zero-trust-flow.html](../../diagrams/interactive/sec-zero-trust-flow.html)**: Fluxo de gerenciamento de segredos e imunização Zero Trust.
 
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/infrastructure/README.md">
@@ -4027,8 +4087,8 @@ graph TD
 ---
 
 ## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[c4-l2-containers.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html)**: Topologia C4 Level 2 dos Contêineres Docker.
-- 🟡 **[infra-network-security.html](file:///c:/PromptCore_Labs/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html)**: Rede de segurança perimetral WireGuard / Tailscale VPN Mesh.
+- 🟢 **[c4-l2-containers.html](../../diagrams/interactive/c4-l2-containers.html)**: Topologia C4 Level 2 dos Contêineres Docker.
+- 🟡 **[infra-network-security.html](../../diagrams/interactive/infra-network-security.html)**: Rede de segurança perimetral WireGuard / Tailscale VPN Mesh.
 
   </script>
   <script id="doc-ADR-0010-squad-prototyping-and-antigravity-harness-integration" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md">
@@ -4115,9 +4175,15 @@ flowchart TD
   <script id="doc-STAGE-GATES-HOMOLOGATION-v2" type="text/markdown" data-doc-path="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md" data-doc-decoded="governance/audits/STAGE-GATES-HOMOLOGATION-v2.md">
 # PCL AEOS — Relatório Oficial de Homologação dos Stage Gates (v2.0)
 **Projeto:** Evolução Cognitiva PCL AEOS (Memória Tripartida, System One & RAG Temporal)  
-**Governança:** TLC Spec-Driven v3 | Normas ISO 42001 & ISO 27001  
-**Data de Homologação:** 2026-10-14  
+**Governança:** TLC Spec-Driven v3 | Autoavaliação Técnica Interna inspirada em ISO 42001 e ISO 27001  
+**Data de Homologação Original:** 2026-10-14 | **Calibração Canônica:** 2026-10-15  
 **Autoridade:** EnterDufter / Tech Lead & Arquiteto PCL AEOS  
+
+> [!NOTE]
+> **Status Normativo e Calibração de Escopo:**  
+> Este documento constitui um registro histórico de **Autoavaliação Técnica em Laboratório**. Em conformidade com o [Registro Canônico de Claims e Métricas](../../projects/pcl-aeos-harmonization/design/claims-register.md) (`PCL-AEOS-CLAIM-01`) e a [Auditoria Documental](DOCUMENTATION-AUDIT-2026-10-15.md):
+> 1. Os resultados quantitativos aqui reportados (ex.: RTO de 7.18s e latências do Laya entre 8.42ms e 53.32ms) são **Baselines Históricos de Laboratório** obtidos sob hardware e scripts locais específicos. O SLA contratual de recuperação do sistema é formalmente estipulado em **$\le$ 15 minutos**.
+> 2. O escopo das normas ISO e princípios Zero Trust reflete alinhamento arquitetural por autoavaliação do operador, não constituindo certificação emitida por organismo externo independente credenciado.
 
 ---
 

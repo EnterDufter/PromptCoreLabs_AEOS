@@ -13,46 +13,49 @@ A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (port
 ## 2. MATRIZ DE RESPONSABILIDADE DOS 15 AGENTES
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
-graph TD
-    classDef strat fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef core fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef sec fill:#1c1917,stroke:#f59e0b,stroke-width:2px,color:#ffffff;
-    classDef growth fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
+flowchart LR
+    classDef s1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef s2 fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef s3 fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
+    classDef s4 fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
 
-    subgraph StratSquad["Squad de Estratégia & Governança Executiva"]
-        direction LR
-        S1["<b>Strategist_One</b><br/><i>Visão Estratégica & OKRs</i>"]:::strat
-        LEAD["<b>Lead_TLC_Engineer</b><br/><i>Arquitetura Viva & Standards</i>"]:::strat
-        AUD["<b>Auditor Agent</b><br/><i>Compliance & Gate Signoff</i>"]:::strat
+    subgraph Squad1 ["1. Estratégia & Governança"]
+        direction TB
+        A1["<b>Strategist_One</b><br/>Visão & OKRs"]:::s1
+        A2["<b>Lead_TLC_Engineer</b><br/>Arquitetura Viva"]:::s1
+        A3["<b>Auditor_Agent</b><br/>Compliance & Gates"]:::s1
+        A1 --> A2 --> A3
     end
 
-    subgraph CoreSquad["Squad Core de Engenharia TLC"]
-        direction LR
-        PLN["<b>Planner Agent</b><br/><i>Decomposição de Tasks & Backlog</i>"]:::core
-        BLD["<b>Builder Agent</b><br/><i>Escrita de Código & Diffs</i>"]:::core
-        QA["<b>Reviewer QA</b><br/><i>Testes Adversários & Cobertura</i>"]:::core
+    subgraph Squad2 ["2. Engenharia TLC"]
+        direction TB
+        A4["<b>Planner_Agent</b><br/>Tasks & Backlog"]:::s2
+        A5["<b>Builder_Agent</b><br/>Código & Diffs"]:::s2
+        A6["<b>Reviewer_QA</b><br/>Testes & Cobertura"]:::s2
+        A4 --> A5 --> A6
     end
 
-    subgraph SecOpsSquad["Squad SecOps, FinOps & Infra"]
-        direction LR
-        CISO["<b>CISO Security Agent</b><br/><i>Zero Trust, Secrets & Mesh VPN</i>"]:::sec
-        BIZ["<b>BizOps Controller</b><br/><i>Processos, Sprints & Qualidade</i>"]:::sec
-        FIN["<b>Financial Advisor</b><br/><i>FinOps & EBITDA Shield</i>"]:::sec
+    subgraph Squad3 ["3. SecOps & FinOps"]
+        direction TB
+        A7["<b>CISO_Security</b><br/>Zero Trust & Mesh"]:::s3
+        A8["<b>BizOps_Controller</b><br/>Processos & Métricas"]:::s3
+        A9["<b>Financial_Advisor</b><br/>FinOps & EBITDA"]:::s3
+        A7 --> A8 --> A9
     end
 
-    subgraph GrowthDataSquad["Squad Data, Growth & People"]
-        direction LR
-        REV["<b>RevOps Architect</b><br/><i>GTM & Conversão B2B</i>"]:::growth
-        DATA["<b>Data Insight Agent</b><br/><i>RAG Relacional & Vetores 768D</i>"]:::growth
-        NEURO["<b>Neuromarketing Strategist</b><br/><i>Branding & Posicionamento</i>"]:::growth
-        COMP["<b>Compliance Steward</b><br/><i>LegalOps & Conformidade</i>"]:::growth
-        SKILL["<b>Skills Manager</b><br/><i>People Ops & Competências</i>"]:::growth
+    subgraph Squad4 ["4. Data & Growth"]
+        direction TB
+        A10["<b>RevOps_Architect</b><br/>GTM & Vendas"]:::s4
+        A11["<b>Data_Insight</b><br/>RAG & Vetores"]:::s4
+        A12["<b>Neuromarketing</b><br/>Branding & Canvas"]:::s4
+        A13["<b>Compliance_Steward</b><br/>LegalOps & LGPD"]:::s4
+        A14["<b>Skills_Manager</b><br/>People Ops & Skills"]:::s4
+        A10 --> A11 --> A12 --> A13 --> A14
     end
 
-    StratSquad --> CoreSquad
-    CoreSquad --> SecOpsSquad
-    SecOpsSquad --> GrowthDataSquad
+    Squad1 ==>|"Diretrizes"| Squad2
+    Squad2 ==>|"Segurança"| Squad3
+    Squad3 ==>|"Escala"| Squad4
 ```
 
 ---
@@ -60,45 +63,42 @@ graph TD
 ## 2.1. ESTRUTURA ORGANIZACIONAL NO PAPERCLIP (ORG CHART DA HOLDING)
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
-graph TD
-    classDef board fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef squadDev fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef squadRev fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
-    classDef squadEstra fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff;
-    classDef squadFin fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ffffff;
-    classDef squadSec fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
-    classDef squadOps fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#ffffff;
+flowchart TD
+    classDef ceo fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef tlc fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef biz fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
 
-    CEO["👑 <b>CEO (PromptCore Labs)</b><br/><i>ai-pricing • create-rfc • tlc-spec-driven</i>"]:::board
+    CEO["👑 <b>CEO PromptCore Labs</b><br/>ai-pricing • create-rfc • tlc-spec-driven"]:::ceo
 
-    subgraph Vert_Software["Frente 1: Software Studio & DevSecOps"]
-        LeadEng["<b>Lead_TLC_Engineer</b> (Head Software)<br/><i>tlc-spec-driven • create-adr</i>"]:::squadDev
-        CISO["<b>CISO_Security_Agent</b> (DevSecOps)<br/><i>aws-advisor • zero-trust</i>"]:::squadSec
-        AgileBot["<b>bot-agile-master</b> (Agile QA)"]:::squadOps
-        LeadEng --> CISO --> AgileBot
+    subgraph F1 ["Frente 1: Software & DevSecOps"]
+        direction TB
+        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software"]:::tlc
+        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps"]:::sec
+        Agile["<b>bot-agile-master</b><br/>Agile QA"]:::tlc
+        TLC --> CISO --> Agile
     end
 
-    subgraph Vert_Growth["Frente 2: Marketing, RevOps & Growth"]
-        RevOps["<b>RevOps_Architect</b> (Head Growth)<br/><i>ai-sdr • ai-cold-outreach</i>"]:::squadRev
-        CMO["<b>Neuromarketing_Strategist</b> (CMO)<br/><i>ai-seo • ai-ugc-ads</i>"]:::squadRev
-        GrowthDS["<b>Data_Insight_Agent</b> (Data Science)<br/><i>ai-analytics • best-practices</i>"]:::squadRev
-        RevOps --> CMO --> GrowthDS
+    subgraph F2 ["Frente 2: Marketing & Growth"]
+        direction TB
+        RevOps["<b>RevOps_Architect</b><br/>Head Growth"]:::mkt
+        Neuro["<b>Neuromarketing</b><br/>CMO Lead"]:::mkt
+        Data["<b>Data_Insight</b><br/>Data Science"]:::mkt
+        RevOps --> Neuro --> Data
     end
 
-    subgraph Vert_Consulting["Frente 3: Consultoria, FinOps & People Ops"]
-        Strategist["<b>Strategist_One</b> (Head AI Consulting)<br/><i>ai-pricing • create-rfc</i>"]:::squadEstra
-        FinAdv["<b>Financial_Advisor</b> (CFO Lead)<br/><i>ai-pricing • ebitda-shield</i>"]:::squadFin
-        Compliance["<b>Compliance_Steward</b> (LegalOps)<br/><i>create-adr • compliance</i>"]:::squadFin
-        SkillsMgr["<b>Skills_Manager</b> (People Ops)<br/><i>agent-skills-cli</i>"]:::squadFin
-        BizOps["<b>BizOps_Controller</b> (Processos)<br/><i>tlc-spec-driven</i>"]:::squadOps
-        FinBot["<b>bot-financial</b> (FinOps Bot)"]:::squadFin
-        Strategist --> FinAdv --> Compliance --> SkillsMgr --> BizOps --> FinBot
+    subgraph F3 ["Frente 3: Consultoria & FinOps"]
+        direction TB
+        Strat["<b>Strategist_One</b><br/>Head Consulting"]:::biz
+        Fin["<b>Financial_Advisor</b><br/>CFO Lead"]:::biz
+        Legal["<b>Compliance_Steward</b><br/>LegalOps"]:::biz
+        Strat --> Fin --> Legal
     end
 
-    CEO --> LeadEng
-    CEO --> RevOps
-    CEO --> Strategist
+    CEO ==> F1
+    CEO ==> F2
+    CEO ==> F3
 ```
 
 
@@ -126,37 +126,37 @@ graph TD
 
 ```mermaid
 flowchart LR
-    classDef inception fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff
-    classDef gov fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    classDef exec fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
-    classDef audit fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff
+    classDef gate fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
+    classDef cmd fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef app fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef sub fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
 
-    subgraph SG1["Stage Gate 1: Inception & Specs"]
+    subgraph G1 ["Gate 1: Inception"]
         direction TB
-        GrillMe["<b>/grill-me</b><br/>Entrevista técnica e alinhamento de design"]:::inception
-        Boost["<b>/boost</b><br/>Análise profunda e refatoração arquitetural"]:::inception
+        C_Grill["<b>/grill-me</b><br/>Entrevista & Design"]:::cmd
+        C_Boost["<b>/boost</b><br/>Refatoração Arch"]:::cmd
     end
 
-    subgraph SG2["Stage Gate 2: Governança"]
+    subgraph G2 ["Gate 2: Aprovação"]
         direction TB
-        HitL["<b>Human-in-the-Loop</b><br/>Aprovação soberana do Implementation Plan"]:::gov
+        C_Plan["<b>Human-in-the-Loop</b><br/>Assinatura do Plano"]:::app
     end
 
-    subgraph SG3_5["Stage Gates 3-5: Construção & QA"]
+    subgraph G3 ["Gates 3-5: Construção"]
         direction TB
-        Goal["<b>/goal</b><br/>Execução autônoma contínua e testes"]:::exec
-        Subagents["<b>Subagentes em Paralelo</b><br/>Prototipagem, testes e infraestrutura"]:::exec
+        C_Goal["<b>/goal</b><br/>Execução Autônoma"]:::app
+        C_Subs["<b>Subagentes</b><br/>Testes & Infra"]:::sub
     end
 
-    subgraph SG6["Stage Gate 6: Auditoria & Memória"]
+    subgraph G6 ["Gate 6: Auditoria"]
         direction TB
-        Walkthrough["<b>Walkthrough & Evidências</b><br/>Validação de conformidade e entregas"]:::audit
-        Learn["<b>/learn</b><br/>Persistência de aprendizados nos KIs"]:::audit
+        C_Walk["<b>Walkthrough</b><br/>Validação QA"]:::cmd
+        C_Learn["<b>/learn</b><br/>Gravação nos KIs"]:::sub
     end
 
-    SG1 -->|"Plano de Tarefas"| SG2
-    SG2 -->|"Autorização Soberana"| SG3_5
-    SG3_5 -->|"Código & Testes"| SG6
+    G1 ==>|"Specs Aprovadas"| G2
+    G2 ==>|"Autorização Soberana"| G3
+    G3 ==>|"Código Validado"| G6
 ```
 
 ---

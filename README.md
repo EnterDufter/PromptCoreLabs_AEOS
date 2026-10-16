@@ -64,31 +64,39 @@ Comprovado pela auditoria científica ([Laudo Oficial de Benchmark](projects/pcl
 O ecossistema opera sobre um modelo de três camadas concêntricas gerado pelo **PCL Cortex Engine**:
 
 ```mermaid
-flowchart TD
-    subgraph L1 [Camada 1: Plataforma Core]
-        direction LR
-        CX[Cortex Engine] --- OR[OmniRoute :20130] --- LAYA[Laya MCP :20140] --- PG[(PGVector :5432)] --- TLC[TLC Gates]
+flowchart LR
+    classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef products fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Camada1 ["1. Plataforma Core ($0)"]
+        direction TB
+        P1["🧠 <b>Cortex Engine</b><br/>Orquestração & Visualização"]:::platform
+        P2["⚡ <b>OmniRoute :20130</b><br/>Gateway Soberano de Modelos"]:::platform
+        P3["⭐ <b>Laya MCP :20140</b><br/>NLI System One em CPU INT8"]:::platform
+        P4["💾 <b>PGVector :5432</b><br/>Memória Vetorial & RAG"]:::platform
+        P5["🛡️ <b>TLC Gates & Skills</b><br/>Auditoria & Guardrails"]:::platform
+        P1 --> P2 --> P3 --> P4 --> P5
     end
-    
-    subgraph L2 [Camada 2: 15 Verticais de Negócio B2B]
-        direction LR
-        VT[Engenharia & Dados]
-        VB[Marketing & Receita]
-        VO[Operações & Jurídico]
+
+    subgraph Camada2 ["2. 15 Verticais B2B"]
+        direction TB
+        V1["💻 <b>Engenharia & Dados</b><br/>Studio • AI Consulting • DevSecOps"]:::verticals
+        V2["📈 <b>Marketing & Receita</b><br/>RevOps • Mídia • E-Commerce"]:::verticals
+        V3["⚖️ <b>Operações & Jurídico</b><br/>People Ops • Compliance • FinOps"]:::verticals
+        V1 --> V2 --> V3
     end
-    
-    subgraph L3 [Camada 3: Produtos & Monetização]
-        direction LR
-        SaaS[Micro-SaaS & APIs]
-        PROJ[Projetos & Plataformas]
+
+    subgraph Camada3 ["3. Produtos & Monetização"]
+        direction TB
+        M1["🚀 <b>Micro-SaaS & APIs</b><br/>Produtos Digitais Escaláveis"]:::products
+        M2["📦 <b>Projetos White-Label</b><br/>Soluções B2B Customizadas"]:::products
+        M3["🔄 <b>Retainers & Academy</b><br/>Contratos Mensais & Treinamentos"]:::products
+        M1 --> M2 --> M3
     end
-    
-    L1 -->|Memória, RAG e Orquestração| L2
-    L2 -->|Entregáveis de Alto Valor| L3
-    
-    style L1 fill:#1a365d,stroke:#3182ce,stroke-width:2px,color:#fff
-    style L2 fill:#2c5282,stroke:#4299e1,stroke-width:2px,color:#fff
-    style L3 fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff
+
+    Camada1 ==>|"Orquestração Core"| Camada2
+    Camada2 ==>|"Monetização & Escala"| Camada3
 ```
 
 | Previsualização Gráfica | Artefato & Detalhes | Ações Disponíveis |
@@ -103,11 +111,9 @@ Abaixo você encontra a mesma jornada estruturada presente na GitHub Page, permi
 
 ```mermaid
 flowchart LR
-    P1["Passo 1<br/>Visão Macro"] --> P2["Passo 2<br/>Squad IA"]
-    P2 --> P3["Passo 3<br/>RAG & Memória"]
-    P3 --> P4["Passo 4<br/>Backup & DRP"]
-    P4 --> P5["Passo 5<br/>Infra & Governança"]
-    P5 --> P6["Passo 6<br/>Failover Local"]
+    classDef step fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+
+    P1["<b>Passo 1</b><br/>Visão Macro & Estrutura"]:::step --> P2["<b>Passo 2</b><br/>Squad de IA & Papéis"]:::step --> P3["<b>Passo 3</b><br/>RAG & Memória Tripartida"]:::step --> P4["<b>Passo 4</b><br/>Backup & DRP Contínuo"]:::step --> P5["<b>Passo 5</b><br/>Infra, Portas & Governança"]:::step --> P6["<b>Passo 6</b><br/>Failover Local em CPU"]:::step
 ```
 
 ---
@@ -138,24 +144,24 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Humano as Operador Humano (Soberano)
-    participant PL as Agente Planner
-    participant BL as Agente Builder
-    participant QA as Agente QA / Reviewer
-    participant AD as Agente Auditor
-    
-    Humano->>PL: Aprova especificação (Stage Gate)
-    PL->>BL: Entrega backlog detalhado (tasks.md)
-    BL->>BL: Executa edições no código (máx. 3 retentativas)
-    BL->>QA: Submete diffs para validação
-    QA->>QA: Roda testes adversários e estáticos
-    alt Testes Reprovados
-        QA-->>BL: Emite REFUTED com logs de erro
-    else Testes Aprovados
-        QA->>AD: Solicita auditoria de conformidade (VERIFIED)
-        AD->>AD: Verifica vazamento de secrets e padrões
-        AD-->>Humano: Apresenta relatório consolidado para decisão
-        Humano->>Humano: Assina e autoriza passagem do Gate
+    actor Operador as 👑 Operador Humano (Soberano)
+    participant Planner as 📋 Planner
+    participant Builder as 🛠️ Builder
+    participant QA as 🧪 QA / Reviewer
+    participant Auditor as ⚖️ Auditor
+
+    Operador->>Planner: Aprova especificação e plano
+    Planner->>Builder: Entrega backlog detalhado (tasks.md)
+    loop Executa edições no código (máx. 3 retries)
+        Builder->>QA: Submete diffs para validação
+        QA->>QA: Executa suíte de testes
+    end
+    alt Sucesso: Aprovado
+        QA->>Auditor: Submete relatório de auditoria
+        Auditor->>Operador: Solicita assinatura final do Gate
+        Operador->>Auditor: Assina selamento em STATE.md
+    else Falha: Rejeitado
+        QA->>Builder: Retorna logs de erro para correção
     end
 ```
 
@@ -228,29 +234,43 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
   Invariante de 0 MB de VRAM na GPU em modo online (com a RTX 3050 em repouso). Monitor reativo em background via PowerShell ([watch_network_trigger.ps1](scripts/windows/watch_network_trigger.ps1)) que aciona o carregamento sob demanda no Ollama (`qwen2.5-coder:7b`) e LM Studio (`DeepSeek-Coder-V2-Lite MoE`), com desalocação automática (`lms unload --all`) ao restabelecer a conectividade.
 
 ```mermaid
-flowchart TD
-    classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    classDef gate fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff
-    classDef online fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
-    classDef failover fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff
-    classDef moe fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff
+flowchart LR
+    classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef c0 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef c1 fill:#78350f,stroke:#f59e0b,stroke-width:1.5px,color:#ffffff;
+    classDef c2 fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef out fill:#022c22,stroke:#10b981,stroke-width:1.5px,color:#ffffff;
 
-    Req["Requisição do Agente / IDE<br/>(Antigravity Harness)"]:::req --> Gateway["OmniRoute AI Gateway<br/>(:20130 Port)"]:::gate
-    
-    subgraph ModoOnline ["1. Operação Primária Online - 0 MB VRAM"]
-        Gateway -->|Conexão Ativa| CloudAPI["APIs de Nuvem Soberanas<br/>(Free Tier / Gemini / DeepSeek)"]:::online
-        CloudAPI --> ResCloud(("Resposta Cloud")):::online
+    subgraph Entrada ["1. Ponto de Entrada"]
+        direction TB
+        Harness["<b>Agente PCL</b><br/>Antigravity IDE & Terminal"]:::req
+        Gateway["<b>OmniRoute Gateway</b><br/>Porta :20130"]:::req
+        Harness --> Gateway
     end
-    
-    subgraph FailoverL1 ["2. Queda de Conexão: Failover Nível 1"]
-        CloudAPI -.->|Queda de Rede / Timeout| OllamaLocal["Ollama Local :11434<br/>(Qwen 2.5 Coder 7B)"]:::failover
-        OllamaLocal --> ResOllama(("Resposta Local L1")):::failover
+
+    subgraph Tier0 ["2. Rota Primária: Nuvem"]
+        direction LR
+        APIs["<b>APIs Soberanas Free Tier</b><br/>Gemini 2.5 Pro / DeepSeek V3"]:::c0
+        RespCloud["<b>Resposta Nuvem</b><br/>Latência: ~1.5s • Zero Custo"]:::out
+        APIs --> RespCloud
     end
-    
-    subgraph FailoverL2 ["3. Tarefas Complexas / MoE: Failover Nível 2"]
-        OllamaLocal -.->|Se Indisponível / Raciocínio MoE| LMStudioLocal["LM Studio :1234<br/>(DeepSeek-Coder-V2 MoE)"]:::moe
-        LMStudioLocal --> ResLMS(("Resposta Local L2")):::moe
+
+    subgraph TierLocal ["3. Contingência: Local (0 MB VRAM)"]
+        direction LR
+        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (CPU)"]:::c1
+        L2["<b>LM Studio :1234</b><br/>DeepSeek-Coder-V2 (CPU)"]:::c2
+        RespLocal["<b>Resposta Local</b><br/>0 MB VRAM • 100% Offline"]:::out
+        L1 -.->|"Fallback L2"| L2
+        L2 --> RespLocal
     end
+
+    Saida["🎯 <b>Execução Concluída</b><br/>Retorno ao Agente IDE"]:::out
+
+    Gateway ==>|"1. Conexão Normal"| APIs
+    Gateway -.->|"2. Failover Timeout"| L1
+
+    RespCloud ==>|"Resposta Nuvem"| Saida
+    RespLocal -.->|"Resposta Offline"| Saida
 ```
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |

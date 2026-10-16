@@ -18,49 +18,46 @@ Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica di
 Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
-flowchart TD
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
-    classDef memRota fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef auditRota fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#ffffff;
-    classDef biblioRota fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef especRota fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#ffffff;
-    classDef shield fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
+flowchart LR
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef mem fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef audit fill:#4c1d95,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef llm fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#ffffff;
+    classDef shield fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef output fill:#032830,stroke:#22d3ee,stroke-width:1.5px,color:#ffffff;
 
-    Cliente(["👤 Operador Humano / Liderança (Comando Soberano)"]):::cliente
+    User["👤 <b>Operador Humano</b><br/>Liderança & Decisão Soberana"]:::cliente
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ LÓGICO NLI (Coprocessador Laya)"]
-        Laya["<b>Juiz Lógico NLI & Triagem Semântica Express</b><br/>Inferência ultrarrápida em CPU local (22.3ms • 0 MB VRAM • Custo $0.00)<br/>Classifica a intenção e audita contradições com 93.3% de precisão"]:::portaria
-        Filtro{"Fato já validado ou<br/>exige raciocínio inédito?"}:::portaria
-        Laya --> Filtro
+    subgraph Triagem ["⚡ Triagem Express Laya (CPU 22ms)"]
+        direction TB
+        Laya["<b>Laya System One</b><br/>NLI em CPU INT8 & Guardrails"]:::laya
+        Decisao{"Fato validado<br/>no acervo?"}:::laya
+        Laya --> Decisao
     end
 
-    subgraph Execucao["🏢 CENTRAL DE OPERAÇÕES: DUAS ROTAS CONCORRENTES DE EXECUÇÃO"]
-        subgraph MemoriaPCL["📋 ROTA RÁPIDA: MEMÓRIA TRIPARTIDA SOBERANA (Instantâneo • Custo $0.00)"]
-            direction TB
-            Claims["<b>1. Fichas Técnicas de Fatos Validados (memory.claims)</b><br/>Parâmetros homologados para consulta imediata ('Porta :5432', 'Backup R2')"]:::memRota
-            Recibos["<b>2. Trilha de Auditoria Criptográfica (memory.evidence_receipts)</b><br/>Hash SHA-256 e commit Git vinculando a evidência sem risco de alucinação"]:::auditRota
-            Docs["<b>3. Base de Conhecimento Central (Acervo Digital PCL)</b><br/>Código-fonte, manuais, políticas e normas indexados em blocos vetoriais 768D"]:::biblioRota
-            Claims <-->|"Valida Selo Digital"| Recibos
-            Recibos <-->|"Rastreia Documento-Fonte"| Docs
-        end
-
-        subgraph Especialistas["🧠 ROTA CRIATIVA: TIME DE ESPECIALISTAS SENIORES (Modelos de Fronteira)"]
-            direction TB
-            LLM["<b>Engenharia de Soluções & Raciocínio Profundo</b><br/>Modelos LLM acionados sob demanda para desenhar novas soluções e códigos complexos"]:::especRota
-            Shield["<b>EBITDA Shield & Governança de FinOps</b><br/>Proteção algorítmica contra consumo desnecessário de tokens e inferências de nuvem"]:::shield
-            LLM --- Shield
-        end
+    subgraph RotaRapida ["📋 Rota Rápida: Memória Tripartida ($0.00)"]
+        direction LR
+        Claims["<b>1. Fichas de Fatos</b><br/>memory.claims validados"]:::mem
+        Receipts["<b>2. Trilha Digital</b><br/>Evidências SHA-256"]:::audit
+        Kb["<b>3. Base Acervo</b><br/>Documentos & Código"]:::mem
+        Claims --- Receipts --- Kb
     end
 
-    %% Fluxos Operacionais Claros
-    Cliente -->|"Instrução ou Pergunta"| Laya
-    Filtro -->|"Sim: Fato Homologado"| Claims
-    Recibos -->|"Resposta Auditada em < 50ms"| Cliente
+    subgraph RotaCriativa ["🧠 Rota Criativa: LLMs & FinOps"]
+        direction LR
+        Modelos["<b>Engenharia & Soluções</b><br/>Raciocínio Profundo Multi-Agente"]:::llm
+        FinOps["<b>EBITDA Shield</b><br/>Governança de Custos & Tokens"]:::shield
+        Modelos --- FinOps
+    end
 
-    Filtro -->|"Não: Exige Raciocínio"| LLM
-    Shield -->|"Nova Solução Homologada"| Cliente
+    Output["🚀 <b>Entrega Homologada</b><br/>Retorno Imediato ao Operador"]:::output
+
+    User -->|"Instrução"| Laya
+    Decisao -->|"Sim: Fato"| Claims
+    Decisao -->|"Não: Criativo"| Modelos
+    Receipts -->|"< 50ms"| Output
+    FinOps -->|"Solução Validada"| Output
 ```
 
 
