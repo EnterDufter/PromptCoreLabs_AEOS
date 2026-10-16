@@ -18,38 +18,38 @@ Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica di
 Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '12px', 'fontFamily': 'Inter, sans-serif' }}}%%
-flowchart LR
-    Cliente(["👤 Operador Humano"])
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px', 'fontFamily': 'Inter, sans-serif' }}}%%
+flowchart TD
+    Cliente(["👤 Operador Humano / Liderança"])
 
-    subgraph Portaria["⚡ 1. TRIAGEM EXPRESS"]
-        Laya["<b>Concierge Laya</b><br/><i>CPU Local &lt; 15ms • $0.00</i>"]
+    subgraph Portaria["⚡ 1. TRIAGEM EXPRESS (Coprocessador Laya)"]
+        Laya["<b>Concierge Laya System One</b><br/><i>CPU Local • &lt; 15ms • Custo $0.00 • 0 MB VRAM</i>"]
         Filtro{"Fato já validado<br/>ou contradição?"}
         Laya --> Filtro
     end
 
     subgraph Hub["🏢 2. CENTRAL DE OPERAÇÕES & MEMÓRIA"]
-        direction TB
-        Fichas["📋 <b>Fichas Técnicas</b> (memory.claims)<br/>Fatos atômicos comprovados"]
-        Trilha["🔐 <b>Trilha de Auditoria</b> (SHA-256)<br/>Selo cartorial anti-alucinação"]
-        Base["💾 <b>Base de Conhecimento</b> (Git)<br/>Código e manuais originais"]
+        direction LR
+        Fichas["📋 <b>Fichas Técnicas</b><br/><i>memory.claims</i>"]
+        Trilha["🔐 <b>Trilha de Auditoria</b><br/><i>SHA-256 / Git</i>"]
+        Base["💾 <b>Base Central</b><br/><i>Acervo Original</i>"]
         Fichas <--> Trilha <--> Base
     end
 
-    subgraph Especialistas["🧠 3. ESPECIALISTAS"]
-        LLM["<b>LLMs de Raciocínio</b><br/>Engenharia & Código Novo<br/><i>EBITDA Shield Protegido</i>"]
+    subgraph Especialistas["🧠 3. ESPECIALISTAS (Modelos Avançados)"]
+        LLM["<b>Engenharia & Raciocínio Profundo</b><br/><i>Protegidos pelo EBITDA Shield</i>"]
     end
 
-    Cliente -->|"Pergunta / Tarefa"| Laya
+    Cliente -->|"Pergunta ou Instrução"| Laya
     Filtro -->|"Sim: Fato Validado"| Fichas
     Trilha -->|"Resposta Confiável"| Cliente
     Filtro -->|"Não: Raciocínio Novo"| LLM
     LLM -->|"Entrega Validada"| Cliente
 
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
-    classDef hub fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#fff;
-    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#fff;
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef hub fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff;
+    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#fff;
 
     class Cliente cliente;
     class Laya,Filtro portaria;
