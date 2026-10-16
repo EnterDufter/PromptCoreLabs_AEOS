@@ -16,53 +16,38 @@ Para garantir que o **PCL AEOS** opere como um Sistema Operacional de IA Soberan
 A arquitetura do AEOS opera em modelo de portas e adaptadores, permitindo comunicação direta local em altíssima velocidade via **Model Context Protocol (MCP)** e exposição em microsserviço no container do **OmniRoute AI Gateway (:20130)** para blindagem financeira (*EBITDA Shield*).
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px', 'fontFamily': 'Inter, sans-serif' }}}%%
 flowchart TD
-    subgraph Core["🏛️ PCL AEOS Core & Harness"]
-        IDE["Antigravity IDE / Squad de Agentes"]
-        Harness["PCL Runtime Harness"]
+    subgraph Core["🏛️ PCL AEOS Core"]
+        IDE["<b>Antigravity IDE & Squad de Agentes</b>"]
     end
 
-    subgraph CanalMCP["⚡ Canal 1: Direto Local (Laya MCP Server)"]
-        MCPServer["🔌 Laya MCP Server (services/pcl-laya)<br/><i>stdio / JSON-RPC • ~0.014ms • 0 MB VRAM</i>"]
-        MCPTools["Ferramentas Tipadas Nativas:<br/>• laya_evaluate_binary<br/>• laya_evaluate_choice<br/>• laya_evaluate_score<br/>• laya_check_contradiction<br/>• laya_evaluate_batch"]
-        MCPServer --- MCPTools
+    subgraph Canais["⚡ Duplo Canal de Comunicação"]
+        Canal1["<b>Canal 1: Local MCP (stdio)</b><br/>• Protocolo nativo JSON-RPC<br/>• Latência ~0.014ms em CPU<br/>• Primitivas: binary, choice, score, contradiction"]
+        Canal2["<b>Canal 2: OmniRoute Gateway (:20130)</b><br/>• Firewall semântico EBITDA Shield<br/>• Encaminhamento REST para o container local"]
     end
 
-    subgraph CanalGateway["🌐 Canal 2: Rede & Gateway (EBITDA Shield)"]
-        OmniRoute["OmniRoute AI Gateway (:20130)<br/><i>/v1/classifier/evaluate</i>"]
-        EBITDA["🛡️ EBITDA Shield (Cache de Prompts & Roteamento)"]
-        OmniRoute --- EBITDA
+    subgraph Engine["🧠 Motor de Classificação Soberano"]
+        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Microsserviço em CPU Local (:20140 / INT8 ONNX)</i><br/>• SLA &lt; 15ms | Custo $0.00 | 0 MB VRAM"]
     end
 
-    subgraph Engine["🧠 PCL CLASSIFIER ENGINE (Implementação Canônica Soberana)"]
-        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Engine Nativa em CPU Local (:20140 / INT8 ONNX)</i><br/>• Primitivas: Binary, Choice, Score, Contradiction<br/>• SLA: &lt; 15ms | Custo: $0.00 | VRAM: 0 MB"]
+    subgraph Fallback["🛡️ Contingência de Exceção"]
+        CloudFallback["<b>Cloud Structured LLM Fallback</b><br/><i>Acionado apenas na indisponibilidade do container local</i>"]
     end
 
-    subgraph FallbackSecundario["🛡️ Camada de Contingência"]
-        CloudFallback["<b>Fallback de Exceção Corporativa</b><br/>Modelos Estruturados em Nuvem (JSON Schema)<br/><i>Acionado apenas se o container local for desligado</i>"]
-    end
-
-    %% Conexões do Canal MCP
-    IDE ==>|"MCP Protocol (Zero Latência de Rede)"| MCPServer
-    MCPServer ==>|"Execução Direta em CPU"| LayaCore
-
-    %% Conexões do Canal Gateway
-    IDE -.->|"REST / HTTP"| OmniRoute
-    Harness -.->|"Inspeciona Tráfego"| OmniRoute
-    OmniRoute ==>|"Consome Microsserviço :20140"| LayaCore
-
-    %% Fallback
-    OmniRoute -.->|"Falha Extrema / Timeout"| CloudFallback
+    IDE ==>|"MCP Direto (Alta Velocidade)"| Canal1
+    IDE -.->|"HTTP / REST"| Canal2
+    Canal1 ==>|"Execução em CPU"| LayaCore
+    Canal2 ==>|"Consome porta :20140"| LayaCore
+    Canal2 -.->|"Fallback"| CloudFallback
 
     classDef core fill:#0b1329,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef mcp fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef gateway fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#fff;
+    classDef canal fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
     classDef laya fill:#1e3a8a,stroke:#60a5fa,stroke-width:2.5px,color:#fff;
-    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1px,color:#a8a29e;
+    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1.5px,color:#a8a29e;
 
-    class IDE,Harness core;
-    class MCPServer,MCPTools mcp;
-    class OmniRoute,EBITDA gateway;
+    class IDE core;
+    class Canal1,Canal2 canal;
     class LayaCore laya;
     class CloudFallback fallback;
 ```

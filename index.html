@@ -847,27 +847,28 @@
       }
       .modal-body .mermaid {
         background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        padding: 0.5rem !important;
-        margin: 0.8rem 0 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 0.8rem !important;
+        margin: 1.2rem auto !important;
         page-break-inside: avoid !important;
-        width: 100% !important;
-        height: auto !important;
+        break-inside: avoid !important;
+        max-width: 100% !important;
+        text-align: center !important;
         overflow: visible !important;
       }
       .modal-body .mermaid svg {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 100% !important;
+        max-width: 92% !important;
+        max-height: 380px !important;
+        width: auto !important;
         height: auto !important;
         display: block !important;
         margin: 0 auto !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       .modal-body .mermaid svg text {
-        font-size: 9.5pt !important;
-        font-weight: 700 !important;
-        fill: #000000 !important;
+        fill: #0f172a !important;
       }
     }
   
@@ -2288,55 +2289,42 @@ Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica di
 Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
 ```mermaid
-flowchart TD
-    Cliente(["👤 Operador Humano / Liderança"])
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '12px', 'fontFamily': 'Inter, sans-serif' }}}%%
+flowchart LR
+    Cliente(["👤 Operador Humano"])
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS (Coprocessador Laya System One)"]
-        Laya["<b>Concierge Inteligente de Decisão Rápida</b><br/><i>CPU Local • &lt; 15ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia a intenção e tria a requisição instantaneamente."]
-        Filtro{"O fato já está validado<br/>ou há contradição?"}
+    subgraph Portaria["⚡ 1. TRIAGEM EXPRESS"]
+        Laya["<b>Concierge Laya</b><br/><i>CPU Local &lt; 15ms • $0.00</i>"]
+        Filtro{"Fato já validado<br/>ou contradição?"}
         Laya --> Filtro
     end
 
-    subgraph Hub["🏢 CENTRAL DE OPERAÇÕES & MEMÓRIA (PCL AEOS)"]
-        subgraph Fichario["📋 1. FICHAS TÉCNICAS (Fatos Validados)"]
-            Claims["<b>Cards Objetivos de Conhecimento (memory.claims)</b><br/>Parâmetros e fatos homologados prontos para uso:<br/><i>'Porta do banco: :5432' • 'Backup: R2 Criptografado'</i>"]
-        end
-
-        subgraph Cartorio["🔐 2. TRILHA DE AUDITORIA DIGITAL"]
-            Recibos["<b>Selo Criptográfico de Autenticidade (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem exata.<br/>Garante integridade e elimina alucinações."]
-        end
-
-        subgraph Biblioteca["💾 3. BASE DE CONHECIMENTO CENTRAL"]
-            Docs["<b>Acervo Original Completo (Git & Chunks Vetoriais)</b><br/>Código-fonte, políticas de governança, arquitetura e playbooks."]
-        end
+    subgraph Hub["🏢 2. CENTRAL DE OPERAÇÕES & MEMÓRIA"]
+        direction TB
+        Fichas["📋 <b>Fichas Técnicas</b> (memory.claims)<br/>Fatos atômicos comprovados"]
+        Trilha["🔐 <b>Trilha de Auditoria</b> (SHA-256)<br/>Selo cartorial anti-alucinação"]
+        Base["💾 <b>Base de Conhecimento</b> (Git)<br/>Código e manuais originais"]
+        Fichas <--> Trilha <--> Base
     end
 
-    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs Cloud & Locais)"]
-        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Acionados apenas para desenhar novas soluções ou programar.<br/><i>Protegidos contra custos desnecessários pelo EBITDA Shield.</i>"]
+    subgraph Especialistas["🧠 3. ESPECIALISTAS"]
+        LLM["<b>LLMs de Raciocínio</b><br/>Engenharia & Código Novo<br/><i>EBITDA Shield Protegido</i>"]
     end
 
-    %% Fluxos
-    Cliente -->|"Pergunta ou Instrução"| Laya
-    Filtro -->|"Sim: Fato Já Validado"| Fichario
-    Fichario <-->|"Verifica Selo Digital"| Cartorio
-    Cartorio <-->|"Rastreia Documento Original"| Biblioteca
-    Cartorio -->|"Resposta Confiável & Auditada"| Cliente
+    Cliente -->|"Pergunta / Tarefa"| Laya
+    Filtro -->|"Sim: Fato Validado"| Fichas
+    Trilha -->|"Resposta Confiável"| Cliente
+    Filtro -->|"Não: Raciocínio Novo"| LLM
+    LLM -->|"Entrega Validada"| Cliente
 
-    Filtro -->|"Não: Exige Novo Raciocínio"| LLM
-    LLM -->|"Solução Criada com Sucesso"| Cliente
-
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff;
-    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#fff;
-    classDef biblio fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#fff;
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+    classDef hub fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#fff;
+    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#fff;
 
     class Cliente cliente;
     class Laya,Filtro portaria;
-    class Claims fichario;
-    class Recibos cartorio;
-    class Docs biblio;
+    class Fichas,Trilha,Base hub;
     class LLM espec;
 ```
 
@@ -3471,53 +3459,38 @@ Para garantir que o **PCL AEOS** opere como um Sistema Operacional de IA Soberan
 A arquitetura do AEOS opera em modelo de portas e adaptadores, permitindo comunicação direta local em altíssima velocidade via **Model Context Protocol (MCP)** e exposição em microsserviço no container do **OmniRoute AI Gateway (:20130)** para blindagem financeira (*EBITDA Shield*).
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px', 'fontFamily': 'Inter, sans-serif' }}}%%
 flowchart TD
-    subgraph Core["🏛️ PCL AEOS Core & Harness"]
-        IDE["Antigravity IDE / Squad de Agentes"]
-        Harness["PCL Runtime Harness"]
+    subgraph Core["🏛️ PCL AEOS Core"]
+        IDE["<b>Antigravity IDE & Squad de Agentes</b>"]
     end
 
-    subgraph CanalMCP["⚡ Canal 1: Direto Local (Laya MCP Server)"]
-        MCPServer["🔌 Laya MCP Server (services/pcl-laya)<br/><i>stdio / JSON-RPC • ~0.014ms • 0 MB VRAM</i>"]
-        MCPTools["Ferramentas Tipadas Nativas:<br/>• laya_evaluate_binary<br/>• laya_evaluate_choice<br/>• laya_evaluate_score<br/>• laya_check_contradiction<br/>• laya_evaluate_batch"]
-        MCPServer --- MCPTools
+    subgraph Canais["⚡ Duplo Canal de Comunicação"]
+        Canal1["<b>Canal 1: Local MCP (stdio)</b><br/>• Protocolo nativo JSON-RPC<br/>• Latência ~0.014ms em CPU<br/>• Primitivas: binary, choice, score, contradiction"]
+        Canal2["<b>Canal 2: OmniRoute Gateway (:20130)</b><br/>• Firewall semântico EBITDA Shield<br/>• Encaminhamento REST para o container local"]
     end
 
-    subgraph CanalGateway["🌐 Canal 2: Rede & Gateway (EBITDA Shield)"]
-        OmniRoute["OmniRoute AI Gateway (:20130)<br/><i>/v1/classifier/evaluate</i>"]
-        EBITDA["🛡️ EBITDA Shield (Cache de Prompts & Roteamento)"]
-        OmniRoute --- EBITDA
+    subgraph Engine["🧠 Motor de Classificação Soberano"]
+        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Microsserviço em CPU Local (:20140 / INT8 ONNX)</i><br/>• SLA &lt; 15ms | Custo $0.00 | 0 MB VRAM"]
     end
 
-    subgraph Engine["🧠 PCL CLASSIFIER ENGINE (Implementação Canônica Soberana)"]
-        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Engine Nativa em CPU Local (:20140 / INT8 ONNX)</i><br/>• Primitivas: Binary, Choice, Score, Contradiction<br/>• SLA: &lt; 15ms | Custo: $0.00 | VRAM: 0 MB"]
+    subgraph Fallback["🛡️ Contingência de Exceção"]
+        CloudFallback["<b>Cloud Structured LLM Fallback</b><br/><i>Acionado apenas na indisponibilidade do container local</i>"]
     end
 
-    subgraph FallbackSecundario["🛡️ Camada de Contingência"]
-        CloudFallback["<b>Fallback de Exceção Corporativa</b><br/>Modelos Estruturados em Nuvem (JSON Schema)<br/><i>Acionado apenas se o container local for desligado</i>"]
-    end
-
-    %% Conexões do Canal MCP
-    IDE ==>|"MCP Protocol (Zero Latência de Rede)"| MCPServer
-    MCPServer ==>|"Execução Direta em CPU"| LayaCore
-
-    %% Conexões do Canal Gateway
-    IDE -.->|"REST / HTTP"| OmniRoute
-    Harness -.->|"Inspeciona Tráfego"| OmniRoute
-    OmniRoute ==>|"Consome Microsserviço :20140"| LayaCore
-
-    %% Fallback
-    OmniRoute -.->|"Falha Extrema / Timeout"| CloudFallback
+    IDE ==>|"MCP Direto (Alta Velocidade)"| Canal1
+    IDE -.->|"HTTP / REST"| Canal2
+    Canal1 ==>|"Execução em CPU"| LayaCore
+    Canal2 ==>|"Consome porta :20140"| LayaCore
+    Canal2 -.->|"Fallback"| CloudFallback
 
     classDef core fill:#0b1329,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef mcp fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef gateway fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#fff;
+    classDef canal fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
     classDef laya fill:#1e3a8a,stroke:#60a5fa,stroke-width:2.5px,color:#fff;
-    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1px,color:#a8a29e;
+    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1.5px,color:#a8a29e;
 
-    class IDE,Harness core;
-    class MCPServer,MCPTools mcp;
-    class OmniRoute,EBITDA gateway;
+    class IDE core;
+    class Canal1,Canal2 canal;
     class LayaCore laya;
     class CloudFallback fallback;
 ```

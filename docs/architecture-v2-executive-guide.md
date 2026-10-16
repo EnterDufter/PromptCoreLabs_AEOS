@@ -18,55 +18,42 @@ Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica di
 Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
 ```mermaid
-flowchart TD
-    Cliente(["👤 Operador Humano / Liderança"])
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '12px', 'fontFamily': 'Inter, sans-serif' }}}%%
+flowchart LR
+    Cliente(["👤 Operador Humano"])
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS (Coprocessador Laya System One)"]
-        Laya["<b>Concierge Inteligente de Decisão Rápida</b><br/><i>CPU Local • &lt; 15ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia a intenção e tria a requisição instantaneamente."]
-        Filtro{"O fato já está validado<br/>ou há contradição?"}
+    subgraph Portaria["⚡ 1. TRIAGEM EXPRESS"]
+        Laya["<b>Concierge Laya</b><br/><i>CPU Local &lt; 15ms • $0.00</i>"]
+        Filtro{"Fato já validado<br/>ou contradição?"}
         Laya --> Filtro
     end
 
-    subgraph Hub["🏢 CENTRAL DE OPERAÇÕES & MEMÓRIA (PCL AEOS)"]
-        subgraph Fichario["📋 1. FICHAS TÉCNICAS (Fatos Validados)"]
-            Claims["<b>Cards Objetivos de Conhecimento (memory.claims)</b><br/>Parâmetros e fatos homologados prontos para uso:<br/><i>'Porta do banco: :5432' • 'Backup: R2 Criptografado'</i>"]
-        end
-
-        subgraph Cartorio["🔐 2. TRILHA DE AUDITORIA DIGITAL"]
-            Recibos["<b>Selo Criptográfico de Autenticidade (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem exata.<br/>Garante integridade e elimina alucinações."]
-        end
-
-        subgraph Biblioteca["💾 3. BASE DE CONHECIMENTO CENTRAL"]
-            Docs["<b>Acervo Original Completo (Git & Chunks Vetoriais)</b><br/>Código-fonte, políticas de governança, arquitetura e playbooks."]
-        end
+    subgraph Hub["🏢 2. CENTRAL DE OPERAÇÕES & MEMÓRIA"]
+        direction TB
+        Fichas["📋 <b>Fichas Técnicas</b> (memory.claims)<br/>Fatos atômicos comprovados"]
+        Trilha["🔐 <b>Trilha de Auditoria</b> (SHA-256)<br/>Selo cartorial anti-alucinação"]
+        Base["💾 <b>Base de Conhecimento</b> (Git)<br/>Código e manuais originais"]
+        Fichas <--> Trilha <--> Base
     end
 
-    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs Cloud & Locais)"]
-        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Acionados apenas para desenhar novas soluções ou programar.<br/><i>Protegidos contra custos desnecessários pelo EBITDA Shield.</i>"]
+    subgraph Especialistas["🧠 3. ESPECIALISTAS"]
+        LLM["<b>LLMs de Raciocínio</b><br/>Engenharia & Código Novo<br/><i>EBITDA Shield Protegido</i>"]
     end
 
-    %% Fluxos
-    Cliente -->|"Pergunta ou Instrução"| Laya
-    Filtro -->|"Sim: Fato Já Validado"| Fichario
-    Fichario <-->|"Verifica Selo Digital"| Cartorio
-    Cartorio <-->|"Rastreia Documento Original"| Biblioteca
-    Cartorio -->|"Resposta Confiável & Auditada"| Cliente
+    Cliente -->|"Pergunta / Tarefa"| Laya
+    Filtro -->|"Sim: Fato Validado"| Fichas
+    Trilha -->|"Resposta Confiável"| Cliente
+    Filtro -->|"Não: Raciocínio Novo"| LLM
+    LLM -->|"Entrega Validada"| Cliente
 
-    Filtro -->|"Não: Exige Novo Raciocínio"| LLM
-    LLM -->|"Solução Criada com Sucesso"| Cliente
-
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff;
-    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#fff;
-    classDef biblio fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#fff;
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#fff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+    classDef hub fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.5px,color:#fff;
+    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:1.5px,color:#fff;
 
     class Cliente cliente;
     class Laya,Filtro portaria;
-    class Claims fichario;
-    class Recibos cartorio;
-    class Docs biblio;
+    class Fichas,Trilha,Base hub;
     class LLM espec;
 ```
 
