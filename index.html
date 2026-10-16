@@ -1034,7 +1034,8 @@
       </div>
 
       <div class="phase-intro">
-        <strong>O que você vai aprender aqui:</strong> O <em>PromptCoreLabs_AEOS</em> é um sistema operacional soberano concebido para governar o desenvolvimento assistido por IA. Nesta primeira fase, você entenderá o contexto do sistema (atores e fronteira local/nuvem) e a topologia de contêineres do Harness físico.
+        <p style="margin-bottom: 0.6rem;"><strong>🏛️ Para Liderança & Não Técnicos:</strong> O PCL AEOS é a fundação de um ecossistema autônomo onde agentes de IA trabalham com regras claras, proteção contra custos excessivos e sem depender de provedores externos proprietários para seu conhecimento essencial.</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> Delimita o escopo C4 L1 (System Context, fronteira perimetral Tailscale Zero Trust e conexões de inferência) e o C4 L2 (Harness Docker local com <code>pcl-db</code> PostgreSQL 17 + PGVector, <code>pcl-laya</code> Coprocessador System One, <code>pcl-omniroute</code> Gateway e <code>pcl-paperclip</code> Dashboard).</p>
       </div>
 
       <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
@@ -1153,7 +1154,8 @@ graph LR
       </div>
 
       <div class="phase-intro">
-        <strong>O que você vai aprender aqui:</strong> O ecossistema PCL AEOS orquestra uma squad com <strong>15 Agentes Inteligentes especialistas</strong>. Nesta etapa, você verá como o Planner, Builder, QA e Auditor colaboram no protocolo de mensagens e na governança do PaperClip.
+        <p style="margin-bottom: 0.6rem;"><strong>👥 Para Liderança & Não Técnicos:</strong> Imagine um escritório de projetos de alta performance onde 15 especialistas digitais realizam tarefas sem interferência indevida: um arquiteto planeja, um engenheiro constrói, um revisor testa e um auditor valida antes que qualquer código vá para produção.</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> Orquestração atômica de agentes com papéis canônicos via PaperClip, protocolo estrito de mensagens assíncronas e governança por 5 Stage Gates sequenciais (G1 specify, G2 design, G3 build, G4 review, G5 deliver).</p>
       </div>
 
       <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
@@ -1319,7 +1321,8 @@ sequenceDiagram
       </div>
 
       <div class="phase-intro">
-        <strong>O que você vai aprender aqui:</strong> O AEOS opera sobre uma <strong>Memória Tripartida (Curto, Médio e Longo Prazo)</strong> integrada ao banco relacional local PostgreSQL 17 + PGVector. Esta fase cobre a ingestão, o RAG semântico (768D/1536D) e a estrutura relacional das tabelas de vetores e logs de execução.
+        <p style="margin-bottom: 0.6rem;"><strong>📚 Para Liderança & Não Técnicos:</strong> O sistema não "esquece" o que aprendeu nem inventa respostas falsas. Ele utiliza uma memória estruturada: anotações rápidas de trabalho na mesa (curto prazo), cadernos de projetos recentes na gaveta (médio prazo) e a biblioteca central em cofre seguro (longo prazo).</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> Modelo de Memória Tripartida operando sobre PostgreSQL 17 + PGVector local, motor de RAG semântico híbrido com embeddings 768D/1536D, busca vetorial cosina e verificação instantânea de contradições/staleness pelo classificador não-autoregressivo Laya.</p>
       </div>
 
       <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
@@ -1510,7 +1513,8 @@ graph LR
       </div>
 
       <div class="phase-intro">
-        <strong>O que você vai aprender aqui:</strong> A arquitetura de resiliência do PCL AEOS opera no modelo de Memória Tripartida de custo marginal zero (<code>$0.00/mês</code>), combinando backup em frio cifrado com AES-256 no Cloudflare R2, sincronização de borda no D1/Vectorize e um Plano de Recuperação de Desastres (DRP) rigoroso com SLAs RPO &le; 1h/24h e RTO &le; 15min.
+        <p style="margin-bottom: 0.6rem;"><strong>🛡️ Para Liderança & Não Técnicos:</strong> Resiliência absoluta com custo zero de infraestrutura na nuvem: o sistema mantém cópias automáticas em cofre criptografado e, se todo o computador quebrar, recupera a operação completa em questão de segundos com SLA contratual garantido.</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> DRP e backup tripartido criptografado (AES-256 + SHA-256) com envio ao Cloudflare R2 ($0.00/mês). Cumpre estritamente os SLAs contratuais de RPO &le; 24h e RTO &le; 15 min, com recuperação ponta a ponta homologada e auditada em <strong>7,18 segundos</strong> em ambiente de laboratório.</p>
       </div>
 
       <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do DRP & Backup Engine</h3>
@@ -1538,7 +1542,7 @@ graph LR
             <td><strong>Longo Prazo (Cold SQL)</strong></td>
             <td>Dump <code>pcl-db</code> (PostgreSQL/pgvector) + Criptografia AES-256 + SHA-256 Checksum</td>
             <td><strong>Cloudflare R2 Bucket</strong> (<code>pcl-backup-memoria-tripartida</code>)</td>
-            <td><strong>RPO &le; 24h</strong> / <strong>RTO = 7.18s (Homologado)</strong></td>
+            <td><strong>RPO &le; 24h</strong> / <strong>SLA RTO &le; 15min (Homologado 7.18s)</strong></td>
           </tr>
           <tr>
             <td><strong>Médio Prazo (Event Docs)</strong></td>
@@ -1568,7 +1572,7 @@ graph LR
               <span class="card-exp-id">DIAG-MEM-01 • Resiliência & DRP</span>
               <span class="priority-tag p0">P0 Crítico</span>
             </div>
-            <h4 class="card-exp-title">Memória Tripartida & DRP (RTO 7.18s)</h4>
+            <h4 class="card-exp-title">Memória Tripartida & DRP (SLA RTO &le; 15min / Benchmark 7.18s)</h4>
             <p class="card-exp-desc">Fluxo de resiliência e backup frio criptografado em AES-256 no Cloudflare R2 ($0.00/mês) com restauração ponta a ponta homologada e auditada em <strong>7,18 segundos</strong>.</p>
             <div class="card-exp-footer">
               <a href="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" class="link-doc" data-doc-title="Runbook: Staleness Daemon & DRP Operations">📖 Ler Runbook de DRP ↗</a>
@@ -1589,7 +1593,8 @@ graph LR
       </div>
 
       <div class="phase-intro">
-        <strong>O que você vai aprender aqui:</strong> A camada operacional garante que o sistema execute com total segurança perimetral (Zero Trust), economia financeira (EBITDA Shield no OmniRoute) e rastreabilidade rigorosa por 5 Stage Gates sequenciais.
+        <p style="margin-bottom: 0.6rem;"><strong>🔒 Para Liderança & Não Técnicos:</strong> Total conformidade e segurança: nenhuma informação confidencial sai do ambiente local sem criptografia, custos de API na nuvem são bloqueados por tetos financeiros automáticos e todas as ações dos agentes são auditáveis.</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> Harness de contêineres Docker, malha Zero Trust com Tailscale Mesh, proteção de custos via EBITDA Shield no OmniRoute e esteira de execução orientada por especificações auditáveis (TLC Loop).</p>
       </div>
 
       <h3 style="color: var(--accent-cyan); margin: 1.5rem 0 0.8rem 0;">Quickstart: Comandos do Harness Local (Docker)</h3>
@@ -1756,7 +1761,8 @@ graph LR
       </div>
 
       <div class="phase-intro">
-        <strong>Inferência Reativa e Smart Failover:</strong> A infraestrutura soberana do PCL AEOS garante autonomia 100% offline sem desperdício de recursos locais. Em modo online, a GPU local (RTX 3050 6GB) é mantida com <strong>0 MB de VRAM alocada</strong>. Na ocorrência de uma queda de internet/VPN, o monitor reativo dispara automaticamente a carga do modelo local sob demanda no LM Studio.
+        <p style="margin-bottom: 0.6rem;"><strong>⚡ Para Liderança & Não Técnicos:</strong> Operação ininterrupta mesmo se a internet cair: em dias normais o sistema usa inteligência em nuvem sem gastar a placa de vídeo do computador (0 MB VRAM). Se a conexão cair, a inteligência local assume em milissegundos sem você parar de trabalhar.</p>
+        <p><strong>⚙️ Para Engenharia & Arquitetura:</strong> Topologia de inferência reativa e smart failover. Monitor de rede chaveia dinamicamente do tier primário em nuvem (Cloud Free Tier / OpenRouter via OmniRoute) para a pilha local (Ollama Qwen 2.5-Coder 7B e LM Studio DeepSeek-Coder-V2-Lite MoE), com alocação dinâmica e liberação automática de VRAM.</p>
       </div>
 
       <!-- TÍTULO COM BOTÃO INTERATIVO CORTEX NA MESMA LINHA -->
