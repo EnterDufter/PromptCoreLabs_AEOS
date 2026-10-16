@@ -3,9 +3,9 @@
 **Última atualização:** 2026-10-16  
 **Etapa TLC declarada pelo projeto:** RELEASE / FOUNDATION READY  
 **Status declarado anteriormente:** CONCLUÍDO, HOMOLOGADO E PUBLICADO NO GITHUB  
-**Parecer independente mais recente:** Foundation Ready não confirmado pela reauditoria local de 2026-10-16; achados P1 e ações recomendadas em audits/DOCUMENTATION-AUDIT-2026-10-16.md.  
+**Parecer independente mais recente:** Laya neural ONNX está implementado no checkout, mas o benchmark não comprova validade independente; os P1 anteriores de governança, segurança e readiness continuam. Foundation Ready não confirmado. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md.  
 **Baseline declarado pelo certificado anterior:** 7764976672696c19cabfeec19c17ec4b31331a0a  
-**HEAD local reauditado:** master / 158156429cbe88a408331e22d0ceced3d5b77163  
+**HEAD local reauditado nesta revisão:** master / b0b83df2c82d0fff4a616b216c498959937c4cf3  
 **Baseline publicado informado pela versão anterior deste STATE:** 4feb6391d4e7b415a773aee10f635aafe115e5a2; não reconferido contra o GitHub remoto nesta auditoria.  
 **Repo:** EnterDufter/PromptCoreLabs_AEOS  
 **Pasta:** C:\PromptCore_Labs\projects\pcl-aeos-harmonization
@@ -76,4 +76,5 @@ A fundação do PCL AEOS está **FOUNDATION READY**. O patrocinador pode autoriz
 | 2026-10-15 | Implementação e homologação do Laya MCP Server e Skill .agents/skills/laya/SKILL.md. |
 | 2026-10-15 | Aprovação do Implementation Plan e execução completa das Etapas 1 a 5 da Harmonização. Emissão do Certificado Foundation Ready (foundation-readiness.md). |
 | 2026-10-16 | Reauditoria documental independente do checkout local; progresso de apresentação confirmado, Foundation Ready não confirmado devido a conflitos normativos, semântica/capacidade do Laya, reconciliação automática, controles do Compose, baseline e cobertura de aceite. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16.md. |
+| 2026-10-16 | Reauditoria após integração do ONNX NLI: implementação neural confirmada estaticamente; validação publicada considerada exploratória, sem benchmark independente; artefato sem pin/hash, health não mostra degradação e P1 normativos, segurança e readiness permanecem. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md. |
 

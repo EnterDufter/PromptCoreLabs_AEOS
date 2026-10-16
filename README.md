@@ -229,21 +229,27 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 
 ```mermaid
 flowchart TD
-    Req[Requisição do Agente / IDE] --> Gateway[OmniRoute AI Gateway :20130]
+    classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    classDef gate fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff
+    classDef online fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
+    classDef failover fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff
+    classDef moe fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff
+
+    Req["Requisição do Agente / IDE<br/>(Antigravity Harness)"]:::req --> Gateway["OmniRoute AI Gateway<br/>(:20130 Port)"]:::gate
     
-    subgraph ModoOnline [1. Operação Primária Online - 0 MB VRAM]
-        Gateway -->|Conexão Ativa| CloudAPI[APIs de Nuvem / Free Tier]
-        CloudAPI --> ResCloud((Resposta Cloud))
+    subgraph ModoOnline ["1. Operação Primária Online - 0 MB VRAM"]
+        Gateway -->|Conexão Ativa| CloudAPI["APIs de Nuvem Soberanas<br/>(Free Tier / Gemini / DeepSeek)"]:::online
+        CloudAPI --> ResCloud(("Resposta Cloud")):::online
     end
     
-    subgraph FailoverL1 [2. Queda de Conexão: Failover Nível 1]
-        CloudAPI -.->|Queda de Rede / Timeout| OllamaLocal[Ollama Local :11434<br>Qwen 2.5 Coder 7B]
-        OllamaLocal --> ResOllama((Resposta Local L1))
+    subgraph FailoverL1 ["2. Queda de Conexão: Failover Nível 1"]
+        CloudAPI -.->|Queda de Rede / Timeout| OllamaLocal["Ollama Local :11434<br/>(Qwen 2.5 Coder 7B)"]:::failover
+        OllamaLocal --> ResOllama(("Resposta Local L1")):::failover
     end
     
-    subgraph FailoverL2 [3. Tarefas Complexas / MoE: Failover Nível 2]
-        OllamaLocal -.->|Se Indisponível / Raciocínio MoE| LMStudioLocal[LM Studio :1234<br>DeepSeek-Coder-V2 MoE]
-        LMStudioLocal --> ResLMS((Resposta Local L2))
+    subgraph FailoverL2 ["3. Tarefas Complexas / MoE: Failover Nível 2"]
+        OllamaLocal -.->|Se Indisponível / Raciocínio MoE| LMStudioLocal["LM Studio :1234<br/>(DeepSeek-Coder-V2 MoE)"]:::moe
+        LMStudioLocal --> ResLMS(("Resposta Local L2")):::moe
     end
 ```
 

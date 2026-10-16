@@ -22,46 +22,46 @@ Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funci
 flowchart TD
     Cliente(["👤 Operador Humano / Liderança"])
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ NLI (Coprocessador Laya System One)"]
-        Laya["<b>Juiz Lógico NLI & Triagem Express</b><br/><i>CPU Local • 22.3ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia intenção e contradição factual com 93.3% de precisão."]
-        Filtro{"O fato já está validado<br/>ou há contradição?"}
+    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ NLI (Coprocessador Laya)"]
+        Laya["<b>Juiz Lógico NLI & Triagem Express</b><br/><i>CPU Local • 22.3ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia intenções e contradições com 93.3% de precisão"]
+        Filtro{"Fato validado ou<br/>há contradição?"}
         Laya --> Filtro
     end
 
     subgraph Hub["🏢 CENTRAL DE OPERAÇÕES & MEMÓRIA (PCL AEOS)"]
         subgraph Fichario["📋 1. FICHAS TÉCNICAS (Fatos Validados)"]
-            Claims["<b>Cards Objetivos de Conhecimento (memory.claims)</b><br/>Parâmetros e fatos homologados prontos para uso:<br/><i>'Porta do banco: :5432' • 'Backup: R2 Criptografado'</i>"]
+            Claims["<b>Fichas de Fatos (memory.claims)</b><br/>Parâmetros e regras homologados para uso imediato<br/><i>'Porta: :5432' • 'Backup: R2 AES-256'</i>"]
         end
 
         subgraph Cartorio["🔐 2. TRILHA DE AUDITORIA DIGITAL"]
-            Recibos["<b>Selo Criptográfico de Autenticidade (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem exata.<br/>Garante integridade e elimina alucinações."]
+            Recibos["<b>Trilha de Auditoria (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem<br/>Garante conformidade e elimina alucinações"]
         end
 
         subgraph Biblioteca["💾 3. BASE DE CONHECIMENTO CENTRAL"]
-            Docs["<b>Acervo Original Completo (Git & Chunks Vetoriais)</b><br/>Código-fonte, políticas de governança, arquitetura e playbooks."]
+            Docs["<b>Base de Conhecimento Central</b><br/>Código-fonte, políticas, arquitetura e playbooks"]
         end
     end
 
-    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs Cloud & Locais)"]
-        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Acionados apenas para desenhar novas soluções ou programar.<br/><i>Protegidos contra custos desnecessários pelo EBITDA Shield.</i>"]
+    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs)"]
+        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Modelos acionados para desenhar novas soluções<br/><i>Protegidos contra custos desnecessários via EBITDA Shield</i>"]
     end
 
-    %% Fluxos
-    Cliente -->|"Pergunta ou Instrução"| Laya
-    Filtro -->|"Sim: Fato Já Validado"| Claims
+    %% Fluxos Operacionais
+    Cliente -->|"Instrução ou Pergunta"| Laya
+    Filtro -->|"Sim: Fato Validado"| Claims
     Claims <-->|"Verifica Selo Digital"| Recibos
-    Recibos <-->|"Rastreia Documento Original"| Docs
-    Recibos -->|"Resposta Confiável & Auditada"| Cliente
+    Recibos <-->|"Rastreia Documento"| Docs
+    Recibos -->|"Resposta Auditada"| Cliente
 
-    Filtro -->|"Não: Exige Novo Raciocínio"| LLM
-    LLM -->|"Solução Criada com Sucesso"| Cliente
+    Filtro -->|"Não: Exige Raciocínio"| LLM
+    LLM -->|"Nova Solução Criada"| Cliente
 
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff;
-    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#ffffff;
     classDef biblio fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#fff;
+    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#ffffff;
 
     class Cliente cliente;
     class Laya,Filtro portaria;
@@ -70,6 +70,7 @@ flowchart TD
     class Docs biblio;
     class LLM espec;
 ```
+
 
 ### Como a Estrutura se Divide:
 1. **A Base de Conhecimento Central (Acervo Digital):** Onde residem o código-fonte, manuais, normas de governança e documentação completa indexados em blocos vetoriais 768D.

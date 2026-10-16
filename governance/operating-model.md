@@ -74,17 +74,20 @@ Conforme registrado no [ADR-005](../docs/adr/ADR-005-multi-vertical-ai-holding-m
 ## 🏛️ O Modelo em 3 Camadas da Holding Digital PCL
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
 graph TD
-    classDef platform fill:#131b2e,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
-    classDef verticals fill:#0f172a,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
-    classDef products fill:#1e1b4b,stroke:#c084fc,stroke-width:1.5px,color:#f8fafc;
+    classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef products fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff;
 
     subgraph Layer1["Camada 1: Plataforma Core PCL-AEOS ($0 Custo Marginal)"]
+        direction LR
         C1["🧠 Cortex Engine"]:::platform
         C2["⚡ OmniRoute :20130"]:::platform
-        C3["🤖 Paperclip :3100"]:::platform
-        C4["💾 PGVector RAG"]:::platform
-        C5["🛠️ TLC Agent Skills"]:::platform
+        C3["⭐ Laya System One :20140"]:::platform
+        C4["💾 PGVector RAG :5432"]:::platform
+        C5["🤖 Paperclip :3100"]:::platform
+        C6["🛠️ TLC Agent Skills"]:::platform
     end
 
     subgraph Layer2["Camada 2: 15 Verticais de Negócio B2B (Profit Centers)"]
@@ -110,6 +113,7 @@ graph TD
     end
 
     subgraph Layer3["Camada 3: Modelos de Monetização & Produtos"]
+        direction LR
         P1["📦 Proposta Fechada"]:::products
         P2["🔄 Retainers Mensais"]:::products
         P3["🚀 Micro-SaaS White-Label"]:::products
@@ -120,6 +124,7 @@ graph TD
     Layer1 --> Layer2
     Layer2 --> Layer3
 ```
+
 
 ---
 
