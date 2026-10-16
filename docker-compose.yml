@@ -30,8 +30,27 @@ services:
       - AUTH_DISABLED=1
       - SKIP_LOGIN=1
       - REQUIRE_LOGIN=false
+      - OMNIROUTE_CLASSIFIER_PROVIDER=laya
+      - OMNIROUTE_LAYA_ENDPOINT=http://pcl-laya:20140
+      - OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED=true
+    depends_on:
+      - laya
     volumes:
       - omniroute-data:/var/lib/omniroute
+
+  laya:
+    build:
+      context: ./services/pcl-laya
+      dockerfile: Dockerfile
+    image: pcl-laya:latest
+    container_name: pcl-laya
+    restart: always
+    ports:
+      - "20140:20140"
+    environment:
+      - PORT=20140
+      - ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider
+
 
   paperclip:
     build: 
