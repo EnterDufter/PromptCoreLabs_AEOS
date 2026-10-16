@@ -106,10 +106,10 @@ class ONNXNLIEngine:
             self.model_path = str(resolved_dir / "model.onnx")
             self.tokenizer_path = str(resolved_dir / "tokenizer.json")
 
-            # Configura Tokenizer Fast WordPiece
+            # Configura Tokenizer Fast RoBERTa/MiniLM
             self.tokenizer = Tokenizer.from_file(self.tokenizer_path)
             self.tokenizer.enable_truncation(max_length=128)
-            self.tokenizer.enable_padding(length=128)
+            self.tokenizer.no_padding()
 
             # Configura Sessão ONNX Runtime estritamente em CPU
             opts = ort.SessionOptions()
