@@ -19,7 +19,7 @@ Seu objetivo é realizar um **Gap Analysis** (confrontar o estado atual do repos
 
 ### **Passo 1: Audit & Gap Analysis do OmniRoute Gateway (:20130)**
 1. Inspecione a pasta do OmniRoute Gateway no repositório (`/docker/omniroute` ou equivalente).
-2. Verifique se a rota `/v1/classifier/evaluate` está exposta e se o suporte ao **JEV (TypeSafe AI)** como provedor default de classificação do Sistema 1 está habilitado.
+2. Verifique se a rota `/v1/classifier/evaluate` está exposta e se o suporte ao **Laya System One (MCP Server e microsserviço :20140)** como motor soberano de classificação do Sistema 1 está habilitado.
 3. Garanta que o contrato do **PCL Classifier Port** (`spec-pcl-aeos-classifier-engine.md`) seja respeitado:
    - Respostas das primitivas em tempo < 100ms.
    - Retorno estruturado em JSON com custo $0.00 de saída de tokens.

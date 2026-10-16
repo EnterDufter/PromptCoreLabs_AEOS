@@ -41,7 +41,7 @@ Para evitar dependência direta de ferramentas de terceiros ou termos proprietá
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                        OMNIROUTE AI GATEWAY (:20130)                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │ PCL Classifier Port (JEV / System 1 Triage)                                      │  │
+│  │ PCL Classifier Engine (Laya System One Triage / MCP Engine)                 │  │
 │  │  - Intercepta requisições do Agente em <100ms sem custo de output                 │  │
 │  └────────────────────────────────────────┬─────────────────────────────────────────┘  │
 │                                           │ (Se complexo)                              │

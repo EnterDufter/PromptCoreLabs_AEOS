@@ -2277,54 +2277,89 @@ graph LR
 
 ## 1. O que é o PCL AEOS em poucas palavras?
 
-O **PCL AEOS** (*AI Engineering Operating System*) é como um **sistema nervoso autônomo** para o desenvolvimento de software e inteligência artificial. 
+O **PCL AEOS** (*AI Engineering Operating System*) é o **sistema operacional soberano** para engenharia e desenvolvimento assistido por inteligência artificial. 
 
-Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica digital inteligente** que roda localmente no seu computador, unindo agentes de inteligência artificial especializados para arquitetar, programar, testar e proteger suas aplicações de forma contínua, com **soberania total sobre seus dados** e **custo zero de nuvem para operações corriqueiras**.
+Ele não é apenas um "chat" ou uma ferramenta isolada. Ele é uma **fábrica digital inteligente** que roda localmente no seu computador, orquestrando um squad de agentes especializados para arquitetar, programar, testar e proteger suas aplicações de forma contínua, com **soberania total sobre seus dados** e **custo zero de nuvem para operações corriqueiras**.
 
 ---
 
-## 2. A Metáfora do Escritório e da Biblioteca
+## 2. A Metáfora da Central de Operações & Memória Digital
 
-Para entender como a **Memória Tripartida** do PCL AEOS funciona na prática, imagine um escritório de consultoria de alto padrão:
+Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funcionam na prática, imagine a dinâmica de um **Hub de Inteligência Digital de Alta Tecnologia**:
 
+```mermaid
+flowchart TD
+    Cliente(["👤 Operador Humano / Liderança"])
+
+    subgraph Portaria["⚡ TRIAGEM EXPRESS (Coprocessador Laya System One)"]
+        Laya["<b>Concierge Inteligente de Decisão Rápida</b><br/><i>CPU Local • &lt; 15ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia a intenção e tria a requisição instantaneamente."]
+        Filtro{"O fato já está validado<br/>ou há contradição?"}
+        Laya --> Filtro
+    end
+
+    subgraph Hub["🏢 CENTRAL DE OPERAÇÕES & MEMÓRIA (PCL AEOS)"]
+        subgraph Fichario["📋 1. FICHAS TÉCNICAS (Fatos Validados)"]
+            Claims["<b>Cards Objetivos de Conhecimento (memory.claims)</b><br/>Parâmetros e fatos homologados prontos para uso:<br/><i>'Porta do banco: :5432' • 'Backup: R2 Criptografado'</i>"]
+        end
+
+        subgraph Cartorio["🔐 2. TRILHA DE AUDITORIA DIGITAL"]
+            Recibos["<b>Selo Criptográfico de Autenticidade (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem exata.<br/>Garante integridade e elimina alucinações."]
+        end
+
+        subgraph Biblioteca["💾 3. BASE DE CONHECIMENTO CENTRAL"]
+            Docs["<b>Acervo Original Completo (Git & Chunks Vetoriais)</b><br/>Código-fonte, políticas de governança, arquitetura e playbooks."]
+        end
+    end
+
+    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs Cloud & Locais)"]
+        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Acionados apenas para desenhar novas soluções ou programar.<br/><i>Protegidos contra custos desnecessários pelo EBITDA Shield.</i>"]
+    end
+
+    %% Fluxos
+    Cliente -->|"Pergunta ou Instrução"| Laya
+    Filtro -->|"Sim: Fato Já Validado"| Fichario
+    Fichario <-->|"Verifica Selo Digital"| Cartorio
+    Cartorio <-->|"Rastreia Documento Original"| Biblioteca
+    Cartorio -->|"Resposta Confiável & Auditada"| Cliente
+
+    Filtro -->|"Não: Exige Novo Raciocínio"| LLM
+    LLM -->|"Solução Criada com Sucesso"| Cliente
+
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff;
+    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef biblio fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
+    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#fff;
+
+    class Cliente cliente;
+    class Laya,Filtro portaria;
+    class Claims fichario;
+    class Recibos cartorio;
+    class Docs biblio;
+    class LLM espec;
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        COMO FUNCIONA O ESCRITÓRIO                     │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. A BIBLIOTECA (Documentos Brutos)                                    │
-│    Onde ficam guardados os livros, manuais e projetos originais.       │
-│    No PCL AEOS: São os textos do seu repositório Git organizados em    │
-│    pequenos blocos indexados (chunks 768D).                           │
-├────────────────────────────────────────────────────────────────────────┤
-│ 2. O FICHÁRIO DE PREMISSAS (As Claims Atômicas)                        │
-│    Em vez de reler um livro inteiro de 500 páginas a cada dúvida, um   │
-│    assistente mantém fichas catalogadas com afirmações comprovadas:     │
-│    "A porta de banco é :5432", "A política de backup é diária".        │
-│    No PCL AEOS: memory.claims com selos de autoridade e confiança.     │
-├────────────────────────────────────────────────────────────────────────┤
-│ 3. O LIVRO CARTORIAL (Os Recibos Criptográficos de Evidência)          │
-│    Cada ficha do fichário possui um carimbo cartorial que aponta para  │
-│    a página e linha exatas do livro de onde ela saiu. Se alguém tentar │
-│    alterar o livro, o carimbo detecta a divergência instantaneamente. │
-│    No PCL AEOS: memory.evidence_receipts com hashes SHA-256 e commits. │
-└────────────────────────────────────────────────────────────────────────┘
-```
+
+### Como a Estrutura se Divide:
+1. **A Base de Conhecimento Central (Acervo Digital):** Onde residem o código-fonte, manuais, normas de governança e documentação completa indexados em blocos vetoriais 768D.
+2. **As Fichas Técnicas de Fatos Validados (`memory.claims`):** Em vez de reler centenas de páginas a cada interação, o sistema mantém cartões objetivos com afirmações comprovadas (*"A porta do banco é :5432"*, *"A política de backup é diária"*).
+3. **A Trilha de Auditoria Digital (`memory.evidence_receipts`):** Cada ficha técnica possui um selo digital criptográfico com hash SHA-256 e o commit exato do Git. Se alguém alterar o documento original, o sistema acusa a divergência no mesmo segundo.
 
 ### Por que essa abordagem elimina as "alucinações"?
-Quando uma inteligência artificial comum é questionada, ela tenta "adivinhar" o que soa verossímil.  
-No PCL AEOS, os agentes são proibidos de inventar: eles consultam o fichário e exigem o carimbo cartorial da evidência. Se uma informação for contraditória ou não estiver comprovada, o sistema acusa o conflito de forma transparente.
+Quando uma inteligência artificial convencional é questionada, ela tenta "adivinhar" o que soa verossímil.  
+No PCL AEOS, os agentes são proibidos de inventar: eles consultam as Fichas Técnicas e exigem a Trilha de Auditoria com selo de evidência. Se uma informação for contraditória ou não comprovada, o sistema acusa o conflito de forma transparente.
 
 ---
 
-## 3. O Coprocessador Laya: O "Reflexo Rápido" que Protege o Bolso
+## 3. O Coprocessador Laya: A Triagem Express que Protege o Bolso
 
 No cérebro humano, quando você encosta a mão em uma chapa quente, seu braço recua antes mesmo de você raciocinar: isso é um **reflexo involuntário**.
 
 O **Laya System One** é o reflexo involuntário do PCL AEOS:
-* Ele é um microsserviço ultrarrápido que roda no processador comum (CPU) em **menos de 15 milissegundos**.
+* Ele é um microsserviço e MCP Server nativo que roda no processador comum (CPU) em **menos de 15 milissegundos** (com benchmark auditado em $\sim$0,014ms via MCP local).
 * Ele **não gasta 1 megabyte sequer da placa de vídeo (GPU)**, deixando todo o hardware livre para trabalho pesado.
 * Se você disser um simples *"Bom dia"* ou perguntar *"Qual é a porta do banco?"*, o Laya responde de imediato no computador local, **sem gastar tokens de nuvem nem um centavo de dólar ($0.00)**.
-* Se a solicitação exigir raciocínio complexo ou programação sofisticada, o Laya direciona a tarefa para os modelos mais potentes com cache inteligente padronizado (**EBITDA Shield**).
+* Se a solicitação exigir raciocínio complexo ou programação sofisticada, o Laya direciona a tarefa para os modelos mais potentes através do cache inteligente padronizado (**EBITDA Shield**).
 
 ---
 
@@ -2335,15 +2370,15 @@ Imagine que você editou uma única linha de um documento no Git. Sistemas tradi
 O PCL AEOS possui um sentinela silencioso:
 * A cada alteração no código, ele calcula a "impressão digital" (hash SHA-256) do arquivo em **0,2 segundo**.
 * Se nada mudou, ele gasta **zero tokens**.
-* Se houve alteração, ele atualiza cirurgicamente apenas aquela página do livro.
+* Se houve alteração, ele atualiza cirurgicamente apenas aquela ficha técnica específica.
 
 ---
 
-## 5. Resiliência Absoluta: Recuperação de Desastres em 7 Segundos
+## 5. Resiliência Absoluta: Recuperação de Desastres em Segundos
 
 Se o computador queimar ou o disco for formatado, o PCL AEOS foi projetado e **auditado formalmente** para:
-* Executar backup cifrado militarmente (AES-256) para nuvem gratuita Cloudflare R2.
-* Restaurar toda a base de dados, inteligência e memórias em **apenas 7,18 segundos (RTO)**.
+* Executar backup cifrado militarmente (AES-256) para nuvem gratuita Cloudflare R2 ($0.00/mês).
+* Cumprir SLA contratual de RTO $\le$ 15 minutos, com restauração completa de dados, inteligência e memórias homologada e auditada em **apenas 7,18 segundos** em laboratório.
 
 ---
 
@@ -2353,10 +2388,9 @@ Se o computador queimar ou o disco for formatado, o PCL AEOS foi projetado e **a
 |:---|:---:|:---|
 | **Custo Mensal de Infraestrutura** | **$0.00 / mês** | Zero dependência de servidores pagos |
 | **Alocação de VRAM na GPU** | **0 MB** | Placa de vídeo 100% livre |
-| **Latência de Decisão (Laya)** | **< 15 ms** | Resposta instantânea e sem engasgos |
-| **Tempo de Recuperação (RTO)** | **7,18 s** | Continuidade de negócio inabalável |
+| **Latência de Decisão (Laya)** | **< 15 ms (0.014ms MCP)** | Resposta instantânea e sem engasgos |
+| **Tempo de Recuperação (RTO)** | **7,18 s (SLA $\le$ 15min)** | Continuidade de negócio inabalável |
 | **Integridade de Fatos** | **100% Criptografado** | Rastreabilidade do commit à resposta |
-
   </script>
   <script id="doc-README" type="text/markdown" data-doc-path="projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md" data-doc-decoded="projects/Living Architecture PCL AEOS/docs/strategy/README.md">
 # Artigo Técnico: Estratégia Corporativa & Visão PCL AEOS
@@ -3421,55 +3455,78 @@ docker-compose.yml
   <script id="doc-spec-pcl-aeos-classifier-engine" type="text/markdown" data-doc-path="specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md" data-doc-decoded="specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md">
 # SPEC-PCL-AEOS-CLASSIFIER-01: PCL Triage & System 1 Classifier Engine Specification
 
-**Versão:** 2.0-Agnostic  
-**Status:** Approved for Implementation (Ports & Adapters Architecture)  
+**Versão:** 2.0-Sovereign (Laya System One)  
+**Status:** Approved & Implemented (Ports & Adapters Architecture / Laya MCP Native)  
 **Autor:** Forward Deployed Architecture (FDA) / PCL AI Squad  
-**Escopo:** OmniRoute AI Gateway (:20130), Antigravity IDE, PCL Core Engine  
+**Escopo:** OmniRoute AI Gateway (:20130), Antigravity IDE, PCL Core Engine, Laya MCP Server  
 **Padrão Arquitetural:** Hexagonal Architecture (Ports & Adapters) / Strategy Pattern  
 **Normas de Governança:** ISO/IEC 27001 & ISO/IEC 42001  
 
 ---
 
-## 1. Diretriz Arquitetural: Abstração & Independência de Provedor
+## 1. Diretriz Arquitetural: Abstração & Soberania do Sistema 1
 
-Para garantir que o **PCL AEOS** permaneça um Sistema Operacional de IA Soberano e totalmente agnóstico, o componente de decisão e triagem ultra-rápida é especificado como um **Porto de Classificação do Sistema 1 (`PCL Classifier Port`)**.
+Para garantir que o **PCL AEOS** opere como um Sistema Operacional de IA Soberano, o componente de decisão e triagem ultrarrápida é formalizado como o **PCL Classifier Engine**, implementado nativamente pelo **Coprocessador Laya System One**.
 
-A arquitetura do AEOS **não depende de um fornecedor único**. O contrato de interface é genérico e permite plugar diferentes **Provedores de Classificação (Classifier Adapters)** conforme a necessidade do projeto de cada cliente.
+A arquitetura do AEOS opera em modelo de portas e adaptadores, permitindo comunicação direta local em altíssima velocidade via **Model Context Protocol (MCP)** e exposição em microsserviço no container do **OmniRoute AI Gateway (:20130)** para blindagem financeira (*EBITDA Shield*).
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                 PCL AEOS CORE / HARNESS                                │
-└──────────────────────────────────────────┬─────────────────────────────────────────────┘
-                                           │
-                                  REST / gRPC Interface
-                                           │
-                                           ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        OMNIROUTE AI GATEWAY (:20130)                                   │
-│                        `/v1/classifier/evaluate`                                       │
-│                                                                                        │
-│  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │ PCL CLASSIFIER PORT (CONTRATO ABSTRATO)                                          │  │
-│  │  - Primitivas: `binary` (no/nul), `choice` (enum), `score` (numeric)             │  │
-│  │  - SLA de Latência: < 100ms                                                       │  │
-│  │  - Saída Tipada & Custo Marginal de Output = $0.00                               │  │
-│  └───────────────────────────────────────┬──────────────────────────────────────────┘  │
-│                                          │                                             │
-│                  ┌───────────────────────┼───────────────────────┐                     │
-│                  │ (Default)             │ (Alternative)         │ (Fallback)          │
-│                  ▼                       ▼                       ▼                     │
-│  ┌────────────────────────┐  ┌───────────────────────┐  ┌──────────────────────────┐ │
-│  │ Provider Adapter: JEV  │  │ Provider Adapter:     │  │ Provider Adapter:        │ │
-│  │ (TypeSafe AI)          │  │ Local Rust Classifier │  │ Structured LLM Fallback  │ │
-│  └────────────────────────┘  └───────────────────────┘  └──────────────────────────┘ │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Core["🏛️ PCL AEOS Core & Harness"]
+        IDE["Antigravity IDE / Squad de Agentes"]
+        Harness["PCL Runtime Harness"]
+    end
+
+    subgraph CanalMCP["⚡ Canal 1: Direto Local (Laya MCP Server)"]
+        MCPServer["🔌 Laya MCP Server (services/pcl-laya)<br/><i>stdio / JSON-RPC • ~0.014ms • 0 MB VRAM</i>"]
+        MCPTools["Ferramentas Tipadas Nativas:<br/>• laya_evaluate_binary<br/>• laya_evaluate_choice<br/>• laya_evaluate_score<br/>• laya_check_contradiction<br/>• laya_evaluate_batch"]
+        MCPServer --- MCPTools
+    end
+
+    subgraph CanalGateway["🌐 Canal 2: Rede & Gateway (EBITDA Shield)"]
+        OmniRoute["OmniRoute AI Gateway (:20130)<br/><i>/v1/classifier/evaluate</i>"]
+        EBITDA["🛡️ EBITDA Shield (Cache de Prompts & Roteamento)"]
+        OmniRoute --- EBITDA
+    end
+
+    subgraph Engine["🧠 PCL CLASSIFIER ENGINE (Implementação Canônica Soberana)"]
+        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Engine Nativa em CPU Local (:20140 / INT8 ONNX)</i><br/>• Primitivas: Binary, Choice, Score, Contradiction<br/>• SLA: &lt; 15ms | Custo: $0.00 | VRAM: 0 MB"]
+    end
+
+    subgraph FallbackSecundario["🛡️ Camada de Contingência"]
+        CloudFallback["<b>Fallback de Exceção Corporativa</b><br/>Modelos Estruturados em Nuvem (JSON Schema)<br/><i>Acionado apenas se o container local for desligado</i>"]
+    end
+
+    %% Conexões do Canal MCP
+    IDE ==>|"MCP Protocol (Zero Latência de Rede)"| MCPServer
+    MCPServer ==>|"Execução Direta em CPU"| LayaCore
+
+    %% Conexões do Canal Gateway
+    IDE -.->|"REST / HTTP"| OmniRoute
+    Harness -.->|"Inspeciona Tráfego"| OmniRoute
+    OmniRoute ==>|"Consome Microsserviço :20140"| LayaCore
+
+    %% Fallback
+    OmniRoute -.->|"Falha Extrema / Timeout"| CloudFallback
+
+    classDef core fill:#0b1329,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef mcp fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef gateway fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#fff;
+    classDef laya fill:#1e3a8a,stroke:#60a5fa,stroke-width:2.5px,color:#fff;
+    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1px,color:#a8a29e;
+
+    class IDE,Harness core;
+    class MCPServer,MCPTools mcp;
+    class OmniRoute,EBITDA gateway;
+    class LayaCore laya;
+    class CloudFallback fallback;
 ```
 
 ---
 
 ## 2. Contrato da Interface Abstrata (`PCL Classifier Port`)
 
-Qualquer provedor de classificação integrado ao PCL AEOS deve implementar rigorosamente as três primitivas determinísticas abaixo:
+Qualquer provedor de classificação integrado ao PCL AEOS implementa rigorosamente as quatro primitivas determinísticas abaixo:
 
 1. **`evaluate_binary(state, query) -> { result: boolean, confidence: float }`**
    - Respostas estritas de sim/não ou verdadeiro/falso sem geração de texto.
@@ -3477,48 +3534,54 @@ Qualquer provedor de classificação integrado ao PCL AEOS deve implementar rigo
    - Seleção determinística dentre uma lista fixa de opções.
 3. **`evaluate_score(state, query, min, max) -> { score: float, confidence: float }`**
    - Atribuição de pontuação numérica dentro de um intervalo calibrado.
+4. **`check_contradiction(premise, hypothesis) -> { contradiction: boolean, confidence: float }`**
+   - Verificação instantânea de conflito ou staleness entre premissas documentais e afirmações.
 
-### Requisitos Inegociáveis do Porto
-- **Latência:** Resposta entre **50ms e 200ms**.
+### Requisitos Inegociáveis do Motor
+- **Latência:** Resposta entre **0.014ms (via MCP local) e < 35ms (via REST Docker)**.
 - **Segurança de Tipos (Type Safety):** Garantia absoluta de conformidade ao schema JSON, eliminando quebras de pipeline e alucinações de texto.
-- **EBITDA Shield / Economia de Tokens:** Isenção de cobrança de tokens de saída (*zero output token generation*).
+- **EBITDA Shield / Economia de Tokens:** Isenção total de cobrança de tokens de saída (*zero output token generation*, custo \$0.00).
+- **Consumo de Hardware:** 0 MB de VRAM na GPU; execução 100% em CPU com quantização INT8.
 
 ---
 
 ## 3. Mapeamento de Provedores (Adapters)
 
-### **3.1. Provedor Padrão (Reference Implementation): JEV (TypeSafe AI)**
-- **Descrição:** Modelo do Sistema 1 treinado por RLCD (Reinforcement Learning for Calibrated Decisions) da TypeSafe AI [102, 104].
-- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, classificação de intenções em milissegundos e guardrails pré-execução [119, 161].
-- **Custo:** \$0.042 / 1M input tokens. \$0.00 output.
+### **3.1. Provedor Canônico Soberano: Laya System One Coprocessor**
+- **Descrição:** Motor do Sistema 1 local treinado e calibrado para decisões reflexas ultrarrápidas, sem dependência de nuvem.
+- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, verificação instantânea de contradições no RAG de memória, classificação de intenções em microssegundos e guardrails pré-execução no pipeline TLC.
+- **Interfaces:**
+  - **Canal Local:** MCP Server (`services/pcl-laya/src/mcp_server.py`) via `stdio`.
+  - **Canal de Rede:** Endpoint HTTP REST no container `pcl-laya:20140`.
+- **Custo:** \$0.00 / 0 MB GPU VRAM / 100% Offline.
 
-### **3.2. Provedor Alternativo A: Local Compiled Classifier (Rust / ONNX)**
-- **Descrição:** Classificador embarcado compilado em Rust rodando via ONNX Runtime diretamente no contêiner local do AEOS [33, 112].
-- **Caso de Uso:** Ambiência de borda com *air-gap* total ou requisitos de latência <20ms (ex: detecção de fraudes ou filtros de segurança pesados).
+### **3.2. Provedor Alternativo de Borda: Local Compiled ONNX Runtime**
+- **Descrição:** Classificador embarcado compilado para ambientes bare-metal de baixíssimo consumo energético.
+- **Caso de Uso:** Ambiência de borda com *air-gap* total ou requisitos de hardware ultrarrestringido.
 
-### **3.3. Provedor Alternativo B: Cloud Enterprise Structured Classifier**
-- **Descrição:** Adaptador para saídas estruturadas via Amazon Bedrock, Google Vertex AI ou OpenAI Structured Outputs.
-- **Caso de Uso:** Clientes corporativos com restrições normativas de uso exclusivo de nuvem pública contratada.
+### **3.3. Provedor de Contingência: Cloud Structured Fallback**
+- **Descrição:** Adaptador para saídas estruturadas via Amazon Bedrock, Google Vertex AI ou OpenAI Structured Outputs (JSON Schema estrito).
+- **Caso de Uso:** Fallback secundário ativado apenas na hipótese de parada deliberada dos serviços locais.
 
 ---
 
 ## 4. Configuração no OmniRoute AI Gateway (:20130)
 
-O OmniRoute gerencia a troca dinâmica do provedor através de variáveis de ambiente no `docker-compose.aeos.yml`:
+O OmniRoute gerencia a integração dinâmica com o Laya através de variáveis de ambiente no `docker-compose.aeos.yml`:
 
 ```yaml
 # Trecho de configuração no OmniRoute Gateway
-OMNIROUTE_CLASSIFIER_PROVIDER: "jev" # Opções: "jev", "local_rust", "bedrock_structured"
-OMNIROUTE_CLASSIFIER_JEV_API_KEY: "${JEV_API_KEY}"
+OMNIROUTE_CLASSIFIER_PROVIDER: "laya"
+OMNIROUTE_LAYA_ENDPOINT: "http://pcl-laya:20140"
 OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED: "true"
 ```
 
 ---
 
-## 5. Próximos Passos de Integração
-1. A rota `/v1/classifier/evaluate` do OmniRoute deve expor a interface genérica.
-2. O Antigravity IDE chamará o endpoint agnóstico, sem acoplamento direto com a SDK do JEV.
+## 5. Integração com Antigravity IDE & Agentes
 
+1. O **Antigravity IDE** acessa diretamente o Laya MCP Server registrado em `.agents/mcp_config.json`, garantindo decisão instantânea em CPU antes de qualquer inferência de modelo pesado.
+2. O **OmniRoute Gateway** consome o Laya na porta `:20140` como firewall semântico e protetor de custos (*EBITDA Shield*).
   </script>
   <script id="doc-staleness-daemon-and-drp-operations" type="text/markdown" data-doc-path="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md" data-doc-decoded="docs/runtime/runbooks/staleness-daemon-and-drp-operations.md">
 # Runbook de Operações: Deterministic Staleness Daemon & DRP
