@@ -34,12 +34,14 @@ graph TD
     end
 
     subgraph MCPServers["Servidores MCP Ativos"]
+        direction LR
         CX_MCP["pcl-cortex MCP Server<br/>(Cortex Visual Engine v2.12)"]:::server
         LAYA_MCP["pcl-laya MCP Server<br/>(System One & NLI Neural :20140)"]:::server
         NLM_MCP["gemini-notebooklm MCP Server<br/>(Pesquisa & RAG Context)"]:::server
     end
 
     subgraph TargetWorkspace["Host Filesystem & Runtime"]
+        direction LR
         WS["Repositório PCL AEOS<br/>(Workspace & Documentação Viva)"]:::target
         MEM["Memória Híbrida & Vector DB<br/>(pcl-db PostgreSQL / pgvector)"]:::target
     end

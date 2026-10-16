@@ -21,24 +21,28 @@ graph TD
     classDef growth fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
 
     subgraph StratSquad["Squad de Estratégia & Governança Executiva"]
+        direction LR
         S1["<b>Strategist_One</b><br/><i>Visão Estratégica & OKRs</i>"]:::strat
         LEAD["<b>Lead_TLC_Engineer</b><br/><i>Arquitetura Viva & Standards</i>"]:::strat
         AUD["<b>Auditor Agent</b><br/><i>Compliance & Gate Signoff</i>"]:::strat
     end
 
     subgraph CoreSquad["Squad Core de Engenharia TLC"]
+        direction LR
         PLN["<b>Planner Agent</b><br/><i>Decomposição de Tasks & Backlog</i>"]:::core
         BLD["<b>Builder Agent</b><br/><i>Escrita de Código & Diffs</i>"]:::core
         QA["<b>Reviewer QA</b><br/><i>Testes Adversários & Cobertura</i>"]:::core
     end
 
     subgraph SecOpsSquad["Squad SecOps, FinOps & Infra"]
+        direction LR
         CISO["<b>CISO Security Agent</b><br/><i>Zero Trust, Secrets & Mesh VPN</i>"]:::sec
         BIZ["<b>BizOps Controller</b><br/><i>Processos, Sprints & Qualidade</i>"]:::sec
         FIN["<b>Financial Advisor</b><br/><i>FinOps & EBITDA Shield</i>"]:::sec
     end
 
     subgraph GrowthDataSquad["Squad Data, Growth & People"]
+        direction LR
         REV["<b>RevOps Architect</b><br/><i>GTM & Conversão B2B</i>"]:::growth
         DATA["<b>Data Insight Agent</b><br/><i>RAG Relacional & Vetores 768D</i>"]:::growth
         NEURO["<b>Neuromarketing Strategist</b><br/><i>Branding & Posicionamento</i>"]:::growth
@@ -121,37 +125,38 @@ graph TD
 ## 2.3. MATRIZ DE FUNCIONAMENTO DOS COMANDOS SLASH & GOVERNANÇA (ANTIGRAVITY IDE)
 
 ```mermaid
-flowchart TD
+flowchart LR
     classDef inception fill:#0c2340,stroke:#60a5fa,stroke-width:2px,color:#ffffff
     classDef gov fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
     classDef exec fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
     classDef audit fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff
 
-    subgraph Inception_StageGate1["Stage Gate 1: Inception & Specs"]
-        GrillMe["/grill-me<br/>(Entrevista & Alinhamento de Design)"]:::inception
-        Boost["/boost<br/>(Análise Profunda & Refatoração de Arquitetura)"]:::inception
+    subgraph SG1["Stage Gate 1: Inception & Specs"]
+        direction TB
+        GrillMe["<b>/grill-me</b><br/>Entrevista técnica e alinhamento de design"]:::inception
+        Boost["<b>/boost</b><br/>Análise profunda e refatoração arquitetural"]:::inception
     end
 
-    subgraph Governance_StageGate2["Stage Gate 2: Aprovação"]
-        HitL["Human-in-the-Loop<br/>(Aprovação do Implementation Plan)"]:::gov
+    subgraph SG2["Stage Gate 2: Governança"]
+        direction TB
+        HitL["<b>Human-in-the-Loop</b><br/>Aprovação soberana do Implementation Plan"]:::gov
     end
 
-    subgraph Execution_StageGates3_5["Stage Gates 3-5: Construção & QA"]
-        Goal["/goal<br/>(Execução Autônoma Contínua & Testes)"]:::exec
-        Subagents["Subagentes em Paralelo<br/>(Prototyping, InfraSec, Data)"]:::exec
+    subgraph SG3_5["Stage Gates 3-5: Construção & QA"]
+        direction TB
+        Goal["<b>/goal</b><br/>Execução autônoma contínua e testes"]:::exec
+        Subagents["<b>Subagentes em Paralelo</b><br/>Prototipagem, testes e infraestrutura"]:::exec
     end
 
-    subgraph Audit_StageGate6["Stage Gate 6: Auditoria & Memória"]
-        Walkthrough["Walkthrough & Evidências de Teste"]:::audit
-        Learn["/learn<br/>(Gravação de Aprendizados nos KIs)"]:::audit
+    subgraph SG6["Stage Gate 6: Auditoria & Memória"]
+        direction TB
+        Walkthrough["<b>Walkthrough & Evidências</b><br/>Validação de conformidade e entregas"]:::audit
+        Learn["<b>/learn</b><br/>Persistência de aprendizados nos KIs"]:::audit
     end
 
-    GrillMe --> HitL
-    Boost --> HitL
-    HitL --> Goal
-    Goal --> Subagents
-    Subagents --> Walkthrough
-    Walkthrough --> Learn
+    SG1 -->|"Plano de Tarefas"| SG2
+    SG2 -->|"Autorização Soberana"| SG3_5
+    SG3_5 -->|"Código & Testes"| SG6
 ```
 
 ---

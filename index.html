@@ -878,29 +878,30 @@
         page-break-inside: avoid;
       }
       .modal-body .mermaid {
-        background: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
+        background: #0f172a !important;
+        border: 1px solid #334155 !important;
         border-radius: 8px !important;
-        padding: 0.8rem !important;
+        padding: 1rem !important;
         margin: 1.2rem auto !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        width: 100% !important;
         max-width: 100% !important;
         text-align: center !important;
         overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       .modal-body .mermaid svg {
-        max-width: 92% !important;
-        max-height: 380px !important;
-        width: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
+        max-height: none !important;
         display: block !important;
         margin: 0 auto !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-      }
-      .modal-body .mermaid svg text {
-        fill: #0f172a !important;
+        overflow: visible !important;
       }
     }
   
@@ -2354,55 +2355,47 @@ Para entender como a **Memória Tripartida** e a inteligência do PCL AEOS funci
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '13px', 'fontFamily': 'Inter, sans-serif' }}}%%
 flowchart TD
-    Cliente(["👤 Operador Humano / Liderança"])
+    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef memRota fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef auditRota fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+    classDef biblioRota fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
+    classDef especRota fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#ffffff;
+    classDef shield fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
 
-    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ NLI (Coprocessador Laya)"]
-        Laya["<b>Juiz Lógico NLI & Triagem Express</b><br/><i>CPU Local • 22.3ms • 0 MB VRAM • Custo $0.00</i><br/>Avalia intenções e contradições com 93.3% de precisão"]
-        Filtro{"Fato validado ou<br/>há contradição?"}
+    Cliente(["👤 Operador Humano / Liderança (Comando Soberano)"]):::cliente
+
+    subgraph Portaria["⚡ TRIAGEM EXPRESS & JUIZ LÓGICO NLI (Coprocessador Laya)"]
+        Laya["<b>Juiz Lógico NLI & Triagem Semântica Express</b><br/>Inferência ultrarrápida em CPU local (22.3ms • 0 MB VRAM • Custo $0.00)<br/>Classifica a intenção e audita contradições com 93.3% de precisão"]:::portaria
+        Filtro{"Fato já validado ou<br/>exige raciocínio inédito?"}:::portaria
         Laya --> Filtro
     end
 
-    subgraph Hub["🏢 CENTRAL DE OPERAÇÕES & MEMÓRIA (PCL AEOS)"]
-        subgraph Fichario["📋 1. FICHAS TÉCNICAS (Fatos Validados)"]
-            Claims["<b>Fichas de Fatos (memory.claims)</b><br/>Parâmetros e regras homologados para uso imediato<br/><i>'Porta: :5432' • 'Backup: R2 AES-256'</i>"]
+    subgraph Execucao["🏢 CENTRAL DE OPERAÇÕES: DUAS ROTAS CONCORRENTES DE EXECUÇÃO"]
+        subgraph MemoriaPCL["📋 ROTA RÁPIDA: MEMÓRIA TRIPARTIDA SOBERANA (Instantâneo • Custo $0.00)"]
+            direction TB
+            Claims["<b>1. Fichas Técnicas de Fatos Validados (memory.claims)</b><br/>Parâmetros homologados para consulta imediata ('Porta :5432', 'Backup R2')"]:::memRota
+            Recibos["<b>2. Trilha de Auditoria Criptográfica (memory.evidence_receipts)</b><br/>Hash SHA-256 e commit Git vinculando a evidência sem risco de alucinação"]:::auditRota
+            Docs["<b>3. Base de Conhecimento Central (Acervo Digital PCL)</b><br/>Código-fonte, manuais, políticas e normas indexados em blocos vetoriais 768D"]:::biblioRota
+            Claims <-->|"Valida Selo Digital"| Recibos
+            Recibos <-->|"Rastreia Documento-Fonte"| Docs
         end
 
-        subgraph Cartorio["🔐 2. TRILHA DE AUDITORIA DIGITAL"]
-            Recibos["<b>Trilha de Auditoria (memory.evidence_receipts)</b><br/>Hash SHA-256 e ID de Commit rastreando a origem<br/>Garante conformidade e elimina alucinações"]
-        end
-
-        subgraph Biblioteca["💾 3. BASE DE CONHECIMENTO CENTRAL"]
-            Docs["<b>Base de Conhecimento Central</b><br/>Código-fonte, políticas, arquitetura e playbooks"]
+        subgraph Especialistas["🧠 ROTA CRIATIVA: TIME DE ESPECIALISTAS SENIORES (Modelos de Fronteira)"]
+            direction TB
+            LLM["<b>Engenharia de Soluções & Raciocínio Profundo</b><br/>Modelos LLM acionados sob demanda para desenhar novas soluções e códigos complexos"]:::especRota
+            Shield["<b>EBITDA Shield & Governança de FinOps</b><br/>Proteção algorítmica contra consumo desnecessário de tokens e inferências de nuvem"]:::shield
+            LLM --- Shield
         end
     end
 
-    subgraph Especialistas["🧠 TIME DE ESPECIALISTAS SENIORES (LLMs)"]
-        LLM["<b>Engenharia & Raciocínio Profundo</b><br/>Modelos acionados para desenhar novas soluções<br/><i>Protegidos contra custos desnecessários via EBITDA Shield</i>"]
-    end
-
-    %% Fluxos Operacionais
+    %% Fluxos Operacionais Claros
     Cliente -->|"Instrução ou Pergunta"| Laya
-    Filtro -->|"Sim: Fato Validado"| Claims
-    Claims <-->|"Verifica Selo Digital"| Recibos
-    Recibos <-->|"Rastreia Documento"| Docs
-    Recibos -->|"Resposta Auditada"| Cliente
+    Filtro -->|"Sim: Fato Homologado"| Claims
+    Recibos -->|"Resposta Auditada em < 50ms"| Cliente
 
     Filtro -->|"Não: Exige Raciocínio"| LLM
-    LLM -->|"Nova Solução Criada"| Cliente
-
-    classDef cliente fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
-    classDef portaria fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
-    classDef fichario fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef cartorio fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#ffffff;
-    classDef biblio fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-    classDef espec fill:#3b0764,stroke:#e879f9,stroke-width:2px,color:#ffffff;
-
-    class Cliente cliente;
-    class Laya,Filtro portaria;
-    class Claims fichario;
-    class Recibos cartorio;
-    class Docs biblio;
-    class LLM espec;
+    Shield -->|"Nova Solução Homologada"| Cliente
 ```
 
 

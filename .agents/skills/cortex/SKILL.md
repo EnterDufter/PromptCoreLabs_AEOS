@@ -82,9 +82,9 @@ Leia entradas em Mermaid ou UML para extrair a topologia e o significado semânt
 
 Quando solicitado a redigir, otimizar, validar ou manter diagramas Mermaid em arquivos Markdown (`.md`) ou no Portal GitHub Pages (`index.html`) do PCL AEOS, o Cortex atua como **guardião de qualidade visual e conformidade técnica**, aplicando rigorosamente as seguintes regras invariantes:
 
-### 1. Garantia Anti-Clipping (Texto Sem Cortes)
-- **Quebra Semântica Forçada (`<br/>`)**: Rótulos e descrições com mais de 2 palavras ou 18 caracteres **devem obrigatoriamente** utilizar quebras de linha com `<br/>` em vez de texto contínuo em linha única. Isso evita que as caixas SVG excedam os limites de cálculo do layout engine.
-- **Evitar Símbolos Problemáticos em Rótulos**: Não misturar parênteses ou aspas sem delimitadores de string adequados (`["Texto Aqui"]`).
+### 1. Garantia de Proporção Visual & Caixas Horizontais (Anti-Torre)
+- **Proporção Harmônica (Aspect Ratio ~16:9 ou ~4:3)**: É estritamente desaconselhada a criação de diagramas verticais ultra-compridos (proporção 1:4 ou superior). Em vez de empilhar nós verticalmente em linha reta, o diagrama deve ser balanceado em subgrafos horizontais paralelos (`direction LR`, colunas concorrentes de responsabilidade ou pipelines lineares `flowchart LR`).
+- **Largura Generosa em Caixas de Diálogo**: As caixas de texto e cartões devem ser ampliados horizontalmente, permitindo linhas com frases fluidas de 40 a 80 caracteres. Quebras de linha a cada 1 ou 2 palavras são proibidas, pois comprimem os nós em pilares estreitos e deformam a hierarquia visual.
 - **Nós de Decisão (Losangos `{ }`) Concisos**: Rótulos dentro de `{ }` devem ter no máximo 2 a 3 palavras curtas (ex: `{Condição?}`). Rótulos longos deformam o losango e provocam clipping severo.
 
 ### 2. Paleta de Cores de Alto Contraste (WCAG AAA)
@@ -95,10 +95,10 @@ Quando solicitado a redigir, otimizar, validar ou manter diagramas Mermaid em ar
 - **Memória / Estratégia / Audit (`audit`)**: `fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff`
 - **Alerta / Risco / Segurança (`alert`)**: `fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff`
 
-### 3. Integração com o Renderer Web (`index.html`)
-O Cortex garante que o portal master aplique a regra global de visualização limpa:
-- `clip-path: none !important;` e `overflow: visible !important;` em todos os SVGs gerados pelo Mermaid v10.
-- `nodeSpacing: 45`, `rankSpacing: 45` e `padding: 16` no payload de inicialização do engine.
+### 3. Integração com o Renderer Web e Preservação de Impressão (`@media print`)
+O Cortex garante que o portal master aplique as regras universais de renderização e exportação:
+- **Anti-Clipping**: `clip-path: none !important;` e `overflow: visible !important;` em todos os SVGs gerados pelo Mermaid v10.
+- **Preservação de Escala em Impressão PDF**: É proibido o uso de `max-height` restritivo em `@media print`. O diagrama deve expandir para 100% da largura útil da folha A4 com `-webkit-print-color-adjust: exact`, assegurando que o grafismo mantenha tamanho legível, contraste vívido e diagramação profissional quando impresso ou salvo em PDF.
 
 ---
 
