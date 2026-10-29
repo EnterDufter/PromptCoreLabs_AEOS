@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "PCL AEOS v2.0",
+    "tagline": "Su IA Corporativa: control absoluto, seguridad y economía.",
+    "bunkerStatus": "Bunker Status: Online (ISO 27001/42001)",
+    "savings": "Ahorros: $1,420.50 ($0.00 Ollama)",
+    "isoAudit": "ISO Audit Task: Activo",
+    "omniRoute": "OmniRoute: Local Ollama"
+  },
+  "sidebar": {
+    "newChat": "Nueva Conversación",
+    "search": "Buscar... (Ctrl+K)",
+    "projects": "Proyectos / Workspaces",
+    "storage": "Archivos & Storage Sync",
+    "admin": "Empresa & Gobernanza",
+    "orgChart": "Org Chart de Agentes",
+    "skills": "Gestor de Skills",
+    "costs": "Costos & Tokens",
+    "integrations": "Integraciones & Herramientas",
+    "users": "Usuarios & Sesiones (Max 2)"
+  },
+  "workspace": {
+    "timeline": "Reproductor de Línea de Tiempo",
+    "pause": "Pausar",
+    "step": "Paso",
+    "viewArtifact": "Ver",
+    "approveGate": "Aprobar Stage Gate 1",
+    "cortexTitle": "Cortex Engine C4 — Arquitectura Viva"
+  },
+  "composer": {
+    "placeholder": "Escriba su mensaje o use / para comandos...",
+    "audioLocal": "Voz Local (Whisper)",
+    "preset1": "Comenzar migración local con Ollama",
+    "preset2": "Simplificar infraestructura DRP",
+    "preset3": "Auditar cumplimiento ISO 27001 y EU AI Act"
+  }
+}

@@ -1,0 +1,751 @@
+/* ==========================================================================
+   Mockups Visuais de Interfaces de Alta Fidelidade (IDE, CLI, App, PaperClip, PS)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. MOCKUP: ANTIGRAVITY IDE (VS CODE BASED)
+   -------------------------------------------------------------------------- */
+.ide-mockup-container {
+  display: flex;
+  height: 580px;
+  background: #090d16;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Activity Bar (Extrema Esquerda) */
+.ide-activity-bar {
+  width: 48px;
+  background: #060911;
+  border-right: 1px solid #1a2333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0;
+  gap: 1.25rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.ide-activity-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 1.1rem;
+}
+
+.ide-activity-icon:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ide-activity-icon.active {
+  color: var(--accent-cyan);
+  border-left: 2px solid var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+/* Explorer Sidebar */
+.ide-explorer-sidebar {
+  width: 220px;
+  background: #090e1a;
+  border-right: 1px solid #1a2333;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ide-sidebar-header {
+  padding: 0.6rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+  display: flex;
+  justify-content: space-between;
+}
+
+.ide-file-tree {
+  padding: 0.5rem 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tree-item {
+  padding: 0.3rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.tree-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+}
+
+.tree-item.active {
+  background: rgba(56, 189, 248, 0.14);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.tree-folder {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+/* Editor Central */
+.ide-editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #090d16;
+  border-right: 1px solid #1a2333;
+  min-width: 0;
+}
+
+.ide-editor-tabs {
+  display: flex;
+  background: #070a12;
+  border-bottom: 1px solid #1a2333;
+  overflow-x: auto;
+}
+
+.ide-tab {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  border-right: 1px solid #1a2333;
+  font-size: 0.75rem;
+  cursor: pointer;
+  background: #070a12;
+}
+
+.ide-tab.active {
+  background: #090d16;
+  color: #f8fafc;
+  border-top: 2px solid var(--accent-cyan);
+}
+
+.ide-editor-content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  line-height: 1.7;
+}
+
+.code-line {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.line-num {
+  width: 25px;
+  color: #475569;
+  text-align: right;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.line-text {
+  flex: 1;
+  white-space: pre;
+}
+
+/* Inline Diff (Ctrl+I) */
+.inline-diff-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 6px;
+  margin: 0.75rem 0;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.2);
+  overflow: hidden;
+}
+
+.inline-diff-header {
+  background: rgba(56, 189, 248, 0.15);
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+}
+
+.diff-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-diff-accept {
+  background: #059669;
+  color: #fff;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-diff-reject {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.diff-line-del {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  display: flex;
+  padding: 0.15rem 0.75rem;
+}
+
+.diff-line-add {
+  background: rgba(16, 185, 129, 0.18);
+  color: #86efac;
+  display: flex;
+  padding: 0.15rem 0.75rem;
+}
+
+/* Sidebar Chat do Agente (Direita) */
+.ide-chat-panel {
+  width: 320px;
+  background: #080c18;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ide-chat-header {
+  padding: 0.65rem 0.9rem;
+  background: #0b1120;
+  border-bottom: 1px solid #1a2333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.ide-chat-messages {
+  flex: 1;
+  padding: 0.9rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.chat-bubble {
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.bubble-user {
+  background: rgba(30, 41, 59, 0.8);
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  align-self: flex-end;
+  max-width: 90%;
+}
+
+.bubble-agent {
+  background: rgba(19, 27, 46, 0.9);
+  color: #e2e8f0;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-left: 3px solid var(--accent-cyan);
+  align-self: flex-start;
+  max-width: 95%;
+}
+
+.ide-chat-input-bar {
+  padding: 0.65rem;
+  background: #070a12;
+  border-top: 1px solid #1a2333;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ide-chat-input {
+  flex: 1;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 5px;
+  color: #fff;
+  padding: 0.45rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  outline: none;
+}
+
+.ide-chat-input:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* Status Bar Inferior */
+.ide-status-bar {
+  height: 26px;
+  background: #0369a1;
+  color: #f0f9ff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+}
+
+.ide-status-nodes {
+  display: flex;
+  gap: 1rem;
+}
+
+.status-node {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* --------------------------------------------------------------------------
+   2. MOCKUP: ANTIGRAVITY CLI (`agy`)
+   -------------------------------------------------------------------------- */
+.cli-mockup-body {
+  background: #070a13;
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.84rem;
+  min-height: 420px;
+  line-height: 1.7;
+  color: #e2e8f0;
+}
+
+.cli-header-banner {
+  border-bottom: 1px dashed #1e293b;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.cli-brand-title {
+  color: var(--accent-cyan);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.cli-line {
+  margin-bottom: 0.35rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cli-prompt-symbol {
+  color: var(--accent-emerald);
+  font-weight: 700;
+}
+
+.cli-user-input {
+  color: #fff;
+  font-weight: 600;
+}
+
+.cli-spinner {
+  color: var(--accent-amber);
+  animation: spin 1.2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cli-table {
+  width: 100%;
+  margin: 0.75rem 0;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.cli-table th {
+  border-bottom: 1px solid #334155;
+  color: var(--accent-cyan);
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+}
+
+.cli-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.cli-command-palette {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.palette-item {
+  padding: 0.3rem 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.76rem;
+}
+
+.palette-item.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   3. MOCKUP: ANTIGRAVITY 2.0 (DESKTOP APP & AUXILIARY PANE)
+   -------------------------------------------------------------------------- */
+.app-mockup-layout {
+  display: flex;
+  height: 540px;
+  background: #090e1b;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.app-left-sidebar {
+  width: 200px;
+  background: #060912;
+  border-right: 1px solid #1a2333;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.app-nav-item {
+  padding: 0.55rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #94a3b8;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.app-nav-item:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.app-nav-item.active {
+  color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.12);
+  border-left: 3px solid var(--accent-cyan);
+}
+
+.app-main-canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #090e1b;
+  border-right: 1px solid #1a2333;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.app-auxiliary-pane {
+  width: 330px;
+  background: #080c16;
+  display: flex;
+  flex-direction: column;
+}
+
+.aux-header {
+  padding: 0.75rem 1rem;
+  background: #0b1120;
+  border-bottom: 1px solid #1a2333;
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.82rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.aux-tabs {
+  display: flex;
+  border-bottom: 1px solid #1a2333;
+  background: #060912;
+}
+
+.aux-tab {
+  flex: 1;
+  padding: 0.45rem;
+  text-align: center;
+  font-size: 0.72rem;
+  color: #64748b;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.aux-tab.active {
+  color: var(--accent-cyan);
+  border-bottom: 2px solid var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.aux-content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.subagent-card {
+  background: #0e1526;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.75rem;
+  border-left: 3px solid var(--accent-emerald);
+}
+
+.subagent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.cron-task-card {
+  background: #0e1526;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. MOCKUP: PAPERCLIP (:3100 — HOLDING DIGITAL DASHBOARD)
+   -------------------------------------------------------------------------- */
+.paperclip-dashboard {
+  background: #0b0f19;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pc-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 1rem;
+}
+
+.pc-company-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pc-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.pc-metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.pc-metric-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.pc-metric-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.pc-metric-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pc-verticals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.pc-card-vertical {
+  background: #131c31;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.pc-card-vertical:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.pc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.pc-agent-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   5. MOCKUP: POWERSHELL TERMINAL HUB (WINDOWS CONSOLE)
+   -------------------------------------------------------------------------- */
+.ps-hub-frame {
+  background: #050811;
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.2), 0 10px 40px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+.ps-hub-tabs {
+  display: flex;
+  background: #080c18;
+  border-bottom: 1px solid #1e293b;
+  padding: 0.5rem 0.75rem 0;
+  gap: 0.35rem;
+  overflow-x: auto;
+}
+
+.ps-tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  padding: 0.5rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all var(--transition-fast);
+}
+
+.ps-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ps-tab-btn.active {
+  background: #050811;
+  border-color: #1e293b;
+  color: var(--accent-cyan);
+  border-top: 2px solid var(--accent-cyan);
+}
+
+.ps-content-body {
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.86rem;
+  min-height: 380px;
+  line-height: 1.7;
+  color: #f1f5f9;
+}
+
+.ps-prompt-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.ps-prompt-badge {
+  color: #38bdf8;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ps-cmd-text {
+  color: #f8fafc;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.ps-output-block {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 0.75rem 0 1.5rem;
+  color: #cbd5e1;
+  overflow-x: auto;
+}
+
+.ps-latency-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}

@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **Status Normativo:** Documento subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> **Status Normativo:** Documento subordinado à [Matriz de Precedência Normativa](normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
 > Para a matriz RACI formal de governança e papéis soberanos de aprovação, a fonte canônica prevalente é a Seção 3 de `normative-hierarchy.md`.
 
 =========================================

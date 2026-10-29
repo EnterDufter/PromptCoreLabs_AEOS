@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCL AEOS v2.0 — Guia Prático: Modos de Usar & Terminal Hub</title>
+  <meta name="description" content="Guia operacional e de engenharia para o ecossistema PCL AEOS: Antigravity IDE, Antigravity CLI, Antigravity 2.0, PaperClip e Operações PowerShell.">
+  
+  <!-- Tipografia de Alta Tecnologia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Folhas de Estilo -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/mockups.css">
+</head>
+<body class="bg-grid-pattern">
+
+  <!-- Ambient Glow Efeito de Fundo -->
+  <div class="ambient-glow" style="top: -100px; left: 50%; transform: translateX(-50%);"></div>
+
+  <!-- Navbar Sticky -->
+  <nav class="navbar-sticky">
+    <a href="#hero" class="nav-brand">
+      <img src="assets/PCL_Logo_Transparente.png" alt="Logo PCL">
+      <span>PCL AEOS <span class="text-cyan">v2.0</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#ide" class="nav-pill">💻 IDE</a>
+      <a href="#cli" class="nav-pill">⚡ CLI (agy)</a>
+      <a href="#app" class="nav-pill">🚀 App 2.0 & SDK</a>
+      <a href="#paperclip" class="nav-pill">🏢 PaperClip</a>
+      <a href="#powershell" class="nav-pill text-cyan">⚡ Terminal Hub (PS)</a>
+      <a href="#workflow" class="nav-pill">🔄 Fluxo E2E</a>
+      <a href="#real-screens" class="nav-pill" style="border-color: rgba(56, 189, 248, 0.4); color: var(--accent-cyan);">📸 Telas Reais</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero" class="hero-section">
+    <div class="container">
+      <img src="assets/PCL_Logo_Transparente.png" alt="PromptCore Labs Logo" class="hero-logo">
+      <h1 class="hero-title glow-cyan">Guia Prático: Modos de Usar o PCL AEOS v2.0</h1>
+      <p class="hero-subtitle">
+        O manual definitivo de engenharia, governança de squads agênticos e automação de terminal.
+        Opere com <strong>soberania total</strong>, <strong>0 MB de VRAM no coprocessador LAYA</strong> e <strong>$0 de nuvem</strong> para inferência local.
+      </p>
+
+      <!-- Badge Bar com Métricas Canônicas -->
+      <div class="badge-bar">
+        <div class="metric-badge">
+          <span class="dot-pulse"></span>
+          <span>Laya System One: <strong>&lt; 35ms (MCP: ~0.014ms)</strong></span>
+        </div>
+        <div class="metric-badge">
+          <span class="text-purple">⚡ VRAM Alocada:</span>
+          <strong>0 MB (100% CPU INT8)</strong>
+        </div>
+        <div class="metric-badge">
+          <span class="text-emerald">💰 Custo Inferência Local:</span>
+          <strong>$0.00 / mês</strong>
+        </div>
+        <div class="metric-badge">
+          <span class="text-cyan">🏛️ Holding Digital:</span>
+          <strong>15 Verticais B2B</strong>
+        </div>
+        <div class="metric-badge">
+          <span class="text-amber">🛡️ Memória Soberana:</span>
+          <strong>PGVector 768D (AES-256)</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SEÇÃO 1: ANTIGRAVITY IDE (PAIR PROGRAMMING & HARNESS)
+       ====================================================================== -->
+  <section id="ide" class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Modo 1 • Desenvolvimento Ativo</div>
+        <h2 class="section-title">No Antigravity IDE (VS Code-based)</h2>
+        <p class="section-desc">
+          O ambiente integrado onde engenheiros e squads de IA colaboram lado a lado.
+          Utilize o agente lateral como <strong>Harness de Execução Autônomo</strong> para as squads do PaperClip, edite código via <strong>Inline Edits (Ctrl+I)</strong> e navegue com <strong>Tab Autocomplete</strong> contextual.
+        </p>
+      </div>
+
+      <!-- UI Mockup: Antigravity IDE -->
+      <div class="window-frame">
+        <div class="window-header">
+          <div class="window-controls-mac">
+            <span class="window-dot dot-red"></span>
+            <span class="window-dot dot-yellow"></span>
+            <span class="window-dot dot-green"></span>
+          </div>
+          <div class="window-title">
+            <span>Antigravity IDE — PromptCoreLabs_AEOS [Workspace: EnterDufter/PromptCoreLabs_AEOS]</span>
+          </div>
+          <div class="window-badges">
+            <span class="window-badge-sm">Agent Mode: ACTIVE</span>
+            <span class="window-badge-sm">MCP: 4 Servers</span>
+          </div>
+        </div>
+
+        <div class="ide-mockup-container">
+          <!-- Activity Bar -->
+          <div class="ide-activity-bar">
+            <div class="ide-activity-icon active" title="Explorer">📁</div>
+            <div class="ide-activity-icon" title="Search">🔍</div>
+            <div class="ide-activity-icon" title="Source Control">🌿</div>
+            <div class="ide-activity-icon" title="Antigravity Agent Chat">🤖</div>
+            <div class="ide-activity-icon" title="Extensions">🧩</div>
+          </div>
+
+          <!-- Explorer Sidebar -->
+          <div class="ide-explorer-sidebar">
+            <div class="ide-sidebar-header">
+              <span>EXPLORER</span>
+              <span>···</span>
+            </div>
+            <div class="ide-file-tree">
+              <div class="tree-item tree-folder">▾ .agents/</div>
+              <div class="tree-item">　▾ rules/</div>
+              <div class="tree-item active">　　📄 squad-antigravity...md</div>
+              <div class="tree-item">　　📄 tlc-triage-gate.md</div>
+              <div class="tree-item">　▾ skills/</div>
+              <div class="tree-item">　　⚡ cortex/</div>
+              <div class="tree-item">　　⚡ laya/</div>
+              <div class="tree-item tree-folder">▾ PaperClip/</div>
+              <div class="tree-item tree-folder">▾ OmniRoute/</div>
+              <div class="tree-item">📄 docker-compose.aeos.yml</div>
+              <div class="tree-item">📄 mcp.config.json</div>
+            </div>
+          </div>
+
+          <!-- Editor Central -->
+          <div class="ide-editor-area">
+            <div class="ide-editor-tabs">
+              <div class="ide-tab active">
+                <span>📄 squad-antigravity-harness-governance.md</span>
+                <span>×</span>
+              </div>
+              <div class="ide-tab">
+                <span>⚡ laya_evaluator.py</span>
+                <span>×</span>
+              </div>
+            </div>
+
+            <div class="ide-editor-content">
+              <div class="code-line"><span class="line-num">1</span><span class="line-text"><span class="syn-keyword"># Regra de Governança:</span> Integração Antigravity Harness</span></div>
+              <div class="code-line"><span class="line-num">2</span><span class="line-text"></span></div>
+              <div class="code-line"><span class="line-num">3</span><span class="line-text"><span class="syn-cmd">## Squad Responsável:</span> `squad-prototyping`</span></div>
+              <div class="code-line"><span class="line-num">4</span><span class="line-text"><span class="syn-comment">// Refatoração sugerida via Inline Command (Ctrl+I):</span></span></div>
+
+              <!-- Simulação do Inline Diff (Ctrl + I) -->
+              <div class="inline-diff-box">
+                <div class="inline-diff-header">
+                  <span><strong>Inline Edit (Ctrl+I):</strong> Substituir termo legado e ativar EBITDA Shield</span>
+                  <div class="diff-actions">
+                    <button class="btn-diff-accept">Accept (Tab)</button>
+                    <button class="btn-diff-reject">Reject (Esc)</button>
+                  </div>
+                </div>
+                <div class="diff-line-del">- const SQUAD_EXECUTION = "squad-vibe-coding"; // Termo obsoleto</div>
+                <div class="diff-line-add">+ const SQUAD_EXECUTION = "squad-prototyping"; // Governança PCL v2.0</div>
+                <div class="diff-line-add">+ const ROUTE_GATEWAY = "http://localhost:20130"; // OmniRoute Failover</div>
+              </div>
+
+              <div class="code-line"><span class="line-num">8</span><span class="line-text"><span class="syn-keyword">function</span> <span class="syn-cmd">executeStageGate</span>(<span class="syn-param">gateId</span>: <span class="syn-var">number</span>) {</span></div>
+              <div class="code-line"><span class="line-num">9</span><span class="line-text">  <span class="syn-keyword">if</span> (gateId === <span class="syn-var">1</span>) <span class="syn-keyword">return</span> <span class="syn-string">"/grill-me"</span>; <span class="syn-comment">// Inception Interview</span></span></div>
+              <div class="code-line"><span class="line-num">10</span><span class="line-text">  <span class="syn-keyword">if</span> (gateId === <span class="syn-var">3</span>) <span class="syn-keyword">return</span> <span class="syn-string">"/goal"</span>;     <span class="syn-comment">// Autonomous Run</span></span></div>
+              <div class="code-line"><span class="line-num">11</span><span class="line-text">  <span class="syn-keyword">return</span> <span class="syn-string">"/learn"</span>;                    <span class="syn-comment">// Knowledge Item Commit</span></span></div>
+              <div class="code-line"><span class="line-num">12</span><span class="line-text">}</span></div>
+            </div>
+          </div>
+
+          <!-- Agent Chat Panel (Direita) -->
+          <div class="ide-chat-panel">
+            <div class="ide-chat-header">
+              <span>🤖 ANTIGRAVITY AGENT</span>
+              <span class="text-emerald">● Online</span>
+            </div>
+            <div class="ide-chat-messages">
+              <div class="chat-bubble bubble-user">
+                Qual squad do PaperClip deve assumir o desenvolvimento do novo endpoint de telemetria?
+              </div>
+              <div class="chat-bubble bubble-agent">
+                Conforme a regra <a href="#" class="text-cyan">squad-antigravity-harness-governance.md</a>, a responsabilidade é da <strong>`squad-prototyping`</strong> com supervisão do <strong>`Lead_TLC_Engineer`</strong>.<br><br>
+                Recomendo acionar o comando <code>/grill-me</code> para refinarmos as premissas antes de escrever o código.
+              </div>
+              <div class="chat-bubble bubble-user">
+                /grill-me
+              </div>
+              <div class="chat-bubble bubble-agent">
+                <strong>[Stage Gate 1: Entrevista de Inception]</strong><br>
+                1. O endpoint deve registrar métricas no schema <code>memory.evidence_receipts</code>?<br>
+                2. Qual o limite de latência admissível (ex: &lt;15ms via Laya)?
+              </div>
+            </div>
+            <div class="ide-chat-input-bar">
+              <input type="text" class="ide-chat-input" placeholder="Pergunte ou digite /grill-me, /plan, /goal...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Bar do IDE -->
+        <div class="ide-status-bar">
+          <div class="ide-status-nodes">
+            <span class="status-node">🌿 main*</span>
+            <span class="status-node text-emerald">● LAYA MCP: ONLINE (~0.014ms)</span>
+            <span class="status-node text-cyan">⚡ OmniRoute: :20130</span>
+            <span class="status-node">💾 PGVector: 768D (0 MB VRAM)</span>
+          </div>
+          <div class="ide-status-nodes">
+            <span>UTF-8</span>
+            <span>TypeScript / Markdown</span>
+            <span>Prettier</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Grid: Ritos no IDE -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🎯</div>
+          <h3 class="feature-title">Inline Edit (Ctrl + I / Cmd + I)</h3>
+          <p class="feature-desc">
+            Selecione uma função ou linha de configuração e execute refatorações cirúrgicas. O agente propõe um diff visual diretamente no buffer sem mexer no restante do código.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">⚡</div>
+          <h3 class="feature-title">Autocompletion & Tab to Jump</h3>
+          <p class="feature-desc">
+            Previsão do próximo passo com 1 único toque no <code>Tab</code>. Adiciona importações automáticas e antecipa navegações entre arquivos referenciados.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🛡️</div>
+          <h3 class="feature-title">TLC Triage Gate (Dual-Track SDD)</h3>
+          <p class="feature-desc">
+            Separação determinística entre a <strong>Rota Lean</strong> (tarefas cirúrgicas de 1 arquivo) e a <strong>Rota Full SDD</strong> (5 Stage Gates para banco de dados e APIs públicas).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 2: ANTIGRAVITY CLI (`agy` — TERMINAL TUI & DEVOPS)
+       ====================================================================== -->
+  <section id="cli" class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Modo 2 • Linha de Comando & TUI</div>
+        <h2 class="section-title">No Antigravity CLI (`agy`)</h2>
+        <p class="section-desc">
+          Uma interface de terminal ultraleve, construída para desenvolvedores que preferem a agilidade do teclado, servidores remotos headless e scripts de CI/CD.
+        </p>
+      </div>
+
+      <!-- UI Mockup: Antigravity CLI (agy) -->
+      <div class="window-frame">
+        <div class="window-header">
+          <div class="window-controls-mac">
+            <span class="window-dot dot-red"></span>
+            <span class="window-dot dot-yellow"></span>
+            <span class="window-dot dot-green"></span>
+          </div>
+          <div class="window-title">
+            <span>agy — Terminal Agent [c:\PromptCore_Labs]</span>
+          </div>
+          <div class="window-badges">
+            <span class="window-badge-sm">v2.0.4</span>
+            <span class="window-badge-sm">Shell: PowerShell 7</span>
+          </div>
+        </div>
+
+        <div class="cli-mockup-body">
+          <div class="cli-header-banner">
+            <span class="cli-brand-title">AGY v2.0</span> — Antigravity Autonomous Terminal Interface<br>
+            Workspace: <span class="text-cyan">c:\PromptCore_Labs</span> | Provedor: <span class="text-purple">Gemini Flash / OmniRoute Local</span> | VRAM: <span class="text-emerald">0 MB</span>
+          </div>
+
+          <div class="cli-line">
+            <span class="cli-prompt-symbol">agy&gt;</span>
+            <span class="cli-user-input">/plan "Validar saúde do coprocessador Laya e tabelas de memória tripartida"</span>
+          </div>
+
+          <div class="cli-line" style="color: #94a3b8; margin: 0.5rem 0;">
+            <span class="cli-spinner">◐</span> Analisando workspace e consultando MCP Server `pcl-laya`...
+          </div>
+
+          <div class="cli-command-palette">
+            <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 0.35rem; text-transform: uppercase;">Ações Planejadas (Stage Gate 2):</div>
+            <div class="palette-item active">
+              <span>[1] Invocar GET http://localhost:20140/health</span>
+              <span class="text-emerald">Latência: ~0.014ms</span>
+            </div>
+            <div class="palette-item">
+              <span>[2] Consultar contagem em `memory.claims` via psql</span>
+              <span class="text-cyan">SQL Read-Only</span>
+            </div>
+            <div class="palette-item">
+              <span>[3] Verificar integridade do selo SHA-256 no Git HEAD</span>
+              <span class="text-purple">Staleness Daemon</span>
+            </div>
+          </div>
+
+          <table class="cli-table">
+            <thead>
+              <tr>
+                <th>Serviço Core</th>
+                <th>Porta</th>
+                <th>Status</th>
+                <th>Latência CPU</th>
+                <th>SLA / Invariante</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>pcl-laya</strong> (System One)</td>
+                <td>:20140</td>
+                <td><span class="syn-success">● HEALTHY</span></td>
+                <td>0.014 ms</td>
+                <td>&lt; 35ms (0 MB VRAM)</td>
+              </tr>
+              <tr>
+                <td><strong>pcl-omniroute</strong> (Gateway)</td>
+                <td>:20130</td>
+                <td><span class="syn-success">● READY</span></td>
+                <td>1.82 ms</td>
+                <td>EBITDA Shield Active</td>
+              </tr>
+              <tr>
+                <td><strong>pcl-db</strong> (PGVector 17)</td>
+                <td>:5432</td>
+                <td><span class="syn-success">● ONLINE</span></td>
+                <td>0.45 ms</td>
+                <td>768 Dimensões HNSW</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="cli-line" style="margin-top: 1rem;">
+            <span class="cli-prompt-symbol">agy&gt;</span>
+            <span class="cli-user-input">/goal "Executar auditoria contínua até que 100% dos testes passem"</span>
+            <span style="color: var(--accent-cyan); animation: pulse-dot 1s infinite;"> █</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snippets & Comandos do CLI -->
+      <div class="code-box">
+        <div class="code-box-header">
+          <span class="code-title">💻 Comandos de Terminal & Automação Headless com `agy`</span>
+          <button class="btn-copy">Copiar Comandos</button>
+        </div>
+        <pre class="code-content"><code><span class="syn-comment"># 1. Iniciar o CLI interativo no workspace</span>
+<span class="syn-cmd">agy</span>
+
+<span class="syn-comment"># 2. Executar um objetivo autônomo diretamente em modo não-interativo (Headless / CI/CD)</span>
+<span class="syn-cmd">agy</span> <span class="syn-param">run</span> <span class="syn-string">"/goal Executar teste de DRP e validar backup R2"</span>
+
+<span class="syn-comment"># 3. Gerar plano de implementação com o comando /plan</span>
+<span class="syn-cmd">agy</span> <span class="syn-param">run</span> <span class="syn-string">"/plan Refatorar rotas do OmniRoute para suportar novo modelo local"</span>
+
+<span class="syn-comment"># 4. Registrar nova convenção aprendida no repositório de Knowledge Items (KI)</span>
+<span class="syn-cmd">agy</span> <span class="syn-param">run</span> <span class="syn-string">"/learn Armazenar parâmetros do modelo Qwen2.5-Coder no catálogo do OmniRoute"</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 3: ANTIGRAVITY 2.0 (DESKTOP APP & PYTHON SDK)
+       ====================================================================== -->
+  <section id="app" class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Modo 3 • Orquestração Paralela & SDK</div>
+        <h2 class="section-title">No Antigravity 2.0 & SDK Programático</h2>
+        <p class="section-desc">
+          O aplicativo desktop autônomo (Electron) projetado para gerenciar múltiplos subagentes em paralelo, monitorar tarefas agendadas em segundo plano (*Scheduled Tasks*) e integrar o PCL AEOS via Python SDK.
+        </p>
+      </div>
+
+      <!-- UI Mockup: Antigravity 2.0 Desktop App -->
+      <div class="window-frame">
+        <div class="window-header">
+          <div class="window-controls-mac">
+            <span class="window-dot dot-red"></span>
+            <span class="window-dot dot-yellow"></span>
+            <span class="window-dot dot-green"></span>
+          </div>
+          <div class="window-title">
+            <span>Antigravity 2.0 — Parallel Orchestrator & Task Canvas</span>
+          </div>
+          <div class="window-badges">
+            <span class="window-badge-sm">Subagents: 3 Running</span>
+            <span class="window-badge-sm">Crons: 2 Active</span>
+          </div>
+        </div>
+
+        <div class="app-mockup-layout">
+          <!-- Left Sidebar -->
+          <div class="app-left-sidebar">
+            <div class="app-nav-item active">💬 Chat Canvas</div>
+            <div class="app-nav-item">📂 Projetos (AEOS)</div>
+            <div class="app-nav-item">⏱️ Scheduled Tasks</div>
+            <div class="app-nav-item">🧩 Skills & MCPs</div>
+            <div class="app-nav-item">⚙️ Configurações</div>
+          </div>
+
+          <!-- Main Canvas -->
+          <div class="app-main-canvas">
+            <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; color: #fff;">
+              Execução Orquestrada: Refatoração de Resiliência do OmniRoute
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+              O agente principal delegou tarefas especializadas para 3 subagentes em paralelo sob a política de sandbox.
+            </p>
+
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid #1e293b; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.5rem;">
+                <span class="text-cyan">Progresso Geral do Objetivo (/goal)</span>
+                <span class="text-emerald">75% Concluído</span>
+              </div>
+              <div style="width: 100%; height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden;">
+                <div style="width: 75%; height: 100%; background: linear-gradient(90deg, #38bdf8, #34d399);"></div>
+              </div>
+            </div>
+
+            <!-- Crons / Scheduled Tasks Card -->
+            <div class="cron-task-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; color: #fff; font-size: 0.8rem;">⏱️ Scheduled Crons do PCL AEOS</span>
+                <span class="window-badge-sm">Status: ACTIVE</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.75rem;">
+                <div style="background: #090e1a; padding: 0.5rem; border-radius: 4px; border: 1px solid #1e293b;">
+                  <strong class="text-cyan">Staleness Daemon</strong><br>
+                  <code>0 */4 * * *</code> (a cada 4 horas)<br>
+                  <span class="text-muted">Auditoria de divergências no Git</span>
+                </div>
+                <div style="background: #090e1a; padding: 0.5rem; border-radius: 4px; border: 1px solid #1e293b;">
+                  <strong class="text-purple">Backup R2 Criptografado</strong><br>
+                  <code>0 3 * * *</code> (diário às 03:00)<br>
+                  <span class="text-muted">Dump AES-256 no Cloudflare R2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auxiliary Pane (Subagents & Artifacts) -->
+          <div class="app-auxiliary-pane">
+            <div class="aux-header">
+              <span>AUXILIARY PANE</span>
+              <span class="text-cyan">● Ativo</span>
+            </div>
+            <div class="aux-tabs">
+              <div class="aux-tab active">Subagentes (3)</div>
+              <div class="aux-tab">Artefatos (4)</div>
+              <div class="aux-tab">Diffs</div>
+            </div>
+            <div class="aux-content">
+              <!-- Subagent 1 -->
+              <div class="subagent-card">
+                <div class="subagent-header">
+                  <span>subagent-prototyping</span>
+                  <span class="text-emerald">Running</span>
+                </div>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Implementando lógica de failover no código TypeScript...</p>
+              </div>
+
+              <!-- Subagent 2 -->
+              <div class="subagent-card" style="border-left-color: var(--accent-cyan);">
+                <div class="subagent-header">
+                  <span>subagent-qa-tests</span>
+                  <span class="text-cyan">Executing</span>
+                </div>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Rodando vitest nos endpoints do OmniRoute...</p>
+              </div>
+
+              <!-- Subagent 3 -->
+              <div class="subagent-card" style="border-left-color: var(--accent-purple);">
+                <div class="subagent-header">
+                  <span>subagent-infrasec</span>
+                  <span class="text-purple">Audit</span>
+                </div>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Verificando conformidade com ISO 27001 / Zero Trust...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snippet Python SDK -->
+      <div class="code-box">
+        <div class="code-box-header">
+          <span class="code-title">🐍 Integração Programática via Antigravity Python SDK</span>
+          <button class="btn-copy">Copiar Código Python</button>
+        </div>
+        <pre class="code-content"><code><span class="syn-keyword">import</span> <span class="syn-cmd">asyncio</span>
+<span class="syn-keyword">from</span> <span class="syn-var">antigravity</span> <span class="syn-keyword">import</span> <span class="syn-param">AgentClient</span>, <span class="syn-param">TaskConfig</span>
+
+<span class="syn-keyword">async def</span> <span class="syn-cmd">main</span>():
+    <span class="syn-comment"># Conecta ao Antigravity Core local apontando para o workspace PCL AEOS</span>
+    <span class="syn-var">client</span> = <span class="syn-cmd">AgentClient</span>(workspace=<span class="syn-string">"c:/PromptCore_Labs"</span>)
+    
+    <span class="syn-comment"># Aluga um agente especializado para executar uma tarefa de conformidade</span>
+    <span class="syn-var">lease</span> = <span class="syn-keyword">await</span> <span class="syn-var">client</span>.<span class="syn-cmd">lease_agent</span>(
+        role=<span class="syn-string">"Lead_TLC_Engineer"</span>,
+        skills=[<span class="syn-string">"cortex"</span>, <span class="syn-string">"laya"</span>]
+    )
+    
+    <span class="syn-comment"># Dispara o objetivo autônomo com rastreamento nos transcripts</span>
+    <span class="syn-var">result</span> = <span class="syn-keyword">await</span> <span class="syn-var">lease</span>.<span class="syn-cmd">execute_goal</span>(
+        prompt=<span class="syn-string">"Validar se todos os schemas em memory.* possuem recibos de evidência SHA-256"</span>
+    )
+    <span class="syn-cmd">print</span>(<span class="syn-string">f"Status da Auditoria: {result.status} | Recibos verificados: {result.data}"</span>)
+
+<span class="syn-cmd">asyncio</span>.<span class="syn-cmd">run</span>(<span class="syn-cmd">main</span>())</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 4: PAPERCLIP (:3100 — HOLDING DIGITAL & SQUADS)
+       ====================================================================== -->
+  <section id="paperclip" class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Modo 4 • Estratégia, Squads & Negócios</div>
+        <h2 class="section-title">No PaperClip (:3100 — Holding Digital)</h2>
+        <p class="section-desc">
+          O PaperClip é a camada executiva que transforma IA em empresa autônoma (*"If OpenClaw is an employee, Paperclip is the company"*).
+          Gerencie as <strong>15 Verticais de Negócio B2B</strong> da holding <code>promptcore-labs</code>, acompanhe metas de MRR, atribua orçamentos e blinde os custos pelo <strong>EBITDA Shield</strong>.
+        </p>
+      </div>
+
+      <!-- UI Mockup & Print Real: PaperClip Web Dashboard -->
+      <div class="window-frame tabs-wrapper">
+        <div class="window-header">
+          <div class="window-controls-mac">
+            <span class="window-dot dot-red"></span>
+            <span class="window-dot dot-yellow"></span>
+            <span class="window-dot dot-green"></span>
+          </div>
+          <div class="window-title">
+            <span>PaperClip Web UI — http://localhost:3100 [Holding: PromptCore Labs]</span>
+          </div>
+          <div class="window-badges">
+            <span class="window-badge-sm text-emerald">EBITDA Shield: 100%</span>
+            <span class="window-badge-sm">Port :3100</span>
+          </div>
+        </div>
+
+        <!-- Abas do PaperClip: Dashboard vs Print Real -->
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="pc-tab-dashboard">
+            🏢 Painel de Gestão & 15 Verticais B2B
+          </button>
+          <button class="tab-btn" data-tab="pc-tab-real">
+            📸 Print Real do Sistema (Host :3100)
+          </button>
+        </div>
+
+        <!-- ABA 1: Dashboard de Squads & Verticais -->
+        <div id="pc-tab-dashboard" class="tab-pane active paperclip-dashboard" style="padding: 1.5rem;">
+          <!-- Topbar da Holding -->
+          <div class="pc-topbar">
+            <div class="pc-company-badge">
+              <div class="pc-avatar">PCL</div>
+              <div>
+                <h3 style="color: #fff; font-size: 1.15rem;">PromptCore Labs Holding</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">AI-Orchestrated Multi-Vertical Holding • 15 B2B Services</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <span class="metric-badge"><span class="dot-pulse"></span> 9 Squads Active</span>
+              <button class="nav-pill text-cyan">+ Nova Meta de Negócio</button>
+            </div>
+          </div>
+
+          <!-- Métricas Executivas Strip -->
+          <div class="pc-metrics-strip">
+            <div class="pc-metric-box">
+              <div class="pc-metric-val text-cyan">$0.00</div>
+              <div class="pc-metric-label">Gasto de Nuvem no Mês (EBITDA Shield)</div>
+            </div>
+            <div class="pc-metric-box">
+              <div class="pc-metric-val text-emerald">15 / 15</div>
+              <div class="pc-metric-label">Verticais B2B Prontas para Venda</div>
+            </div>
+            <div class="pc-metric-box">
+              <div class="pc-metric-val text-purple">100%</div>
+              <div class="pc-metric-label">Memória Local Soberana (PGVector)</div>
+            </div>
+            <div class="pc-metric-box">
+              <div class="pc-metric-val text-amber">&lt; 15 min</div>
+              <div class="pc-metric-label">SLA de Recuperação de Desastres (DRP)</div>
+            </div>
+          </div>
+
+          <!-- Grid das 15 Verticais de Negócio (Amostra Operacional) -->
+          <div style="font-weight: 700; color: #fff; font-size: 0.9rem; margin-top: 0.5rem;">
+            Principais Verticais e Agentes em Execução:
+          </div>
+
+          <div class="pc-verticals-grid">
+            <!-- Vertical 1 -->
+            <div class="pc-card-vertical">
+              <div class="pc-card-header">
+                <strong style="color: #fff; font-size: 0.85rem;">#1 Software Studio</strong>
+                <span class="pc-agent-pill">Lead_TLC_Engineer</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Desenvolvimento Prototipagem & SDD, PRD, APIs e SaaS de alta velocidade.</p>
+              <div style="font-size: 0.72rem; color: var(--accent-emerald);">● Status: Produzindo Código</div>
+            </div>
+
+            <!-- Vertical 2 -->
+            <div class="pc-card-vertical">
+              <div class="pc-card-header">
+                <strong style="color: #fff; font-size: 0.85rem;">#2 Marketing & Growth</strong>
+                <span class="pc-agent-pill">Neuromarketing</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Programmatic SEO, UGC Ads, Landing Pages e Funis de Conversão.</p>
+              <div style="font-size: 0.72rem; color: var(--accent-cyan);">● Status: SEO Audit Ativo</div>
+            </div>
+
+            <!-- Vertical 7 -->
+            <div class="pc-card-vertical">
+              <div class="pc-card-header">
+                <strong style="color: #fff; font-size: 0.85rem;">#7 Jurídico & Compliance</strong>
+                <span class="pc-agent-pill">Compliance_Steward</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Conformidade LGPD, Auditoria Documental e Certificação ISO 27001/42001.</p>
+              <div style="font-size: 0.72rem; color: var(--accent-purple);">● Status: Auditoria Concluída</div>
+            </div>
+
+            <!-- Vertical 9 -->
+            <div class="pc-card-vertical">
+              <div class="pc-card-header">
+                <strong style="color: #fff; font-size: 0.85rem;">#9 Financeiro & FinOps</strong>
+                <span class="pc-agent-pill">Financial_Advisor</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Precificação de IA, Margens EBITDA, Gestão em D-0 e Fluxo de Caixa.</p>
+              <div style="font-size: 0.72rem; color: var(--accent-amber);">● Status: Margem 92%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 2: Print Real do Host PaperClip -->
+        <div id="pc-tab-real" class="tab-pane" style="padding: 1.5rem; text-align: center; background: #080d1a;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag" style="border-color: rgba(56, 189, 248, 0.4); color: var(--accent-cyan);">📸 Captura Real do Host Local</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">PaperClip em Execução no Contêiner `pcl-paperclip` (Porta :3100)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Print de tela capturado diretamente do serviço PaperClip ativo na máquina do operador, gerenciando as credenciais e o acesso aos squads da holding.
+            </p>
+          </div>
+          <img src="assets/screen-real-paperclip-ui.png" alt="Print Real do PaperClip :3100" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 520px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na captura para visualizá-la em tela cheia no visualizador modal.</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Configuração da Empresa no Paperclip -->
+      <div class="code-box">
+        <div class="code-box-header">
+          <span class="code-title">📋 Configuração Canônica da Empresa (.paperclip.yaml & COMPANY.md)</span>
+          <button class="btn-copy">Copiar YAML</button>
+        </div>
+        <pre class="code-content"><code><span class="syn-keyword">name:</span> <span class="syn-string">PromptCore Labs</span>
+<span class="syn-keyword">slug:</span> <span class="syn-string">promptcore-labs</span>
+<span class="syn-keyword">version:</span> <span class="syn-string">2.0.0</span>
+<span class="syn-keyword">goals:</span>
+  - <span class="syn-string">"Oferecer 15 Verticais de Negócio B2B com $0 custo marginal de expansão"</span>
+  - <span class="syn-string">"Materializar software de alta performance via Spec-Driven Development (SDD)"</span>
+  - <span class="syn-string">"Garantir o EBITDA Shield através do OmniRoute (:20130) e gestão em D-0"</span>
+<span class="syn-keyword">infrastructure:</span>
+  <span class="syn-cmd">omniroute_gateway:</span> <span class="syn-string">"http://localhost:20130"</span>
+  <span class="syn-cmd">laya_system_one:</span>   <span class="syn-string">"http://localhost:20140"</span>
+  <span class="syn-cmd">database_pgvector:</span> <span class="syn-string">"localhost:5432"</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 5: TERMINAL HUB — OPERAÇÕES POWERSHELL (WINDOWS)
+       ====================================================================== -->
+  <section id="powershell" class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag" style="border-color: rgba(56, 189, 248, 0.5);">Operações de Terminal • Windows PowerShell</div>
+        <h2 class="section-title">Terminal Hub — Operações & Automação PowerShell</h2>
+        <p class="section-desc">
+          Controle completo da infraestrutura soberana direto do console Windows.
+          Alterne entre as abas abaixo para copiar comandos pré-configurados com medição de latência, auditoria de dados e verificações de saúde.
+        </p>
+      </div>
+
+      <!-- Simulador Windows Terminal / PowerShell Hub -->
+      <div class="ps-hub-frame">
+        <!-- Tab Bar de Rotinas PowerShell -->
+        <div class="ps-hub-tabs">
+          <button class="ps-tab-btn active" data-routine="lifecycle">🚀 1. Stack Lifecycle</button>
+          <button class="ps-tab-btn" data-routine="laya">⚡ 2. Laya & OmniRoute Health</button>
+          <button class="ps-tab-btn" data-routine="memory">💾 3. Memória Tripartida SQL</button>
+          <button class="ps-tab-btn" data-routine="drp">🛡️ 4. DRP & Backup R2</button>
+          <button class="ps-tab-btn" data-routine="headless">🤖 5. Antigravity CLI Scripts</button>
+          <button class="ps-tab-btn" data-routine="real-console">📸 6. Print Real do Console</button>
+        </div>
+
+        <!-- ABA 1: Stack Lifecycle -->
+        <div id="ps-pane-lifecycle" class="ps-routine-pane active ps-content-body">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong>Rotina:</strong> Inicialização e inspeção dos 4 contêineres Docker do PCL AEOS
+            </span>
+            <button class="btn-copy btn-copy-ps" data-target="code-ps-lifecycle">Copiar Script PowerShell</button>
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">docker compose -f docker-compose.aeos.yml up -d</span>
+          </div>
+
+          <div class="ps-output-block" id="code-ps-lifecycle">
+[+] Running 4/4
+ ✔ Container pcl-db         Healthy                                               0.5s
+ ✔ Container pcl-laya       Started (0 MB VRAM - CPU INT8)                        0.2s
+ ✔ Container pcl-omniroute  Started (:20130 Failover Ready)                       0.4s
+ ✔ Container pcl-paperclip  Started (Web UI: http://localhost:3100)               0.3s
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">docker ps --filter "name=pcl-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"</span>
+          </div>
+
+          <div class="ps-output-block">
+NAMES             STATUS                   PORTS
+pcl-db            Up 2 hours (healthy)     0.0.0.0:5432->5432/tcp
+pcl-laya          Up 2 hours               0.0.0.0:20140->20140/tcp
+pcl-omniroute     Up 2 hours               0.0.0.0:20130->20130/tcp
+pcl-paperclip     Up 2 hours               0.0.0.0:3100->3100/tcp
+          </div>
+          <span class="ps-latency-tag">Tempo de inicialização: ~1.4s • Custo de Nuvem: $0.00</span>
+        </div>
+
+        <!-- ABA 2: Laya Health -->
+        <div id="ps-pane-laya" class="ps-routine-pane ps-content-body" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong>Rotina:</strong> Medição de latência real com <code>Measure-Command</code> e <code>Invoke-RestMethod</code>
+            </span>
+            <button class="btn-copy btn-copy-ps" data-target="code-ps-laya">Copiar Script PowerShell</button>
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">Measure-Command { $res = Invoke-RestMethod -Uri "http://localhost:20140/health" } | Select-Object TotalMilliseconds</span>
+          </div>
+
+          <div class="ps-output-block" id="code-ps-laya">
+TotalMilliseconds
+-----------------
+             1.24   # Latência HTTP local (via MCP in-process: ~0.014 ms)
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">$body = @{ doc_claim = "Porta do banco: :5432"; candidate_claim = "Porta do banco: :5432" } | ConvertTo-Json;<br>Invoke-RestMethod -Uri "http://localhost:20140/evaluate/contradiction" -Method Post -Body $body -ContentType "application/json"</span>
+          </div>
+
+          <div class="ps-output-block">
+{
+  "contradiction": false,
+  "confidence": 0.9998,
+  "vram_used_bytes": 0,
+  "device": "cpu_int8",
+  "cost_usd": 0.0000
+}
+          </div>
+          <span class="ps-latency-tag">Zero Alucinação • 0 MB VRAM • Triagem Determinística</span>
+        </div>
+
+        <!-- ABA 3: Memória Tripartida SQL -->
+        <div id="ps-pane-memory" class="ps-routine-pane ps-content-body" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong>Rotina:</strong> Consulta aos recibos criptográficos e afirmações homologadas no PostgreSQL 17
+            </span>
+            <button class="btn-copy btn-copy-ps" data-target="code-ps-memory">Copiar Script PowerShell</button>
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">docker exec -it pcl-db psql -U paperclip -d paperclip -c "SELECT claim_id, subject, status FROM memory.claims LIMIT 3;"</span>
+          </div>
+
+          <div class="ps-output-block" id="code-ps-memory">
+ claim_id |           subject           |  status  
+----------+-----------------------------+----------
+ CLM-0001 | Porta de escuta do banco    | VERIFIED
+ CLM-0002 | Provedor de DRP Cloudflare  | VERIFIED
+ CLM-0003 | Dimensões do vetor HNSW     | VERIFIED
+(3 rows)
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">docker exec -it pcl-db psql -U paperclip -d paperclip -c "SELECT doc_path, sha256_hash FROM memory.evidence_receipts LIMIT 2;"</span>
+          </div>
+
+          <div class="ps-output-block">
+         doc_path          |                           sha256_hash                            
+---------------------------+------------------------------------------------------------------
+ docs/architecture-v2.md   | 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+ .agents/rules/governance  | 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+(2 rows)
+          </div>
+          <span class="ps-latency-tag">Trilha Criptográfica Imutável • ISO 42001 & 27001</span>
+        </div>
+
+        <!-- ABA 4: DRP & Backup R2 -->
+        <div id="ps-pane-drp" class="ps-routine-pane ps-content-body" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong>Rotina:</strong> Disparo manual do script de backup criptografado em AES-256 no Cloudflare R2
+            </span>
+            <button class="btn-copy btn-copy-ps" data-target="code-ps-drp">Copiar Script PowerShell</button>
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">powershell -ExecutionPolicy Bypass -File .\scripts\backup-tripartite-r2.ps1 -DryRun:$false</span>
+          </div>
+
+          <div class="ps-output-block" id="code-ps-drp">
+[PCL-DRP] Iniciando snapshot de memory.* e paperclip schemas...
+[PCL-DRP] Dump gerado: pg_dump_20261016_0100.sql (18.4 MB)
+[PCL-DRP] Criptografando com AES-256-GCM... OK!
+[PCL-DRP] Transmitindo para bucket Cloudflare R2: s3://pcl-aeos-backups/
+[PCL-DRP] Backup concluído em 7.18s! SLA histórico atingido (&lt; 15 min).
+          </div>
+          <span class="ps-latency-tag">RTO Histórico: 7.18s • Criptografia AES-256 Ativa</span>
+        </div>
+
+        <!-- ABA 5: Antigravity CLI Headless -->
+        <div id="ps-pane-headless" class="ps-routine-pane ps-content-body" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong>Rotina:</strong> Execução de comandos slash em lote e pipelines autônomos
+            </span>
+            <button class="btn-copy btn-copy-ps" data-target="code-ps-headless">Copiar Script PowerShell</button>
+          </div>
+
+          <div class="ps-prompt-line">
+            <span class="ps-prompt-badge">PS C:\PromptCore_Labs&gt;</span>
+            <span class="ps-cmd-text">agy run "/plan Analisar dependências Python e atualizar uv"</span>
+          </div>
+
+          <div class="ps-output-block" id="code-ps-headless">
+[AGY HEADLESS] Workspace detectado: C:\PromptCore_Labs
+[AGY HEADLESS] Regras ativas: squad-antigravity-harness-governance.md, tlc-triage-gate.md
+[AGY HEADLESS] Rota classificada: LEAN SPECIFICATION (Complexidade: 1)
+[AGY HEADLESS] Execução concluída sem pendências humanas. Transcripts salvos em JSONL.
+          </div>
+          <span class="ps-latency-tag">Execução Headless • Rastreabilidade Completa</span>
+        </div>
+
+        <!-- ABA 6: Print Real do Console PowerShell -->
+        <div id="ps-pane-real-console" class="ps-routine-pane ps-content-body" style="display: none; padding: 1.5rem; text-align: center;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag" style="border-color: rgba(56, 189, 248, 0.4); color: var(--accent-cyan);">📸 Captura do Terminal do Host</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">Sessão Real de PowerShell em Execução no Workspace (EnterDufter/PromptCoreLabs_AEOS)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Captura em alta resolução dos comandos reais executados neste computador: inspeção dos 4 contêineres Docker, latência do Laya (~0.014ms), consulta ao PGVector e pipeline do Antigravity CLI (`agy`).
+            </p>
+          </div>
+          <img src="assets/screen-real-powershell-console.png" alt="Print Real do Console PowerShell" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 540px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na captura para visualizá-la em tela cheia no visualizador modal.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 6: O CICLO DE VIDA INTEGRADO (E2E WORKFLOW)
+       ====================================================================== -->
+  <section id="workflow" class="content-section">
+    <div class="container">
+      <div class="section-header text-center" style="text-align: center; margin: 0 auto 3rem;">
+        <div class="section-tag">Orquestração Ponta a Ponta</div>
+        <h2 class="section-title">O Ciclo de Vida Integrado do PCL AEOS</h2>
+        <p class="section-desc" style="margin: 0 auto;">
+          Como uma meta estratégica cadastrada no PaperClip se transforma em código validado no Antigravity IDE, testado no CLI e persistido na Memória Tripartida.
+        </p>
+      </div>
+
+      <!-- Diagramas Sequenciais Interativos (Tabs) -->
+      <div class="window-frame tabs-wrapper">
+        <div class="window-header">
+          <div class="window-controls-mac">
+            <span class="window-dot dot-red"></span>
+            <span class="window-dot dot-yellow"></span>
+            <span class="window-dot dot-green"></span>
+          </div>
+          <div class="window-title">
+            <span>DIAG-SEQ • Diagramas de Sequência Canônicos (PCL Cortex Engine)</span>
+          </div>
+          <div class="window-badges">
+            <span class="window-badge-sm text-cyan">Clique para Ampliar em Tela Cheia</span>
+          </div>
+        </div>
+
+        <!-- Abas de Navegação dos Diagramas de Sequência -->
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="diag-tab-harness">
+            🏢 DIAG-SEQ-01: PaperClip ➔ Antigravity Harness
+          </button>
+          <button class="tab-btn" data-tab="diag-tab-laya">
+            ⚡ DIAG-SEQ-02: Laya System One (<15ms)
+          </button>
+          <button class="tab-btn" data-tab="diag-tab-omniroute">
+            🌐 DIAG-SEQ-03: OmniRoute & EBITDA Shield
+          </button>
+          <button class="tab-btn" data-tab="diag-tab-drp">
+            💾 DIAG-SEQ-04: Memória Tripartida & DRP
+          </button>
+        </div>
+
+        <!-- TAB 1: PaperClip ➔ Antigravity Harness -->
+        <div id="diag-tab-harness" class="tab-pane active" style="padding: 1.5rem; text-align: center; background: #080d1a;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag">Fluxo Executivo & Squads</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">PaperClip Agent Harness: Da Meta de Negócio ao Código Homologado</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Mapeia o ciclo completo: o operador humano define a meta no PaperClip, o Laya faz a triagem instantânea, o Antigravity IDE executa o SDD e os artefatos são persistidos na Memória Tripartida com selo criptográfico SHA-256.
+            </p>
+          </div>
+          <img src="assets/seq-paperclip-agent-harness.png" alt="DIAG-SEQ-01 PaperClip Agent Harness" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 520px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);" onerror="this.onerror=null; this.src='assets/seq-paperclip-agent-harness.png';">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na imagem para inspecionar o diagrama topológico em resolução máxima no visualizador modal.</em>
+          </p>
+        </div>
+
+        <!-- TAB 2: Laya System One -->
+        <div id="diag-tab-laya" class="tab-pane" style="padding: 1.5rem; text-align: center; background: #080d1a;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag" style="border-color: rgba(52, 211, 153, 0.4); color: #34d399;">Coprocessador Reflexivo</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">Laya System One: Decisão Determinística em CPU INT8 (< 15ms)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Demonstração do reflexo involuntário: verificação de contradição semântica e staleness em 0 MB de VRAM sem consumir tokens de LLM.
+            </p>
+          </div>
+          <img src="assets/seq-laya-system-one.png" alt="DIAG-SEQ-02 Laya System One" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 520px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);" onerror="this.onerror=null; this.src='assets/seq-laya-system-one.png';">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na imagem para inspecionar o diagrama topológico em resolução máxima no visualizador modal.</em>
+          </p>
+        </div>
+
+        <!-- TAB 3: OmniRoute & EBITDA Shield -->
+        <div id="diag-tab-omniroute" class="tab-pane" style="padding: 1.5rem; text-align: center; background: #080d1a;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag" style="border-color: rgba(96, 165, 250, 0.4); color: #60a5fa;">Roteamento Híbrido</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">OmniRoute AI Gateway: Blindagem Orçamentária & Failover Local</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Roteia chamadas de inferência priorizando modelos locais soberanos (Ollama) e acionando APIs na nuvem sob regras estritas de EBITDA Shield.
+            </p>
+          </div>
+          <img src="assets/seq-omniroute-routing.png" alt="DIAG-SEQ-03 OmniRoute Routing & Failover" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 520px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);" onerror="this.onerror=null; this.src='assets/seq-omniroute-routing.png';">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na imagem para inspecionar o diagrama topológico em resolução máxima no visualizador modal.</em>
+          </p>
+        </div>
+
+        <!-- TAB 4: Memória Tripartida & DRP -->
+        <div id="diag-tab-drp" class="tab-pane" style="padding: 1.5rem; text-align: center; background: #080d1a;">
+          <div style="margin-bottom: 1rem; text-align: left;">
+            <span class="section-tag" style="border-color: rgba(192, 132, 252, 0.4); color: #c084fc;">Resiliência & Soberania</span>
+            <h4 style="color: #fff; font-size: 1.1rem; margin: 0.35rem 0;">Memória Tripartida & Plano de Recuperação de Desastres (DRP)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Sincronização dos schemas <code>memory.*</code>, gravação de recibos de evidência SHA-256 e replicação criptografada em AES-256 no Cloudflare R2 (RTO histórico de 7.18s).
+            </p>
+          </div>
+          <img src="assets/seq-tripartite-memory-drp.png" alt="DIAG-SEQ-04 Memoria Tripartida & DRP" class="zoomable-diagram" style="max-width: 100%; height: auto; max-height: 520px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid var(--border-glow);" onerror="this.onerror=null; this.src='assets/seq-tripartite-memory-drp.png';">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.85rem;">
+            🔍 <em>Clique na imagem para inspecionar o diagrama topológico em resolução máxima no visualizador modal.</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 Passos do Ciclo de Vida -->
+      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">1️⃣</div>
+          <h3 class="feature-title">1. Meta no PaperClip</h3>
+          <p class="feature-desc">
+            A liderança define a meta de negócio (ex: novo SaaS ou API) e delega ao squad competente com limite de orçamento.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">2️⃣</div>
+          <h3 class="feature-title">2. Triagem LAYA (0 MB)</h3>
+          <p class="feature-desc">
+            O Laya avalia em CPU se o fato já está validado ou se exige novo raciocínio, acionando o OmniRoute com EBITDA Shield.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">3️⃣</div>
+          <h3 class="feature-title">3. Engenharia no IDE</h3>
+          <p class="feature-desc">
+            A <code>squad-prototyping</code> executa via <code>/grill-me</code>, aprovação do plano e codificação com <code>/goal</code>.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">4️⃣</div>
+          <h3 class="feature-title">4. Selo Criptográfico</h3>
+          <p class="feature-desc">
+            O resultado homologado grava o card em <code>memory.claims</code> com recibo de hash SHA-256 e commit no Git.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SEÇÃO 7: GALERIA DE TELAS REAIS DO SISTEMA LOCAL (PCL AEOS HOST)
+       ====================================================================== -->
+  <section id="real-screens" class="content-section">
+    <div class="container">
+      <div class="section-header text-center" style="text-align: center; margin: 0 auto 3rem;">
+        <div class="section-tag" style="border-color: rgba(56, 189, 248, 0.5); color: var(--accent-cyan);">📸 Evidências Visuais Autênticas</div>
+        <h2 class="section-title">Galeria de Telas Reais do Sistema Local</h2>
+        <p class="section-desc" style="margin: 0 auto;">
+          Prints de tela reais capturados diretamente desta estação de trabalho (EnterDufter/PromptCoreLabs_AEOS).
+          Comprova a execução simultânea dos serviços do PaperClip, OmniRoute, Terminal PowerShell e Portal Oficial.
+        </p>
+      </div>
+
+      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));">
+        <!-- Card 1: PaperClip Local -->
+        <div class="window-frame" style="margin: 0;">
+          <div class="window-header">
+            <div class="window-controls-mac">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+            </div>
+            <div class="window-title">
+              <span>📸 Host Real: PaperClip Web (:3100)</span>
+            </div>
+            <span class="window-badge-sm text-emerald">● Up 16h</span>
+          </div>
+          <div style="padding: 1rem; background: #080d1a; text-align: center;">
+            <img src="assets/screen-real-paperclip-ui.png" alt="Print Real do PaperClip no Host Local" class="zoomable-diagram" style="width: 100%; height: auto; max-height: 280px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-glow);">
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Interface real do PaperClip ativa na porta <code>:3100</code> no Docker. Clique para zoom.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: OmniRoute Local -->
+        <div class="window-frame" style="margin: 0;">
+          <div class="window-header">
+            <div class="window-controls-mac">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+            </div>
+            <div class="window-title">
+              <span>📸 Host Real: OmniRoute Gateway (:20130)</span>
+            </div>
+            <span class="window-badge-sm text-cyan">● Failover Ready</span>
+          </div>
+          <div style="padding: 1rem; background: #080d1a; text-align: center;">
+            <img src="assets/screen-real-omniroute-ui.png" alt="Print Real do OmniRoute AI Gateway" class="zoomable-diagram" style="width: 100%; height: auto; max-height: 280px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-glow);">
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Gateway híbrido de inferência ativo na porta <code>:20130</code> com EBITDA Shield.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: PowerShell Terminal Console -->
+        <div class="window-frame" style="margin: 0;">
+          <div class="window-header">
+            <div class="window-controls-mac">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+            </div>
+            <div class="window-title">
+              <span>📸 Host Real: PowerShell 7 Console</span>
+            </div>
+            <span class="window-badge-sm text-purple">● Native Windows</span>
+          </div>
+          <div style="padding: 1rem; background: #080d1a; text-align: center;">
+            <img src="assets/screen-real-powershell-console.png" alt="Print Real do Console PowerShell" class="zoomable-diagram" style="width: 100%; height: auto; max-height: 280px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-glow);">
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Auditoria de saúde e contêineres executada no PowerShell da estação de trabalho.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Portal GitHub Pages Living Architecture -->
+        <div class="window-frame" style="margin: 0;">
+          <div class="window-header">
+            <div class="window-controls-mac">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+            </div>
+            <div class="window-title">
+              <span>📸 Host Real: Portal Interativo Living Architecture</span>
+            </div>
+            <span class="window-badge-sm text-amber">● GitHub Pages</span>
+          </div>
+          <div style="padding: 1rem; background: #080d1a; text-align: center;">
+            <img src="assets/screen-real-portal-cortex.png" alt="Print Real do Portal Living Architecture" class="zoomable-diagram" style="width: 100%; height: auto; max-height: 280px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-glow);">
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Portal interativo com visão dupla (Executiva e Técnica) mantido pelo Cortex Engine.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal / Lightbox para Diagramas -->
+  <div id="diagram-modal" style="display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(5, 8, 17, 0.94); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 2rem;">
+    <div style="max-width: 95vw; max-height: 92vh; display: flex; flex-direction: column; align-items: center; position: relative;">
+      <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 0.75rem;">
+        <span id="modal-title" style="color: #fff; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;"></span>
+        <button id="modal-close" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fff; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer;">Fechar (Esc)</button>
+      </div>
+      <img id="modal-img" src="" alt="" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; border: 1px solid var(--border-glow);">
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-main">
+    <div class="container">
+      <div class="footer-logo-row">
+        <img src="assets/PCL_Logo_Transparente.png" alt="PromptCore Labs" style="height: 38px;">
+        <span style="font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem;">
+          PromptCoreLabs_AEOS <span class="text-cyan">v2.0</span>
+        </span>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/" target="_blank" class="footer-link">🌐 Portal Oficial GitHub Pages</a>
+        <a href="#ide" class="footer-link">💻 Antigravity IDE</a>
+        <a href="#cli" class="footer-link">⚡ Antigravity CLI</a>
+        <a href="#app" class="footer-link">🚀 Desktop App & SDK</a>
+        <a href="#paperclip" class="footer-link">🏢 PaperClip</a>
+        <a href="#powershell" class="footer-link">⚡ Terminal Hub</a>
+      </div>
+
+      <p style="font-size: 0.82rem; color: #64748b;">
+        Construído sob os princípios de <strong>Soberania de Dados</strong>, <strong>EBITDA Shield</strong> e <strong>Spec-Driven Development (TLC v3)</strong>.<br>
+        PromptCore Labs © 2026 • Licença MIT
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script>
+    // Correção pontual para exibição do modal de diagrama
+    const modal = document.getElementById('diagram-modal');
+    document.querySelectorAll('.zoomable-diagram').forEach(img => {
+      img.addEventListener('click', () => {
+        modal.style.display = 'flex';
+      });
+    });
+    document.getElementById('modal-close').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

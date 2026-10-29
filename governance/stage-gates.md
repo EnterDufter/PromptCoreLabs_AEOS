@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **Status Normativo:** Documento de diretrizes subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> **Status Normativo:** Documento de diretrizes subordinado à [Matriz de Precedência Normativa](normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
 > Para a numeração oficial de Stage Gates unificados (G-00 a G-04) e critérios formais de autoridade humana soberana, a fonte canônica prevalente é a Seção 5 de `normative-hierarchy.md`.
 
 =========================================================

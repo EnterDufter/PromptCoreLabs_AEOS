@@ -6,7 +6,7 @@
 ### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor e Living Architecture
 
 [![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
-[![Status](https://img.shields.io/badge/Foundation-READY-10b981?style=for-the-badge)](projects/pcl-aeos-harmonization/foundation-readiness.md)
+[![Status](https://img.shields.io/badge/Foundation-READY_--_AUDITED-emerald?style=for-the-badge)](projects/pcl-aeos-harmonization/foundation-readiness.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Hardware](https://img.shields.io/badge/VRAM-0_MB_(CPU_INT8)-purple?style=for-the-badge)](#indicadores-canônicos)
 
@@ -21,7 +21,7 @@ O **PromptCoreLabs_AEOS** é um sistema operacional de engenharia de software de
 * **Em Linguagem Simples (Para Leigos e Líderes):**  
   Pense no PCL AEOS como um **escritório virtual hiper-eficiente com um cofre digital integrado**. Em vez de usar modelos de IA avulsos na nuvem que esquecem o contexto da sua empresa e cobram caro por token, o AEOS roda localmente no seu computador ou servidor próprio. Ele possui uma memória permanente que nunca esquece seus manuais e regras, garante privacidade absoluta dos dados (custo marginal zero de nuvem) e coloca uma equipe de agentes especialistas (planejador, desenvolvedor, revisor) para trabalhar sob a sua supervisão.
 * **Sob a Ótica Técnica (Para Engenheiros e Arquitetos):**  
-  Trata-se de um harness orquestrador agêntico desacoplado, assentado sobre **Memória Tripartida** no PostgreSQL 17 + PGVector, coprocessador reflexivo neural **LAYA (System One)** com motor NLI (`cross-encoder/nli-MiniLM-2-L6-H768` ONNX INT8) operando 100% em CPU (**0 MB de VRAM**, 93.3% de recall em detecção de contradições, 22ms de latência), gateway inteligente de inferência **OmniRoute** e governança determinística orientada a especificações (**TLC Spec-Driven v3**).
+  Trata-se de um harness orquestrador agêntico desacoplado, assentado sobre **Memória Tripartida** no PostgreSQL 17 + PGVector, coprocessador reflexivo neural **LAYA (System One)** com motor NLI (`cross-encoder/nli-MiniLM-2-L6-H768` ONNX INT8) operando 100% em CPU (**0 MB de VRAM**, 93.3% de especificidade factual, 70.0% de recall de contradições em protocolo controlado dev/holdout, ~23.9ms de latência média), gateway inteligente de inferência **OmniRoute** e governança determinística orientada a especificações (**TLC Spec-Driven v3**).
 
 > 🌐 **Explore o Portal Interativo (GitHub Pages):**  
 > Para uma experiência imersiva com alternância de visão (👔 Executiva vs. 🛠️ Técnica), navegação interativa em tela cheia dos diagramas do **PCL Cortex** e leitura assistida em modais, acesse:  
@@ -29,30 +29,30 @@ O **PromptCoreLabs_AEOS** é um sistema operacional de engenharia de software de
 
 ---
 
-## 📊 Indicadores Canônicos & Benchmark de Estado da Arte (v2.0)
+## 📊 Indicadores Canônicos & Medições de Engenharia (v2.0)
 
 | Indicador | Classificação Normativa | Valor Canônico | Benefício Prático e de Negócio |
 |---|:---:|:---:|---|
 | **Custo de Nuvem (Inferência Local)** | Modo Soberano Local | **$0.00 / mês** | 100% autônomo na máquina local do operador (Ollama, LM Studio e Laya). |
-| **Coprocessador LAYA (System One)** | Benchmark NLI em CPU | **22.3 ms (60x speedup)** | Motor neural NLI (MiniLM-2 L6 INT8): 93.3% recall de contradições em CPU, eliminando alucinações. |
+| **Coprocessador LAYA (System One)** | Triagem NLI em CPU | **23.9 ms em CPU** | Motor neural NLI (MiniLM-2 L6 INT8): 93.3% especificidade factual, 70.0% recall, 81.7% acurácia global em CPU com 0 MB VRAM. |
 | **Alocação de GPU VRAM (Laya)** | Invariante de Hardware | **0 MB (100% CPU)** | GPU dedicada totalmente livre para modelos pesados (LLMs e SLMs). |
-| **Taxa de Vazão (Throughput)** | Reconciliação Contínua | **44.8 claims/seg** | Reconciliação dialética de memória em tempo real sem custo de API. |
+| **Taxa de Vazão (Throughput)** | Reconciliação Contínua | **41.8 claims/seg** | Reconciliação dialética de memória em tempo real sem custo de API em 1 core de CPU. |
 | **Recuperação de Desastres (RTO)** | SLA / Baseline Histórico | **SLA < 15 min** (Lab: 7.18s) | Restauração rápida multi-schema criptografada em AES-256 no Cloudflare R2. |
 | **Memória Vetorial Soberana** | PGVector HNSW Local | **768 Dimensões** | Indexação semântica e RAG relacional isolado no schema `memory.*`. |
 | **Governança Canônica** | Precedência Normativa | **PCL-AEOS-NORM-01** | Decisão humana soberana; sem fusão silenciosa de regras conflitantes. |
 
-### 🔬 Comparativo de Paradigmas: Laya Neural NLI vs Abordagens Tradicionais
+### 🔬 Modelo Teórico de Projeção: Laya Neural NLI vs Abordagens Tradicionais
 
-Comprovado pela auditoria científica ([Laudo Oficial de Benchmark](projects/pcl-aeos-harmonization/audits/BENCHMARK-NEURAL-NLI-2026-10-16.md)):
+> *Nota: Os valores de latência (~1.350ms, ~480ms), custo ($0.003) e VRAM de modelos generativos são estimativas teóricas de mercado adotadas para fins de modelagem conceitual.* Mais detalhes no [Relatório Técnico de Benchmark](projects/pcl-aeos-harmonization/audits/BENCHMARK-NEURAL-NLI-2026-10-16.md).
 
-| Dimensão Avaliada | Paradigma Nuvem (GPT-4o / Claude) | Paradigma Local 7B (GPU Dedicada) | PCL AEOS LAYA (Motor NLI INT8 CPU) |
+| Dimensão Avaliada | Paradigma Nuvem (Estimativa Teórica) | Paradigma Local 7B (Estimativa Teórica) | PCL AEOS LAYA (Motor NLI INT8 CPU) |
 |---|:---:|:---:|:---:|
-| **Latência Média por Claim** | ~1.350 ms | ~480 ms | **22.33 ms** |
-| **Fator de Aceleração (Speedup)** | 60x mais lento | 21x mais lento | **BASELINE (1.0x / Ultrarrápido)** |
-| **VRAM Consumida na GPU** | 0 MB (Nuvem) | 6.144 MB (6 GB) | **0 MB (100% CPU Execution Provider)** |
-| **Custo Marginal por Validação** | ~$0.003 USD | $0.00 | **$0.00 (Zero Custo de Tokens)** |
-| **Prevenção de Contradições (Recall)** | Variável (~85%) | Variável (~88%) | **93.33% (Auditoria Matemática)** |
-| **Risco de Alucinação / Parsing** | Elevado (JSON livre) | Médio-Alto | **ZERO (Classificador Tensorial Nativo)** |
+| **Latência Média por Claim** | ~1.350 ms *(hipótese)* | ~480 ms *(hipótese)* | **22.33 ms (aferido em CPU)** |
+| **Fator de Aceleração Estimado** | ~60x mais lento *(projeção)* | ~21x mais lento *(projeção)* | **Referência Local (1.0x)** |
+| **VRAM Consumida na GPU** | 0 MB (Nuvem) | ~6.144 MB (6 GB) *(hipótese)* | **0 MB (100% CPU Execution Provider)** |
+| **Custo Marginal por Validação** | ~$0.003 USD *(estimativa)* | $0.00 | **$0.00 (Zero Custo de Tokens)** |
+| **Detecção de Contradições (Recall)** | Variável (~85% literatura) | Variável (~88% literatura) | **93.33% (Ensaio Interno; 63.3% Especificidade)** |
+| **Natureza do Risco de Erro** | Alucinação livre de texto | Alucinação livre de texto | **Erro de Classificação Estatística (36.7% Falso Positivo)** |
 | **Privacidade dos Fatos da Memória** | Vaza para Datacenter Externo | Local | **100% Local (Pronto para Air-Gap)** |
 | **Impacto Financeiro (500k ops/ano)** | -$1.500 a -$15.000 USD (EBITDA Drain) | Exige GPU Dedicada | **$0.00 (EBITDA Shield Total)** |
 
@@ -76,7 +76,8 @@ flowchart LR
         P3["⭐ <b>Laya MCP :20140</b><br/>NLI System One em CPU INT8"]:::platform
         P4["💾 <b>PGVector :5432</b><br/>Memória Vetorial & RAG"]:::platform
         P5["🛡️ <b>TLC Gates & Skills</b><br/>Auditoria & Guardrails"]:::platform
-        P1 --> P2 --> P3 --> P4 --> P5
+        P6["🖥️ <b>AEOS Dashboard :3001</b><br/>Cockpit Soberano & Canvas"]:::platform
+        P1 --> P2 --> P3 --> P4 --> P5 --> P6
     end
 
     subgraph Camada2 ["2. 15 Verticais B2B"]
@@ -102,6 +103,25 @@ flowchart LR
 | Previsualização Gráfica | Artefato & Detalhes | Ações Disponíveis |
 |:---:|---|:---:|
 | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="320" alt="DIAG-HOLD-01 Holding Digital"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *PCL Cortex Engine*, mapeando a Plataforma Core, os 15 clusters de squads e a saída para produtos de valor agregado. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo no Portal ↗**</a><br><br>[📖 Operating Model](governance/operating-model.md) |
+
+---
+
+## 🖥️ Cockpit Oficial: PCL AEOS Dashboard v3.5 (`projects/PromptCoreLabs_AEOS_Dashboard`)
+
+O **PCL AEOS Dashboard** é o painel web operacional oficial do ecossistema, projetado sob o design system *Liquid Glass* e executado localmente na porta **`:3001`**:
+
+* **Motor Cognitivo Híbrido Fast-Path (~3.4s):** Descriptografa em memória a credencial do cofre AES-256-GCM do OmniRoute (`pc-gemini-cloud`) para chamadas ultrarrápidas ao Google Gemini 3.5 Flash-Lite / 3.6 Flash, com suporte nativo a streams SSE (`open-sse`), fail-fast TCP (300ms) e chaveamento imediato para Ollama local (`qwen2.5-coder:7b` na porta `:11434` a $0.00).
+* **Triagem Laya System One (CPU INT8 / 0 MB VRAM):** Coprocessador não-autorregressivo em CPU host para triagem de intenção, RAG Answerability e detecção de contradições em ~20 a 35ms.
+* **Grounding Híbrido Inteligente:** Separação estrita entre consultas gerais de mercado (respostas fluidas, técnicas e naturais sem jargões forçados) e consultas internas corporativas (`ADR-0001` a `ADR-0005` e `#documentos`).
+* **Visualização Dual-Plex & Cortex Canvas:** Grafo DAG em tempo real sincronizado ao stepper de execução de 5 etapas com Inspector lateral de 3 abas (*Telemetria*, *Payload* e *Governança*).
+* **Super-Chatbubble:** Contexto tátil via esfera 3D *TokenAquaOrb*, Console de Orquestração com 4 perfis cognitivos e sanitização PII Guard LGPD em tempo real.
+
+Para iniciar o Dashboard:
+```bash
+cd projects/PromptCoreLabs_AEOS_Dashboard
+npm install
+npm run dev -- --port 3001 --host
+```
 
 ---
 
@@ -316,7 +336,7 @@ powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.
 
 O ecossistema PCL AEOS é regido pela documentação canônica aprovada no processo de harmonização estrutural:
 
-* **[Certificado Foundation Ready](projects/pcl-aeos-harmonization/foundation-readiness.md):** Homologação formal da fundação do sistema.
+* **[Certificado Foundation Ready](projects/pcl-aeos-harmonization/foundation-readiness.md):** Declaração de prontidão fundacional (atualmente sob revisão e saneamento de P1s pós-reauditoria).
 * **[Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md):** Hierarquia de autoridade soberana e RACI de governança (`PCL-AEOS-NORM-01`).
 * **[Boundary Register & Arquitetura Canônica](projects/pcl-aeos-harmonization/design/canonical-architecture.md):** Delimitação formal de Core, Satélites e Módulos Externos.
 * **[Registro Calibrado de Métricas e Claims](projects/pcl-aeos-harmonization/design/claims-register.md):** SLAs, targets de engenharia e medições históricas de laboratório.

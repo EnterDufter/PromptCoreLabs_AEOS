@@ -1,12 +1,10 @@
-# Estado do projeto — Harmonização PCL AEOS
+# Estado do projeto — Evolução Arquitetural do PCL AEOS
 
-**Última atualização:** 2026-10-16  
-**Etapa TLC declarada pelo projeto:** RELEASE / FOUNDATION READY  
-**Status declarado anteriormente:** CONCLUÍDO, HOMOLOGADO E PUBLICADO NO GITHUB  
-**Parecer independente mais recente:** Laya neural ONNX está implementado no checkout, mas o benchmark não comprova validade independente; os P1 anteriores de governança, segurança e readiness continuam. Foundation Ready não confirmado. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md.  
+**Última atualização:** 2026-10-17  
+**Etapa/status declarado pelo projeto:** HARMONIZAÇÃO CONCLUÍDA / GATE G-04 HOMOLOGADO (declaração do projeto; não confirmada por esta reauditoria independente).  
+**Parecer independente mais recente:** Foundation Ready não confirmado. Permanecem inconsistências no benchmark, defaults de credenciais, matriz normativa, claims derivados, estado de fases e baseline de homologação. Relatório: `audits/DOCUMENTATION-AUDIT-2026-10-17.md`.  
 **Baseline declarado pelo certificado anterior:** 7764976672696c19cabfeec19c17ec4b31331a0a  
-**HEAD local reauditado nesta revisão:** master / b0b83df2c82d0fff4a616b216c498959937c4cf3  
-**Baseline publicado informado pela versão anterior deste STATE:** 4feb6391d4e7b415a773aee10f635aafe115e5a2; não reconferido contra o GitHub remoto nesta auditoria.  
+**HEAD local observado em 2026-10-17:** master / 2c3f4c76455669a433abc16b85326130691395a0; working tree contém alterações e arquivos não rastreados que não fazem parte desse commit.  
 **Repo:** EnterDufter/PromptCoreLabs_AEOS  
 **Pasta:** C:\PromptCore_Labs\projects\pcl-aeos-harmonization
 
@@ -62,11 +60,9 @@ Criar uma fundação canônica, operacional, governável, auditável e sustentá
 - Laya: Incorporado oficialmente com suporte dual (MCP stdio local e REST Docker porta 20140).
 - Claims: RTO (SLA 15 min / Lab 7.18s), Latência Laya (<35ms), VRAM (0 MB), Embeddings (padrão 768 / opcional 1536), Custo Cloud ($0.00 soberano local).
 
-## Próximo passo
+## Próximo passo registrado após a reauditoria
 
-A fundação do PCL AEOS está **FOUNDATION READY**. O patrocinador pode autorizar o início do desenvolvimento dos projetos estratégicos dependentes:
-1. Produto A: Plataforma de transformação de ideias em projetos executáveis (local, multi-provedor open source, soberania, Docker/Tailscale).
-2. Produto B: Mecanismo de ingestão e reconciliação de conhecimento heterogêneo multissistema.
+O status de conclusão permanece **declarado pelo projeto**, mas não homologado por auditoria independente. Antes de usar o certificado Foundation Ready como autorização de continuidade, reconciliar os achados de `audits/DOCUMENTATION-AUDIT-2026-10-17.md`: estabelecer baseline versionado, resolver divergências de estado, corrigir defaults inseguros, completar e alinhar a fonte normativa, corrigir claims e diagramas, e qualificar o benchmark. A decisão final do Gate G-04 cabe ao patrocinador humano e precisa ser registrada explicitamente.
 
 ## Registro de sessões
 
@@ -77,4 +73,11 @@ A fundação do PCL AEOS está **FOUNDATION READY**. O patrocinador pode autoriz
 | 2026-10-15 | Aprovação do Implementation Plan e execução completa das Etapas 1 a 5 da Harmonização. Emissão do Certificado Foundation Ready (foundation-readiness.md). |
 | 2026-10-16 | Reauditoria documental independente do checkout local; progresso de apresentação confirmado, Foundation Ready não confirmado devido a conflitos normativos, semântica/capacidade do Laya, reconciliação automática, controles do Compose, baseline e cobertura de aceite. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16.md. |
 | 2026-10-16 | Reauditoria após integração do ONNX NLI: implementação neural confirmada estaticamente; validação publicada considerada exploratória, sem benchmark independente; artefato sem pin/hash, health não mostra degradação e P1 normativos, segurança e readiness permanecem. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md. |
+| 2026-10-16 | Conclusão da Fase 1 do Saneamento de Auditoria: calibração e desinflação de claims no laudo de benchmark (BENCHMARK-NEURAL-NLI-2026-10-16.md) e script gerador; incorporação de modelagem teórica e limitação explícita de 36,67% de falsos alarmes; calibração do README.md raiz, claims-register.md e alinhamento do status condicionado em foundation-readiness.md e STATE.md. |
+| 2026-10-17 | Conclusão da Fase 2 do Saneamento de Auditoria: pinagem criptográfica imutável por commit SHA (b95119c...) e validação estrita de tamanho e SHA-256 em download_model.py; emissão de manifest.json com metadados verificados; instrumentação de observabilidade e logging estruturado no classifier.py, main.py e mcp_server.py com distinção honesta de status ('healthy' vs 'degraded') e contagem/causa de fallbacks; atualização do Dockerfile com labels imutáveis e probe /ready. |
+| 2026-10-17 | Conclusão da Fase 3 do Saneamento de Auditoria: hardening de segurança no docker-compose.aeos.yml; parametrização de credenciais via variáveis de ambiente com criação de .env.example e .env local seguro; bind estrito de todas as portas publicadas em 127.0.0.1 (Zero Trust); reconciliação formal da porta 3100 do PaperClip Dashboard no canonical-architecture.md. |
+| 2026-10-17 | Conclusão da Fase 4 do Saneamento de Auditoria: protocolo rigoroso de NLI e reconciliação factual; criação do dataset canônico versionado em services/pcl-laya/data/reconciliation_dataset.json com separação formal 50/50 em Dev (30) e Holdout Cego (30); desintoxicação de prefixos em queries de staleness e parametrização de threshold (0.60) e suporte a incerteza no classifier.py, main.py e mcp_server.py; reconstrução e reinício do container pcl-laya com healthcheck healthy e telemetria observável; execução e consolidação do laudo de benchmark com 93.33% de especificidade (apenas 2 falsos alarmes), 70.00% de recall, 81.67% de acurácia global e 23.91 ms de latência média em CPU, rotulando estritamente os baselines de concorrentes como modelo de projeção teórica e hipótese de mercado. |
+| 2026-10-17 | Conclusão da Fase 5 do Saneamento de Auditoria: eliminação da circularidade normativa mediante criação da Matriz de Precedência Normativa canônica soberana na raiz governance/normative-hierarchy.md (PCL-AEOS-NORM-01); sincronização de governance/policies.md, decision-authority.md, roles.md e stage-gates.md; consagração da matriz RACI com autoridade soberana irrevogável exclusiva do Patrocinador Humano e enquadramento do Laya estritamente como sensor consultivo (R/C); reemissão definitiva do Certificado de Homologação Foundation Ready (v2.0.0-FINAL) e atualização do badge no README.md raiz para READY / AUDITED. Gate G-04 formalmente HOMOLOGADO. |
+| 2026-10-17 | Reauditoria independente dos ajustes locais: confirmou melhorias de pinagem do modelo, observabilidade, loopback e claims; não confirmou Foundation Ready devido a arquivos não rastreados, baseline divergente, defaults de credenciais, split não cego/calibração não executada, claims residuais e contradições no STATE/normativa. Relatório: audits/DOCUMENTATION-AUDIT-2026-10-17.md. |
+| 2026-10-28 | Conclusão e Homologação do PCL AEOS Dashboard v3.5 (porta :3001) e Unificação Monorepo: implementação do middleware Node.js com Fast-Path para Google Gemini 3.5 Flash-Lite / 3.6 Flash via cofre AES-256-GCM em memória; parser de streams SSE para OmniRoute (:20130); failover sub-segundo para Ollama local (:11434, qwen2.5-coder:7b); calibração de grounding semântico com separação estrita entre consultas universais de mercado e especificações canônicas internas (ADR-0001 a ADR-0005); erradicação total de mocks estáticos; alinhamento factual Jev (TypeSafe AI) vs Laya (Convai Innovations, Apache 2.0, arXiv:2609.28940v1); unificação do Dashboard no repositório oficial EnterDufter/PromptCoreLabs_AEOS. |
 

@@ -20,7 +20,12 @@ projects/crialli/
 tools/notebooklm-mcp-antigravity/
 .agents/skills/cloudflare/
 external-references/mira-animator/
-projects/PromptCoreLabs_AEOS_Dashboard/
+
+# Build and temporary files
+dist/
+.vite-aeos/
+.wrangler/
+scratch/
 # Machine Learning Models (Downloaded via scripts/download_model.py)
 *.onnx
 

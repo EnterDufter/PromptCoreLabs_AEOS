@@ -1,0 +1,145 @@
+/* ==========================================================================
+   PCL AEOS Design System — Harmonizado v2.0
+   Inspiração Canônica: https://enterdufter.github.io/PromptCoreLabs_AEOS/
+   ========================================================================== */
+
+:root {
+  /* Paleta Base */
+  --bg-dark: #0b0f19;
+  --bg-darker: #060911;
+  --bg-card: #131b2e;
+  --bg-card-hover: #1a2744;
+  --bg-card-subtle: rgba(19, 27, 46, 0.7);
+  --border-color: #1e293b;
+  --border-glow: rgba(56, 189, 248, 0.28);
+  --border-highlight: rgba(56, 189, 248, 0.5);
+
+  /* Tipografia & Cores de Texto */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-inverse: #0b0f19;
+
+  /* Acentos de Alta Tecnologia */
+  --accent-cyan: #38bdf8;
+  --accent-cyan-glow: rgba(56, 189, 248, 0.45);
+  --accent-blue: #60a5fa;
+  --accent-indigo: #818cf8;
+  --accent-purple: #c084fc;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f43f5e;
+
+  /* Badges & Tags */
+  --tag-p0-bg: #451a03; --tag-p0-text: #f97316; --tag-p0-border: #7c2d12;
+  --tag-p1-bg: #422006; --tag-p1-text: #eab308; --tag-p1-border: #713f12;
+  --tag-p2-bg: #172554; --tag-p2-text: #38bdf8; --tag-p2-border: #1e40af;
+  --tag-p3-bg: #3b0764; --tag-p3-text: #c084fc; --tag-p3-border: #6b21a8;
+  --tag-success-bg: rgba(6, 78, 59, 0.6); --tag-success-text: #34d399; --tag-success-border: #059669;
+
+  /* Efeitos */
+  --glass-bg: rgba(11, 15, 25, 0.88);
+  --glass-card: rgba(19, 27, 46, 0.82);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.35);
+
+  /* Transições */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset Global */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--bg-dark);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografia */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+code, pre, kbd, .font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Barra de rolagem */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+  border: 2px solid var(--bg-darker);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
+}
+
+/* Utilitários & Container */
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.text-cyan { color: var(--accent-cyan); }
+.text-blue { color: var(--accent-blue); }
+.text-purple { color: var(--accent-purple); }
+.text-emerald { color: var(--accent-emerald); }
+.text-amber { color: var(--accent-amber); }
+.text-muted { color: var(--text-muted); }
+
+.glow-cyan {
+  text-shadow: 0 0 16px rgba(56, 189, 248, 0.8), 0 0 32px rgba(56, 189, 248, 0.4);
+}
+
+/* Gradientes de Fundo Sutis */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.ambient-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+  filter: blur(60px);
+  z-index: 0;
+}

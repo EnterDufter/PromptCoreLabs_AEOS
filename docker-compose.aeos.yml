@@ -6,11 +6,11 @@ services:
     container_name: pcl-db
     restart: always
     environment:
-      POSTGRES_USER: paperclip
-      POSTGRES_PASSWORD: paperclip
-      POSTGRES_DB: paperclip
+      POSTGRES_USER: ${POSTGRES_USER:-paperclip}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-paperclip}
+      POSTGRES_DB: ${POSTGRES_DB:-paperclip}
     ports:
-      - "5432:5432"
+      - "${DB_BIND_ADDRESS:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -24,7 +24,7 @@ services:
     container_name: pcl-omniroute
     restart: always
     ports:
-      - "20130:20130"
+      - "${OMNIROUTE_BIND_ADDRESS:-127.0.0.1}:${OMNIROUTE_PORT:-20130}:20130"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     env_file:
@@ -32,10 +32,10 @@ services:
     environment:
       - PORT=20130
       - DATA_DIR=/var/lib/omniroute
-      - INITIAL_PASSWORD=admin
-      - AUTH_DISABLED=1
-      - SKIP_LOGIN=1
-      - REQUIRE_LOGIN=false
+      - INITIAL_PASSWORD=${OMNIROUTE_INITIAL_PASSWORD:-admin}
+      - AUTH_DISABLED=${OMNIROUTE_AUTH_DISABLED:-0}
+      - SKIP_LOGIN=${OMNIROUTE_SKIP_LOGIN:-0}
+      - REQUIRE_LOGIN=${OMNIROUTE_REQUIRE_LOGIN:-true}
       - CONFIG_FILE=/var/lib/omniroute/config.yaml
       - OMNIROUTE_CLASSIFIER_PROVIDER=laya
       - OMNIROUTE_LAYA_ENDPOINT=http://pcl-laya:20140
@@ -55,14 +55,14 @@ services:
     container_name: pcl-paperclip
     restart: always
     ports:
-      - "3100:3100"
+      - "${PAPERCLIP_BIND_ADDRESS:-127.0.0.1}:${PAPERCLIP_PORT:-3100}:3100"
     depends_on:
       - db
       - omniroute
     env_file:
       - ./PaperClip/.env
     environment:
-      - DATABASE_URL=postgres://paperclip:paperclip@db:5432/paperclip
+      - DATABASE_URL=postgres://${POSTGRES_USER:-paperclip}:${POSTGRES_PASSWORD:-paperclip}@db:5432/${POSTGRES_DB:-paperclip}
       - OMNI_ROUTE_URL=http://omniroute:20130
       - OPENAI_API_BASE=http://omniroute:20130/v1
       - OPENAI_API_KEY=sk-omniroute-local
@@ -82,10 +82,12 @@ services:
     container_name: pcl-laya
     restart: always
     ports:
-      - "20140:20140"
+      - "${LAYA_BIND_ADDRESS:-127.0.0.1}:${LAYA_PORT:-20140}:20140"
     environment:
       - PORT=20140
       - ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider
+      - LAYA_REQUIRE_NEURAL=${LAYA_REQUIRE_NEURAL:-0}
+      - LAYA_CPU_THREADS=${LAYA_CPU_THREADS:-2}
     networks:
       - aeos-net
 

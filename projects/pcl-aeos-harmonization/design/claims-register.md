@@ -31,6 +31,8 @@ A tabela abaixo reconcilia e resolve definitivamente as 7 divergências identifi
 | **Dimensão de Embeddings PGVector** | 768 vs. 1536 dimensões | **Canônico Local:** 768<br/>**Opcional Cloud:** 1536 | **Padrão Canônico: 768**<br/>(all-MiniLM / nomic) | O padrão de soberania local do PCL AEOS adota 768 dimensões. Dimensões de 1536 são tratadas como extensões para provedores externos (ex.: OpenAI). |
 | **Custo de Operação Cloud** | "$0.00" vs. Custos de API | **Modo Soberano:** $0.00<br/>**Modo Híbrido:** Variável | **$0.00 no Modo Local/Soberano** | Quando o AEOS opera 100% com Ollama, LM Studio e Laya em hardware próprio, o custo de inferência cloud é $0.00. Chamadas cloud via OmniRoute dependem da chave do usuário. |
 | **Volume de Claims Normativos** | 220 claims vs. 52 claims | **Inventário:** 220 brutos<br/>**Prioritários:** 52 canônicos | **52 Claims Canônicos Prioritários** | Os 220 claims catalogados representam todas as menções em documentos legados. O conjunto consolidado de trabalho foi filtrado em 52 claims estruturais. |
+| **Laya Neural NLI (Semântica)** | "Risco Zero / 100% Prevenção" vs. "Falsos Positivos" | **Ensaio Controlado (Dev + Holdout Cego)** | **Acurácia: 81,67%<br/>Especificidade: 93,33%<br/>Recall: 70,00%<br/>Precisão: 91,30%** | Avaliação em dataset canônico de 60 amostras (30 Dev / 30 Holdout) com desintoxicação de prefixos e threshold calibrado (0.60). Latência média de 23,9ms em CPU (0 MB VRAM). Atua estritamente como sensor consultivo, sem autoridade irrevogável autônoma para supersessão de memória. |
+| **Projeções de Mercado (Cloud/7B)** | "Benchmark Científico Concorrente" vs. Estimativa | **Modelagem Teórica / Projeção** | **Hipótese de Dimensionamento** | Valores de latência (~1.350ms, ~480ms) e custo ($0.003) são estimativas teóricas adotadas para cálculo de economia potencial, não ensaio empírico controlado. |
 | **Declaração de Zero Trust e ISO** | "Certificado ISO" vs. Autoavaliação | **Status:** Arquitetura Alinhada (Autoavaliação) | **Arquitetura Alinhada aos Princípios** | O PCL AEOS implementa princípios de isolamento Zero Trust e controles inspirados em normas ISO, mas **não possui certificação externa emitida por entidade credenciadora**. |
 
 ---
@@ -40,4 +42,6 @@ A tabela abaixo reconcilia e resolve definitivamente as 7 divergências identifi
 A partir da vigência deste registro:
 * Nenhum documento do repositório pode citar a medição de 7,18s de RTO como se fosse uma garantia contratual sem mencionar o SLA de 15 minutos.
 * Toda citação à latência do Laya deve referenciar a meta de design `< 35ms` ou os laudos de benchmark registrados.
+* Nenhum documento pode alegar "risco zero de alucinação", "superioridade científica homologada" ou "certificação ISO/IEC 42001" para o classificador probabilístico Laya.
+* As comparações com nuvem ou modelos 7B devem ser rotuladas como projeções teóricas hipotéticas para dimensionamento arquitetural.
 * Toda alegação de Zero Trust deve vir acompanhada da ressalva de conformidade arquitetural interna.

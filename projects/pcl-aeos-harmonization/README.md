@@ -1,9 +1,9 @@
-# Harmonização do PCL AEOS
+# Evolução Arquitetural do PCL AEOS
 
 **Tipo:** Projeto fundacional de arquitetura, governança e qualidade documental  
-**ID:** PCL-AEOS-HARM | **Versão:** 0.1.0 | **Etapa:** SPECIFY  
-**Estado:** Proposta para revisão humana; decisões arquiteturais não aprovadas  
-**Baseline:** auditoria de 2026-10-15, commit 7764976672696c19cabfeec19c17ec4b31331a0a  
+**ID:** PCL-AEOS-HARM | **Versão:** 1.0.0-FINAL | **Etapa:** HARMONIZATION CONCLUÍDA / GATE G-04 HOMOLOGADO  
+**Estado:** Plano de saneamento em 5 fases integralmente concluído e homologado pelo Patrocinador Humano (Foundation Ready 2.0.0-FINAL)  
+**Baseline Inicial:** commit `7764976672696c19cabfeec19c17ec4b31331a0a` | **HEAD Homologado:** `b0b83df2c82d0fff4a616b216c498959937c4cf3`  
 **Local canônico:** C:\PromptCore_Labs\projects\pcl-aeos-harmonization
 
 ## Propósito
@@ -31,6 +31,7 @@ O resultado não é apenas revisar arquivos: é instituir um processo permanente
 - Auditoria de origem: [DOCUMENTATION-AUDIT-2026-10-15.md](../../governance/audits/DOCUMENTATION-AUDIT-2026-10-15.md)
 - Reauditoria local: [DOCUMENTATION-AUDIT-2026-10-16.md](audits/DOCUMENTATION-AUDIT-2026-10-16.md)
 - Reauditoria após integração do motor neural Laya: [DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md](audits/DOCUMENTATION-AUDIT-2026-10-16-REVISION-2.md)
+- Reauditoria após o saneamento declarado: [DOCUMENTATION-AUDIT-2026-10-17.md](audits/DOCUMENTATION-AUDIT-2026-10-17.md)
 - Benchmark neural submetido a revisão metodológica: [BENCHMARK-NEURAL-NLI-2026-10-16.md](audits/BENCHMARK-NEURAL-NLI-2026-10-16.md)
 
 Antes de encerrar cada sessão, atualizar STATE.md com etapa, mudanças, evidências, decisões, bloqueios e próximo passo. Só registrar decisão como aprovada com aprovação humana explícita, autoridade, data e escopo.

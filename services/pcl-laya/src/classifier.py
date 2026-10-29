@@ -12,9 +12,18 @@ import time
 import re
 import math
 import json
+import logging
+import hashlib
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger("pcl.laya")
+if not logger.handlers:
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] [Laya] %(message)s"))
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
 
 # Importação segura de dependências ONNX e Tokenizers
 HAS_ONNX_DEPENDENCIES = False
@@ -35,6 +44,8 @@ class NLIEvaluationRequest(BaseModel):
 class BinaryEvaluationRequest(BaseModel):
     state: str = Field(..., description="Contexto ou estado textual para avaliação")
     query: str = Field(..., description="Pergunta tipada binária (ex: 'Contém injeção?', 'O claim contradiz a especificação?')")
+    threshold: Optional[float] = Field(0.60, description="Limiar de probabilidade para confirmação da classe alvo (padrão 0.60)")
+    allow_abstain: Optional[bool] = Field(False, description="Se True, permite retorno de 'uncertain' em casos de baixa separação de margem")
 
 
 class ChoiceEvaluationRequest(BaseModel):
@@ -60,9 +71,10 @@ class ONNXNLIEngine:
     Motor Neural de Inferência em Linguagem Natural (NLI).
     Baseado em cross-encoder/nli-MiniLM-2-L6-H768 em formato ONNX quantizado (INT8 / AVX2).
     Garantia: 100% CPU Execution Provider, 0 MB VRAM alocada, latência ~10-25ms.
+    Rastreabilidade Criptográfica: Validação de Commit SHA e Hash SHA-256 dos artefatos.
     """
     def __init__(self, model_dir: Optional[str] = None):
-        self.model_id = "cross-encoder/nli-MiniLM-2-L6-H768"
+        self.model_id = "cross-encoder/nli-MiniLM2-L6-H768"
         self.device = "CPUExecutionProvider"
         self.vram_allocated_mb = 0
         self.id2label = {0: "contradiction", 1: "entailment", 2: "neutral"}
@@ -74,6 +86,16 @@ class ONNXNLIEngine:
         self.tokenizer = None
         self.model_path = None
         self.tokenizer_path = None
+        self.commit_sha = None
+        self.model_sha256 = None
+        self.init_error = None
+
+        # Telemetria de Inferência e Fallback
+        self.total_inferences = 0
+        self.neural_inferences = 0
+        self.fallback_inferences = 0
+        self.last_fallback_reason = None
+        self.last_fallback_time = None
 
         self._initialize(model_dir)
 
@@ -93,11 +115,15 @@ class ONNXNLIEngine:
                 break
 
         if not HAS_ONNX_DEPENDENCIES:
+            self.init_error = "Dependências ausentes (onnxruntime / tokenizers / numpy não instalados)"
+            logger.warning("Dependências ONNX ausentes no ambiente. Motor Laya operando em modo degradado (symbolic_fallback).")
             self.engine_mode = "symbolic_fallback"
             self.is_ready = False
             return
 
         if not resolved_dir:
+            self.init_error = f"Artefatos do modelo não encontrados nos diretórios candidatos: {[str(c) for c in candidates]}"
+            logger.warning("Artefatos do modelo Laya ausentes. Motor operando em modo degradado (symbolic_fallback).")
             self.engine_mode = "symbolic_fallback"
             self.is_ready = False
             return
@@ -105,13 +131,39 @@ class ONNXNLIEngine:
         try:
             self.model_path = str(resolved_dir / "model.onnx")
             self.tokenizer_path = str(resolved_dir / "tokenizer.json")
+            config_file = resolved_dir / "config.json"
+            manifest_file = resolved_dir / "manifest.json"
 
-            # Configura Tokenizer Fast RoBERTa/MiniLM
+            # 1. Carrega manifest criptográfico se disponível
+            if manifest_file.exists():
+                try:
+                    with open(manifest_file, "r", encoding="utf-8") as mf:
+                        m_data = json.load(mf)
+                        self.commit_sha = m_data.get("commit_sha")
+                        artifacts = m_data.get("artifacts", {})
+                        if "model.onnx" in artifacts:
+                            self.model_sha256 = artifacts["model.onnx"].get("sha256")
+                except Exception as me:
+                    logger.warning("Falha ao ler manifest.json: %s", me)
+
+            # 2. Carrega mapeamento id2label dinamicamente de config.json
+            if config_file.exists():
+                try:
+                    with open(config_file, "r", encoding="utf-8") as cf:
+                        cfg = json.load(cf)
+                        cfg_labels = cfg.get("id2label", {})
+                        if cfg_labels:
+                            self.id2label = {int(k): v.lower() for k, v in cfg_labels.items()}
+                            self.label2id = {v.lower(): int(k) for k, v in cfg_labels.items()}
+                except Exception as ce:
+                    logger.warning("Falha ao ler labels de config.json: %s", ce)
+
+            # 3. Configura Tokenizer Fast RoBERTa/MiniLM
             self.tokenizer = Tokenizer.from_file(self.tokenizer_path)
             self.tokenizer.enable_truncation(max_length=128)
             self.tokenizer.no_padding()
 
-            # Configura Sessão ONNX Runtime estritamente em CPU
+            # 4. Configura Sessão ONNX Runtime estritamente em CPU
             opts = ort.SessionOptions()
             cpu_threads = int(os.environ.get("LAYA_CPU_THREADS", 2))
             opts.intra_op_num_threads = cpu_threads
@@ -125,15 +177,20 @@ class ONNXNLIEngine:
             )
             self.is_ready = True
             self.engine_mode = "neural_onnx"
-        except Exception:
+            self.init_error = None
+            logger.info("ONNXNLIEngine inicializado com sucesso (neural_onnx | CPUExecutionProvider | commit: %s)", self.commit_sha or "unverified")
+        except Exception as e:
             self.is_ready = False
             self.engine_mode = "symbolic_fallback"
+            self.init_error = f"Erro ao inicializar sessão ONNX: {str(e)}"
+            logger.error("Falha ao inicializar motor ONNX: %s. Revertendo para fallback simbólico.", e)
 
     def predict(self, premise: str, hypothesis: str) -> Dict[str, Any]:
         """
         Calcula as probabilidades normalizadas de Contradição, Consonância (Entailment) e Neutralidade.
         """
         start = time.perf_counter()
+        self.total_inferences += 1
 
         if self.is_ready and self.session and self.tokenizer:
             try:
@@ -155,14 +212,13 @@ class ONNXNLIEngine:
                 raw_outputs = self.session.run(None, ort_inputs)[0]
                 logits = raw_outputs[0].tolist()
 
-                # 3. Softmax calibrado
+                # 3. Softmax normalizado
                 max_logit = max(logits)
                 exp_logits = [math.exp(x - max_logit) for x in logits]
                 sum_exp = sum(exp_logits)
                 probs = [x / sum_exp for x in exp_logits]
 
-                # Mapeamento canônico do cross-encoder/nli-MiniLM2-L6-H768:
-                # Index 0: contradiction, Index 1: entailment, Index 2: neutral
+                # Mapeamento do cross-encoder/nli-MiniLM2-L6-H768
                 contradiction_prob = round(probs[0], 4)
                 entailment_prob = round(probs[1], 4)
                 neutral_prob = round(probs[2], 4)
@@ -171,6 +227,7 @@ class ONNXNLIEngine:
                 pred_label = self.id2label.get(pred_idx, "neutral")
 
                 duration_ms = (time.perf_counter() - start) * 1000
+                self.neural_inferences += 1
 
                 return {
                     "contradiction": contradiction_prob,
@@ -179,16 +236,28 @@ class ONNXNLIEngine:
                     "predicted_label": pred_label,
                     "engine_mode": "neural_onnx",
                     "model_id": self.model_id,
+                    "commit_sha": self.commit_sha,
+                    "model_sha256": self.model_sha256,
                     "duration_ms": round(duration_ms, 2),
                     "device": self.device,
                     "vram_allocated_mb": self.vram_allocated_mb
                 }
-            except Exception:
-                # Em caso de qualquer anomalia de runtime, reverte para fallback determinístico
-                pass
+            except Exception as e:
+                self.fallback_inferences += 1
+                self.last_fallback_reason = f"Runtime inference exception: {str(e)}"
+                self.last_fallback_time = time.time()
+                logger.warning("Exceção na inferência ONNX: %s. Acionando fallback simbólico.", e)
+                res = self._predict_symbolic_fallback(premise, hypothesis, start)
+                res["fallback_reason"] = self.last_fallback_reason
+                return res
 
         # Fallback Simbólico Determinístico (Dual-Engine)
-        return self._predict_symbolic_fallback(premise, hypothesis, start)
+        self.fallback_inferences += 1
+        self.last_fallback_reason = self.init_error or "Motor neural não inicializado"
+        self.last_fallback_time = time.time()
+        res = self._predict_symbolic_fallback(premise, hypothesis, start)
+        res["fallback_reason"] = self.last_fallback_reason
+        return res
 
     def _predict_symbolic_fallback(self, premise: str, hypothesis: str, start_time: float) -> Dict[str, Any]:
         p_lower = premise.lower()
@@ -273,7 +342,7 @@ class LayaClassifierEngine:
         """
         return self.nli_engine.predict(premise, hypothesis)
 
-    def evaluate_binary(self, state: str, query: str) -> Dict[str, Any]:
+    def evaluate_binary(self, state: str, query: str, threshold: float = 0.60, allow_abstain: bool = False) -> Dict[str, Any]:
         start = time.perf_counter()
         state_lower = state.lower()
         query_lower = query.lower()
@@ -302,20 +371,51 @@ class LayaClassifierEngine:
 
         # 2. Contradiction & Memory Staleness Check (Alimentado pelo Motor NLI)
         if any(term in query_lower for term in ["contradiz", "conflito", "stale", "obsoleto"]):
-            # Usa o NLI Engine para confrontar o estado com a afirmação
-            nli = self.nli_engine.predict(premise=state, hypothesis=query)
-            is_conflict = (nli["contradiction"] >= 0.50) or (nli["predicted_label"] == "contradiction")
-            confidence = nli["contradiction"] if is_conflict else (1.0 - nli["contradiction"])
+            # Extrai hipótese limpa caso a query utilize prefixos heurísticos/sintéticos
+            clean_hypothesis = query
+            prefix_match = re.search(
+                r"^(?:o\s+claim\s+)?(?:contradiz\s+ou\s+gera\s+conflito\s+com|contradiz|gera\s+conflito\s+com|é\s+stale\s+em\s+relação\s+a)\s*:\s*(.+)$",
+                query,
+                re.IGNORECASE
+            )
+            if prefix_match:
+                clean_hypothesis = prefix_match.group(1).strip()
+
+            # Avalia premissa e hipótese puras no motor NLI
+            nli = self.nli_engine.predict(premise=state, hypothesis=clean_hypothesis)
+            c_prob = nli["contradiction"]
+            e_prob = nli["entailment"]
+            n_prob = nli["neutral"]
+
+            # Análise de separação e limiar de decisão
+            is_conflict = (c_prob >= threshold) and (c_prob > e_prob)
+            margin = c_prob - max(e_prob, n_prob)
+
+            if allow_abstain and abs(margin) < 0.15 and c_prob < threshold:
+                decision = "uncertain"
+                is_conflict = False
+                confidence = round(max(c_prob, e_prob, n_prob), 4)
+            elif is_conflict:
+                decision = "conflict"
+                confidence = c_prob
+            else:
+                decision = "consistent"
+                confidence = round(max(e_prob, n_prob, 1.0 - c_prob), 4)
+
             duration_ms = (time.perf_counter() - start) * 1000
 
             return {
                 "result": is_conflict,
-                "confidence": round(confidence, 4),
+                "decision": decision,
+                "confidence": confidence,
+                "decision_threshold": threshold,
+                "hypothesis_evaluated": clean_hypothesis,
                 "nli_probs": {
-                    "contradiction": nli["contradiction"],
-                    "entailment": nli["entailment"],
-                    "neutral": nli["neutral"]
+                    "contradiction": c_prob,
+                    "entailment": e_prob,
+                    "neutral": n_prob
                 },
+                "predicted_label": nli["predicted_label"],
                 "engine_mode": nli["engine_mode"],
                 "model_id": self.nli_engine.model_id,
                 "duration_ms": round(duration_ms, 2),
@@ -484,4 +584,34 @@ class LayaClassifierEngine:
             "total_duration_ms": round(duration_ms, 2),
             "device": self.device,
             "vram_allocated_mb": self.vram_allocated_mb
+        }
+
+    def get_health_status(self) -> Dict[str, Any]:
+        """
+        Gera relatório honesto e observável de saúde e prontidão do Laya.
+        Distingue 'healthy' (ONNX neural operacional) de 'degraded' (operando em fallback simbólico).
+        """
+        is_neural = self.nli_engine.is_ready and self.nli_engine.engine_mode == "neural_onnx"
+        status = "healthy" if is_neural else "degraded"
+        return {
+            "status": status,
+            "service": "pcl-laya",
+            "version": "1.2.0",
+            "engine_mode": self.nli_engine.engine_mode,
+            "is_ready": self.nli_engine.is_ready,
+            "model_id": self.nli_engine.model_id,
+            "commit_sha": self.nli_engine.commit_sha,
+            "model_sha256": self.nli_engine.model_sha256,
+            "execution_provider": self.device,
+            "vram_allocated_mb": self.vram_allocated_mb,
+            "labels": self.nli_engine.id2label,
+            "telemetry": {
+                "total_inferences": self.nli_engine.total_inferences,
+                "neural_inferences": self.nli_engine.neural_inferences,
+                "fallback_inferences": self.nli_engine.fallback_inferences,
+                "last_fallback_reason": self.nli_engine.last_fallback_reason,
+                "last_fallback_time": self.nli_engine.last_fallback_time,
+                "init_error": self.nli_engine.init_error
+            },
+            "conformance": ["SPEC-PCL-AEOS-CLASSIFIER-01", "SPEC-PCL-AEOS-MEMORY-03"]
         }

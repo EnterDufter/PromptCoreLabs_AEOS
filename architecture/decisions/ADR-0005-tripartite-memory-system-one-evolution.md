@@ -56,7 +56,11 @@ Alternativa C — Arquitetura Soberana: PCL Temporal Graph-RAG no PostgreSQL 17 
 
 Adotar a **Alternativa C**: Implementar a evolução da Memória Cognitiva Tripartida do PCL AEOS apoiada em:
 1. **PCL Temporal Graph-RAG:** Modelagem de entidades, alegações temporais (`claims`) com status (`TRUSTED`, `STALE`, `CONFLICT`) e recibos criptográficos de evidência (`evidence_receipts` com SHA-256 e git commit hash), persistida no schema isolado `memory` do PostgreSQL 17 (`pcl-db`).
-2. **Coprocessador System One (Laya):** Microserviço Docker `pcl-laya` executando modelo encoder bidirecional (ModernBERT) com cabeças de decisão tipadas via **ONNX Runtime CPU (`CPUExecutionProvider`) quantizado em INT8**, com latência alvo < 40ms e **0 MB de VRAM alocada**.
+2. **Coprocessador System One (Laya vs Jev):**
+   - Paradigma System One: Modelos não-autorregressivos de tomada de decisão rápida em single forward pass, retornando probabilidades matematicamente calibradas e saídas estritamente tipadas (`boolean`, `choice`, `score`).
+   - Jev (TypeSafe AI — https://typesafe.ai): Serviço gerenciado proprietário em nuvem (SaaS) que estabeleceu a especificação de API de decisão calibrada.
+   - Laya (Convai Innovations — https://huggingface.co/convaiinnovations/laya): Implementação open-source sob licença Apache 2.0, multilíngue e não-autorregressiva documentada na literatura acadêmica (arXiv:2609.28940v1). Permite auto-hospedagem local ou uso via Laya Studio.
+   - No PCL AEOS: Microserviço Docker `pcl-laya` (porta 20140 / MCP stdio) executando modelo quantizado em INT8 via **ONNX Runtime CPU (`CPUExecutionProvider`)**, com latência determinística de **~20 a 35ms**, custo marginal **$0.00** e **0 MB de VRAM alocada** na GPU NVIDIA RTX 3050, preservando a VRAM integralmente para o Ollama local no modo offline.
 3. **Pipeline de Reconciliação Canônica:** Protocolo formal para ingestão e determinação do Estado Canônico Definitivo (SSOT) de artefatos heterogêneos de múltiplos modelos.
 4. **Governança de Autonomia Confinada:** Qualquer worker assíncrono em background (`pcl-daemon`) é confinado à execução de tarefas já aprovadas no **Gate 3 (tasks)** do Paperclip, proibido de autoaprovação de requisitos e submetido aos Gates 4 e 5.
 5. **Harmonização Estrita com o ADR-006:** A Memória Cognitiva constitui a camada lógica operacional resguardada e replicada pelo DRP físico criptografado (Cold SQL R2, Event Docs R2 e Hot Sync D1/Vectorize).

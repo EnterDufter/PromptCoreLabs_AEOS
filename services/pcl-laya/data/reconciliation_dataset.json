@@ -1,0 +1,613 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Dataset canônico de avaliação de inferência NLI e reconciliação factual para o Coprocessador Laya System One do PCL AEOS",
+    "canonical_model": "cross-encoder/nli-MiniLM-2-L6-H768",
+    "split_policy": "Divisão formal 50/50 em subconjunto de calibração (dev: 30 itens) e subconjunto de validação cega (holdout: 30 itens)",
+    "total_samples": 60,
+    "dev_samples": 30,
+    "holdout_samples": 30
+  },
+  "samples": [
+    {
+      "id": "CONF-01",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Rede & Portas",
+      "premise": "The pcl-laya service operates on TCP port 20140 in the internal network.",
+      "hypothesis": "The pcl-laya service listens on port 8080.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-02",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Hardware & VRAM",
+      "premise": "The Laya coprocessor allocates 0 MB of VRAM on the GPU, running on CPU.",
+      "hypothesis": "Laya requires a dedicated GPU with 8 GB of VRAM.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-03",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "DRP & Resiliência",
+      "premise": "The laboratory DRP restore was 7.18 seconds with a 15-minute maximum SLA.",
+      "hypothesis": "The disaster recovery restore took 4 hours of complete downtime.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-04",
+      "subset": "dev",
+      "category": "negation",
+      "domain": "Segurança & Cifragem",
+      "premise": "Cold memory backups are encrypted with AES-256 before storage in Cloudflare R2.",
+      "hypothesis": "Cold backups are stored unencrypted in plain text in a public bucket.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-05",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Rede & Zero Trust",
+      "premise": "Network access is strictly governed by Zero Trust via Tailscale mesh VPN.",
+      "hypothesis": "The cluster allows anonymous public open connections from the internet.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-06",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Banco de Dados & RAG",
+      "premise": "PGVector stores dense embeddings with dimension 768 in schema memory on Postgres 17.",
+      "hypothesis": "The vector table in PostgreSQL stores embeddings with dimensionality 1536.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-07",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Governança RACI",
+      "premise": "The human operator holds sovereign irrevocable decision authority in all Stage Gates.",
+      "hypothesis": "Autonomous AI agents have full autonomy to apply production code without human approval.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-08",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Containers & Uptime",
+      "premise": "The Docker cluster keeps the pcl-omniroute container healthy and online.",
+      "hypothesis": "The OmniRoute service is permanently shut down and disabled.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-09",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Precedência Normativa",
+      "premise": "Normative policy PCL-AEOS-NORM-01 establishes precedence of Policies over User Manuals.",
+      "hypothesis": "An outdated user guide overrides a formal security policy.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-10",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Reconciliação Dialética",
+      "premise": "Laya dialectic reconciliation automatically supersedes contradictory memory claims.",
+      "hypothesis": "Contradictory claims are preserved permanently without supersession.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-11",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Inconcorrência & Failover",
+      "premise": "In local failover mode, Ollama runs qwen2.5-coder:7b on the local machine.",
+      "hypothesis": "Local failover depends exclusively on active external OpenAI cloud APIs.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-12",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Hardware & VRAM",
+      "premise": "The NVIDIA RTX 3050 dedicated GPU remains idle with 0 MB allocated during online mode.",
+      "hypothesis": "The RTX 3050 is 100% loaded with 4 GB of VRAM locked by the gateway.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-13",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Tool Gating & Segurança",
+      "premise": "The dangerous command 'rm -rf /' is strictly blocked by Laya tool gating filters.",
+      "hypothesis": "The dangerous command 'rm -rf /' executes directly without any safety checks.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-14",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Zero Secret Leak",
+      "premise": "All API keys and secrets must remain outside Git version control.",
+      "hypothesis": "Production API keys should be committed in plain text in the public README.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-15",
+      "subset": "dev",
+      "category": "direct_opposition",
+      "domain": "Portal & Entrega",
+      "premise": "The interactive portal of PCL AEOS is published and accessible via GitHub Pages.",
+      "hypothesis": "The web portal was disabled and GitHub Pages was permanently deleted.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-16",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Banco de Dados & Storage",
+      "premise": "The official relational database for PCL AEOS is PostgreSQL version 17.",
+      "hypothesis": "The official relational database used is MongoDB 4.2 in a NoSQL cluster.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-17",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Licenciamento",
+      "premise": "The official distribution license for PromptCoreLabs_AEOS repository is the MIT License.",
+      "hypothesis": "The repository is proprietary closed-source under restricted commercial license.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-18",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Validação de Claims",
+      "premise": "Deterministic staleness verification was completed with zero residual errors.",
+      "hypothesis": "Staleness verification failed with hundreds of unhandled inconsistencies.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-19",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Performance & SLA",
+      "premise": "Laya average inference latency via MCP stdio in batch is under 1 millisecond.",
+      "hypothesis": "Laya takes 45 seconds to process a single binary verification in the terminal.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-20",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Resiliência Dual-Engine",
+      "premise": "Laya operates natively in a Dual-Engine architecture with resilient fallback.",
+      "hypothesis": "Laya crashes and throws HTTP 500 error if ONNX models are absent.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-21",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Rede & Portas",
+      "premise": "O serviço pcl-laya opera na porta TCP 20140.",
+      "hypothesis": "O serviço pcl-laya escuta na porta 8080.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-22",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Hardware & VRAM",
+      "premise": "Laya aloca estritamente 0 MB de VRAM na GPU.",
+      "hypothesis": "O Laya exige GPU com 8 GB de VRAM dedicados.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-23",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "DRP & Resiliência",
+      "premise": "RTO medido em laboratório de 7,18s dentro do SLA de 15 minutos.",
+      "hypothesis": "RTO de recuperação de desastres ultrapassou 3 horas de indisponibilidade.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-24",
+      "subset": "holdout",
+      "category": "negation",
+      "domain": "Segurança & Cifragem",
+      "premise": "Backups da memória são cifrados com AES-256 no Cloudflare R2.",
+      "hypothesis": "Backups frios são armazenados em texto plano sem chave pública.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-25",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Rede & Zero Trust",
+      "premise": "Acesso de rede é restrito a Zero Trust via Tailscale.",
+      "hypothesis": "Cluster permite conexões públicas abertas sem chave ou VPN.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-26",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Banco de Dados & RAG",
+      "premise": "PGVector armazena embeddings na dimensão 768 no PostgreSQL 17.",
+      "hypothesis": "A tabela vetorial do PostgreSQL armazena vetores com dimensão 1536.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-27",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Governança RACI",
+      "premise": "Operador humano possui autoridade soberana irrevogável.",
+      "hypothesis": "Agentes autônomos aplicam código sem autorização humana.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-28",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Containers & Uptime",
+      "premise": "Container pcl-omniroute rodando online na porta 20130.",
+      "hypothesis": "Serviço OmniRoute desligado e inativo permanentemente.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-29",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Precedência Normativa",
+      "premise": "Precedência formal: Políticas sobre Manuais desatualizados.",
+      "hypothesis": "Manual antigo se sobrepõe a uma política formal de segurança.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "CONF-30",
+      "subset": "holdout",
+      "category": "direct_opposition",
+      "domain": "Tool Gating & Segurança",
+      "premise": "Comando 'rm -rf /' bloqueado pelos guardrails do Laya.",
+      "hypothesis": "Comando perigoso 'rm -rf /' executado diretamente no terminal.",
+      "expected_label": "contradiction",
+      "expected_conflict": true
+    },
+    {
+      "id": "COER-01",
+      "subset": "dev",
+      "category": "paraphrase",
+      "domain": "Portas & Rede",
+      "premise": "The pcl-laya microservice responds to HTTP REST requests on port 20140.",
+      "hypothesis": "Network traffic sent to port 20140 reaches the pcl-laya service.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-02",
+      "subset": "dev",
+      "category": "paraphrase",
+      "domain": "Hardware & VRAM",
+      "premise": "Laya executes 100% on CPU using the CPUExecutionProvider provider.",
+      "hypothesis": "Laya model inference runs on the central processor without allocating GPU VRAM.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-03",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "DRP & Resiliência",
+      "premise": "Disaster recovery completed schemas restore in 7.18s, within the 15-minute SLA.",
+      "hypothesis": "The disaster recovery process satisfied the established SLA time limits.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-04",
+      "subset": "dev",
+      "category": "paraphrase",
+      "domain": "Segurança & Cifragem",
+      "premise": "The backup script encrypts data with AES-256 and stores in Cloudflare R2 bucket.",
+      "hypothesis": "The backup vault uses bank-grade encryption to protect cold data in cloud storage.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-05",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Banco de Dados & RAG",
+      "premise": "PostgreSQL 17 utilizes the PGVector extension for vector similarity calculations.",
+      "hypothesis": "The relational database possesses native vector search capabilities for AI.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-06",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "EBITDA Shield & Custos",
+      "premise": "OmniRoute implements EBITDA Shield prompt caching and intelligent dynamic routing.",
+      "hypothesis": "The AI gateway possesses dedicated mechanisms to reduce financial costs on tokens.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-07",
+      "subset": "dev",
+      "category": "paraphrase",
+      "domain": "Governança RACI",
+      "premise": "Governance requires that production changes must have human sponsor sign-off.",
+      "hypothesis": "The human operator retains final authority over technical deliveries.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-08",
+      "subset": "dev",
+      "category": "paraphrase",
+      "domain": "Otimização de VRAM",
+      "premise": "The reactive background monitor unloads heavy models from GPU when network reconnects.",
+      "hypothesis": "GPU video memory is freed automatically once online operation resumes.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-09",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Protocolo MCP",
+      "premise": "The pcl-laya MCP server communicates with Antigravity IDE via stdio JSON-RPC pipes.",
+      "hypothesis": "The IDE can invoke Laya classification tools without routing through the public internet.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-10",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Inferência NLI",
+      "premise": "The NLI engine evaluates text pairs across contradiction, entailment, and neutrality.",
+      "hypothesis": "The model calculates semantic and factual relationships between statements.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-11",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Metodologia TLC",
+      "premise": "The repository adopts TLC Spec-Driven v3 with 5 sequential approval Stage Gates.",
+      "hypothesis": "The software lifecycle follows a structured specification-driven development workflow.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-12",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Qualidade Documental",
+      "premise": "The link sanitizer script converted 46 absolute paths into portable relative links.",
+      "hypothesis": "Documentation was cleaned to prevent broken links across external systems and GitHub.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-13",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Memória Tripartida",
+      "premise": "The tripartite memory architecture is formally divided into Episodic, Semantic, and Procedural.",
+      "hypothesis": "The system preserves distinct memory stores for chat history, facts, and procedures.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-14",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Eficiência Neural",
+      "premise": "The cross-encoder/nli-MiniLM-2-L6-H768 quantized model weighs approximately 79 MB in INT8.",
+      "hypothesis": "The neural classifier artifact is compact and designed to run in RAM without host overhead.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-15",
+      "subset": "dev",
+      "category": "implication",
+      "domain": "Performance & SLA",
+      "premise": "MCP handshake test suite confirmed latency under 10 milliseconds for health response.",
+      "hypothesis": "Local communication between agent and coprocessor responds with high speed.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-16",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "Segurança Perimetral",
+      "premise": "Zero Trust policy requires inter-container communication to stay inside aeos-net subnet.",
+      "hypothesis": "Network isolation prevents unprotected traffic between cluster nodes outside the internal net.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-17",
+      "subset": "holdout",
+      "category": "paraphrase",
+      "domain": "Rastreabilidade SSOT",
+      "premise": "The canonical specification of PCL AEOS resides in spec-pcl-aeos-classifier-engine.md.",
+      "hypothesis": "The spec-pcl-aeos-classifier-engine.md document acts as source of truth for classifier contracts.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-18",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "Orquestração Docker",
+      "premise": "Docker Compose orchestrates pcl-db, pcl-laya, pcl-omniroute, and pcl-paperclip services.",
+      "hypothesis": "Base container infrastructure can be booted up via a unified configuration file.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-19",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "Provisionamento Automático",
+      "premise": "The automatic download script fetches the ONNX model and tokenizer from Hugging Face.",
+      "hypothesis": "Neural model weights required for inference can be provisioned programmatically.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-20",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "Experiência de Usuário",
+      "premise": "GitHub Pages portal renders interactive C4 architecture diagrams with light and dark themes.",
+      "hypothesis": "Web architectural visualization offers reading flexibility and contrast switching.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-21",
+      "subset": "holdout",
+      "category": "paraphrase",
+      "domain": "Portas & Rede",
+      "premise": "O microserviço pcl-laya responde requisições HTTP REST na porta 20140 da rede Docker aeos-net.",
+      "hypothesis": "O tráfego de rede direcionado à porta 20140 acessa o serviço pcl-laya.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-22",
+      "subset": "holdout",
+      "category": "paraphrase",
+      "domain": "Hardware & VRAM",
+      "premise": "O Laya foi compilado para execução 100% em CPU com Execution Provider CPUExecutionProvider.",
+      "hypothesis": "A execução do modelo Laya consome recursos de CPU sem demandar VRAM da GPU.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-23",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "DRP & Resiliência",
+      "premise": "A restauração de desastres em laboratório concluiu os schemas em 7,18s dentro do SLA de 15 minutos.",
+      "hypothesis": "O processo de recuperação DRP cumpriu com folga a meta de tempo estipulada em SLA.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-24",
+      "subset": "holdout",
+      "category": "paraphrase",
+      "domain": "Segurança & Cifragem",
+      "premise": "O script de backup gera um dump criptografado com AES-256 e armazena no Cloudflare R2.",
+      "hypothesis": "O cofre de backup utiliza criptografia de nível bancário para proteção dos dados em repouso.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-25",
+      "subset": "holdout",
+      "category": "implication",
+      "domain": "Banco de Dados & RAG",
+      "premise": "O PostgreSQL 17 utiliza a extensão PGVector para cálculo de similaridade vetorial.",
+      "hypothesis": "O banco de dados relacional possui capacidades nativas de busca vetorial para IA.",
+      "expected_label": "entailment",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-26",
+      "subset": "holdout",
+      "category": "independence",
+      "domain": "Independência Factual",
+      "premise": "The service runs on port 20140.",
+      "hypothesis": "The infrastructure engineer prefers Ubuntu for host servers.",
+      "expected_label": "neutral",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-27",
+      "subset": "holdout",
+      "category": "independence",
+      "domain": "Independência Factual",
+      "premise": "The Laya coprocessor allocates 0 MB of VRAM on GPU.",
+      "hypothesis": "Electricity prices in the datacenter increased this quarter.",
+      "expected_label": "neutral",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-28",
+      "subset": "holdout",
+      "category": "independence",
+      "domain": "Independência Factual",
+      "premise": "PGVector stores dense embeddings with dimension 768.",
+      "hypothesis": "Data scientists concluded a new training experiment yesterday.",
+      "expected_label": "neutral",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-29",
+      "subset": "holdout",
+      "category": "independence",
+      "domain": "Independência Factual",
+      "premise": "Cold backup is sent encrypted with AES-256 to R2.",
+      "hypothesis": "Cloudflare announced new tools for WebAssembly development.",
+      "expected_label": "neutral",
+      "expected_conflict": false
+    },
+    {
+      "id": "COER-30",
+      "subset": "holdout",
+      "category": "independence",
+      "domain": "Independência Factual",
+      "premise": "Disaster recovery failover measured in laboratory was 7.18 seconds.",
+      "hypothesis": "The company cafeteria serves organic espresso to developers.",
+      "expected_label": "neutral",
+      "expected_conflict": false
+    }
+  ]
+}

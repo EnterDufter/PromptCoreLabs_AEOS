@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **Status Normativo:** Documento de políticas operacionais subordinado à [Matriz de Precedência Normativa](../projects/pcl-aeos-harmonization/design/normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
+> **Status Normativo:** Documento de políticas operacionais subordinado à [Matriz de Precedência Normativa](normative-hierarchy.md) (`PCL-AEOS-NORM-01`).
 > Para a hierarquia formal de políticas soberanas aprovadas, a fonte canônica prevalente é a Seção 2 de `normative-hierarchy.md`.
 
 ==================================================

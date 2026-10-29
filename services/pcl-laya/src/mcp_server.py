@@ -27,18 +27,10 @@ engine = LayaClassifierEngine()
 
 @mcp.tool()
 def laya_health() -> Dict[str, Any]:
-    """Retorna o status operacional, modo do motor, modelo neural carregado e garantias de hardware do Laya."""
-    return {
-        "status": "healthy",
-        "service": "pcl-laya",
-        "mcp_server": "PCL-LAYA-System-One",
-        "version": "1.1.0",
-        "engine_mode": engine.nli_engine.engine_mode,
-        "model_id": engine.nli_engine.model_id,
-        "execution_provider": "CPUExecutionProvider",
-        "vram_allocated_mb": 0,
-        "conformance": ["SPEC-PCL-AEOS-CLASSIFIER-01", "SPEC-PCL-AEOS-MEMORY-03"]
-    }
+    """Retorna o status operacional detalhado ('healthy' vs 'degraded'), modo do motor, commit SHA e telemetria do Laya."""
+    health_data = engine.get_health_status()
+    health_data["mcp_server"] = "PCL-LAYA-System-One"
+    return health_data
 
 
 @mcp.tool()
@@ -58,7 +50,7 @@ def laya_evaluate_nli(premise: str, hypothesis: str) -> Dict[str, Any]:
 
 
 @mcp.tool()
-def laya_evaluate_binary(state: str, query: str) -> Dict[str, Any]:
+def laya_evaluate_binary(state: str, query: str, threshold: float = 0.60, allow_abstain: bool = False) -> Dict[str, Any]:
     """
     Executa avaliação binária ultra-rápida em CPU (~20-35ms) com validação neural ou guardrails.
     Pode ser usado para verificar:
@@ -70,12 +62,14 @@ def laya_evaluate_binary(state: str, query: str) -> Dict[str, Any]:
     Args:
         state: O texto, contexto ou documento a ser analisado.
         query: A pergunta ou critério de teste (ex: 'O claim é confiável?', 'Contém contradição?').
+        threshold: Limiar de probabilidade para confirmação da classe alvo (padrão 0.60).
+        allow_abstain: Se True, retorna 'uncertain' em casos de baixa separação de margem.
     """
-    return engine.evaluate_binary(state=state, query=query)
+    return engine.evaluate_binary(state=state, query=query, threshold=threshold, allow_abstain=allow_abstain)
 
 
 @mcp.tool()
-def laya_check_contradiction(state: str, query: str) -> Dict[str, Any]:
+def laya_check_contradiction(state: str, query: str, threshold: float = 0.60) -> Dict[str, Any]:
     """
     Especialização para detectar contradições semânticas diretas e discrepâncias
     entre o estado atual (documento/código) e uma afirmação ou especificação canônica.
@@ -83,9 +77,10 @@ def laya_check_contradiction(state: str, query: str) -> Dict[str, Any]:
     Args:
         state: Texto da fonte ou documento em análise (Premissa).
         query: Afirmação ou termo a verificar contra o texto (Hipótese).
+        threshold: Limiar de probabilidade para confirmação de conflito (padrão 0.60).
     """
-    test_query = f"contradiz ou gera conflito com: {query}"
-    return engine.evaluate_binary(state=state, query=test_query)
+    test_query = f"contradiz: {query}"
+    return engine.evaluate_binary(state=state, query=test_query, threshold=threshold)
 
 
 @mcp.tool()

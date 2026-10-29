@@ -1,20 +1,21 @@
 # Matriz de Precedência Normativa e Governança do PCL AEOS
 
-**ID:** `PCL-AEOS-NORM-01` | **Versão:** 1.0.0 | **Etapa:** DESIGN / NORMATIVE  
+**ID:** `PCL-AEOS-NORM-01` | **Versão:** 1.1.0 | **Etapa:** DESIGN / NORMATIVE  
 **Projeto:** [Harmonização do PCL AEOS](..) (`PCL-AEOS-HARM`)  
-**Autoridade:** Patrocinador Humano (User)  
-**Data-Base:** 2026-10-15  
+**Fonte Soberana Primária:** [`governance/normative-hierarchy.md`](file:///c:/PromptCore_Labs/governance/normative-hierarchy.md)  
+**Autoridade Suprema:** Patrocinador Humano Soberano (User / Sponsor)  
+**Data de Homologação:** 2026-10-17  
 **Conformidade:** `HARM-DEC-001`, `HARM-DEC-002`, `HARM-FR-002`, `HARM-FR-005`  
 
 ---
 
 ## 1. Objetivo e Princípio da Raiz Única
 
-Este documento estabelece a **Fonte Normativa Canônica** para todo o ecossistema PCL AEOS. 
+Este documento reflete a **Matriz Normativa Canônica** aprovada para o ecossistema PCL AEOS, cuja sede canônica primária e soberana reside em [`governance/normative-hierarchy.md`](file:///c:/PromptCore_Labs/governance/normative-hierarchy.md).
 
 > [!IMPORTANT]
-> **Invariante de Autoridade:**
-> Não haverá duas fontes supremas competindo no mesmo escopo. Qualquer documento ou especificação no repositório que contradiga as definições deste documento é subordinado e deve ser lido conforme a ordem estrita de precedência aqui definida.
+> **Invariante de Autoridade e Não-Circularidade:**
+> A governança institucional emana da raiz `governance/`. Este documento é a especificação arquitetural de design correspondente, perfeitamente sincronizada com a política soberana. Qualquer documento no repositório que contradiga a ordem estrita de precedência aqui estabelecida é formalmente subordinado.
 
 ---
 
@@ -44,20 +45,26 @@ flowchart TD
 
 ## 3. Matriz RACI de Governança (`HARM-FR-002`, `HARM-NFR-003`)
 
-Define a separação irrestrita entre a autoridade humana e as capacidades de automação agêntica:
+Define a separação irrestrita entre a autoridade humana soberana e as capacidades agênticas e reflexivas:
 
-| Atividade / Decisão | Patrocinador Humano (User) | Agente Antigravity IDE | Coprocessador LAYA |
+| Atividade / Decisão Estrutural | Patrocinador Humano (User/Sponsor) | Agente Antigravity IDE | Coprocessador LAYA System One |
 | :--- | :---: | :---: | :---: |
-| **Aprovação de Políticas e Normas** | **A (Aprovador Soberano)** | C (Consulta / Rascunho) | I (Informativo / 0) |
-| **Aprovação de Mudanças Arquiteturais (ADRs)** | **A (Aprovador Soberano)** | R (Proponente Técnico) | I (Informativo / 0) |
-| **Resolução de Conflitos Materiais entre Documentos** | **A (Decisor Final)** | C (Apresentador de Opções) | R (Detector de Contradição) |
-| **Triagem Automatizada de Contradições e Staleness** | I (Notificado) | R (Orquestrador) | **A / R (Executor Não-Autoregressivo)** |
-| **Saneamento e Atualização de Documentos em Lotes** | A (Validador do Lote) | **R (Executor)** | C (Aferidor de Inconsistências) |
+| **Aprovação de Políticas e Normas** | **A (Aprovador Soberano)** | C (Consulta / Rascunho) | I (Informativo / Sem Ação) |
+| **Aprovação de Mudanças Arquiteturais (ADRs)** | **A (Aprovador Soberano)** | R (Proponente Técnico) | I (Informativo / Sem Ação) |
+| **Resolução de Conflitos Materiais de Documentação** | **A (Decisor Final)** | C (Sistematizador de Opções) | C / R (Sensor de Detecção NLI) |
+| **Triagem Automatizada de Contradições e Staleness** | **A (Governante da Regra)** | R (Orquestrador do Pipeline) | **R (Executor Técnico de NLI)** |
+| **Saneamento e Atualização de Documentos em Lotes** | **A (Validador do Lote)** | **R (Executor do Saneamento)** | C (Aferidor de Integridade) |
+| **Supersessão ou Exclusão em Memória Tripartida** | **A (Autorizador Exclusivo)** | R (Executor Supervisionado) | C (Sensor Consultivo de Score) |
 | **Declaração de Readiness (*Foundation Ready*)** | **A (Homologador Final)** | R (Compilador de Evidências) | C (Validador de Integridade) |
 
-*Legenda: **R** = Responsible (Quem faz) \| **A** = Accountable (Quem aprova soberanamente) \| **C** = Consulted (Quem apoia) \| **I** = Informed (Quem é notificado)*
+*Legenda RACI:*  
+- **A (Accountable):** Autoridade soberana exclusiva do Patrocinador Humano.  
+- **R (Responsible):** Executor da computação técnica ou saneamento.  
+- **C (Consulted):** Sensor consultivo não-soberano.  
+- **I (Informed):** Notificado do resultado da decisão.  
 
----
+> [!CAUTION]
+> O Coprocessador Laya atua estritamente como sensor consultivo e executor de inferência (R / C). Não possui prerrogativa de aprovação soberana (A) nem poder de mutação autônoma de regras ou memória.
 
 ## 4. Ciclo de Vida e Estados Documentais (`HARM-FR-005`)
 

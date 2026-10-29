@@ -16,7 +16,7 @@ O PCL AEOS é estruturado em **três camadas conceituais estritamente segregadas
 flowchart TD
     subgraph UI_SATELLITES["Camada 2: Aplicações Satélites & Interfaces"]
         OR["OmniRoute (Porta 20130)<br/>Gateway de Modelos"]
-        DASH["Dashboard (Porta 8080)<br/>Interface de Operação"]
+        DASH["PaperClip / Dashboard (Porta 3100)<br/>Workspaces & Agentes"]
         CTX["Cortex Persona<br/>Visualização de Arquitetura"]
     end
 
@@ -51,7 +51,7 @@ Cada pasta do repositório possui uma classificação formal de fronteira, respo
 | `specs/` | **Normative Specs** | Especificações canônicas de engenharia, schemas e contratos formais do sistema. | Canônica Suprema para Engenharia |
 | `architecture/` | **Architecture Root** | Registros de decisões arquiteturais (ADRs) e diagramas mestres. | Canônica para decisões técnicas |
 | `OmniRoute/` | **Satélite** | Proxy e roteador inteligente para provedores de LLMs (cloud e locais como Ollama/LM Studio). | Autônoma de satélite (Porta 20130) |
-| `Dashboard/` | **Satélite UI** | Interface gráfica web para monitoramento operacional do ecossistema. | Informativa de UI (Porta 8080) |
+| `PaperClip/` | **Satélite UI** | Interface gráfica web de gestão de empresas, workspaces, orquestração e agentes. | Operacional de UI (Porta 3100) |
 | `.agents/skills/` | **Agent Extensions** | Skills do workspace consumíveis pela Antigravity IDE e agentes (ex.: Cortex, Laya). | Canônica para personas e skills |
 | `projects/` | **Project Workspace** | Espaço persistente de iniciativas e evolução controlada (incluindo `pcl-aeos-harmonization`). | Histórico e gestão de projetos |
 | `external-references/` | **External / Vendor** | Dependências de terceiros, templates de animação (Mira) e assets auxiliares. | Não-normativa de terceiros |
@@ -79,12 +79,12 @@ O módulo [`services/pcl-laya`](../../../services/pcl-laya) passa a operar ofici
 
 Ficam padronizadas sem ambiguidades as portas oficiais do ecossistema PCL AEOS:
 
-| Serviço | Porta Canônica | Protocolo | Escopo de Rede |
+| Serviço | Porta Canônica | Protocolo | Escopo de Rede & Isolamento |
 | :--- | :---: | :---: | :--- |
-| **PostgreSQL + PGVector** | `5432` | TCP / SQL | Rede interna Docker (`aeos-net`) e localhost |
-| **OmniRoute Gateway** | `20130` | HTTP / REST | Exposta para clientes e agentes |
-| **Laya System One REST** | `20140` | HTTP / REST | Rede interna Docker (`aeos-net`) |
-| **Laya System One MCP** | `stdio` | JSON-RPC | Comunicação interprocesso direta no SO |
-| **AEOS Dashboard** | `8080` | HTTP / Web | Exposta para navegadores locais |
-| **Ollama Local (se ativo)** | `11434` | HTTP / REST | Localhost / bridge privada |
-| **LM Studio Local (se ativo)**| `1234` | HTTP / REST | Localhost / bridge privada |
+| **PostgreSQL + PGVector** | `5432` | TCP / SQL | Rede interna Docker (`aeos-net`) e bind estrito em `127.0.0.1` (Zero Trust) |
+| **OmniRoute Gateway** | `20130` | HTTP / REST | Rede interna Docker (`aeos-net`) e bind em `127.0.0.1` no host |
+| **Laya System One REST** | `20140` | HTTP / REST | Rede interna Docker (`aeos-net`) e bind em `127.0.0.1` no host |
+| **Laya System One MCP** | `stdio` | JSON-RPC | Comunicação interprocesso direta (IPC) no host |
+| **PaperClip Dashboard & Workspaces** | `3100` | HTTP / Web | Exposta em `127.0.0.1` para navegadores locais (porta 8080 mantida como alias reverso legado) |
+| **Ollama Local (se ativo)** | `11434` | HTTP / REST | Localhost `127.0.0.1` / bridge privada |
+| **LM Studio Local (se ativo)**| `1234` | HTTP / REST | Localhost `127.0.0.1` / bridge privada |
