@@ -85,6 +85,47 @@ Supervisiona a execução em grafos acíclicos dirigidos (DAG), integrando obser
     tags: ['byos', 'zero-bin', 'google drive', 'onedrive', 'storage', 'soberania'],
     sourceFile: 'c:/PromptCore_Labs/architecture/vision.md',
     content: `A política Zero-Bin Custody garante que nenhum byte de artefato confidencial do cliente permaneça sob custódia em instâncias intermediárias. A sincronização de documentos, atas e relatórios flui diretamente para os tenants corporativos do cliente (Google Workspace e Microsoft 365) com atestação SHA-256.`
+  },
+  {
+    id: 'pcl-cockpit-competitive-matrix',
+    title: 'PCL Cockpit vs Jumpad.ai, Read.ai, ChatGPT, Gemini & Claude (Matriz Competitiva)',
+    category: 'benchmark',
+    tags: ['cockpit', 'pcl cockpit', 'jumpad', 'jumped ai', 'read ai', 'chatgpt', 'gemini', 'claude', 'benchmark', 'diferenciais', 'soberania'],
+    sourceFile: 'c:/PromptCore_Labs/knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md',
+    content: `Matriz Comparativa do PCL Cockpit (PromptCore Labs Cockpit) frente ao ecossistema corporativo:
+1. PCL Cockpit vs Jumpad.ai / Read.ai:
+   - Custódia de Dados: PCL Cockpit adota Headless BYOS e Zero-Bin Custody com atestação SHA-256 no tenant corporativo do cliente (Google Workspace / Microsoft 365); Jumpad.ai e Read.ai são SaaS multitenant de caixa-preta retendo transcrições e áudios em nuvem de terceiros.
+   - Decisão Rápida & FinOps: Laya System One operando em CPU host (INT8) com 0 MB de VRAM (~25ms determinísticos a $0.00 de custo marginal); concorrentes usam chamadas de LLM para toda e qualquer decisão.
+   - Orquestração: OmniRoute com fallback local sub-segundo para Ollama (qwen2.5-coder) em caso de blackout de rede ou cota esgotada.
+2. PCL Cockpit vs ChatGPT / Gemini / Claude Enterprise:
+   - Os grandes chats operam com interfaces puramente conversacionais e memória volátil, sem orquestração de DAGs, sem Stage Gates TLC v3 auditáveis e sem rastreabilidade de linhagem em banco relacional local (PostgreSQL 17 + PGVector).
+   - O PCL Cockpit entrega transparência em 5 nós de pipeline, visualização gráfica via Cortex e conformidade total ISO 27001 e ISO 42001.`
+  },
+  {
+    id: 'pcl-cockpit-spec-v35',
+    title: 'Especificação Técnica do PCL Cockpit v3.5 (PromptCore Labs Cockpit)',
+    category: 'architecture',
+    tags: ['cockpit', 'pcl cockpit', 'especificacao', 'canvas', 'dag', 'cortex', 'laya', 'governance', 'iso 42001'],
+    sourceFile: 'c:/PromptCore_Labs/knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.5.md',
+    content: `O PCL Cockpit é a central operacional executiva unificada do ecossistema PromptCoreLabs_AEOS v3.5:
+- Arquitetura Frontend: React 18, TypeScript, Tailwind CSS, Lucide Icons e Vite.
+- Visualizador de Arquitetura Cortex: Renderização de fluxogramas interativos e grafos acíclicos dirigidos (DAG) representando o estado em tempo real dos 5 nós operacionais.
+- Telemetria e Monitoramento de Inferência: Acompanhamento de latência e custo por token em tempo real entre modelos de fronteira e o fallback local soberano.
+- Painel de Governança & RAG: Integração direta com o acervo tripartite em knowledge/ (Cold, Warm, Learnings) e consulta calibrada pelo Laya System One.`
+  },
+  {
+    id: 'pcl-canonical-adr-index',
+    title: 'Índice Canônico de Decisões Arquiteturais do PCL AEOS (ADRs 0001 a 0006)',
+    category: 'adr',
+    tags: ['adr', 'adrs', 'adr-0001', 'adr-0002', 'adr-0003', 'adr-0004', 'adr-0005', 'adr-0006', 'decisoes', 'arquitetura'],
+    sourceFile: 'c:/PromptCore_Labs/knowledge/warm/architecture/ADR_INDEX.md',
+    content: `Registro canônico das decisões arquiteturais mandatórias do PCL AEOS:
+- ADR-0001: Adoção da Arquitetura Monorepo Unificado para o ecossistema PCL AEOS.
+- ADR-0002: Governança TLC v3 e Stage Gates determinísticos de validação de artefatos.
+- ADR-0003: Orquestração Multi-Agente Híbrida via OmniRoute Gateway (:20130).
+- ADR-0004: Enclave de Auditoria Criptográfica SHA-256 e Política Zero-Bin Custody (Headless BYOS).
+- ADR-0005: Coprocessador System One (Laya em CPU com 0 MB VRAM) e Memória Cognitiva Tripartida (PostgreSQL 17 + PGVector).
+- ADR-0006: Localização Canônica da Memória RAG (knowledge/) e Nomenclatura PCL Cockpit.`
   }
 ];
 
