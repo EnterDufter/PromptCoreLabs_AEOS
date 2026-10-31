@@ -121,7 +121,8 @@ class OmniRouteService {
   public async sendPrompt(
     prompt: string,
     modelOption: ModelOption = OMNIROUTE_MODELS[0],
-    profileId: string = 'sintese-executiva'
+    profileId: string = 'sintese-executiva',
+    historyMessages?: ChatMessagePayload[]
   ): Promise<OmniRouteResponse> {
     const startTime = performance.now();
     const customApiKey = typeof window !== 'undefined'
@@ -129,6 +130,13 @@ class OmniRouteService {
       : undefined;
 
     const systemPrompt = 'Você é um assistente de inteligência artificial avançado, analítico e preciso. Responda diretamente ao que foi perguntado pelo usuário em português, com linguagem clara, natural, aprofundada e bem estruturada. Utilize tabelas comparativas em Markdown sempre que útil. Só mencione detalhes internos do PCL AEOS se o usuário perguntar especificamente sobre o PCL AEOS.';
+
+    // Normalização e truncamento de histórico multi-turn
+    const conversationHistory: ChatMessagePayload[] = Array.isArray(historyMessages) && historyMessages.length > 0
+      ? historyMessages
+          .filter(m => m.content && m.content.trim().length > 0)
+          .slice(-10) // Mantém no máximo os 10 turnos mais recentes
+      : [];
 
     // 1. Rota Principal via Middleware Node.js Fail-Fast (/api/aeos/infer)
     // Detecta em 300ms se o container :20130 está ativo ou chaveia instantaneamente para Gemini Cloud / Ollama :11434
@@ -140,7 +148,8 @@ class OmniRouteService {
           prompt,
           systemPrompt,
           profileId,
-          customApiKey
+          customApiKey,
+          messages: conversationHistory
         })
       }, 65000);
 
@@ -169,6 +178,12 @@ class OmniRouteService {
     // 1.5. Rota Direta para OmniRoute (:20130) com Parser Nativo de Stream SSE (open-sse)
     if (profileId !== 'soberano-local') {
       try {
+        const directMessages = [
+          { role: 'system', content: systemPrompt },
+          ...conversationHistory.map(m => ({ role: m.role, content: m.content })),
+          { role: 'user', content: prompt }
+        ];
+
         const omniRes = await fetchWithTimeout(`${this.omnirouteUrl}/chat/completions`, {
           method: 'POST',
           headers: {
@@ -177,10 +192,7 @@ class OmniRouteService {
           },
           body: JSON.stringify({
             model: 'aeos-coding-fallback',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: prompt }
-            ],
+            messages: directMessages,
             temperature: 0.25,
             max_tokens: 3500
           })
@@ -212,15 +224,18 @@ class OmniRouteService {
 
     // 2. Rota Direta para Ollama Local (:11434) caso o middleware não tenha respondido
     try {
+      const ollamaMessages = [
+        { role: 'system', content: systemPrompt },
+        ...conversationHistory.map(m => ({ role: m.role, content: m.content })),
+        { role: 'user', content: prompt }
+      ];
+
       const response = await fetchWithTimeout(`${this.ollamaUrl}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'qwen2.5-coder:7b-instruct-q4_K_M',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
+          messages: ollamaMessages,
           stream: false,
           keep_alive: '60m'
         })

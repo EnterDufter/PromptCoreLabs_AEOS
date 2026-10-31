@@ -396,14 +396,27 @@ export const App: React.FC = () => {
           if (m.id !== agentReplyId || !m.steps) return m;
           const updatedSteps = [...m.steps];
           updatedSteps[0] = { ...updatedSteps[0], status: 'completed', durationMs: layaDuration, detail: `Intenção: ${layaResult.intent} | Rota: ${layaResult.recommendedRoute} (0 MB VRAM)` };
-          updatedSteps[1] = { ...updatedSteps[1], status: 'running', detail: 'Indexando ADR-0001 a ADR-0005 e catálogo de skills...' };
+          updatedSteps[1] = { 
+            ...updatedSteps[1], 
+            status: layaResult.needsCanonicalRAG ? 'running' : 'skipped', 
+            detail: layaResult.needsCanonicalRAG 
+              ? 'Indexando ADR-0001 a ADR-0006 e catálogo de skills...' 
+              : 'Dispensada (pergunta geral sem dependência de normas internas).' 
+          };
           return { ...m, activeStepIndex: 1, steps: updatedSteps };
         })
       }));
 
-      // ETAPA 2 & 3: Grounding Híbrido Federado (Conhecimento Local + Busca Web Automática)
+      // ETAPA 2 & 3: Grounding Híbrido Federado Guiado por Gating do Laya
+      const shouldSearchWeb = Boolean(webSearch || layaResult.needsWebSearch);
+      const shouldQueryCanonical = Boolean(layaResult.needsCanonicalRAG);
+
       const groundingStartTime = performance.now();
-      const groundingResult = await intelligentGroundingService.performGrounding(text, webSearch);
+      const groundingResult = await intelligentGroundingService.performGrounding(
+        text, 
+        shouldSearchWeb, 
+        shouldQueryCanonical
+      );
       const groundingDuration = Math.round(performance.now() - groundingStartTime);
 
       setActiveConversation(prev => ({
@@ -413,26 +426,43 @@ export const App: React.FC = () => {
           const updatedSteps = [...m.steps];
           updatedSteps[1] = { 
             ...updatedSteps[1], 
-            status: 'completed', 
+            status: groundingResult.localMatchesCount > 0 ? 'completed' : 'skipped', 
             durationMs: Math.round(groundingDuration * 0.4), 
-            detail: `${groundingResult.localMatchesCount} especificações canônicas PCL recuperadas.` 
+            detail: groundingResult.localMatchesCount > 0
+              ? `${groundingResult.localMatchesCount} especificações canônicas PCL recuperadas.`
+              : 'Dispensada (não requer normas PCL).' 
           };
           updatedSteps[2] = { 
             ...updatedSteps[2], 
             status: groundingResult.webResultsCount > 0 ? 'completed' : 'skipped', 
             durationMs: Math.round(groundingDuration * 0.6), 
             detail: groundingResult.webResultsCount > 0 
-              ? `${groundingResult.webResultsCount} referências externas indexadas (Google / DuckDuckGo).`
-              : 'Dispensada (coberta integralmente pelas fontes canônicas).' 
+              ? `${groundingResult.webResultsCount} referências externas verificadas.`
+              : shouldSearchWeb 
+                ? 'Conhecimento nativo suficiente (zero injeção externa).'
+                : 'Dispensada (consulta factual direta).' 
           };
-          updatedSteps[3] = { ...updatedSteps[3], status: 'running', detail: 'Executando inferência com grounding factual estrito...' };
+          updatedSteps[3] = { ...updatedSteps[3], status: 'running', detail: 'Sintetizando resposta contextual...' };
           return { ...m, activeStepIndex: 3, steps: updatedSteps };
         })
       }));
 
-      // ETAPA 4: Inferência Fundamentada no OmniRoute / Ollama
+      // ETAPA 4: Inferência com Histórico Multi-Turn Completo
+      // Extrai o histórico conversacional real de todas as mensagens anteriores
+      const conversationHistory = activeConversation.messages
+        .filter(m => m.id !== newMessage.id && m.id !== agentReplyId && m.text && m.text.trim())
+        .map(m => ({
+          role: (m.sender === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+          content: m.text
+        }));
+
       const omniStartTime = performance.now();
-      const omniResult = await omniRouteService.sendPrompt(groundingResult.groundedPrompt, undefined, profileId);
+      const omniResult = await omniRouteService.sendPrompt(
+        groundingResult.groundedPrompt, 
+        undefined, 
+        profileId,
+        conversationHistory
+      );
       const omniDuration = Math.round(performance.now() - omniStartTime);
 
       // ETAPA 5: Finalização e Auditoria

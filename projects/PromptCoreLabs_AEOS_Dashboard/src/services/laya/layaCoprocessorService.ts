@@ -9,6 +9,8 @@ export interface LayaClassification {
   rationale: string;
   engineMode?: string;
   modelId?: string;
+  needsWebSearch: boolean;
+  needsCanonicalRAG: boolean;
 }
 
 class LayaCoprocessorService {
@@ -42,6 +44,24 @@ class LayaCoprocessorService {
       }
     } catch (e) {
       // fallback instantâneo se container Docker pcl-laya estiver parado
+    }
+
+    let needsWebSearch = false;
+    let needsCanonicalRAG = false;
+
+    // Gating de Busca Web Estrito: somente fatos temporais explícitos ou comandos de web
+    const temporalTerms = ['hoje', 'ontem', 'agora', 'notícia', 'noticia', 'últimas', 'ultimas', 'cotação', 'cotacao', 'previsão do tempo', 'tempo real', 'lançado em', 'lançamento'];
+    const hasTemporalIntent = temporalTerms.some(t => lower.includes(t));
+    const isExplicitWebCommand = lower.startsWith('@web') || lower.startsWith('/search') || lower.includes('pesquise na web') || lower.includes('pesquise na internet') || lower.includes('busque na web');
+
+    if (isExplicitWebCommand || hasTemporalIntent) {
+      needsWebSearch = true;
+    }
+
+    // Gating de RAG Canônico Estrito: somente menções explícitas ao ecossistema PCL / ADRs
+    const canonicalTerms = ['pcl', 'aeos', 'promptcore', 'omniroute', 'adr-', 'adr ', 'tlc v3', 'stage gate', '#documentos', '#auditoria', '#especificacao'];
+    if (canonicalTerms.some(t => lower.includes(t))) {
+      needsCanonicalRAG = true;
     }
 
     if (lower.includes('atraso') || lower.includes('fatura') || lower.includes('sap') || lower.includes('salesforce') || lower.includes('hubspot') || lower.includes('pipedrive') || lower.includes('rdstation') || lower.includes('pagamento')) {
@@ -80,7 +100,9 @@ class LayaCoprocessorService {
       sha256Attestation: sha256,
       rationale,
       engineMode,
-      modelId
+      modelId,
+      needsWebSearch,
+      needsCanonicalRAG
     };
   }
 

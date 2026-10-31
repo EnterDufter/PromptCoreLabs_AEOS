@@ -63,33 +63,22 @@ class WebSearchService {
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data.results) && data.results.length > 0) {
+          // Filtra resultados com relevância mínima
+          const filtered = data.results.filter((r: WebSearchResult) => r.title && r.url);
           return {
             query: cleanQuery,
-            results: data.results,
+            results: filtered,
             searchTimeMs: Math.round(performance.now() - startTime)
           };
         }
       }
     } catch {
-      // Fallback caso o middleware esteja indisponível
+      // Fallback sem inventar links sintéticos
     }
 
     return {
       query: cleanQuery,
-      results: [
-        {
-          title: `${topic} — Artigos Acadêmicos & Benchmarks`,
-          url: `https://scholar.google.com/scholar?q=${encodeURIComponent(topic)}`,
-          snippet: `Revisão de literatura e especificações arquiteturais sobre ${topic}.`,
-          source: 'scholar.google.com'
-        },
-        {
-          title: `${topic} — Implementações de Referência`,
-          url: `https://github.com/search?q=${encodeURIComponent(topic)}`,
-          snippet: `Repositórios open-source e arquiteturas validadas para ${topic}.`,
-          source: 'github.com'
-        }
-      ],
+      results: [],
       searchTimeMs: Math.round(performance.now() - startTime)
     };
   }

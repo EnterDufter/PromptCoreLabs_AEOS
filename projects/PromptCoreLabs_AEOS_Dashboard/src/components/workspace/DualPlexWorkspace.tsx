@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   MessageSquare, Cpu, Columns, Layers, Bot, User, ShieldCheck, 
   FileText, ExternalLink, Play, Clock, Sparkles, Copy, Check,
-  Share2, Volume2, Square, GitBranch, Globe, X, Plus
+  Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown
 } from 'lucide-react';
 import { Conversation, ChatMessage, Artifact } from '../../types';
 import { AgentNarrationPanel } from './AgentNarrationPanel';
@@ -246,32 +246,41 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                         </div>
                       )}
 
-                      {/* Web References Consultadas da Internet */}
+                      {/* Fontes e Referências Desacopladas (Padrão Gemini / Perplexity) */}
                       {msg.webReferences && msg.webReferences.length > 0 && (
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
-                          <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-sky-600 dark:text-sky-400">
-                            <Globe className="w-3.5 h-3.5" />
-                            <span>Referências Externas Encontradas ({msg.webReferences.length}):</span>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                            {msg.webReferences.map((ref, idx) => (
-                              <a
-                                key={idx}
-                                href={ref.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500 transition group flex flex-col justify-between"
-                              >
-                                <span className="font-medium text-[11px] text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 truncate block">
-                                  {ref.title}
-                                </span>
-                                <span className="text-[10px] text-slate-400 font-mono flex items-center space-x-1 mt-1">
-                                  <span>{ref.source}</span>
-                                  <ExternalLink className="w-2.5 h-2.5 opacity-60" />
-                                </span>
-                              </a>
-                            ))}
-                          </div>
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                          <details className="group/sources text-xs">
+                            <summary className="cursor-pointer list-none flex items-center space-x-2 py-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition select-none">
+                              <span className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 text-[10px] font-medium text-slate-700 dark:text-slate-300">
+                                <Globe className="w-3 h-3 text-sky-500" />
+                                <span>Fontes Consultadas ({msg.webReferences.length})</span>
+                              </span>
+                              <ChevronDown className="w-3.5 h-3.5 text-slate-400 transition-transform group-open/sources:rotate-180" />
+                            </summary>
+
+                            <div className="pt-2 flex flex-wrap gap-1.5 animate-in fade-in duration-150">
+                              {msg.webReferences.map((ref, idx) => {
+                                const isCanonical = ref.source.includes('Canônico') || ref.source.includes('PCL');
+                                return (
+                                  <a
+                                    key={idx}
+                                    href={ref.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={ref.title}
+                                    className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] transition max-w-[280px] shadow-2xs ${
+                                      isCanonical
+                                        ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:border-emerald-400'
+                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 dark:hover:border-sky-500'
+                                    }`}
+                                  >
+                                    <span className="truncate">{ref.title}</span>
+                                    <ExternalLink className="w-2.5 h-2.5 opacity-50 flex-shrink-0" />
+                                  </a>
+                                );
+                              })}
+                            </div>
+                          </details>
                         </div>
                       )}
 

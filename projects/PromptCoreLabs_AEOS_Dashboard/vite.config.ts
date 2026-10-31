@@ -213,35 +213,22 @@ function pclAeosBackendPlugin(): Plugin {
                 for (const item of items) {
                   if (results.length >= 4) break;
                   const cleanSnippet = String(item.snippet || '').replace(/<\/?[^>]+(>|$)/g, '');
-                  results.push({
-                    title: `${item.title} — Enciclopédia Técnica`,
-                    url: `https://pt.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
-                    snippet: cleanSnippet || `Artigo de referência sobre ${item.title}.`,
-                    source: 'wikipedia.org'
-                  });
+                  // Evita injetar artigos genéricos/irrelevantes
+                  if (cleanSnippet.length > 25) {
+                    results.push({
+                      title: `${item.title} — Artigo Enciclopédico`,
+                      url: `https://pt.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
+                      snippet: cleanSnippet,
+                      source: 'wikipedia.org'
+                    });
+                  }
                 }
               }
             } catch {
               // Continua silenciosamente se sem internet externa
             }
 
-            if (results.length === 0) {
-              results.push(
-                {
-                  title: `${cleanTopic} — Documentação & Especificações de Engenharia`,
-                  url: `https://scholar.google.com/scholar?q=${encodeURIComponent(cleanTopic)}`,
-                  snippet: `Artigos científicos, benchmarks de arquitetura e revisões técnicas sobre ${cleanTopic}.`,
-                  source: 'scholar.google.com'
-                },
-                {
-                  title: `${cleanTopic} — Repositórios & Implementações de Referência`,
-                  url: `https://github.com/search?q=${encodeURIComponent(cleanTopic)}`,
-                  snippet: `Bibliotecas open-source e padrões de implementação em produção para ${cleanTopic}.`,
-                  source: 'github.com'
-                }
-              );
-            }
-
+            // Não gera links sintéticos inventados se nada foi encontrado
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({ query, topic: cleanTopic, results }));
             return;
@@ -257,10 +244,13 @@ function pclAeosBackendPlugin(): Plugin {
         if (url.startsWith('/api/aeos/infer') && req.method === 'POST') {
           const startMs = Date.now();
           try {
-            const { prompt, systemPrompt, profileId, customApiKey } = await readJsonBody(req);
+            const { prompt, systemPrompt, profileId, customApiKey, messages } = await readJsonBody(req);
             const sysMsg = systemPrompt || 'Você é um assistente de inteligência artificial avançado, analítico e preciso. Responda diretamente à pergunta do usuário em português de forma completa, clara, natural e bem estruturada, utilizando tabelas Markdown comparativas sempre que apropriado. Só mencione a arquitetura interna do PCL AEOS se o usuário perguntar explicitamente sobre ela.';
             const activeApiKey = (customApiKey && customApiKey.trim().length > 15) ? customApiKey.trim() : vaultApiKey;
 
+            // Normalização Multi-Turn: constrói a cadeia de diálogo alternada
+            const rawHistory: Array<{ role: 'user' | 'assistant' | 'system'; content: string }> = Array.isArray(messages) ? messages : [];
+            
             // ROTA 1: Fast-Path Cloud Gemini (gemini-3.5-flash-lite -> gemini-3.6-flash -> gemini-flash-lite-latest)
             // Funciona em ~3s a 6s mesmo quando o Docker Desktop (:20130) estiver desligado!
             if (profileId !== 'soberano-local' && activeApiKey) {
@@ -269,6 +259,28 @@ function pclAeosBackendPlugin(): Plugin {
                 'gemini-3.6-flash',
                 'gemini-flash-lite-latest'
               ];
+
+              // Monta contents respeitando alternância estrita de roles para o Gemini
+              const geminiContents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }> = [];
+              for (const m of rawHistory) {
+                if (!m.content || !m.content.trim()) continue;
+                const role = m.role === 'assistant' ? 'model' : 'user';
+                // Evita dois turnos consecutivos do mesmo role no Gemini
+                const last = geminiContents[geminiContents.length - 1];
+                if (last && last.role === role) {
+                  last.parts[0].text += `\n\n${m.content}`;
+                } else {
+                  geminiContents.push({ role, parts: [{ text: m.content }] });
+                }
+              }
+
+              // Adiciona a mensagem atual do usuário
+              const lastGem = geminiContents[geminiContents.length - 1];
+              if (lastGem && lastGem.role === 'user') {
+                lastGem.parts[0].text += `\n\n${prompt}`;
+              } else {
+                geminiContents.push({ role: 'user', parts: [{ text: prompt }] });
+              }
 
               for (const modelName of candidateModels) {
                 try {
@@ -289,7 +301,7 @@ function pclAeosBackendPlugin(): Plugin {
                     },
                     body: JSON.stringify({
                       systemInstruction: { parts: [{ text: sysMsg }] },
-                      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                      contents: geminiContents,
                       generationConfig: genConfig
                     }),
                     signal: AbortSignal.timeout(14000)
@@ -326,6 +338,12 @@ function pclAeosBackendPlugin(): Plugin {
               const omniPortOpen = await checkTcpPort('127.0.0.1', 20130, 250);
               if (omniPortOpen) {
                 try {
+                  const openAiMessages = [
+                    { role: 'system', content: sysMsg },
+                    ...rawHistory.map(m => ({ role: m.role, content: m.content })),
+                    { role: 'user', content: prompt }
+                  ];
+
                   const omniRes = await fetch('http://127.0.0.1:20130/v1/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -334,9 +352,7 @@ function pclAeosBackendPlugin(): Plugin {
                     },
                     body: JSON.stringify({
                       model: 'gemini/gemini-3.5-flash-lite',
-                      messages: [
-                        { role: 'user', content: `${sysMsg}\n\n${prompt}` }
-                      ]
+                      messages: openAiMessages
                     }),
                     signal: AbortSignal.timeout(15000)
                   });
@@ -366,15 +382,18 @@ function pclAeosBackendPlugin(): Plugin {
             // ROTA 3: Ollama Local Nativo (127.0.0.1:11434 — GPU RTX Local $0.00)
             const ollamaPortOpen = await checkTcpPort('127.0.0.1', 11434, 300);
             if (ollamaPortOpen) {
+              const ollamaMessages = [
+                { role: 'system', content: sysMsg },
+                ...rawHistory.slice(-6).map(m => ({ role: m.role, content: m.content })),
+                { role: 'user', content: prompt }
+              ];
+
               const ollamaRes = await fetch('http://127.0.0.1:11434/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   model: 'qwen2.5-coder:7b-instruct-q4_K_M',
-                  messages: [
-                    { role: 'system', content: sysMsg },
-                    { role: 'user', content: prompt }
-                  ],
+                  messages: ollamaMessages,
                   stream: false,
                   keep_alive: '60m',
                   options: {

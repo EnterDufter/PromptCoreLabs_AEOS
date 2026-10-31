@@ -54,19 +54,23 @@ class IntelligentGroundingService {
   }
 
   /**
-   * Executa Grounding Híbrido Federado Inteligente
+   * Executa Grounding Híbrido Federado Inteligente com Gating Estrito
    */
-  public async performGrounding(query: string, forceWeb: boolean = false): Promise<GroundingResult> {
+  public async performGrounding(
+    query: string,
+    forceWeb: boolean = false,
+    allowCanonical: boolean = false
+  ): Promise<GroundingResult> {
     const startTime = performance.now();
-    const isInternalPcl = this.isExplicitInternalPclQuery(query);
+    const isInternalPcl = allowCanonical || this.isExplicitInternalPclQuery(query);
     const sources: GroundingSource[] = [];
 
     let localMatches: LocalKnowledgeMatch[] = [];
     let webResults: WebSearchResult[] = [];
 
-    // 1. Busca Local Canônica APENAS se o usuário perguntou explicitamente sobre PCL AEOS / ADRs
+    // 1. Busca Local Canônica APENAS se ativada pelo Laya ou por menção explícita
     if (isInternalPcl) {
-      localMatches = localKnowledgeService.search(query, 0.35);
+      localMatches = localKnowledgeService.search(query, 0.40); // Corte de relevância mais estrito
       for (const match of localMatches) {
         sources.push({
           title: `[Canônico PCL] ${match.doc.title}`,
@@ -78,24 +82,26 @@ class IntelligentGroundingService {
       }
     }
 
-    // 2. Busca na Web para referências externas reais
-    try {
-      const searchData = await webSearchService.searchWeb(query);
-      webResults = searchData.results;
-      for (const res of webResults) {
-        sources.push({
-          title: res.title,
-          url: res.url,
-          sourceType: 'web_external',
-          snippet: res.snippet,
-          confidence: 0.94
-        });
+    // 2. Busca na Web APENAS se explicitamente autorizada ou solicitada
+    if (forceWeb) {
+      try {
+        const searchData = await webSearchService.searchWeb(query);
+        webResults = searchData.results;
+        for (const res of webResults) {
+          sources.push({
+            title: res.title,
+            url: res.url,
+            sourceType: 'web_external',
+            snippet: res.snippet,
+            confidence: 0.94
+          });
+        }
+      } catch (err) {
+        console.warn('Busca web complementar indisponível no momento:', err);
       }
-    } catch (err) {
-      console.warn('Busca web complementar indisponível no momento:', err);
     }
 
-    // 3. Construir Prompt Natural (Sem forçar jargões internos quando a pergunta é geral)
+    // 3. Construir Contexto Enxuto e Natural (sem amarras artificiais)
     const contextSections: string[] = [];
 
     const publicFacts = this.getPublicTechnicalFacts(query);
@@ -105,7 +111,7 @@ class IntelligentGroundingService {
 
     if (isInternalPcl && localMatches.length > 0) {
       const localBlock = localMatches
-        .slice(0, 3)
+        .slice(0, 2)
         .map(m => `[Especificação PCL AEOS: ${m.doc.title}]\n${m.doc.content}`)
         .join('\n\n');
       contextSections.push(`=== CONTEXTO ARQUITETURAL PCL AEOS ===\n${localBlock}`);
@@ -113,20 +119,21 @@ class IntelligentGroundingService {
 
     if (webResults.length > 0) {
       const webBlock = webResults
-        .slice(0, 4)
+        .slice(0, 3)
         .map(w => `- ${w.title} (${w.source}): ${w.snippet}`)
         .join('\n');
-      contextSections.push(`Referências Externas Indexadas:\n${webBlock}`);
+      contextSections.push(`Referências Externas Relevantes Encontradas:\n${webBlock}`);
     }
 
+    // O groundedPrompt entrega o contexto de suporte apenas se houver algo substancial
     const groundedPrompt = contextSections.length > 0
-      ? `${contextSections.join('\n\n')}\n\nPergunta do Usuário:\n${query}`
+      ? `${contextSections.join('\n\n')}\n\nInstrução Específica para a Resposta:\n${query}`
       : query;
 
-    const confidenceScore = sources.length > 0 ? 0.98 : 0.94;
+    const confidenceScore = sources.length > 0 ? 0.98 : 0.95;
 
     return {
-      requiresGrounding: true,
+      requiresGrounding: contextSections.length > 0,
       groundedPrompt,
       sources,
       confidenceScore,
@@ -134,8 +141,10 @@ class IntelligentGroundingService {
       webResultsCount: webResults.length,
       executionTimeMs: Math.round(performance.now() - startTime),
       rationale: isInternalPcl
-        ? `Grounding Híbrido PCL (${localMatches.length} ADRs + ${webResults.length} fontes web).`
-        : `Pesquisa aberta fundamentada (${webResults.length} fontes web verificadas).`
+        ? `Grounding Canônico PCL (${localMatches.length} ADRs).`
+        : forceWeb && webResults.length > 0
+          ? `Pesquisa web factual (${webResults.length} fontes verificadas).`
+          : 'Inferência direta via modelo (conhecimento nativo suficiente).'
     };
   }
 }
