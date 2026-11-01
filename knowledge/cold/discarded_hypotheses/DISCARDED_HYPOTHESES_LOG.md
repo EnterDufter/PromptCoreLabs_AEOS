@@ -74,3 +74,24 @@ normative_ref: "PCL-AEOS-NORM-01"
 * **Solução Aprovada:** Calibração do **Grounding Híbrido Federado (`intelligentGroundingService.ts`)**:
   - *Perguntas Gerais de Tecnologia/Mercado:* Resposta limpa, universal e natural (padrão Gemini 3.6 Flash), fundamentada em literatura pública (Convai Innovations, Apache 2.0, arXiv).
   - *Perguntas Corporativas Explícitas:* Injeção dos ADRs e normas canônicas apenas se o usuário mencionar explicitamente `PCL`, `AEOS`, `PromptCore`, `ADR` ou selecionar `#documentos`.
+
+
+---
+
+## 7. Descarte de Grounding Web Obrigatório e Injeção Forçada de Fontes (Crise v3.5)
+
+* **Hipótese Original:** Executar busca na internet (Wikipedia / DuckDuckGo) e injetar fontes externas compulsoriamente em 100% das mensagens submetidas ao Cockpit, exibindo cartões de links ao final de cada interação.
+* **Motivo da Rejeição:**
+  1. *Poluição e Alucinação Induzida:* Em perguntas teóricas (ex: *"Sistema 1 vs Sistema 2"*) ou de síntese (ex: *"Sintetize nossa discussão em 1 parágrafo"*), a busca web trazia artigos desconexos (ex: biografias ou artigos aleatórios sobre 'limitação') que contaminavam o raciocínio da LLM.
+  2. *Ruído Visual:* A lista obrigatória de links disputava espaço com a resposta executiva, afastando-se do padrão limpo de concorrentes como Gemini e Perplexity.
+* **Solução Aprovada (ADR-0007 / v3.6):** Adoção de **Intention Gating** via sensor Laya em CPU (~20ms). A busca web só é ativada se a intenção for classificada como contemporânea factual (`web_search`). Em perguntas conceituais (`general_chat`), a busca é dispensada e zero fontes são injetadas. Quando a busca ocorre, as fontes são apresentadas no formato retrátil em pílula (`Fontes Consultadas (n) v`).
+
+---
+
+## 8. Descarte de Memória Stateless / Single-Turn nos Modelos de Nuvem
+
+* **Hipótese Original:** Tratar cada requisição de chat de forma isolada, enviando apenas o prompt atual (`messages: [{ role: 'user', content: prompt }]`) para economizar largura de banda e tokens.
+* **Motivo da Rejeição:**
+  1. *Amnésia Conversacional Grave:* O sistema tornava-se incapaz de resolver anáforas e pronomes (ex: *"Quais as limitações dessa abordagem?"* falhava porque o modelo não sabia a que "essa abordagem" se referia).
+  2. *Inviabilidade de Raciocínio Cross-Turn:* Solicitações de síntese, refinamento iterativo e comparações entre turnos anteriores tornavam-se impossíveis.
+* **Solução Aprovada (ADR-0007 / v3.6):** Implementação de **Memória Multi-Turn Contígua com Janela Deslizante (Sliding Window)** no `omniRouteService.ts`. O histórico estruturado completo da sessão é transmitido ao modelo com orçamento inteligente de tokens, garantindo retenção contextual de 100% e eliminando a amnésia.

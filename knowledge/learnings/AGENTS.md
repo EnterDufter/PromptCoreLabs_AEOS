@@ -66,3 +66,4 @@ normative_ref: "PCL-AEOS-NORM-01"
 1. **Compilação e Verificação:** Qualquer alteração no frontend ou backend do Cockpit (`projects/PromptCoreLabs_AEOS_Dashboard/`) deve ser validada com `npm run build` gerando bundle com **Exit Code 0**.
 2. **Links Clicáveis:** Todas as referências a arquivos locais devem utilizar links no padrão Markdown com protocolo `file:///`.
 3. **Segredos e Credenciais:** Jamais versionar arquivos `.env` com valores em texto claro; utilizar sempre variáveis de ambiente ou o cofre AES-256-GCM.
+

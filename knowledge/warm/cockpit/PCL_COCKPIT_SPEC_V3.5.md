@@ -77,3 +77,4 @@ normative_ref: "PCL-AEOS-NORM-01"
 - **Zero Mocks:** Toda resposta exibida decorre de inferência real; funções estáticas de contingência são estritamente proibidas.
 - **Isolamento de Hardware:** O microserviço Laya opera com 0 MB de VRAM na GPU local.
 - **Segurança de Sessão:** Strict 2 Devices Guard ativo, impedindo a concorrência não autorizada de estações.
+

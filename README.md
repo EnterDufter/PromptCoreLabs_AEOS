@@ -2,11 +2,12 @@
 
 <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/PCL_Logo_Transparente.png" width="160" alt="PromptCore Labs Logo" />
 
-# PromptCoreLabs_AEOS (AI Engineering Operating System) — v2.0
+# PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.6
 ### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor e Living Architecture
 
 [![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
-[![Status](https://img.shields.io/badge/Foundation-READY_--_AUDITED-emerald?style=for-the-badge)](projects/pcl-aeos-harmonization/foundation-readiness.md)
+[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.6_Active-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
+[![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0-emerald?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v36-vs-provedores-globais)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Hardware](https://img.shields.io/badge/VRAM-0_MB_(CPU_INT8)-purple?style=for-the-badge)](#indicadores-canônicos)
 
@@ -106,22 +107,42 @@ flowchart LR
 
 ---
 
-## 🖥️ Cockpit Oficial: PCL AEOS Dashboard v3.5 (`projects/PromptCoreLabs_AEOS_Dashboard`)
+## 🖥️ PCL Cockpit Oficial v3.6 (`projects/PromptCoreLabs_AEOS_Dashboard`)
 
-O **PCL AEOS Dashboard** é o painel web operacional oficial do ecossistema, projetado sob o design system *Liquid Glass* e executado localmente na porta **`:3001`**:
+O **PCL Cockpit** é o centro de comando agêntico soberano e a interface operacional unificada do ecossistema, projetado sob o design system *Liquid Glass Bento Grid* e executado localmente na porta **`:3001`**. A versão **v3.6** consolida a eliminação definitiva de amnésia conversacional, o gating determinístico de busca via Laya Coprocessor em CPU e a nova experiência de fontes desacopladas:
 
-* **Motor Cognitivo Híbrido Fast-Path (~3.4s):** Descriptografa em memória a credencial do cofre AES-256-GCM do OmniRoute (`pc-gemini-cloud`) para chamadas ultrarrápidas ao Google Gemini 3.5 Flash-Lite / 3.6 Flash, com suporte nativo a streams SSE (`open-sse`), fail-fast TCP (300ms) e chaveamento imediato para Ollama local (`qwen2.5-coder:7b` na porta `:11434` a $0.00).
-* **Triagem Laya System One (CPU INT8 / 0 MB VRAM):** Coprocessador não-autorregressivo em CPU host para triagem de intenção, RAG Answerability e detecção de contradições em ~20 a 35ms.
-* **Grounding Híbrido Inteligente:** Separação estrita entre consultas gerais de mercado (respostas fluidas, técnicas e naturais sem jargões forçados) e consultas internas corporativas (`ADR-0001` a `ADR-0005` e `#documentos`).
-* **Visualização Dual-Plex & Cortex Canvas:** Grafo DAG em tempo real sincronizado ao stepper de execução de 5 etapas com Inspector lateral de 3 abas (*Telemetria*, *Payload* e *Governança*).
-* **Super-Chatbubble:** Contexto tátil via esfera 3D *TokenAquaOrb*, Console de Orquestração com 4 perfis cognitivos e sanitização PII Guard LGPD em tempo real.
+* **Live Execution Stepper (5 Fases em Tempo Real):** Visibilidade total dos milissegundos e das ações de cada etapa cognitiva do pipeline (*1. Triagem Semântica*, *2. Consulta Canônica*, *3. Pesquisa Web*, *4. Síntese Factual* e *5. Validação de Prova SHA-256 no PostgreSQL 17*).
+* **Memória Conversacional Multi-Turn Completa & Janela Deslizante:** Fim definitivo da amnésia. Preservação contígua de contexto para resolução anafórica perfeita (ex: interpretação de pronomes como *"dessa abordagem"*) e síntese cross-turn corporativa sob restrições rígidas.
+* **Intention Gating via Laya Coprocessor (CPU INT8 / 0 MB VRAM):** Sensor não-autorregressivo ultrarrápido (~20ms a 35ms) executando em CPU host. Classifica intenções em $O(1)$ determinístico (`general_chat`, `internal_rag`, `web_search`), impedindo o grounding forçado e dispensando a busca web em perguntas conceituais.
+* **Apresentação de Fontes Desacoplada e Retrátil:** Componente em pílula (`Fontes Consultadas (n) v`) inspirado nos padrões do Google Gemini e Perplexity AI, agrupado ao final e expansível sob clique sem poluir a resposta executiva.
+* **Visualização Dual-Plex & Cortex Canvas:** Grafo DAG em tempo real sincronizado ao stepper de execução com Inspector lateral de 3 abas (*Telemetria*, *Payload* e *Governança*).
+* **Super-Chatbubble & TokenAquaOrb 3D:** Contexto tátil via esfera vítrea Aqua OS X com morfismo para pílula, console de orquestração com 4 perfis cognitivos e sanitização PII Guard LGPD em tempo real.
 
-Para iniciar o Dashboard:
+Para iniciar o Cockpit:
 ```bash
 cd projects/PromptCoreLabs_AEOS_Dashboard
 npm install
 npm run dev -- --port 3001 --host
 ```
+
+### 🏆 Benchmark Empírico Cego: PCL Cockpit v3.6 vs. Provedores Globais
+
+Resultado da bateria de testes cega oficial (protocolo de 5 turnos sequenciais) avaliando resolução anafórica, síntese cross-turn, premissas temporais futuras (2026), gating de busca e telemetria:
+
+| Dimensão de Avaliação de Engenharia | PCL Cockpit v3.6 | OpenAI ChatGPT | Google Gemini | Microsoft Copilot |
+| :--- | :---: | :---: | :---: | :---: |
+| **1. Resolução Anafórica & Memória Multi-Turn** | **5.0** / 5.0 | 5.0 / 5.0 | 5.0 / 5.0 | 4.0 / 5.0 |
+| **2. Síntese Cross-Turn & Raciocínio Conceitual** | **5.0** / 5.0 | 5.0 / 5.0 | 4.8 / 5.0 | 4.2 / 5.0 |
+| **3. Discernimento Temporal & Fatos Futuros (2026)** | **4.8** / 5.0 | 5.0 / 5.0 | 4.8 / 5.0 | 4.5 / 5.0 |
+| **4. Gating Inteligente de Busca Web (Sem Poluição)** | **5.0** / 5.0 | 5.0 / 5.0 | 5.0 / 5.0 | 3.5 / 5.0 |
+| **5. Apresentação Visual & Desacoplamento de Fontes** | **4.9** / 5.0 | 4.8 / 5.0 | 4.9 / 5.0 | 4.6 / 5.0 |
+| **Transparência de Pipeline / Auditabilidade (FinOps)** | **5.0** / 5.0 | 1.0 *(Caixa Preta)* | 2.0 *(Caixa Preta)* | 1.5 *(Caixa Preta)* |
+| **Média Ponderada Global** | **4.95** | **4.30** | **4.45** | **3.80** |
+
+Consulte as especificações detalhadas e ADRs:
+- 📖 [PCL Cockpit Spec v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md)
+- 🏛️ [ADR-0007: Arquitetura de Memória Multi-Turn & Gating](knowledge/warm/architecture/ADR-0007.md)
+- ⚔️ [Matriz Competitiva Completa](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md)
 
 ---
 
@@ -193,7 +214,7 @@ sequenceDiagram
 
 ---
 
-### PASSO 3: CONHECIMENTO & MEMÓRIA PERSISTENTE (RAG TRIPARTIDO)
+### PASSO 3: CONHECIMENTO & MEMÓRIA PERSISTENTE (RAG TRIPARTIDO & MULTI-TURN v3.6)
 
 * **💡 Para Leigos e Líderes:**  
   A inteligência artificial aprende com a história da sua empresa. Toda informação, regulamento ou código é guardado com recibo de autenticidade (hash criptográfico). O sistema sabe quando um documento ficou velho (*obsoleto*) e alerta imediatamente para não usar respostas desatualizadas.

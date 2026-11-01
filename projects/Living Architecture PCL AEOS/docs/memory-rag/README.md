@@ -10,7 +10,12 @@ O módulo **Memory** do **PromptCoreLabs_AEOS** é a camada responsável pela pe
 
 Ao contrário do módulo `knowledge/` (que armazena documentação legível por humanos em markdown estático), o módulo `memory/` armazena e consulta índices vetoriais, embeddings e métricas legíveis por máquinas e interpretados por agentes de IA via **RAG (Retrieval-Augmented Generation)**.
 
-## 1.1. ARQUITETURA DE MEMÓRIA TRIPARTIDA DA PROMPCORE LABS
+## 1.1. ARQUITETURA DE MEMÓRIA TRIPARTIDA & SLIDING WINDOW (v3.6)
+
+### 1.0. CLARIFICAÇÃO CANÔNICA: MODELO TEMPORAL vs. GOVERNANÇA DE ARQUIVOS
+No PCL AEOS v3.6, estabelece-se a distinção soberana entre duas dimensões complementares de memória:
+1. **Modelo Temporal Operacional (Memória Tripartida em Runtime):** Gerencia os ciclos de vida dos dados em memória de execução (Curto Prazo: sessão/sliding window; Médio Prazo: vetores PGVector; Longo Prazo: histórico imutável).
+2. **Modelo Físico de Governança RAG (Taxonomia em `knowledge/`):** Estrutura canônica de armazenamento de artefatos indexáveis para auditabilidade (Warm Storage: ADRs e especificações ativas; Cold Storage: logs exaustivos e hipóteses descartadas; Learnings: diretrizes canônicas de agentes).
 
 A inteligência operacional do **PCL-AEOS** opera sobre uma estrutura de memória tripartida e multi-temporal:
 
@@ -58,7 +63,8 @@ graph TD
 
 | Camada | Escopo | Retenção / Vida Útil | Latência | Tecnologia / Repositório |
 |---|---|---|---|---|
-| **Curto Prazo** | Contexto ativo do agente durante a tarefa | Duração da sessão (`< 1h`) | `< 10ms` | Memory Buffer / OmniRoute KV-Cache |
+| **Curto Prazo (v3.6)** | Contexto ativo multi-turn, anáfora e janela deslizante | Duração da sessão com orçamento contíguo | `< 10ms` | OmniRoute Multi-Turn Buffer + KV-Cache |
+| **Gating Sensor (Laya)**| Triagem não-autorregressiva de intenção em CPU | Decisão instantânea por requisição | `~20ms a 35ms`| Laya System One ONNX INT8 (**0 MB VRAM**) |
 | **Médio Prazo** | Conhecimento semântico do projeto (RAG) | Duração do ciclo de vida do repositório | `< 150ms` | PGVector (PostgreSQL 17 :5432) |
 | **Longo Prazo** | Histórico executivo, ADRs e Constituição | Permanente (Imutável) | `< 50ms` | Paperclip (`COMPANY.md`), `STATE.md`, Git |
 
