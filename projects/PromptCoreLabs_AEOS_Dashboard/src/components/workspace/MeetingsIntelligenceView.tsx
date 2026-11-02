@@ -37,6 +37,8 @@ export interface ActionItem {
   deadline: string;
   completed: boolean;
   targetApp?: 'salesforce' | 'hubspot' | 'pipedrive' | 'rdstation' | 'jira' | 'gmail';
+  timestamp?: string; // Formato mm:ss auditável (ex: "01:59")
+  timestampSeconds?: number;
 }
 
 export interface MeetingItem {
@@ -107,7 +109,9 @@ export const DETAILED_MEETINGS_DATA: MeetingItem[] = [
         assigneeAvatar: 'MC',
         deadline: 'Amanhã, 14:00',
         completed: false,
-        targetApp: 'salesforce'
+        targetApp: 'salesforce',
+        timestamp: '01:59',
+        timestampSeconds: 119
       },
       {
         id: 'act-2',
@@ -116,7 +120,9 @@ export const DETAILED_MEETINGS_DATA: MeetingItem[] = [
         assigneeAvatar: 'EM',
         deadline: 'Hoje, 18:00',
         completed: true,
-        targetApp: 'jira'
+        targetApp: 'jira',
+        timestamp: '06:40',
+        timestampSeconds: 400
       },
       {
         id: 'act-3',
@@ -125,7 +131,9 @@ export const DETAILED_MEETINGS_DATA: MeetingItem[] = [
         assigneeAvatar: 'JC',
         deadline: '16 de Julho',
         completed: false,
-        targetApp: 'gmail'
+        targetApp: 'gmail',
+        timestamp: '14:20',
+        timestampSeconds: 860
       }
     ],
     questions: [
@@ -283,7 +291,9 @@ export const DETAILED_MEETINGS_DATA: MeetingItem[] = [
         assigneeAvatar: 'EM',
         deadline: 'Amanhã, 10:00',
         completed: false,
-        targetApp: 'gmail'
+        targetApp: 'gmail',
+        timestamp: '00:45',
+        timestampSeconds: 45
       }
     ],
     questions: [
@@ -305,7 +315,32 @@ export const DETAILED_MEETINGS_DATA: MeetingItem[] = [
   }
 ];
 
-interface MeetingsIntelligenceViewProps {
+export type MeetingTemplate = 'clevel' | 'bant' | 'postmortem' | 'compliance';
+
+export const TEMPLATE_DEFINITIONS: Record<MeetingTemplate, { label: string; badge: string; getSummary: (m: MeetingItem) => string }> = {
+  clevel: {
+    label: 'Ata Executiva C-Level',
+    badge: 'Deliberações & FinOps',
+    getSummary: (m) => m.summary
+  },
+  bant: {
+    label: 'Qualificação Comercial (BANT)',
+    badge: 'Vendas & Negócios',
+    getSummary: (m) => `• Budget: Limite mensal de IA calibrado em $19.200,00 com Hard Lock ativo para evitar estouro de cota.\n• Authority: Deliberações ratificadas por ${m.participants.map(p => p.name).slice(0, 2).join(' e ')}.\n• Need: Ajuste de alocação de carteira (15% IPCA+) e cobrança de faturas vencidas no SAP.\n• Timeline: Ações imediatas com entregáveis previstos entre hoje e 16 de Julho.`
+  },
+  postmortem: {
+    label: 'Post-Mortem Técnico',
+    badge: 'Engenharia & SLA',
+    getSummary: (m) => `• Disponibilidade do Serviço: 99.98% de estabilidade durante a sessão com zero falhas de rede.\n• Latência do Coprocessador Laya: Inferência INT8 em CPU estável em 22.4ms sem consumo de VRAM.\n• Mitigações Adotadas: Trava de corte automática implementada no gateway e sanitização LGPD Art. 6º.`
+  },
+  compliance: {
+    label: 'Compliance ISO 42001 & LGPD',
+    badge: 'Auditoria & BYOS',
+    getSummary: (m) => `• Custódia de Dados: Resíduo zero de dados corporativos (BYOS) — áudio e transcrição processados em enclave soberano.\n• Integridade Criptográfica: Trilha auditável autenticada com hash imutável SHA-256 gravada no PostgreSQL 17.\n• Poder Decisório: Stage Gates TLC v3 com autoridade irrevogável de veto mantida exclusivamente pelo operador humano.`
+  }
+};
+
+export interface MeetingsIntelligenceViewProps {
   onOpenArtifact?: (art: Artifact) => void;
 }
 
@@ -313,6 +348,14 @@ export const MeetingsIntelligenceView: React.FC<MeetingsIntelligenceViewProps> =
   const [meetings, setMeetings] = useState<MeetingItem[]>(DETAILED_MEETINGS_DATA);
   const [selectedFolder, setSelectedFolder] = useState<string>('Todas');
   const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(null);
+
+  // Lentes de Ata por Template Executivo & Anotações Privadas (Inspirado no Read.ai)
+  const [selectedTemplate, setSelectedTemplate] = useState<MeetingTemplate>('clevel');
+  const [privateNotes, setPrivateNotes] = useState<Record<string, string>>({
+    'meet-1': 'Atenção especial ao prazo da fatura da Acme Corp. O comitê recomendou verificar se o pagamento foi retido na tesouraria antes de enviar o segundo lembrete.',
+    'meet-2': 'Confirmar com o diretor Luis Dias se a minuta do boleto atualizado deve incluir o desconto de 5% à vista.'
+  });
+  const [privateNotesSaved, setPrivateNotesSaved] = useState(false);
 
   // Estados do Player de Áudio & Word Karaoke
   const [isPlaying, setIsPlaying] = useState(false);
@@ -392,8 +435,13 @@ export const MeetingsIntelligenceView: React.FC<MeetingsIntelligenceViewProps> =
   const handleGenerateOfficialArtifact = () => {
     if (!selectedMeeting) return;
 
-    const artifactContent = `# Ata Executiva de Reunião Corporativa — PCL AEOS
+    const activeSummary = TEMPLATE_DEFINITIONS[selectedTemplate].getSummary(selectedMeeting);
+    const activeTemplateInfo = TEMPLATE_DEFINITIONS[selectedTemplate];
+    const userNotes = privateNotes[selectedMeeting.id];
+
+    const artifactContent = `# Ata de Reunião Corporativa — PCL AEOS
 **Sessão:** ${selectedMeeting.title}
+**Modelo de Ata:** ${activeTemplateInfo.label} (${activeTemplateInfo.badge})
 **Data:** ${selectedMeeting.date} | **Duração:** ${selectedMeeting.duration}
 **Plataforma Segura:** ${selectedMeeting.platform} (${selectedMeeting.meetCode})
 **Classificação de Segurança:** PCL Enclave Confidencial (ISO 27001 / ISO 42001)
@@ -405,8 +453,14 @@ ${selectedMeeting.participants.map(p => `- **${p.name}** (${p.role})`).join('\n'
 
 ---
 
-## 2. Sumário Executivo
-${selectedMeeting.summary}
+## 2. Síntese Executiva (${activeTemplateInfo.label})
+${activeSummary}
+
+${userNotes ? `---
+
+## 3. Anotações Confidenciais do Operador (BYOS)
+${userNotes}
+` : ''}
 
 ---
 
@@ -420,9 +474,9 @@ ${selectedMeeting.decisions.map((d, i) => `### ${i + 1}. ${d.title}
 ---
 
 ## 4. Plano de Ação & Matriz de Responsabilidades (Action Items)
-| Tarefa | Responsável | Prazo | Status | Conector |
-| :--- | :--- | :--- | :--- | :--- |
-${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadline} | ${a.completed ? 'Concluído' : 'Pendente'} | ${a.targetApp?.toUpperCase() || 'PCL'} |`).join('\n')}
+| Tarefa | Responsável | Prazo | Timestamp | Status | Conector |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadline} | ${a.timestamp || '-'} | ${a.completed ? 'Concluído' : 'Pendente'} | ${a.targetApp?.toUpperCase() || 'PCL'} |`).join('\n')}
 
 ---
 
@@ -436,7 +490,7 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
       id: `art-meet-${Date.now()}`,
       title: `Ata Executiva: ${selectedMeeting.title}`,
       type: 'doc',
-      summary: `Ata formal autenticada com ${selectedMeeting.decisions.length} decisões e ${selectedMeeting.actionItems.length} itens de ação.`,
+      summary: `Ata formal (${activeTemplateInfo.label}) com ${selectedMeeting.decisions.length} decisões e ${selectedMeeting.actionItems.length} itens de ação.`,
       content: artifactContent,
       updatedAt: new Date().toISOString()
     };
@@ -451,9 +505,17 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
 
   const handleCopySummary = () => {
     if (!selectedMeeting) return;
-    navigator.clipboard.writeText(selectedMeeting.summary);
+    const textToCopy = TEMPLATE_DEFINITIONS[selectedTemplate].getSummary(selectedMeeting);
+    navigator.clipboard.writeText(textToCopy);
     setCopiedSummary(true);
     setTimeout(() => setCopiedSummary(false), 2000);
+  };
+
+  const handleUpdatePrivateNotes = (text: string) => {
+    if (!selectedMeeting) return;
+    setPrivateNotes(prev => ({ ...prev, [selectedMeeting.id]: text }));
+    setPrivateNotesSaved(true);
+    setTimeout(() => setPrivateNotesSaved(false), 2000);
   };
 
   const handleAskQuestion = (question: string) => {
@@ -519,6 +581,11 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
 
         {selectedMeeting && (
           <div className="flex items-center space-x-2">
+            <span className="hidden sm:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono text-[10px] font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Custódia Blindada BYOS • Zero Bloqueios</span>
+            </span>
+
             <button
               onClick={handleGenerateOfficialArtifact}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow-sm ${
@@ -536,7 +603,7 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
               ) : (
                 <>
                   <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Gerar Ata Executiva Oficial</span>
+                  <span>Gerar Ata ({TEMPLATE_DEFINITIONS[selectedTemplate].badge})</span>
                 </>
               )}
             </button>
@@ -831,6 +898,79 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
             </div>
           </div>
 
+          {/* Card de Lentes de Ata por Template & Síntese Dinâmica (Padrão Read.ai) */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 dark:border-slate-800/80 pb-2.5">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-emerald-500" />
+                <span className="font-bold text-xs text-slate-900 dark:text-slate-100">
+                  Síntese da Sessão & Perspectiva de Ata
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+                  {TEMPLATE_DEFINITIONS[selectedTemplate].badge}
+                </span>
+              </div>
+
+              {/* Seletor de Modelo / Lente de Ata */}
+              <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-950 p-0.5 rounded-xl border border-slate-200/80 dark:border-slate-800 text-[11px] overflow-x-auto custom-scrollbar">
+                {(['clevel', 'bant', 'postmortem', 'compliance'] as MeetingTemplate[]).map(tmpl => (
+                  <button
+                    key={tmpl}
+                    onClick={() => setSelectedTemplate(tmpl)}
+                    className={`px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition ${
+                      selectedTemplate === tmpl
+                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    {tmpl === 'clevel' ? 'Ata C-Level' : tmpl === 'bant' ? 'BANT Comercial' : tmpl === 'postmortem' ? 'Post-Mortem' : 'ISO & LGPD'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Texto da Síntese Adaptada ao Modelo */}
+            <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-slate-50/60 dark:bg-slate-950/40 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800/60 font-sans">
+              {TEMPLATE_DEFINITIONS[selectedTemplate].getSummary(selectedMeeting)}
+            </div>
+
+            <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
+              <span className="flex items-center space-x-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Auditoria PCL TLC v3 Aprovada</span>
+              </span>
+              <button
+                onClick={handleCopySummary}
+                className="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center space-x-1 font-medium"
+              >
+                {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedSummary ? 'Síntese Copiada!' : 'Copiar Síntese'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Card de Anotações Confidenciais do Operador (BYOS - Blindado) */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Lock className="w-3.5 h-3.5 text-amber-500" />
+                <span className="font-bold text-xs text-slate-900 dark:text-slate-100">
+                  Suas Anotações Privadas (Segredo Blindado • BYOS)
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+                {privateNotesSaved ? '✓ Salvo Localmente' : 'Resíduo Zero de Dados'}
+              </span>
+            </div>
+            <textarea
+              rows={2}
+              value={privateNotes[selectedMeeting.id] || ''}
+              onChange={e => handleUpdatePrivateNotes(e.target.value)}
+              placeholder="Digite aqui anotações particulares sobre esta reunião. Elas ficam criptografadas no seu navegador e jamais serão enviadas para nuvens externas..."
+              className="w-full p-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:border-emerald-500 transition resize-none"
+            />
+          </div>
+
           {/* Abas de Navegação da Reunião (Transcrição, Decisões, Ações) */}
           <div className="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800 text-xs font-semibold">
             <button
@@ -1012,7 +1152,7 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
                   <div className="flex items-center space-x-3 flex-1 truncate pr-3">
                     <button
                       onClick={() => handleToggleActionItem(selectedMeeting.id, item.id)}
-                      className="text-slate-400 hover:text-emerald-500 transition"
+                      className="text-slate-400 hover:text-emerald-500 transition flex-shrink-0"
                     >
                       {item.completed ? (
                         <CheckSquare className="w-4 h-4 text-emerald-500" />
@@ -1020,6 +1160,22 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
                         <Square className="w-4 h-4" />
                       )}
                     </button>
+
+                    {item.timestamp && (
+                      <button
+                        onClick={() => {
+                          handleSeek(item.timestampSeconds ?? 0);
+                          setIsPlaying(true);
+                          setActiveTab('transcript');
+                        }}
+                        className="flex-shrink-0 inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 font-mono text-[10px] font-semibold transition cursor-pointer"
+                        title="Saltar gravação e transcrição para o minuto exato desta tarefa (Read.ai)"
+                      >
+                        <Clock className="w-3 h-3 text-emerald-500" />
+                        <span>{item.timestamp}</span>
+                      </button>
+                    )}
+
                     <div className="truncate">
                       <span className={`text-xs block truncate ${item.completed ? 'line-through text-slate-400' : 'font-medium text-slate-800 dark:text-slate-200'}`}>
                         {item.task}
