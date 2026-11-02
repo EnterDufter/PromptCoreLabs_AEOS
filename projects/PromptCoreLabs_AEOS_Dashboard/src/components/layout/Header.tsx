@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-2">
             <span className="font-semibold text-sm tracking-tight">PCL AEOS</span>
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-              v3.0.4 PROD
+              v3.6.0 PROD
             </span>
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 block -mt-0.5 font-sans">
