@@ -133,21 +133,39 @@ mermaid.initialize({
 });
 ```
 
-### 5. Regra de Ouro Anti-Clipping CSS & Preservação de Títulos de Subgraph
-- **NUNCA aplicar `transform: translateY(...) !important;` em CSS no SVG do Mermaid**: Essa propriedade sobrescreve os atributos de translação nativos `<g class="cluster-label" transform="translate(x, y)">`, zerando as coordenadas calculadas pelo Mermaid e colidindo os títulos dos subgrafos em `(0, 0)` em cima dos primeiros nós.
-- **Regras CSS Obrigatórias**:
-  ```css
-  .mermaid svg [clip-path] { clip-path: none !important; }
-  .mermaid svg .node foreignObject { overflow: visible !important; }
-  .mermaid svg .node foreignObject div {
-    overflow: visible !important;
-    word-break: normal !important;
-    white-space: normal !important;
-    text-align: center !important;
-    line-height: 1.35 !important;
-    font-size: 10.5px !important;
-  }
-  ```
+### 5. Regras Físicas Invioláveis de Governança Mermaid & Anti-Clipping (Padrão Cortex v7)
+Para evitar quebras de layout, colapso de SVGs e degradação em impressões, todo agente e componente do PCL AEOS deve seguir estritamente as quatro regras físicas:
+
+1. **Lei do Contêiner Estável (Zero Flex, Zero Width Auto no SVG):**
+   - **NUNCA aplicar `display: flex !important;` no contêiner `.mermaid-box`** e **NUNCA aplicar `width: auto !important;` no `<svg>` do Mermaid**. Em navegadores Chromium/WebKit, elementos SVG com `width="100%"` colapsam para `0px x 0px` quando colocados sob contêiner flex com largura automática.
+   - O contêiner deve ser sempre `display: block; overflow-x: auto;` e o SVG deve manter `max-width: 100% !important; height: auto !important;`.
+   - **NUNCA aplicar `transform: translateY(...) !important;` no SVG**: Essa propriedade sobrescreve os atributos de translação nativos `<g class="cluster-label" transform="translate(x, y)">`, zerando as coordenadas calculadas pelo Mermaid e colidindo os títulos dos subgrafos em `(0, 0)` em cima dos primeiros nós.
+
+2. **Lei da Soberania Tipográfica (Zero Alteração de Font-Size/Peso):**
+   - É **estritamente proibido** injetar propriedades arbitrárias de `font-size` ou `font-weight` nos elementos internos do Mermaid (`.node`, `.cluster`, `.edgeLabel`). A tipografia obedece rigorosamente à hierarquia do design system (Inter / JetBrains Mono) herdada do tema host.
+
+3. **Lei da Largura Mínima e Multilinhas Livres (Fim das Colunas Estreitas):**
+   - Para evitar que o algoritmo Dagre encolha os nós na largura da menor palavra única (~80px, gerando colunas verticais estreitas de 1 palavra por linha), as caixas dos nós devem declarar largura mínima e respiro lateral:
+     ```css
+     .mermaid svg [clip-path] { clip-path: none !important; }
+     .mermaid svg .node foreignObject { overflow: visible !important; }
+     .mermaid svg .node foreignObject div {
+       overflow: visible !important;
+       word-break: normal !important;
+       white-space: normal !important;
+       text-align: center !important;
+       line-height: 1.4 !important;
+       padding: 8px 16px !important;
+       min-width: 185px !important;
+       box-sizing: border-box !important;
+     }
+     ```
+   - **Zero Supressão de Texto**: Jamais alterar o conteúdo ou forçar texto em "2 linhas". Diagramas multilinha com 3, 4 ou mais linhas descritivas de engenharia devem fluir livremente em sua totalidade.
+
+4. **Lei da Impressão Perfeita (@media print) & Harmonização de ERDs:**
+   - **Zero Páginas em Branco**: Limitar a altura do contêiner a `max-height: 175mm !important;` e do SVG a `max-height: 160mm !important; object-fit: contain !important;` com `break-inside: avoid !important;`, garantindo que o diagrama caiba na área útil da página A4 sem forçar quebras prematuras de página.
+   - **Economia de Tinta e Alto Contraste**: Na impressão, substituir fundos escuros por fundo claro (`#f8fafc`), bordas finas (`#cbd5e1`), traços escuros nítidos (`#334155`) e texto escuro de alta legibilidade (`#0f172a`).
+   - **Harmonização de ERDs (`erDiagram`)**: Conter a largura máxima de esquemas relacionais/ERDs em `max-width: 680px` na tela e `max-width: 90%` com `max-height: 145mm` na impressão, impedindo torres verticais desproporcionais.
 
 ### 6. Paleta de Cores de Alto Contraste (WCAG AAA)
 É estritamente proibido o uso de tons pastéis desbotados ou classes sem definição de `color`. Todos os diagramas devem declarar explicitamente suas classes com texto claro/branco (`#ffffff` ou `#f8fafc`) e bordas contrastantes:

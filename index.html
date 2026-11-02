@@ -1078,7 +1078,111 @@
       }
     }
 
+    /* ==========================================================================
+       CALIBRAÇÃO CANÔNICA MERMAID v3.6 (NÓS LARGOS, SEM FLEX, TIPOGRAFIA PRESERVADA)
+       ========================================================================== */
+    .mermaid-box {
+      display: block !important;
+      overflow-x: auto !important;
+    }
+    .mermaid-box svg,
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+    .mermaid svg [clip-path] {
+      clip-path: none !important;
+    }
+    .mermaid svg .node foreignObject {
+      overflow: visible !important;
+    }
+    .mermaid svg .node foreignObject div {
+      overflow: visible !important;
+      word-break: normal !important;
+      white-space: normal !important;
+      text-align: center !important;
+      line-height: 1.4 !important;
+      padding: 8px 16px !important;
+      min-width: 185px !important;
+      box-sizing: border-box !important;
+    }
+    /* Harmonização visual de esquemas ERD em tela */
+    .modal-body .mermaid svg[id*="erDiagram"],
+    .modal-body .mermaid svg.erDiagram,
+    .mermaid svg[aria-roledescription="er"] {
+      max-width: 680px !important;
+      margin: 0 auto !important;
+    }
 
+    /* ==========================================================================
+       CALIBRAÇÃO IMPRESSÃO PERFEITA v3.6: LEGIBILIDADE, ZERO PÁGINAS EM BRANCO, ERD ESCALÁVEL
+       ========================================================================== */
+    @media print {
+      @page {
+        margin: 1.2cm !important;
+        size: A4 portrait !important;
+      }
+      .modal-body .mermaid {
+        background: #f8fafc !important;
+        border: 1pt solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 0.8rem !important;
+        margin: 0.8rem auto !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 175mm !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
+      }
+      .modal-body .mermaid svg {
+        max-width: 100% !important;
+        max-height: 160mm !important;
+        height: auto !important;
+        width: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+        margin: 0 auto !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .modal-body .mermaid svg[id*="erDiagram"],
+      .modal-body .mermaid svg.erDiagram,
+      .modal-body .mermaid svg[aria-roledescription="er"] {
+        max-height: 145mm !important;
+        max-width: 90% !important;
+        margin: 0 auto !important;
+      }
+      .modal-body .mermaid svg text {
+        fill: #0f172a !important;
+        font-weight: 600 !important;
+      }
+      .modal-body .mermaid svg .node rect,
+      .modal-body .mermaid svg .node circle,
+      .modal-body .mermaid svg .node polygon,
+      .modal-body .mermaid svg [class*="entityBox"] {
+        stroke: #334155 !important;
+        stroke-width: 1.2pt !important;
+      }
+      .modal-body .mermaid svg .flowchart-link,
+      .modal-body .mermaid svg .edgePath path,
+      .modal-body .mermaid svg [class*="relationshipLine"] {
+        stroke: #475569 !important;
+        stroke-width: 1.2pt !important;
+      }
+      .modal-body h1, .modal-body h2, .modal-body h3, .modal-body h4 {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      .modal-body p + .mermaid,
+      .modal-body ul + .mermaid,
+      .modal-body table + .mermaid {
+        page-break-before: auto !important;
+      }
+    }
   </style>
 </head>
 

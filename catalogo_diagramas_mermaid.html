@@ -116,10 +116,17 @@
       word-break: normal !important;
       white-space: normal !important;
       text-align: center !important;
-      line-height: 1.35 !important;
+      line-height: 1.4 !important;
       font-size: 10.5px !important;
       font-weight: 500 !important;
-      padding: 4px 10px !important;
+      padding: 8px 16px !important;
+      min-width: 185px !important;
+      box-sizing: border-box !important;
+    }
+    .mermaid svg[id*="erDiagram"],
+    .mermaid svg[aria-roledescription="er"] {
+      max-width: 680px !important;
+      margin: 0 auto !important;
     }
     /* Estilização de Subgraph Clusters */
     .mermaid svg .cluster rect {
