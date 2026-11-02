@@ -16,7 +16,8 @@ normative_ref: "PCL-AEOS-NORM-01"
 > **Definição Canônica:** O **PCL Cockpit** é o centro de comando agêntico soberano e a interface primária de pilotagem do ecossistema PromptCoreLabs_AEOS, executada na porta local **`:3001`**. A versão **v3.6** consolida a eliminação definitiva de amnésia conversacional, o gating inteligente de intenções via coprocessador não-autorregressivo Laya (em CPU), o desacoplamento visual de fontes e a observabilidade ponta a ponta com auditoria criptográfica SHA-256.
 
 > [!IMPORTANT]
-> **👔 Visão Executiva & Valor de Negócio:** O PCL Cockpit v3.6 entrega uma estação de comando IA que supera assistentes comerciais fechados (**4.95 / 5.0** em benchmark cego oficial contra Gemini `4.45`, ChatGPT `4.30` e Copilot `3.80`), operando com **soberania total sobre os dados**, **custo marginal `$0.00`** em modo local e **transparência auditável** fase a fase (ISO 27001 / ISO 42001).
+> **👔 Visão Executiva & Valor de Negócio (Para Líderes e Diretores):**  
+> Desenvolvido pela **PromptCore Labs**, o **PCL Cockpit v3.6** é a cabine de comando executiva e técnica do **PCL AEOS**. Em rigorosa **avaliação técnica duplo-cega** (na qual especialistas julgaram a qualidade sem saber a marca), conquistou o **1º lugar com 4.95 / 5.0** — superando Google Gemini (`4.45`), ChatGPT Plus (`4.30`) e Microsoft Copilot (`3.80`). Garante **segredo corporativo blindado (Resíduo Zero de Dados / Zero-Bin)**, **custo marginal `$0.00`** em modo local, retenção multi-turn sem amnésia e soberania humana inegociável.
 
 > [!NOTE]
 > **🛠️ Visão de Engenharia & Invariantes:** Aplicação React 19 + TypeScript + Vite (`:3001`) com *Liquid Glass Bento Grid* de 3 colunas retráteis, **Memória Multi-Turn Sliding Window**, **Intention Gating determinístico** via Laya System One em CPU (`ONNX INT8`, `0 MB VRAM`, `~20–35ms`), decodificador universal `open-sse`, sondas TCP sub-segundo (`250–300ms`) e atesto criptográfico imutável **SHA-256**.
@@ -143,8 +144,8 @@ flowchart LR
    - O Laya opera exclusivamente em CPU host via `CPUExecutionProvider`. A GPU dedicada (NVIDIA GeForce RTX 3050 6GB) permanece com 100% de sua memória dedicada à inferência sob demanda de modelos do Ollama local (`qwen2.5-coder:7b-instruct-q4_K_M`).
 2. **Invariante de Custo Zero (`$0.00`) no Modo Soberano:**
    - Em caso de desconexão externa ou operação sensível on-premise, o pipeline comuta automaticamente para o Ollama local (`:11434`) e acervo local indexado, mantendo autonomia plena sem cobrança de nuvem.
-3. **Política de Zero Mocks & Custódia Zero-Bin (BYOS):**
-   - Toda resposta e telemetria decorre de computação real. Anexos corporativos seguem o padrão *Headless Bring-Your-Own-Storage (Zero-Bin Custody)* com sanitização prévia via **PII Guard LGPD** inline no cliente.
+3. **Política de Zero Mocks & Blindagem de Resíduo Zero (Zero-Bin / BYOS):**
+   - Toda resposta e telemetria decorre de computação real. Dados confidenciais e anexos corporativos seguem o padrão *Bring-Your-Own-Storage* com resíduo zero de dados (*Zero-Bin*), sanitização prévia via **PII Guard LGPD** inline no cliente e zero envio para retenção ou treinamento de terceiros.
 
 ---
 

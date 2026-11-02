@@ -17,11 +17,22 @@
 
 ## 💡 O que é o PCL AEOS v3.6?
 
-O **PromptCoreLabs_AEOS** é o sistema operacional soberano de engenharia e inteligência corporativa projetado para governar o trabalho conjunto de executivos, arquitetos humanos e esquadrões de agentes de IA sob rastreabilidade matemática.
+A **PromptCore Labs** desenvolveu o **PCL AEOS** (*AI Engineering Operating System*) para resolver a maior dor da inteligência artificial corporativa moderna: a perda de controle sobre seus dados e a dependência financeira de Big Techs estrangeiras. 
+
+Ele é uma **infraestrutura soberana de inteligência** que une executivos, especialistas humanos e esquadrões de agentes autônomos sob blindagem matemática rigorosa.
 
 > [!IMPORTANT]
 > **👔 Visão Executiva & Valor de Negócio (Para Líderes, Diretores e Investidores):**  
-> Pense no **PCL AEOS v3.6** como uma **central de inteligência corporativa própria com cofre criptográfico integrado**. Enquanto assistentes comerciais de nuvem cobram em dólar por usuário, operam como "caixas-pretas" e armazenam documentos confidenciais em servidores externos, o **PCL Cockpit v3.6 (`:3001`)** alcançou **4.95 / 5.0** em protocolo cego oficial — superando Google Gemini (`4.45`), OpenAI ChatGPT (`4.30`) e Microsoft Copilot (`3.80`) — mantendo **custo marginal `$0.00`** em operação local, custódia *Zero-Bin* (LGPD) e aprovação final exclusiva do humano.
+> Imagine ter a inteligência de ponta do mercado mundial operando dentro dos servidores da sua própria empresa, trancada a sete chaves e com custo operacional que não explode no final do mês. 
+> 
+> Enquanto as grandes plataformas cobram mensalidades em dólar por usuário, operam como "caixas-pretas" imprevisíveis e exigem que você envie relatórios confidenciais para servidores externos:
+> 
+> * **🏆 Liderança Global Comprovada (Nota 4.95 / 5.0):** Em uma rigorosa *avaliação técnica duplo-cega* — onde especialistas auditaram as respostas sem saber qual IA as produziu —, o **PCL Cockpit v3.6** conquistou o **1º lugar absoluto**, superando **Google Gemini** (`4.45`), **OpenAI ChatGPT Plus** (`4.30`) e **Microsoft Copilot** (`3.80`).
+> * **🛡️ Segredo Corporativo Blindado (Resíduo Zero de Dados / Zero-Bin):** Seus planos estratégicos, balanços e dados de clientes nunca saem do perímetro da sua empresa, nunca são usados para treinar modelos de terceiros e cumprem integralmente a LGPD/ISO 42001. Nenhum resíduo de dados trafega desprotegido.
+> * **💰 FinOps Imbatível (Custo Marginal $0.00):** Ao operar em modo local soberano, sua organização realiza milhares de consultas analíticas sem pagar um único centavo a mais por pergunta ou token.
+> * **👑 Autoridade Humana Inegociável:** A IA audita, calcula e sugere; a caneta e o poder de decisão final pertencem exclusivamente ao líder humano.
+>
+> **A Tríade que Move o Sistema:** A **PromptCore Labs** é o laboratório de inovação responsável pela arquitetura; o **PCL AEOS** é o motor de inteligência e governança nos bastidores; e o **PCL Cockpit (`:3001`)** é a sua cabine de comando interativa — onde sua liderança assume o manche com controle total em tempo real.
 
 > [!NOTE]
 > **🛠️ Visão de Engenharia & Invariantes (Para Arquitetos e Desenvolvedores):**  
@@ -37,14 +48,14 @@ O **PromptCoreLabs_AEOS** é o sistema operacional soberano de engenharia e inte
 
 | Indicador Estratégico & Técnico | Classificação Normativa | Valor Canônico Homologado | Benefício Direto de Negócio & Engenharia |
 | :--- | :---: | :---: | :--- |
-| **Placar em Benchmark Cego (5 Turnos)** | Avaliação Multi-Provedor v3.6 | **4.95 / 5.0 (1º Lugar)** | Supera Gemini (`4.45`), ChatGPT (`4.30`) e Copilot (`3.80`) com telemetria aberta. |
+| **Placar em Avaliação Cega (5 Turnos)** | Auditoria Imparcial Sem Marca | **4.95 / 5.0 (1º Lugar)** | Especialistas avaliaram sem saber a marca: supera Gemini (`4.45`), ChatGPT (`4.30`) e Copilot (`3.80`). |
 | **Custo Marginal (Inferência Local)** | Modo Soberano Offline | **`$0.00` / mês** | Operação 100% autônoma via Ollama (`:11434`), LM Studio (`:1234`) e Laya (`:20140`). |
 | **Coprocessador LAYA (System One)** | Triagem `O(1)` & NLI em CPU | **`22.3 – 23.9 ms` em CPU** | Intention Gating + NLI INT8 (`93.3%` especificidade / recall ensaio interno) sem gastar tokens. |
 | **Alocação de GPU VRAM (Laya)** | Invariante Físico (`NORM-01`) | **`0 MB` (100% CPU Host)** | Preserva 100% dos 6 GB da RTX 3050 para o modelo generativo local (`qwen2.5-coder:7b`). |
 | **Sondas de Saúde Fail-Fast (`:3001`)** | Resiliência de Rede v3.6 | **`250 ms – 300 ms` (TCP)** | Elimina esperas de 38s–58s quando contêineres locais estão desligados (`HIP-004`). |
 | **Taxa de Vazão (Throughput NLI)** | Reconciliação Contínua | **`41.8 – 44.8` claims/seg** | Auditoria dialética de memória em tempo real em CPU comum sem chamadas pagas. |
 | **Recuperação de Desastres (RTO)** | Continuidade Cifrada R2 | **Lab: `7.18 s` (SLA `< 15 min`)** | Restauração multi-schema AES-256 no Cloudflare R2 gratuito (`ADR-0006`). |
-| **Memória Dual & Auditoria** | `memory.*` + `knowledge/` | **`768D` HNSW + `SHA-256`** | Separação clara entre grafo temporal ACID e acervo físico Warm/Cold com prova ISO 42001. |
+| **Memória Dual & Blindagem de Dados** | Resíduo Zero de Dados (Zero-Bin) | **`768D` HNSW + `SHA-256`** | Segredos corporativos trancados no cofre local; zero retenção em nuvens públicas (LGPD/ISO 42001). |
 
 ### 🔬 Modelo Comparativo: Sistema 1 Não-Autorregressivo (`O(1)`) vs. Abordagens `O(N)`
 

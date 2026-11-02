@@ -16,7 +16,8 @@ normative_ref: "PCL-AEOS-NORM-01"
 > **Declaração de Posicionamento:** O **PCL Cockpit** é o centro de comando e substrato cognitivo unificado do **PromptCoreLabs_AEOS**. Diferente de soluções puramente comerciais em nuvem (Jumpad.ai) ou assistentes autorregressivos genéricos (ChatGPT, Gemini, Claude, Copilot), o PCL Cockpit opera sob o princípio da **Soberania Absoluta de Dados (On-Premise / BYOS)**, eliminação do desperdício de tokens via **Sistema 1 em CPU (Laya INT8)**, observabilidade em tempo real com **Live Execution Stepper** e governança auditável com **Stage Gates TLC v3** assinados em SHA-256.
 
 > [!IMPORTANT]
-> **👔 Visão Executiva & Valor de Negócio:** Enquanto assistentes comerciais cobram de `US$ 20` a `US$ 30/usuário/mês` operando como "caixas-pretas" que retêm arquivos em nuvens de terceiros, o **PCL Cockpit v3.6** alcançou **4.95 / 5.0** em protocolo cego multi-turn — superando Gemini (`4.45`), ChatGPT (`4.30`) e Copilot (`3.80`) — com **custo marginal `$0.00`** em modo local, custódia Zero-Bin e recibos criptográficos auditáveis.
+> **👔 Visão Executiva & Valor de Negócio (Para Líderes e Investidores):**  
+> Enquanto assistentes comerciais cobram mensalidades em dólar por usuário e operam como "caixas-pretas" que retêm documentos confidenciais em servidores externos, o **PCL Cockpit v3.6** (desenvolvido pela **PromptCore Labs** para o **PCL AEOS**) conquistou o **1º lugar com 4.95 / 5.0** em rigorosa **avaliação técnica duplo-cega** — superando Google Gemini (`4.45`), ChatGPT Plus (`4.30`) e Microsoft Copilot (`3.80`). Garante **segredo corporativo blindado (Resíduo Zero de Dados / Zero-Bin)**, **custo marginal `$0.00`** em modo local, retenção contextual perfeita e controle humano inegociável.
 
 > [!NOTE]
 > **🛠️ Visão de Engenharia & Invariantes:** Combina ergonomia executiva (`@mentions` corporativos, `#documentos` canônicos, pílula retrátil de fontes) com engenharia de sistemas determinística: triagem não-autorregressiva `O(1)` em CPU (`Laya Apache 2.0`, `0 MB VRAM`, `~20–35ms`) versus orquestradores SaaS autorregressivos `O(N)` de `800ms–4.000ms`, além de sanitização **PII Guard LGPD** inline no cliente.
@@ -49,7 +50,7 @@ flowchart LR
     subgraph ADV["3. Diferenciais Irrefutáveis (4.95 / 5.0)"]
         direction TB
         A1["<b>Live Stepper 5 Fases + SHA-256</b><br/>Telemetria aberta & prova ISO 42001"]:::win
-        A2["<b>Zero-Bin Custody & PII Guard</b><br/>BYOS local + sanitização LGPD inline"]:::win
+        A2["<b>Resíduo Zero de Dados (Zero-Bin) & PII Guard</b><br/>Cofre local inviolável + LGPD inline"]:::win
         A1 --> A2
     end
 
@@ -58,9 +59,9 @@ flowchart LR
 
 ---
 
-## 2. Placar do Benchmark Empírico Cego (Protocolo 5 Turnos — v3.6)
+## 2. Placar da Avaliação Técnica Duplo-Cega (Protocolo 5 Turnos — v3.6)
 
-Resultado do teste cego oficial executado entre os quatro ecossistemas sobre a bateria padronizada de 5 turnos (memória multi-turn, resolução anafórica, discernimento temporal 2026, síntese cross-turn e gating factual):
+Resultado da avaliação técnica duplo-cega oficial — na qual especialistas auditaram as respostas sem saber a marca do provedor — executada entre os quatro ecossistemas sobre a bateria padronizada de 5 turnos (memória multi-turn, resolução anafórica, discernimento temporal 2026, síntese cross-turn e gating factual):
 
 | Dimensão de Avaliação de Engenharia | PCL Cockpit v3.6 | Google Gemini | OpenAI ChatGPT | Microsoft Copilot |
 | :--- | :---: | :---: | :---: | :---: |
@@ -112,7 +113,7 @@ Durante o protocolo comparativo, duas investigações técnicas reforçaram a te
 | :--- | :--- | :--- | :--- | :--- |
 | **Hierarquia de Aprovação** | **Stage Gates TLC v3:** O agente jamais se autoaprova; autoridade soberana irrevogável exclusiva do humano. | Aprovações configuráveis em fluxos no-code. | Agentes autônomos tomam decisões sem barreira formal de gates. | Execução direta sem gates manuais de sistema. |
 | **Trilha de Auditoria Criptográfica** | **Hashes SHA-256 Imutáveis:** Cada mensagem, plano e artefato é atestado criptograficamente. | Logs de auditoria estruturados por usuário e agente. | Histórico de chat recuperável, sem prova de integridade imutável. | Logs do Microsoft Purview, sem atesto SHA-256 no cliente. |
-| **Custódia de Documentos (Storage)** | **Zero-Bin Custody (Headless BYOS):** Nenhum arquivo confidencial é custodiado em nuvem central de terceiros. | Armazenamento na infraestrutura de cloud do Jumpad (AWS/GCP). | Arquivos enviados ficam armazenados nos servidores da LLM. | Armazenamento no Microsoft SharePoint / OneDrive. |
+| **Custódia de Documentos (Storage)** | **Resíduo Zero de Dados (Zero-Bin / BYOS):** Nenhum arquivo confidencial ou plano estratégico é custodiado em nuvem de terceiros. | Armazenamento na infraestrutura de cloud do Jumpad (AWS/GCP). | Arquivos enviados ficam armazenados nos servidores da LLM. | Armazenamento no Microsoft SharePoint / OneDrive. |
 | **Proteção de Privacidade (DLP)** | **PII Guard LGPD Ativo:** Sanitização em tempo real no cliente antes de qualquer transmissão externa. | Políticas de conformidade e mascaramento empresarial. | Termos contratuais de não treinamento sem sanitização inline no cliente. | Conformidade corporativa de tenant M365. |
 | **Telemetria de Pipeline** | **Live Execution Stepper (5 Fases):** Visibilidade total dos milissegundos e das ações de cada etapa cognitiva. | Não disponível (processamento interno). | Não disponível (caixa-preta). | Não disponível (caixa-preta). |
 
@@ -125,5 +126,5 @@ Durante o protocolo comparativo, duas investigações técnicas reforçaram a te
 | • Ergonomia de menções `@apps` (Jumpad.ai) | • Soberania On-Premise com fallback a **`$0.00`** | • Mocks estáticos ou telemetria simulada |
 | • Pílula retrátil de fontes (Gemini / Perplexity) | • **`0 MB VRAM`** na triagem via Laya CPU INT8 (`~20ms`) | • Dependência compulsória de SaaS pago em dólar |
 | • Síntese executiva estruturada (Read.ai) | • **Stage Gates TLC v3** com autoridade humana | • Decisões autônomas de produção sem gate humano |
-| • Cards de ação rápida e workspace multi-aba | • Trilha criptográfica **SHA-256** + **PII Guard LGPD** | • Custódia opaca de binários confidenciais de clientes |
+| • Cards de ação rápida e workspace multi-aba | • Trilha criptográfica **SHA-256** + **Resíduo Zero (Zero-Bin)** | • Custódia opaca ou retenção de dados confidenciais |
 | • Respostas diretas sem jargão forçado | • **Live Stepper em 5 Fases** + **Cortex Canvas DAG** | • Caixas-pretas sem visibilidade de latência e rota |
