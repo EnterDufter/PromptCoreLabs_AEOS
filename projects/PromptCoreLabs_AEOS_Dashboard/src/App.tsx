@@ -196,11 +196,17 @@ export const App: React.FC = () => {
     }
   ]);
 
-  const [activeConversation, setActiveConversation] = useState<Conversation>(projects[0].conversations[0]);
-  const [openConversations, setOpenConversations] = useState<Conversation[]>([
-    projects[0].conversations[0],
-    projects[0].conversations[1]
-  ]);
+  // Inicialização Limpa (Thread Zero): O Cockpit inicia pronto para uma nova conversa limpa
+  const initialNewConversation: Conversation = {
+    id: `conv-initial`,
+    title: 'Nova Conversa',
+    dateGroup: 'Hoje',
+    updatedAt: new Date().toISOString(),
+    messages: []
+  };
+
+  const [activeConversation, setActiveConversation] = useState<Conversation>(initialNewConversation);
+  const [openConversations, setOpenConversations] = useState<Conversation[]>([initialNewConversation]);
 
   const handleSelectConversation = (conv: Conversation) => {
     setActiveConversation(conv);
@@ -371,10 +377,33 @@ export const App: React.FC = () => {
       elapsedSeconds: 0.1
     };
 
+    const isFirstMessage = activeConversation.messages.length === 0;
+    const dynamicTitle = isFirstMessage 
+      ? (text.slice(0, 28) + (text.length > 28 ? '...' : '')) 
+      : activeConversation.title;
+
     setActiveConversation(prev => ({
       ...prev,
+      title: dynamicTitle,
       messages: [...prev.messages, newMessage, placeholderReply]
     }));
+
+    if (isFirstMessage) {
+      setOpenConversations(prev => prev.map(c => c.id === activeConversation.id ? { ...c, title: dynamicTitle } : c));
+      setProjects(prev => {
+        const next = [...prev];
+        if (next[0]) {
+          const exists = next[0].conversations.some(c => c.id === activeConversation.id);
+          if (!exists) {
+            next[0] = {
+              ...next[0],
+              conversations: [{ ...activeConversation, title: dynamicTitle }, ...next[0].conversations]
+            };
+          }
+        }
+        return next;
+      });
+    }
 
     // Cronômetro dinâmico em tempo real atualizado a cada 100ms
     const startTime = performance.now();
@@ -609,6 +638,7 @@ export const App: React.FC = () => {
                 onCreateBranch={handleCreateBranch}
                 viewMode={workspaceViewMode}
                 onViewModeChange={setWorkspaceViewMode}
+                onPromptCardClick={(prompt) => handleSendMessage(prompt, false)}
               />
 
               {workspaceViewMode !== 'canvas' && (

@@ -3,7 +3,7 @@ import {
   MessageSquare, Cpu, Columns, Layers, Bot, User, ShieldCheck, 
   FileText, ExternalLink, Play, Clock, Sparkles, Copy, Check,
   Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown,
-  BookOpen
+  BookOpen, Zap, ArrowRight
 } from 'lucide-react';
 import { Conversation, ChatMessage, Artifact } from '../../types';
 import { AgentNarrationPanel } from './AgentNarrationPanel';
@@ -23,6 +23,7 @@ interface DualPlexWorkspaceProps {
   onCreateBranch?: (messageId: string) => void;
   viewMode?: 'chat' | 'canvas' | 'dual';
   onViewModeChange?: (mode: 'chat' | 'canvas' | 'dual') => void;
+  onPromptCardClick?: (text: string) => void;
 }
 
 export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
@@ -34,7 +35,8 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
   onOpenArtifact,
   onCreateBranch,
   viewMode: controlledViewMode,
-  onViewModeChange
+  onViewModeChange,
+  onPromptCardClick
 }) => {
   const [internalViewMode, setInternalViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
   const viewMode = controlledViewMode !== undefined ? controlledViewMode : internalViewMode;
@@ -204,7 +206,90 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
         {(viewMode === 'chat' || viewMode === 'dual') && (
           <div className={`flex-1 overflow-y-auto px-4 py-6 custom-scrollbar ${viewMode === 'dual' ? 'border-r border-slate-200 dark:border-slate-800' : ''}`}>
             <div className="max-w-3xl mx-auto space-y-6">
-              {conversation.messages.map(msg => (
+              {conversation.messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 px-4 select-none animate-in fade-in duration-300">
+                  {/* PCL Cockpit Shield / Logo */}
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold text-2xl shadow-xl shadow-emerald-500/20 mb-3 ring-4 ring-emerald-500/10">
+                    PCL
+                  </div>
+
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight text-center">
+                    PCL Cockpit
+                  </h2>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1 text-center max-w-md leading-relaxed">
+                    Sovereign AI Command Center • Como posso acelerar suas decisões de engenharia e liderança hoje?
+                  </p>
+
+                  {/* 4 Executive Prompt Shortcut Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-7 w-full max-w-2xl">
+                    {[
+                      {
+                        icon: Zap,
+                        iconColor: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800',
+                        title: 'Auditar Daemons & FinOps',
+                        desc: 'Verificar telemetria e consumo dos motores soberanos (:20140 Laya + :11434 Ollama).',
+                        prompt: 'Como está a saúde e a alocação de recursos dos daemons locais Laya (:20140) e Ollama (:11434)?'
+                      },
+                      {
+                        icon: Globe,
+                        iconColor: 'text-sky-500 bg-sky-50 dark:bg-sky-950/60 border-sky-200 dark:border-sky-800',
+                        title: 'Pesquisa Profunda com Citações',
+                        desc: 'Estruturar análise de mercado com árvore de hipóteses e fontes verificadas.',
+                        prompt: 'Faça uma pesquisa profunda e síntese comparativa dos avanços de IA corporativa com resíduo zero de dados.'
+                      },
+                      {
+                        icon: Clock,
+                        iconColor: 'text-amber-500 bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800',
+                        title: 'Inteligência de Reuniões WhisperX',
+                        desc: 'Extrair atas executivas, deliberações e timestamps da última sessão.',
+                        prompt: 'Resuma os principais Action Items e decisões da reunião com clientes em atraso via WhisperX.'
+                      },
+                      {
+                        icon: Layers,
+                        iconColor: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/60 border-indigo-200 dark:border-indigo-800',
+                        title: 'Fluxos de Automação DAG',
+                        desc: 'Consultar ou disparar fluxos agênticos no Canvas de automação.',
+                        prompt: 'Quais clientes estão com pagamentos em atraso este mês? @SAP e @Salesforce'
+                      }
+                    ].map((card, i) => {
+                      const Icon = card.icon;
+                      return (
+                        <div
+                          key={i}
+                          onClick={() => onPromptCardClick && onPromptCardClick(card.prompt)}
+                          className="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-emerald-500/80 hover:shadow-md dark:hover:border-emerald-500/50 cursor-pointer transition-all group flex flex-col justify-between"
+                        >
+                          <div>
+                            <div className="flex items-center space-x-2.5 mb-2">
+                              <div className={`w-7 h-7 rounded-lg border flex items-center justify-center ${card.iconColor}`}>
+                                <Icon className="w-3.5 h-3.5" />
+                              </div>
+                              <h3 className="font-bold text-xs text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                {card.title}
+                              </h3>
+                            </div>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                              {card.desc}
+                            </p>
+                          </div>
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-3 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Iniciar prompt</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Badge Inferior de Soberania */}
+                  <div className="mt-8 flex items-center space-x-2 text-[10px] font-mono text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-800">
+                    <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                    <span>Soberano Local • Custo Marginal $0.00 • Resíduo Zero de Dados (BYOS)</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {conversation.messages.map(msg => (
                 <div
                   key={msg.id}
                   className={`flex space-x-3.5 ${msg.sender === 'user' ? 'ml-auto flex-row-reverse space-x-reverse max-w-2xl' : 'max-w-3xl'}`}
@@ -411,6 +496,8 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                   </div>
                 </div>
               ))}
+                </>
+              )}
               {/* Anchor for Auto-scroll */}
               <div ref={messagesEndRef} className="h-2" />
             </div>

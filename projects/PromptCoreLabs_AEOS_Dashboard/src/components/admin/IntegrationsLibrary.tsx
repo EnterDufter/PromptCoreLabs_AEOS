@@ -246,7 +246,7 @@ export const IntegrationsLibrary: React.FC = () => {
             }`}
           >
             <Workflow className="w-3.5 h-3.5" />
-            <span>Pipeline Linear (Tactiq)</span>
+            <span>Esteira Linear MCP</span>
           </button>
           <button
             onClick={() => setViewMode('catalog')}
@@ -264,7 +264,7 @@ export const IntegrationsLibrary: React.FC = () => {
 
       {/* Controles: Scope Switcher (Suas Conexões vs Workspace) e Busca */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200 dark:border-slate-800">
-        {/* Scope Switcher (Read.ai / Tactiq) */}
+        {/* Seletor de Escopo de Conexões */}
         <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200/80 dark:border-slate-800 text-xs">
           <button
             onClick={() => setScopeFilter('all')}
@@ -311,7 +311,7 @@ export const IntegrationsLibrary: React.FC = () => {
         </div>
       </div>
 
-      {/* MODO 1: Pipeline Linear de 3 Estágios (Padrão Tactiq) */}
+      {/* MODO 1: Pipeline Linear de 3 Estágios (Padrão Soberano PCL) */}
       {viewMode === 'pipeline' ? (
         <div className="space-y-4">
           {/* Esteira Visual Indicadora dos 3 Passos */}

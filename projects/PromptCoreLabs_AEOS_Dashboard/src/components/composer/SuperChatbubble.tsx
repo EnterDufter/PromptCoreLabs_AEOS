@@ -248,7 +248,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   };
 
   const MENTIONS_CATALOG: MentionOption[] = [
-    // Apps (Ordem exata do benchmark Jumpad.ai com logos oficiais)
+    // Conectores de Aplicativos Corporativos com logos oficiais
     { id: 'bigquery', label: 'Google BigQuery', category: 'app', logoId: 'bigquery', tag: '@BigQuery', detail: 'Data Warehouse & SQL' },
     { id: 'sap', label: 'SAP Enterprise', category: 'app', logoId: 'sap', tag: '@SAP', detail: 'ERP & Finanças' },
     { id: 'sheets', label: 'Google Sheets', category: 'app', logoId: 'sheets', tag: '@GoogleSheets', detail: 'Planilhas & Dados' },

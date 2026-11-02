@@ -283,7 +283,7 @@ export const CostsTokenDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-xs text-emerald-800 dark:text-emerald-300 flex items-center space-x-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>PCL AEOS Cockpit Híbrido Soberano</span>
+                    <span>PCL Cockpit Híbrido Soberano</span>
                   </span>
                   <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">BYOS + $0.00 Local</span>
                 </div>

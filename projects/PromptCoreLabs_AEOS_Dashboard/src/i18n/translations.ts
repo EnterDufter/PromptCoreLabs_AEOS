@@ -347,3 +347,4 @@ export const translations: Record<Language, Translations> = {
     }
   }
 };
+

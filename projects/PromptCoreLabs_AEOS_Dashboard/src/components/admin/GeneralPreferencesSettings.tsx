@@ -193,3 +193,4 @@ export const GeneralPreferencesSettings: React.FC<GeneralPreferencesSettingsProp
     </div>
   );
 };
+

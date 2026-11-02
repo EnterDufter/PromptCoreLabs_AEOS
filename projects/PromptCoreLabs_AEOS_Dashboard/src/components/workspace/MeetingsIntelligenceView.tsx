@@ -349,7 +349,7 @@ export const MeetingsIntelligenceView: React.FC<MeetingsIntelligenceViewProps> =
   const [selectedFolder, setSelectedFolder] = useState<string>('Todas');
   const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(null);
 
-  // Lentes de Ata por Template Executivo & Anotações Privadas (Inspirado no Read.ai)
+  // Lentes de Ata por Template Executivo & Anotações Privadas (Padrão Soberano PCL)
   const [selectedTemplate, setSelectedTemplate] = useState<MeetingTemplate>('clevel');
   const [privateNotes, setPrivateNotes] = useState<Record<string, string>>({
     'meet-1': 'Atenção especial ao prazo da fatura da Acme Corp. O comitê recomendou verificar se o pagamento foi retido na tesouraria antes de enviar o segundo lembrete.',
@@ -898,7 +898,7 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
             </div>
           </div>
 
-          {/* Card de Lentes de Ata por Template & Síntese Dinâmica (Padrão Read.ai) */}
+          {/* Card de Lentes de Ata por Template & Síntese Dinâmica (Padrão Soberano PCL) */}
           <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 dark:border-slate-800/80 pb-2.5">
               <div className="flex items-center space-x-2">
@@ -1169,7 +1169,7 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
                           setActiveTab('transcript');
                         }}
                         className="flex-shrink-0 inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 font-mono text-[10px] font-semibold transition cursor-pointer"
-                        title="Saltar gravação e transcrição para o minuto exato desta tarefa (Read.ai)"
+                        title="Saltar reprodução do áudio e transcrição para o minuto exato desta deliberação"
                       >
                         <Clock className="w-3 h-3 text-emerald-500" />
                         <span>{item.timestamp}</span>
