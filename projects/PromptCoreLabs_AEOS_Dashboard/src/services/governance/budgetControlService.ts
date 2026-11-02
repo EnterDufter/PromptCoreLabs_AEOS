@@ -1,7 +1,7 @@
 /**
- * PCL AEOS Enterprise AI Budget & Governance Engine
+ * PCL Cockpit Sovereign FinOps & Hard Budget Enforcement Engine
  * Implements real-time token spend tracking, department allocations, 
- * user quotas, and hard-lock enforcement inspired by Jumpad.ai.
+ * user quotas, and hardware-backed hard-lock enforcement.
  */
 
 export interface UserBudget {
@@ -30,6 +30,9 @@ export interface WorkspaceBudgetConfig {
   notifyAdminAtLimit: boolean;
   dailyAverageUSD: number;
   monthlyProjectionUSD: number;
+  sovereigntyRatioPercent: number;
+  dollarsSavedLocalUSD: number;
+  localTokensCount: number;
 }
 
 class BudgetControlService {
@@ -40,18 +43,21 @@ class BudgetControlService {
     hardLockEnabled: true,
     notifyAdminAtLimit: true,
     dailyAverageUSD: 174.50,
-    monthlyProjectionUSD: 5235.05
+    monthlyProjectionUSD: 5235.05,
+    sovereigntyRatioPercent: 88.4,
+    dollarsSavedLocalUSD: 1420.00,
+    localTokensCount: 42500000
   };
 
   private departments: DepartmentBudget[] = [
-    { id: 'tech', name: 'Tech', usersCount: 54, spendUSD: 1212.50, allocatedUSD: 2879.00 },
-    { id: 'sales', name: 'Sales', usersCount: 36, spendUSD: 1534.85, allocatedUSD: 2184.00 },
-    { id: 'founders', name: 'Founders', usersCount: 12, spendUSD: 1034.20, allocatedUSD: 3120.00 },
-    { id: 'product', name: 'Product', usersCount: 30, spendUSD: 387.60, allocatedUSD: 1248.00 },
-    { id: 'design', name: 'Design', usersCount: 30, spendUSD: 186.90, allocatedUSD: 998.00 },
-    { id: 'jumpad-core', name: 'PCL Core', usersCount: 36, spendUSD: 312.00, allocatedUSD: 780.00 },
-    { id: 'rd', name: 'R&D', usersCount: 18, spendUSD: 158.40, allocatedUSD: 390.00 },
-    { id: 'marketing', name: 'Marketing', usersCount: 24, spendUSD: 142.60, allocatedUSD: 281.00 }
+    { id: 'tech', name: 'Engenharia & IA Soberana', usersCount: 54, spendUSD: 1212.50, allocatedUSD: 2879.00 },
+    { id: 'governance', name: 'Governança & FinOps', usersCount: 18, spendUSD: 158.40, allocatedUSD: 390.00 },
+    { id: 'arch-cx', name: 'Arch Living & Design System', usersCount: 30, spendUSD: 186.90, allocatedUSD: 998.00 },
+    { id: 'sales', name: 'Vendas & Negócios', usersCount: 36, spendUSD: 1534.85, allocatedUSD: 2184.00 },
+    { id: 'executive', name: 'Diretoria Executiva (Board)', usersCount: 12, spendUSD: 1034.20, allocatedUSD: 3120.00 },
+    { id: 'product', name: 'Produto & Operações', usersCount: 30, spendUSD: 387.60, allocatedUSD: 1248.00 },
+    { id: 'pcl-core', name: 'PCL Core Enclave', usersCount: 36, spendUSD: 0.00, allocatedUSD: 780.00 },
+    { id: 'marketing', name: 'Marketing & Conteúdo', usersCount: 24, spendUSD: 142.60, allocatedUSD: 281.00 }
   ];
 
   private users: UserBudget[] = [
@@ -78,13 +84,20 @@ class BudgetControlService {
     return [...this.departments];
   }
 
+  public updateDepartmentAllocation(deptId: string, allocatedUSD: number): void {
+    const dept = this.departments.find(d => d.id === deptId);
+    if (dept) {
+      dept.allocatedUSD = allocatedUSD;
+    }
+  }
+
   public getUsersByDepartment(departmentId: string): UserBudget[] {
     return this.users.filter(u => u.departmentId === departmentId);
   }
 
   /**
    * Verifies if a user or workspace is allowed to execute a model call.
-   * If hard lock is active and limit is reached, blocks the execution.
+   * If hard lock is active and limit is reached, blocks the external paid execution.
    */
   public verifyExecutionAllowance(userId: string): { allowed: boolean; reason?: string } {
     if (!this.config.hardLockEnabled) {
@@ -94,7 +107,7 @@ class BudgetControlService {
     if (this.config.currentSpendUSD >= this.config.monthlyLimitUSD) {
       return { 
         allowed: false, 
-        reason: 'Trava Rígida Ativa (Hard Lock): O orçamento mensal corporativo de IA foi atingido ($19.200,00). Novas requisições estão bloqueadas para proteção financeira.' 
+        reason: 'Trava Rígida Ativa (Hard Lock): O orçamento mensal corporativo de IA foi atingido ($19.200,00). Chamadas externas estão bloqueadas e redirecionadas para inferência local a $0.00.' 
       };
     }
 
@@ -102,7 +115,7 @@ class BudgetControlService {
     if (user && user.spendUSD >= user.limitUSD) {
       return {
         allowed: false,
-        reason: `Trava Rígida Individual: O usuário ${user.name} atingiu 100% da sua cota mensal ($${user.limitUSD.toFixed(2)} USD). Solicite expansão ao administrador da Squad.`
+        reason: `Cota de Usuário Excedida: O usuário ${user.name} atingiu seu limite individual ($${user.limitUSD.toFixed(2)}).`
       };
     }
 

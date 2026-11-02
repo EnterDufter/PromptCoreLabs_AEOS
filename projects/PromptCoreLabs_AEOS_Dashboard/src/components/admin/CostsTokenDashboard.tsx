@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { 
   DollarSign, Cpu, TrendingDown, ShieldAlert, CheckCircle2, 
   ChevronDown, ChevronRight, Sliders, Users, AlertCircle, Edit2, 
-  X, Check, Lock, Sparkles, ShieldCheck, Scale, Zap, BarChart3
+  X, Check, Lock, Sparkles, ShieldCheck, Scale, Zap, BarChart3,
+  Download, FileSpreadsheet, HardDrive, RefreshCw
 } from 'lucide-react';
 import { budgetControlService, DepartmentBudget, UserBudget, WorkspaceBudgetConfig } from '../../services/governance/budgetControlService';
+import { useI18n } from '../../i18n/I18nContext';
 
 export const CostsTokenDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'budget'>('overview');
+  const { t } = useI18n();
+  const [activeTab, setActiveTab] = useState<'overview' | 'budget' | 'ledger'>('overview');
   const [config, setConfig] = useState<WorkspaceBudgetConfig>(budgetControlService.getConfig());
-  const [departments] = useState<DepartmentBudget[]>(budgetControlService.getDepartments());
+  const [departments, setDepartments] = useState<DepartmentBudget[]>(budgetControlService.getDepartments());
   const [expandedDept, setExpandedDept] = useState<string | null>('tech');
   const [showEditModal, setShowEditModal] = useState(false);
-  const [providerView, setProviderView] = useState<'providers' | 'models'>('providers');
+  const [providerView, setProviderView] = useState<'engines' | 'models'>('engines');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Modal editing temporary state
   const [tempLimit, setTempLimit] = useState(config.monthlyLimitUSD);
@@ -22,6 +26,11 @@ export const CostsTokenDashboard: React.FC = () => {
   const percentUsed = Math.round((config.currentSpendUSD / config.monthlyLimitUSD) * 100);
   const availableUSD = Math.max(0, config.monthlyLimitUSD - config.currentSpendUSD);
 
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   const handleSaveBudget = () => {
     const updated = budgetControlService.updateConfig({
       monthlyLimitUSD: tempLimit,
@@ -30,148 +39,269 @@ export const CostsTokenDashboard: React.FC = () => {
     });
     setConfig(updated);
     setShowEditModal(false);
+    showToast('Teto orçamentário e travas atualizadas com sucesso!');
+  };
+
+  const handleToggleHardLock = () => {
+    const nextState = !config.hardLockEnabled;
+    const updated = budgetControlService.updateConfig({ hardLockEnabled: nextState });
+    setConfig(updated);
+    showToast(nextState ? 'Trava Física Hard Lock ATIVADA!' : 'Trava Física Hard Lock DESATIVADA!');
+  };
+
+  const handleExportCSV = () => {
+    const csvContent = [
+      'Data/Hora UTC,Departamento,Tipo,Tokens Processados,Custo Real USD,Economia Soberana USD,Status',
+      `2026-11-02 20:00:00,Engenharia & IA Soberana,Ollama Local ($0.00),18450000,0.00,553.50,SOBERANO`,
+      `2026-11-02 19:45:00,Governança & FinOps,Laya FastMCP CPU INT8,12200000,0.00,366.00,SOBERANO`,
+      `2026-11-02 18:30:00,Arch Living & CX,Claude 3.5 Sonnet,2400000,48.00,0.00,CLOUD_API`,
+      `2026-11-02 17:15:00,Vendas & Negócios,GPT-4o Enterprise,3100000,62.00,0.00,CLOUD_API`
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `PCL_Cockpit_FinOps_Ledger_${Date.now()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast(t.finops.exportSuccess);
   };
 
   const usersInExpandedDept = expandedDept ? budgetControlService.getUsersByDepartment(expandedDept) : [];
 
   return (
-    <div className="space-y-6 text-xs text-slate-800 dark:text-slate-100 select-none">
+    <div className="space-y-6 text-xs text-slate-800 dark:text-slate-100 select-none pb-12">
+      {/* Toast Feedback */}
+      {toastMessage && (
+        <div className="p-3 rounded-xl bg-emerald-600 text-white flex items-center space-x-2 shadow-lg animate-in fade-in duration-150">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span className="font-semibold text-xs">{toastMessage}</span>
+        </div>
+      )}
+
       {/* Top Header Bar & Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">Controle Orçamentário & Governança de IA</h3>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Acompanhamento de consumo por modelo, rateio por squad e travas rígidas de faturamento.
-          </p>
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950 text-white border border-slate-800 shadow-md">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
+                <DollarSign className="w-4 h-4" />
+              </div>
+              <h2 className="text-base font-bold text-white tracking-tight">
+                {t.finops.title}
+              </h2>
+            </div>
+            <p className="text-slate-400 text-xs max-w-2xl leading-relaxed">
+              {t.finops.subtitle}
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleExportCSV}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition flex items-center space-x-1.5 border border-slate-700"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{t.finops.exportLedger}</span>
+            </button>
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center space-x-1.5 shadow-sm"
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              <span>Ajustar Teto</span>
+            </button>
+          </div>
         </div>
 
-        {/* Tab Pills */}
-        <div className="flex items-center space-x-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 self-start">
+        {/* Tab Navigation */}
+        <div className="flex items-center space-x-2 mt-5 pt-4 border-t border-slate-800/80">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeTab === 'overview'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-xs font-semibold'
-                : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                : 'bg-slate-950/60 text-slate-400 hover:text-white'
             }`}
           >
-            Visão Geral
+            Matriz de Soberania & Consumo
           </button>
           <button
             onClick={() => setActiveTab('budget')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeTab === 'budget'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-xs font-semibold'
-                : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                : 'bg-slate-950/60 text-slate-400 hover:text-white'
             }`}
           >
-            Orçamento & Alocação
+            Alocação por Squad & Usuários
+          </button>
+          <button
+            onClick={() => setActiveTab('ledger')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              activeTab === 'ledger'
+                ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                : 'bg-slate-950/60 text-slate-400 hover:text-white'
+            }`}
+          >
+            Atesto Imutável & Auditoria Contábil
           </button>
         </div>
       </div>
 
       {activeTab === 'overview' && (
-        <div className="space-y-4">
-          {/* Top 3 Metric Bento Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* 1. Orçamento Utilizado */}
-            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
-              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-                <span className="font-medium text-xs">Orçamento de IA utilizado</span>
-                <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">{percentUsed}%</span>
+        <div className="space-y-5">
+          {/* Bento Grid: 4 Cartões Principais de FinOps Soberano */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* 1. Sovereignty Ratio Card */}
+            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold block">
+                {t.finops.sovereigntyRatio}
+              </span>
+              <div className="flex items-baseline space-x-1.5">
+                <span className="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  {config.sovereigntyRatioPercent}%
+                </span>
+                <span className="text-[11px] text-slate-500">local</span>
               </div>
-              <div className="flex items-baseline justify-between pt-1">
-                <div>
-                  <span className="text-[10px] text-slate-400 block">Gasto este mês</span>
-                  <span className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
-                    ${config.currentSpendUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-400 block">Disponível</span>
-                  <span className="text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400">
-                    ${availableUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-              </div>
-              {/* Progress Bar */}
+              <p className="text-[10px] text-slate-500 leading-tight">
+                42.5M tokens resolvidos no host sem custos de API externa.
+              </p>
               <div className="w-full h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 <div 
-                  className={`h-full rounded-full transition-all duration-300 ${percentUsed > 90 ? 'bg-rose-500' : 'bg-slate-900 dark:bg-slate-100'}`}
-                  style={{ width: `${Math.min(100, percentUsed)}%` }}
+                  className="h-full bg-emerald-500 rounded-full" 
+                  style={{ width: `${config.sovereigntyRatioPercent}%` }}
                 />
               </div>
             </div>
 
-            {/* 2. Gasto Diário */}
-            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-1">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 block">Gasto diário médio</span>
-              <p className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100 pt-2">
-                ${config.dailyAverageUSD.toFixed(2)}
-              </p>
-              <span className="text-[10px] text-slate-400 font-sans block">
-                Média calculada sobre os últimos 25 dias operacionais
+            {/* 2. Dólares Poupados */}
+            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold block">
+                {t.finops.dollarsSaved}
               </span>
+              <div className="flex items-baseline space-x-1">
+                <span className="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  ${config.dollarsSavedLocalUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </span>
+                <span className="text-[11px] text-emerald-500 font-semibold">USD</span>
+              </div>
+              <p className="text-[10px] text-slate-500 leading-tight">
+                Equivalente poupado frente às tabelas de GPT-4o e Claude 3.5 Sonnet.
+              </p>
             </div>
 
-            {/* 3. Projeção do Mês */}
-            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-1">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 block">Projeção do mês</span>
-              <p className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100 pt-2">
-                ${config.monthlyProjectionUSD.toFixed(2)}
+            {/* 3. Invariante de Hardware (0 MB VRAM) */}
+            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-slate-400 uppercase font-bold block">
+                  {t.finops.vramCpu}
+                </span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              </div>
+              <div className="flex items-baseline space-x-1">
+                <span className="text-2xl font-bold font-mono text-indigo-600 dark:text-indigo-400">
+                  0 MB
+                </span>
+                <span className="text-[11px] text-slate-500 font-mono">CPU INT8</span>
+              </div>
+              <p className="text-[10px] text-slate-500 leading-tight">
+                Laya opera 100% em CPU host sem disputar VRAM com o Ollama na RTX 3050.
               </p>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block">
-                ✓ Dentro do limite teto de ${config.monthlyLimitUSD.toLocaleString('en-US')}
-              </span>
+            </div>
+
+            {/* 4. Trava Física Hard Lock */}
+            <div className={`p-4 rounded-2xl border shadow-xs space-y-2 transition ${
+              config.hardLockEnabled 
+                ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-500/50' 
+                : 'bg-amber-50/40 dark:bg-amber-950/20 border-amber-500/50'
+            }`}>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase font-bold text-slate-600 dark:text-slate-300">
+                  {config.hardLockEnabled ? 'Hard Lock Ativo' : 'Hard Lock Desativado'}
+                </span>
+                <button
+                  onClick={handleToggleHardLock}
+                  className={`p-1.5 rounded-lg border transition ${
+                    config.hardLockEnabled
+                      ? 'bg-emerald-600 text-white border-emerald-500'
+                      : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                  }`}
+                  title="Alternar Trava Rígida"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <div className="flex items-baseline space-x-1">
+                <span className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
+                  ${config.monthlyLimitUSD.toLocaleString('en-US')}
+                </span>
+                <span className="text-[10px] text-slate-400">teto</span>
+              </div>
+              <p className="text-[10px] text-slate-500 leading-tight">
+                {t.finops.hardLockDesc}
+              </p>
             </div>
           </div>
 
-          {/* Breakdown Section: Provedores/Modelos & Economia Local */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Gastos por Provedor / Modelo */}
-            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-xs text-slate-800 dark:text-slate-200">
-                  {providerView === 'providers' ? 'Gastos por provedor' : 'Gastos por modelo'}
-                </span>
+          {/* Breakdown Section: Provedores / Motores & Rateio por Squad */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            {/* Lado Esquerdo: Gastos por Motor (7 cols) */}
+            <div className="lg:col-span-7 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <BarChart3 className="w-4 h-4 text-emerald-500" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                    Consumo Consolidado por Motor de Inferência
+                  </h3>
+                </div>
                 <div className="flex items-center space-x-1">
                   <button
-                    onClick={() => setProviderView('providers')}
-                    className={`px-2 py-0.5 rounded text-[10px] transition ${
-                      providerView === 'providers'
-                        ? 'bg-slate-200 dark:bg-slate-800 font-semibold text-slate-800 dark:text-slate-200'
+                    onClick={() => setProviderView('engines')}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-semibold transition ${
+                      providerView === 'engines'
+                        ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                         : 'text-slate-400 hover:text-slate-600'
                     }`}
                   >
-                    Provedores
+                    Famílias
                   </button>
                   <button
                     onClick={() => setProviderView('models')}
-                    className={`px-2 py-0.5 rounded text-[10px] transition ${
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-semibold transition ${
                       providerView === 'models'
-                        ? 'bg-slate-200 dark:bg-slate-800 font-semibold text-slate-800 dark:text-slate-200'
+                        ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                         : 'text-slate-400 hover:text-slate-600'
                     }`}
                   >
-                    Modelos
+                    Modelos Individuais
                   </button>
                 </div>
               </div>
 
-              {providerView === 'providers' ? (
-                <div className="space-y-2">
+              {providerView === 'engines' ? (
+                <div className="space-y-3">
                   {[
-                    { name: 'Anthropic', models: '5 modelos ativos', spend: 4174.40, color: 'text-amber-600' },
-                    { name: 'Qwen / Alibaba', models: '4 modelos ativos', spend: 94.10, color: 'text-indigo-600' },
-                    { name: 'Grok / xAI', models: '3 modelos ativos', spend: 94.05, color: 'text-blue-600' }
-                  ].map((p, i) => (
-                    <div key={i} className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60 last:border-0">
-                      <div>
-                        <span className="font-medium text-xs text-slate-800 dark:text-slate-200 block">{p.name}</span>
-                        <span className="text-[10px] text-slate-400">{p.models}</span>
+                    { name: 'PCL Ollama Local Host', role: 'qwen2.5-coder:7b dedicado GPU', tokens: '28.5M tokens', spendUSD: 0.00, tag: 'SOBERANO $0.00', color: 'emerald' },
+                    { name: 'PCL Laya Coprocessor', role: 'FastMCP CPU INT8 (0 MB VRAM)', tokens: '14.0M tokens', spendUSD: 0.00, tag: 'SOBERANO $0.00', color: 'emerald' },
+                    { name: 'Anthropic Direct', role: 'Claude 3.5 Sonnet (Design & QA)', tokens: '4.8M tokens', spendUSD: 142.50, tag: 'CLOUD API', color: 'indigo' },
+                    { name: 'OpenAI Enterprise', role: 'GPT-4o (Stage Gate QA)', tokens: '3.2M tokens', spendUSD: 96.00, tag: 'CLOUD API', color: 'indigo' }
+                  ].map((engine, idx) => (
+                    <div key={idx} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{engine.name}</span>
+                          <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
+                            engine.spendUSD === 0 ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400' : 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
+                          }`}>
+                            {engine.tag}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-slate-500">{engine.role} • {engine.tokens}</span>
                       </div>
-                      <span className="font-mono font-semibold text-xs text-slate-800 dark:text-slate-200">
-                        ${p.spend.toFixed(2)}
+                      <span className="font-mono font-bold text-xs text-slate-800 dark:text-slate-200">
+                        ${engine.spendUSD.toFixed(2)} USD
                       </span>
                     </div>
                   ))}
@@ -179,18 +309,17 @@ export const CostsTokenDashboard: React.FC = () => {
               ) : (
                 <div className="space-y-2">
                   {[
-                    { name: 'claude-sonnet-4-5', provider: 'Anthropic', spend: 860.20 },
-                    { name: 'Qwen3.8-Max', provider: 'Qwen', spend: 94.10 },
-                    { name: 'Grok 4.7', provider: 'Grok', spend: 58.40 },
-                    { name: 'Grok 4.5', provider: 'Grok', spend: 35.65 },
-                    { name: 'gpt-4.1-nano', provider: 'OpenAI', spend: 12.35 }
-                  ].map((m, i) => (
-                    <div key={i} className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60 last:border-0">
+                    { name: 'qwen2.5-coder:7b-instruct-q4_K_M', provider: 'Local Host (:11434)', spend: 0.00, tokens: '28.5M' },
+                    { name: 'cross-encoder/nli-MiniLM2-L6-H768', provider: 'Laya (:20140)', spend: 0.00, tokens: '14.0M' },
+                    { name: 'claude-3-5-sonnet-20241022', provider: 'Anthropic', spend: 142.50, tokens: '4.8M' },
+                    { name: 'gpt-4o-2024-08-06', provider: 'OpenAI', spend: 96.00, tokens: '3.2M' }
+                  ].map((m, idx) => (
+                    <div key={idx} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0 font-mono text-[11px]">
                       <div>
-                        <span className="font-medium text-xs text-slate-800 dark:text-slate-200 block font-mono">{m.name}</span>
-                        <span className="text-[10px] text-slate-400">{m.provider}</span>
+                        <span className="font-bold text-slate-800 dark:text-slate-200 block">{m.name}</span>
+                        <span className="text-[10px] text-slate-400 font-sans">{m.provider} • {m.tokens}</span>
                       </div>
-                      <span className="font-mono font-semibold text-xs text-slate-800 dark:text-slate-200">
+                      <span className={`font-bold ${m.spend === 0 ? 'text-emerald-500' : 'text-slate-700 dark:text-slate-300'}`}>
                         ${m.spend.toFixed(2)}
                       </span>
                     </div>
@@ -199,357 +328,206 @@ export const CostsTokenDashboard: React.FC = () => {
               )}
             </div>
 
-            {/* Economia Estratégica Soberana */}
-            <div className="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/70 dark:border-emerald-800/60 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-xs text-emerald-800 dark:text-emerald-300 flex items-center space-x-1.5">
-                  <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Economia Roteamento Local ($0.00)</span>
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 font-bold">
-                  95.2% Local
-                </span>
-              </div>
-              <p className="text-2xl font-bold font-mono text-emerald-900 dark:text-emerald-200">
-                $850.00 USD Poupados
-              </p>
-              <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400 leading-relaxed">
-                42.5M tokens processados em CPU local via Laya e Ollama privado, sem chamadas a APIs pagas de nuvem e com proteção de dados ponta a ponta.
-              </p>
-
-              {/* Invariantes de Hardware & Telemetria Laya */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-emerald-200/50 dark:border-emerald-800/40 text-[10px] font-mono text-emerald-800 dark:text-emerald-300">
-                <div className="bg-white/60 dark:bg-slate-900/60 p-1.5 rounded-lg border border-emerald-200/60 dark:border-emerald-800/60">
-                  <span className="text-slate-400 block text-[9px]">VRAM CPU:</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">0 MB (INT8)</span>
+            {/* Lado Direito: Rateio por Squad Corporativo (5 cols) */}
+            <div className="lg:col-span-5 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Users className="w-4 h-4 text-indigo-500" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                    {t.finops.squadAllocation}
+                  </h3>
                 </div>
-                <div className="bg-white/60 dark:bg-slate-900/60 p-1.5 rounded-lg border border-emerald-200/60 dark:border-emerald-800/60">
-                  <span className="text-slate-400 block text-[9px]">Latência Laya:</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">22.4ms O(1)</span>
-                </div>
-                <div className="bg-white/60 dark:bg-slate-900/60 p-1.5 rounded-lg border border-emerald-200/60 dark:border-emerald-800/60">
-                  <span className="text-slate-400 block text-[9px]">Triagem Zero-Token:</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">38.2k gates</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Card Comparativo Imparcial de Custo Corporativo (Sexy Canvas: Ira / Avareza / Soberania) */}
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-2.5">
-              <div className="flex items-center space-x-2">
-                <Scale className="w-4 h-4 text-emerald-500" />
-                <span className="font-bold text-xs text-slate-900 dark:text-slate-100">
-                  Avaliação Técnica Imparcial de Custos: Nuvem por Assento vs. Modo Híbrido PCL AEOS
+                <span className="text-[10px] font-mono text-slate-400 font-bold">
+                  {departments.length} Squads
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200/60 dark:border-emerald-800/60">
-                -46.8% de Custo Real
-              </span>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              {/* Modelo Big Tech SaaS Fechado */}
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-xs text-slate-700 dark:text-slate-300">
-                    Plataformas SaaS Tradicionais (Por Usuário)
-                  </span>
-                  <span className="text-[10px] font-mono text-rose-500 font-bold">Fatura Recorrente em Dólar</span>
-                </div>
-                <div className="space-y-1.5 text-[11px] text-slate-500 dark:text-slate-400">
-                  <div className="flex justify-between">
-                    <span>• 150 Assentos Corporativos ($30/mês/user):</span>
-                    <span className="font-mono font-semibold text-slate-700 dark:text-slate-300">$4,500.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>• Tokens de Nuvem Opaca (Sem Gating CPU):</span>
-                    <span className="font-mono font-semibold text-slate-700 dark:text-slate-300">$3,700.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>• Retenção e Gravação Restrita (Paywalls 🔒):</span>
-                    <span className="font-mono text-rose-500">Inclusa com Travas</span>
-                  </div>
-                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-xs text-slate-800 dark:text-slate-200">
-                    <span>Custo Estimado Mercado:</span>
-                    <span className="font-mono text-rose-600 dark:text-rose-400">$8,200.00 / mês</span>
-                  </div>
-                </div>
+              <div className="space-y-3">
+                {departments.slice(0, 5).map(dept => {
+                  const deptPercent = Math.round((dept.spendUSD / (dept.allocatedUSD || 1)) * 100);
+                  return (
+                    <div key={dept.id} className="space-y-1.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/60">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-xs text-slate-800 dark:text-slate-200">
+                          {dept.name}
+                        </span>
+                        <span className="font-mono text-xs font-bold text-slate-700 dark:text-slate-300">
+                          ${dept.spendUSD.toFixed(2)} / ${dept.allocatedUSD.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${deptPercent > 80 ? 'bg-amber-500' : 'bg-indigo-600'}`}
+                          style={{ width: `${Math.min(100, deptPercent)}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-
-              {/* Modelo Híbrido Soberano PCL AEOS */}
-              <div className="p-3.5 rounded-xl bg-emerald-50/30 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-800/80 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-xs text-emerald-800 dark:text-emerald-300 flex items-center space-x-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>PCL Cockpit Híbrido Soberano</span>
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">BYOS + $0.00 Local</span>
-                </div>
-                <div className="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-300">
-                  <div className="flex justify-between">
-                    <span>• 150 Usuários Soberanos no Cockpit:</span>
-                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">$0.00 (Ilimitado)</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>• Coprocessamento Laya INT8 em CPU:</span>
-                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">$0.00 (0 MB VRAM)</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>• Modelos Generativos de Nuvem (Só Alta Complexidade):</span>
-                    <span className="font-mono font-semibold text-slate-800 dark:text-slate-200">$4,362.55</span>
-                  </div>
-                  <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/80 flex justify-between font-bold text-xs text-emerald-800 dark:text-emerald-300">
-                    <span>Custo Real PCL AEOS:</span>
-                    <span className="font-mono text-emerald-600 dark:text-emerald-400">$4,362.55 / mês</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500">
-              <span className="flex items-center space-x-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Economia Líquida de <strong>$3,837.45 USD por mês</strong> com proteção LGPD total e zero resíduo em servidores externos.</span>
-              </span>
-              <span className="font-mono text-[10px] font-semibold text-slate-600 dark:text-slate-400">Teto Hard Lock: $19,200.00</span>
             </div>
           </div>
         </div>
       )}
 
+      {/* ABA: ALOCAÇÃO POR SQUAD & USUÁRIOS */}
       {activeTab === 'budget' && (
         <div className="space-y-4">
-          {/* Corporate Budget Overview Card */}
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Orçamento de IA da empresa</span>
-                {config.hardLockEnabled && (
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-medium flex items-center space-x-1">
-                    <Lock className="w-3 h-3" />
-                    <span>Hard Lock Ativo</span>
-                  </span>
-                )}
-              </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-1">
-                ${config.monthlyLimitUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                <span className="text-xs font-normal text-slate-400 ml-1.5 font-sans">/ mensal</span>
-              </div>
-              <div className="flex items-center space-x-3 text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-mono">
-                <span>Alocado: ${config.allocatedUSD.toLocaleString('en-US')}</span>
-                <span>•</span>
-                <span>Gasto este mês: ${config.currentSpendUSD.toFixed(2)}</span>
-                <span>•</span>
-                <span className="text-emerald-600 dark:text-emerald-400">Disponível: ${availableUSD.toFixed(2)}</span>
-              </div>
-            </div>
+          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              Gestão de Cotas por Departamento e Líder
+            </h3>
+            <p className="text-xs text-slate-500">
+              Clique em um squad para expandir e auditar o consumo individual dos membros da equipe.
+            </p>
 
+            <div className="space-y-2">
+              {departments.map(dept => (
+                <div key={dept.id} className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                  <div
+                    onClick={() => setExpandedDept(expandedDept === dept.id ? null : dept.id)}
+                    className="p-3.5 bg-slate-50 dark:bg-slate-950/60 flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  >
+                    <div className="flex items-center space-x-2">
+                      {expandedDept === dept.id ? <ChevronDown className="w-4 h-4 text-slate-400" /> : <ChevronRight className="w-4 h-4 text-slate-400" />}
+                      <span className="font-bold text-xs text-slate-800 dark:text-slate-200">{dept.name}</span>
+                      <span className="text-[10px] text-slate-400 font-mono">({dept.usersCount} membros)</span>
+                    </div>
+                    <span className="font-mono font-bold text-xs">
+                      ${dept.spendUSD.toFixed(2)} de ${dept.allocatedUSD.toFixed(2)}
+                    </span>
+                  </div>
+
+                  {expandedDept === dept.id && (
+                    <div className="p-3 bg-white dark:bg-slate-900 space-y-2 border-t border-slate-200 dark:border-slate-800">
+                      {usersInExpandedDept.map(u => (
+                        <div key={u.id} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40 text-xs">
+                          <div>
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{u.name}</span>
+                            <span className="text-[10px] text-slate-400 block">{u.email}</span>
+                          </div>
+                          <div className="text-right font-mono">
+                            <span className="font-bold text-slate-700 dark:text-slate-300">${u.spendUSD.toFixed(2)}</span>
+                            <span className="text-slate-400 text-[10px]"> / ${u.limitUSD.toFixed(2)}</span>
+                          </div>
+                        </div>
+                      ))}
+                      {usersInExpandedDept.length === 0 && (
+                        <p className="text-xs text-slate-400 py-2 text-center">Nenhum membro detalhado neste squad.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ABA: ATESTO IMUTÁVEL & AUDITORIA CONTÁBIL */}
+      {activeTab === 'ledger' && (
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div>
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                Certificação Criptográfica de Custos & Economia Soberana
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Relatório com atesto SHA-256 para comprovação contábil perante a controladoria e auditorias externas.
+              </p>
+            </div>
             <button
-              onClick={() => {
-                setTempLimit(config.monthlyLimitUSD);
-                setTempHardLock(config.hardLockEnabled);
-                setTempNotify(config.notifyAdminAtLimit);
-                setShowEditModal(true);
-              }}
-              className="px-3.5 py-2 rounded-lg bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-medium text-xs hover:opacity-90 transition flex items-center space-x-1.5 self-start"
+              onClick={handleExportCSV}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center space-x-1.5 shadow-sm"
             >
-              <Edit2 className="w-3.5 h-3.5" />
-              <span>Editar Orçamento</span>
+              <Download className="w-3.5 h-3.5" />
+              <span>Baixar Relatório Contábil (.csv)</span>
             </button>
           </div>
 
-          {/* Departmental Allocation List */}
-          <div className="space-y-2">
-            <h4 className="font-semibold text-xs text-slate-700 dark:text-slate-300 pt-2">
-              Alocação por Departamento e Squad
-            </h4>
-
-            <div className="space-y-2">
-              {departments.map(dept => {
-                const isExpanded = expandedDept === dept.id;
-                const deptPercent = Math.min(100, Math.round((dept.spendUSD / dept.allocatedUSD) * 100));
-
-                return (
-                  <div
-                    key={dept.id}
-                    className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden transition"
-                  >
-                    {/* Header Row */}
-                    <div 
-                      onClick={() => setExpandedDept(isExpanded ? null : dept.id)}
-                      className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition"
-                    >
-                      <div className="flex items-center space-x-2.5">
-                        <button className="text-slate-400">
-                          {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                        </button>
-                        <div>
-                          <span className="font-semibold text-xs text-slate-800 dark:text-slate-200">{dept.name}</span>
-                          <span className="text-[10px] text-slate-400 block">{dept.usersCount} colaboradores</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right">
-                          <span className="font-mono text-xs font-semibold text-slate-800 dark:text-slate-200">
-                            ${dept.spendUSD.toFixed(1)} / ${dept.allocatedUSD.toFixed(0)}
-                          </span>
-                          <div className="w-24 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 mt-1 overflow-hidden">
-                            <div 
-                              className={`h-full rounded-full ${deptPercent > 85 ? 'bg-amber-500' : 'bg-slate-900 dark:bg-slate-200'}`}
-                              style={{ width: `${deptPercent}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Expanded Users Drill-down */}
-                    {isExpanded && (
-                      <div className="px-4 py-3 bg-slate-50/60 dark:bg-slate-950/40 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
-                        <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                          Consumo Individual — {dept.name}
-                        </div>
-
-                        {usersInExpandedDept.map(u => {
-                          const uPercent = Math.min(100, Math.round((u.spendUSD / u.limitUSD) * 100));
-                          return (
-                            <div 
-                              key={u.id}
-                              className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between"
-                            >
-                              <div className="flex items-center space-x-2.5">
-                                <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] font-bold flex items-center justify-center text-slate-600 dark:text-slate-300">
-                                  {u.name.slice(0, 2).toUpperCase()}
-                                </div>
-                                <div>
-                                  <span className="font-medium text-xs text-slate-800 dark:text-slate-200 block">{u.name}</span>
-                                  <span className="text-[10px] text-slate-400">{u.email}</span>
-                                </div>
-                              </div>
-
-                              <div className="flex items-center space-x-3">
-                                <div className="text-right">
-                                  <span className="font-mono text-xs text-slate-700 dark:text-slate-300">
-                                    ${u.spendUSD.toFixed(1)} / ${u.limitUSD.toFixed(0)}
-                                  </span>
-                                  <div className="w-20 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 mt-0.5 overflow-hidden">
-                                    <div 
-                                      className={`h-full rounded-full ${uPercent >= 100 ? 'bg-rose-500' : uPercent > 70 ? 'bg-amber-500' : 'bg-slate-800 dark:bg-slate-200'}`}
-                                      style={{ width: `${uPercent}%` }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="p-4 rounded-xl bg-slate-950 text-slate-200 font-mono text-xs border border-slate-800 space-y-2">
+            <span className="text-emerald-400 font-bold block">--- [PCL COCKPIT] TERMO DE CONFORMIDADE FINOPS SOBERANA ---</span>
+            <p>Hash Raiz Merkle do Enclave: <span className="text-indigo-400">0x7f8a9b2c3d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a</span></p>
+            <p>Taxa de Soberania Comprovada: <span className="text-emerald-400">88.4%</span> local ($0.00 faturado)</p>
+            <p>Total de Dólares Poupados no Mês: <span className="text-emerald-400">$1,420.00 USD</span></p>
+            <p>Alocação de VRAM CPU: <span className="text-emerald-400">0 MB</span> (Laya INT8 em CPUExecutionProvider)</p>
+            <p>Status de Hard Lock: <span className="text-emerald-400">HOMOLOGADO & ATIVO</span></p>
           </div>
         </div>
       )}
 
-      {/* Modal: Editar Orçamento da Empresa */}
+      {/* MODAL: AJUSTAR TETO ORÇAMENTÁRIO */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-5 space-y-4 animate-in fade-in duration-150">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-              <div>
-                <h4 className="font-semibold text-sm text-slate-900 dark:text-slate-100">Editar orçamento de IA</h4>
-                <p className="text-[11px] text-slate-400">Defina um limite mensal de gastos para todo o workspace.</p>
-              </div>
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl max-w-md w-full p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                Ajustar Limites do Workspace
+              </h3>
               <button 
                 onClick={() => setShowEditModal(false)}
-                className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Slider e Input de Limite Mensal */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-700 dark:text-slate-300 block">
-                Orçamento mensal (USD) *
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-2 text-slate-400 font-mono">$</span>
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Limite Mensal Máximo (USD)
+                </label>
                 <input
                   type="number"
                   value={tempLimit}
-                  onChange={e => setTempLimit(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-7 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-mono text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-slate-400"
+                  onChange={e => setTempLimit(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-emerald-500 font-mono text-slate-800 dark:text-slate-100"
                 />
               </div>
-              {/* Range Slider */}
-              <input
-                type="range"
-                min={2000}
-                max={50000}
-                step={500}
-                value={tempLimit}
-                onChange={e => setTempLimit(parseFloat(e.target.value))}
-                className="w-full accent-slate-900 dark:accent-slate-100 cursor-pointer"
-              />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                <span>$2,000</span>
-                <span>$25,000</span>
-                <span>$50,000</span>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-800 dark:text-slate-200">Trava Rígida (Hard Lock)</span>
+                  <input
+                    type="checkbox"
+                    checked={tempHardLock}
+                    onChange={e => setTempHardLock(e.target.checked)}
+                    className="rounded text-emerald-600 focus:ring-emerald-500"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Bloqueia requisições a APIs pagas imediatamente após atingir 100% do limite.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-800 dark:text-slate-200">Alertar Administrador por Email</span>
+                  <input
+                    type="checkbox"
+                    checked={tempNotify}
+                    onChange={e => setTempNotify(e.target.checked)}
+                    className="rounded text-emerald-600 focus:ring-emerald-500"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Envia alerta preventivo quando o consumo atingir 80% do teto.
+                </p>
               </div>
             </div>
 
-            {/* Toggle 1: Notificar Admin */}
-            <div className="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30 flex items-center justify-between">
-              <div>
-                <span className="font-medium text-xs text-slate-800 dark:text-slate-200 block">Notificar admin no limite</span>
-                <span className="text-[10px] text-slate-400">Envia alerta quando o gasto atingir 90% do orçamento.</span>
-              </div>
-              <input
-                type="checkbox"
-                checked={tempNotify}
-                onChange={e => setTempNotify(e.target.checked)}
-                className="w-4 h-4 accent-slate-900 dark:accent-slate-100 rounded"
-              />
-            </div>
-
-            {/* Toggle 2: Hard Lock (Budget Control) */}
-            <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-start justify-between space-x-3">
-              <div>
-                <span className="font-semibold text-xs text-slate-900 dark:text-slate-100 flex items-center space-x-1.5">
-                  <Lock className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Habilitar Budget Control (Hard Lock)</span>
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight block mt-0.5">
-                  Quando habilitado, usuários e departamentos que excederem seus limites de orçamento serão bloqueados imediatamente de usar IA.
-                </span>
-              </div>
-              <input
-                type="checkbox"
-                checked={tempHardLock}
-                onChange={e => setTempHardLock(e.target.checked)}
-                className="w-4 h-4 mt-1 accent-emerald-600 rounded"
-              />
-            </div>
-
-            {/* Modal Actions */}
-            <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSaveBudget}
-                className="px-4 py-1.5 rounded-lg bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-medium text-xs hover:opacity-90 transition"
+                className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition"
               >
-                Salvar Orçamento
+                Salvar Configurações
               </button>
             </div>
           </div>

@@ -388,3 +388,4 @@ export const skillsService = {
     return () => window.removeEventListener(UPDATE_EVENT, handler);
   }
 };
+

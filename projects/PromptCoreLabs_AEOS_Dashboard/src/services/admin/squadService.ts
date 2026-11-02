@@ -271,3 +271,4 @@ export const squadService = {
     return () => window.removeEventListener(UPDATE_EVENT, handler);
   }
 };
+

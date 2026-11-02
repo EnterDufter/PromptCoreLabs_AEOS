@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Bot, Cpu, Sparkles, CheckCircle, Save, Plus, ArrowRight, ArrowLeft, 
-  ShieldCheck, Zap, DollarSign, HelpCircle, Layers, Users, ExternalLink, 
+import {
+  Bot, Cpu, Sparkles, CheckCircle, Save, Plus, ArrowRight, ArrowLeft,
+  ShieldCheck, Zap, DollarSign, HelpCircle, Layers, Users, ExternalLink,
   Lock, Check, Palette, FileText, CheckCircle2
 } from 'lucide-react';
 import { squadService, SquadDefinition } from '../../services/admin/squadService';
@@ -10,7 +10,7 @@ import { skillsService } from '../../services/admin/skillsService';
 export const NoCodeAgentBuilder: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [squads, setSquads] = useState<SquadDefinition[]>(squadService.getSquads());
-  
+
   // Step 1: Identity & Mission
   const [agentName, setAgentName] = useState('');
   const [targetSquadId, setTargetSquadId] = useState(squads[0]?.id || '');
@@ -126,13 +126,12 @@ export const NoCodeAgentBuilder: React.FC = () => {
             <div
               key={st.step}
               onClick={() => !isPublished && setCurrentStep(st.step)}
-              className={`p-2.5 rounded-xl border text-center transition cursor-pointer ${
-                currentStep === st.step
+              className={`p-2.5 rounded-xl border text-center transition cursor-pointer ${currentStep === st.step
                   ? 'bg-indigo-600 text-white border-indigo-400 shadow-sm font-bold'
                   : currentStep > st.step
-                  ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 font-medium'
-                  : 'bg-slate-950/40 border-slate-800 text-slate-500 hover:text-slate-300'
-              }`}
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 font-medium'
+                    : 'bg-slate-950/40 border-slate-800 text-slate-500 hover:text-slate-300'
+                }`}
             >
               <span className="text-[11px] block truncate">{st.label}</span>
             </div>
@@ -224,11 +223,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
                       setSelectedEngine('local');
                       setSelectedModel('Ollama qwen2.5-coder:7b-instruct-q4_K_M');
                     }}
-                    className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${
-                      selectedEngine === 'local'
+                    className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${selectedEngine === 'local'
                         ? 'bg-emerald-50/50 dark:bg-emerald-950/30 border-emerald-500 ring-2 ring-emerald-500/20'
                         : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 opacity-70'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -251,11 +249,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
                       setSelectedEngine('cloud');
                       setSelectedModel('Claude 3.5 Sonnet');
                     }}
-                    className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${
-                      selectedEngine === 'cloud'
+                    className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${selectedEngine === 'cloud'
                         ? 'bg-indigo-50/50 dark:bg-indigo-950/30 border-indigo-500 ring-2 ring-indigo-500/20'
                         : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 opacity-70'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -333,11 +330,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
                       <div
                         key={sk.key}
                         onClick={() => toggleSkill(sk.key)}
-                        className={`p-3 rounded-xl border cursor-pointer transition flex items-start justify-between space-x-2 ${
-                          isChecked
+                        className={`p-3 rounded-xl border cursor-pointer transition flex items-start justify-between space-x-2 ${isChecked
                             ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500/20'
                             : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                        }`}
+                          }`}
                       >
                         <div className="space-y-0.5">
                           <span className="font-bold text-xs text-slate-900 dark:text-slate-100 block">
@@ -421,11 +417,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
               <button
                 onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
                 disabled={currentStep === 1}
-                className={`px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 font-semibold transition flex items-center space-x-1.5 ${
-                  currentStep === 1
+                className={`px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 font-semibold transition flex items-center space-x-1.5 ${currentStep === 1
                     ? 'text-slate-300 dark:text-slate-700 cursor-not-allowed'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
+                  }`}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Voltar</span>
@@ -435,11 +430,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
                 <button
                   onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
                   disabled={!agentName.trim() && currentStep === 1}
-                  className={`px-5 py-2 rounded-xl font-bold text-white transition flex items-center space-x-1.5 ${
-                    agentName.trim() || currentStep > 1
+                  className={`px-5 py-2 rounded-xl font-bold text-white transition flex items-center space-x-1.5 ${agentName.trim() || currentStep > 1
                       ? 'bg-indigo-600 hover:bg-indigo-500 shadow-sm'
                       : 'bg-slate-400 cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   <span>Próximo Passo</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -467,11 +461,10 @@ export const NoCodeAgentBuilder: React.FC = () => {
             <div className="p-4 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 space-y-3.5 shadow-xs">
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-2.5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${
-                    selectedEngine === 'local'
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${selectedEngine === 'local'
                       ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                       : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30'
-                  }`}>
+                    }`}>
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>

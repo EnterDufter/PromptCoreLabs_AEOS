@@ -85,13 +85,43 @@ export interface Translations {
     copyCitation: string;
     citationCopied: string;
   };
+  finops: {
+    title: string;
+    subtitle: string;
+    sovereigntyRatio: string;
+    dollarsSaved: string;
+    vramCpu: string;
+    vramAllocated: string;
+    hardLockActive: string;
+    hardLockDesc: string;
+    spendThisMonth: string;
+    availableBudget: string;
+    dailyAverage: string;
+    projectedMonth: string;
+    squadAllocation: string;
+    exportLedger: string;
+    exportSuccess: string;
+  };
+  audit: {
+    title: string;
+    subtitle: string;
+    exportDossier: string;
+    verifyChain: string;
+    chainIntact: string;
+    tamperDetected: string;
+    toolCallsTitle: string;
+    zeroBinVerified: string;
+    officialStandards: string;
+    downloadSuccess: string;
+    generateReport: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
   pt: {
     header: {
       telemetry: 'Telemetria & Status',
-      version: 'v3.6.0 PROD',
+      version: 'v3.7.0 PROD',
       cortexArchitect: 'Cortex Canvas',
       chatStream: 'Chat Stream',
       dualPlex: 'Dual-Plex (Split)',
@@ -116,7 +146,7 @@ export const translations: Record<Language, Translations> = {
     },
     settings: {
       title: 'Painel Geral de Configurações & Governança',
-      subtitle: 'PCL AEOS Administration Center',
+      subtitle: 'PCL Cockpit Administration Center',
       close: 'Fechar (Esc)',
       cancel: 'Cancelar',
       save: 'Salvar Configurações',
@@ -124,10 +154,10 @@ export const translations: Record<Language, Translations> = {
       general: 'Geral & Idioma',
       security: 'Segurança & Sessões',
       integrations: 'Conexões & MCPs',
-      costs: 'Custos & Tokens Híbridos',
+      costs: 'FinOps & Teto Orçamentário',
       squads: 'Squads & Agentes',
       skills: 'Gestor de Skills',
-      audit: 'Audit ISO & Conselho',
+      audit: 'Audit ISO & Dossiê',
       nocode: 'Criador No-Code',
       languageTitle: 'Idioma da Interface (Internationalization)',
       languageSubtitle: 'Selecione o idioma de navegação para todos os menus, rótulos e diálogos do PCL Cockpit.',
@@ -139,7 +169,7 @@ export const translations: Record<Language, Translations> = {
       enclaveActive: 'Enclave de Governança Ativo • Criptografia AES-256-GCM • SHA-256'
     },
     composer: {
-      placeholder: 'Pergunte ao PCL AEOS ou use @ para sistemas corporativos e # para documentos...',
+      placeholder: 'Pergunte ao PCL Cockpit ou use @ para sistemas corporativos e # para documentos...',
       web: 'Web',
       send: 'Enviar',
       audioWhisper: 'Áudio Local (Whisper)',
@@ -172,12 +202,42 @@ export const translations: Record<Language, Translations> = {
       sourcesConsulted: 'Fontes Consultadas',
       copyCitation: 'Copiar Citação',
       citationCopied: 'Citação copiada!'
+    },
+    finops: {
+      title: 'Livro-Razão FinOps Soberano & Controle Orçamentário',
+      subtitle: 'Auditoria de custos marginais locais ($0.00), consumo de nuvem externa e trava física rígida (Hard Lock).',
+      sovereigntyRatio: 'Taxa de Soberania Local ($0.00 Host)',
+      dollarsSaved: 'Dólares Poupados Este Mês',
+      vramCpu: 'Invariante de VRAM CPU',
+      vramAllocated: '0 MB VRAM (CPU INT8)',
+      hardLockActive: 'Trava Física Hard Lock Ativa',
+      hardLockDesc: 'Suspende automaticamente chamadas a APIs externas ao atingir 100% do teto, redirecionando o tráfego para a inferência local.',
+      spendThisMonth: 'Gasto Consolidado no Mês',
+      availableBudget: 'Saldo Disponível',
+      dailyAverage: 'Média Diária',
+      projectedMonth: 'Projeção de Faturamento',
+      squadAllocation: 'Rateio Orçamentário por Squad',
+      exportLedger: 'Exportar Livro-Razão FinOps (.csv)',
+      exportSuccess: 'Relatório Contábil exportado com sucesso!'
+    },
+    audit: {
+      title: 'Painel de Governança, Compliance & Audit Trail Imutável',
+      subtitle: 'Auditoria formal em conformidade com as normas ISO 27001, ISO 42001, EU AI Act e LGPD.',
+      exportDossier: 'Gerar Dossiê de Auditoria ISO / Conselho',
+      verifyChain: 'Recalcular Integridade da Cadeia SHA-256',
+      chainIntact: 'Cadeia Criptográfica Auditada: 100% Íntegra • Zero Adulterações',
+      tamperDetected: 'Alerta de Auditoria: Inconsistência na assinatura SHA-256 detectada!',
+      toolCallsTitle: 'Rastreabilidade Criptográfica de Tool Calls (Sistemas Externos)',
+      zeroBinVerified: 'Segredo Corporativo Blindado (Resíduo Zero / BYOS)',
+      officialStandards: 'Normas de Conformidade Ativas',
+      downloadSuccess: 'Dossiê Oficial gerado e baixado com sucesso!',
+      generateReport: 'Baixar Parecer Executivo do Conselho'
     }
   },
   en: {
     header: {
       telemetry: 'Telemetry & Status',
-      version: 'v3.6.0 PROD',
+      version: 'v3.7.0 PROD',
       cortexArchitect: 'Cortex Canvas',
       chatStream: 'Chat Stream',
       dualPlex: 'Dual-Plex (Split)',
@@ -202,7 +262,7 @@ export const translations: Record<Language, Translations> = {
     },
     settings: {
       title: 'General Settings & Governance Panel',
-      subtitle: 'PCL AEOS Administration Center',
+      subtitle: 'PCL Cockpit Administration Center',
       close: 'Close (Esc)',
       cancel: 'Cancel',
       save: 'Save Changes',
@@ -210,10 +270,10 @@ export const translations: Record<Language, Translations> = {
       general: 'General & Language',
       security: 'Security & Sessions',
       integrations: 'Connections & MCPs',
-      costs: 'Hybrid Costs & Tokens',
+      costs: 'FinOps & Budget Hard Lock',
       squads: 'Squads & Agents',
       skills: 'Skills Manager',
-      audit: 'ISO Audit & Advisory',
+      audit: 'ISO Audit & Dossier',
       nocode: 'No-Code Builder',
       languageTitle: 'Interface Language (Internationalization)',
       languageSubtitle: 'Select your preferred language across all menus, labels, and dialogs in PCL Cockpit.',
@@ -225,7 +285,7 @@ export const translations: Record<Language, Translations> = {
       enclaveActive: 'Governance Enclave Active • AES-256-GCM Encryption • SHA-256'
     },
     composer: {
-      placeholder: 'Ask PCL AEOS or use @ for enterprise systems and # for documents...',
+      placeholder: 'Ask PCL Cockpit or use @ for enterprise systems and # for documents...',
       web: 'Web',
       send: 'Send',
       audioWhisper: 'Local Audio (Whisper)',
@@ -258,12 +318,42 @@ export const translations: Record<Language, Translations> = {
       sourcesConsulted: 'Sources Consulted',
       copyCitation: 'Copy Citation',
       citationCopied: 'Citation copied!'
+    },
+    finops: {
+      title: 'Sovereign FinOps Ledger & Budget Enforcer',
+      subtitle: 'Auditing local marginal costs ($0.00), external cloud spend, and hardware budget hard lock.',
+      sovereigntyRatio: 'Local Sovereignty Ratio ($0.00 Host)',
+      dollarsSaved: 'Dollars Saved This Month',
+      vramCpu: 'CPU VRAM Physical Invariant',
+      vramAllocated: '0 MB VRAM (CPU INT8)',
+      hardLockActive: 'Physical Hard Lock Active',
+      hardLockDesc: 'Automatically suspends external cloud calls at 100% budget cap, seamlessly routing traffic to local sovereign models.',
+      spendThisMonth: 'Consolidated Spend This Month',
+      availableBudget: 'Available Balance',
+      dailyAverage: 'Daily Average',
+      projectedMonth: 'Projected Monthly Spend',
+      squadAllocation: 'Budget Allocation by Squad',
+      exportLedger: 'Export FinOps Ledger (.csv)',
+      exportSuccess: 'Accounting report exported successfully!'
+    },
+    audit: {
+      title: 'Governance, Compliance & Immutable Audit Trail',
+      subtitle: 'Formal compliance auditing adhering to ISO 27001, ISO 42001, EU AI Act, and LGPD standards.',
+      exportDossier: 'Generate ISO / Board Audit Dossier',
+      verifyChain: 'Recalculate SHA-256 Chain Integrity',
+      chainIntact: 'Cryptographic Chain Audited: 100% Immutable • Zero Tampering',
+      tamperDetected: 'Audit Warning: Discrepancy detected in cryptographic signature!',
+      toolCallsTitle: 'Cryptographic Traceability of Tool Calls (External Systems)',
+      zeroBinVerified: 'Shielded Corporate Secret (Zero Data Residual / BYOS)',
+      officialStandards: 'Active Compliance Standards',
+      downloadSuccess: 'Official Audit Dossier generated and downloaded!',
+      generateReport: 'Download Executive Board Report'
     }
   },
   es: {
     header: {
       telemetry: 'Telemetría y Estado',
-      version: 'v3.6.0 PROD',
+      version: 'v3.7.0 PROD',
       cortexArchitect: 'Cortex Canvas',
       chatStream: 'Chat Stream',
       dualPlex: 'Dual-Plex (Split)',
@@ -288,7 +378,7 @@ export const translations: Record<Language, Translations> = {
     },
     settings: {
       title: 'Panel General de Configuraciones y Gobernanza',
-      subtitle: 'PCL AEOS Administration Center',
+      subtitle: 'PCL Cockpit Administration Center',
       close: 'Cerrar (Esc)',
       cancel: 'Cancelar',
       save: 'Guardar Cambios',
@@ -296,10 +386,10 @@ export const translations: Record<Language, Translations> = {
       general: 'General e Idioma',
       security: 'Seguridad y Sesiones',
       integrations: 'Conexiones y MCPs',
-      costs: 'Costos y Tokens Híbridos',
+      costs: 'FinOps y Teto Presupuestario',
       squads: 'Squads y Agentes',
       skills: 'Gestor de Skills',
-      audit: 'Auditoría ISO y Consejo',
+      audit: 'Auditoría ISO y Dossier',
       nocode: 'Creador No-Code',
       languageTitle: 'Idioma de la Interfaz (Internacionalización)',
       languageSubtitle: 'Seleccione el idioma de navegación para todos los menús, etiquetas y diálogos de PCL Cockpit.',
@@ -311,7 +401,7 @@ export const translations: Record<Language, Translations> = {
       enclaveActive: 'Enclave de Gobernanza Activo • Criptografía AES-256-GCM • SHA-256'
     },
     composer: {
-      placeholder: 'Pregunte a PCL AEOS o use @ para sistemas corporativos y # para documentos...',
+      placeholder: 'Pregunte a PCL Cockpit o use @ para sistemas corporativos y # para documentos...',
       web: 'Web',
       send: 'Enviar',
       audioWhisper: 'Audio Local (Whisper)',
@@ -344,7 +434,36 @@ export const translations: Record<Language, Translations> = {
       sourcesConsulted: 'Fuentes Consultadas',
       copyCitation: 'Copiar Cita',
       citationCopied: '¡Cita copiada!'
+    },
+    finops: {
+      title: 'Libro Mayor FinOps Soberano y Control Presupuestario',
+      subtitle: 'Auditoría de costos marginales locales ($0.00), consumo de nube externa y traba física estricta (Hard Lock).',
+      sovereigntyRatio: 'Tasa de Soberanía Local ($0.00 Host)',
+      dollarsSaved: 'Dólares Ahorrados Este Mes',
+      vramCpu: 'Invariante Físico de VRAM CPU',
+      vramAllocated: '0 MB VRAM (CPU INT8)',
+      hardLockActive: 'Traba Física Hard Lock Activa',
+      hardLockDesc: 'Suspende automáticamente llamadas a APIs externas al alcanzar el 100% del presupuesto, redirigiendo el tráfico a modelos locales.',
+      spendThisMonth: 'Gasto Consolidado del Mes',
+      availableBudget: 'Saldo Disponible',
+      dailyAverage: 'Promedio Diario',
+      projectedMonth: 'Proyección Mensual',
+      squadAllocation: 'Distribución Presupuestaria por Squad',
+      exportLedger: 'Exportar Libro Mayor FinOps (.csv)',
+      exportSuccess: '¡Reporte contable exportado con éxito!'
+    },
+    audit: {
+      title: 'Panel de Gobernanza, Cumplimiento y Audit Trail Inmutable',
+      subtitle: 'Auditoría formal en conformidad con las normas ISO 27001, ISO 42001, EU AI Act y LGPD.',
+      exportDossier: 'Generar Dossier de Auditoría ISO / Junta',
+      verifyChain: 'Recalcular Integridad de Cadena SHA-256',
+      chainIntact: 'Cadena Criptográfica Auditada: 100% Íntegra • Cero Adulteraciones',
+      tamperDetected: '¡Alerta de Auditoría: Discrepancia detectada en la firma criptográfica!',
+      toolCallsTitle: 'Trazabilidad Criptográfica de Tool Calls (Sistemas Externos)',
+      zeroBinVerified: 'Secreto Corporativo Blindado (Residuo Cero / BYOS)',
+      officialStandards: 'Normas de Conformidad Activas',
+      downloadSuccess: '¡Dossier Oficial generado y descargado!',
+      generateReport: 'Descargar Dictamen Ejecutivo de la Junta'
     }
   }
 };
-
