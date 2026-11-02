@@ -221,6 +221,119 @@ export const RDStationLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size
   </svg>
 );
 
+// 12. Google Gemini Official Logo
+export const GoogleGeminiLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="gemini-grad-logo" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#1BA1E3" />
+        <stop offset="50%" stopColor="#5B7BF5" />
+        <stop offset="100%" stopColor="#9B72CB" />
+      </linearGradient>
+    </defs>
+    <path 
+      d="M12 2C12 7.523 7.523 12 2 12C7.523 12 12 16.477 12 22C12 16.477 16.477 12 22 12C16.477 12 12 7.523 12 2Z" 
+      fill="url(#gemini-grad-logo)" 
+    />
+  </svg>
+);
+
+// 13. Anthropic Claude Official Logo
+export const AnthropicClaudeLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="12" cy="12" r="10" fill="#CC6B49" fillOpacity="0.18" />
+    <path 
+      d="M12 3.5L13.8 9.2L19.5 11L13.8 12.8L12 18.5L10.2 12.8L4.5 11L10.2 9.2L12 3.5Z" 
+      fill="#CC6B49" 
+    />
+  </svg>
+);
+
+// 14. OpenAI / ChatGPT Official Logo
+export const OpenAILogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="currentColor" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M22.28 10.37a5.57 5.57 0 0 0-.48-4.66 5.66 5.66 0 0 0-4.04-2.73 5.68 5.68 0 0 0-5-1.18 5.61 5.61 0 0 0-4.14 2.82 5.59 5.59 0 0 0-2.07 4.22 5.68 5.68 0 0 0 .54 3.47 5.6 5.6 0 0 0-.47 4.67 5.66 5.66 0 0 0 4.04 2.73 5.66 5.66 0 0 0 5 1.18 5.6 5.6 0 0 0 4.14-2.82 5.6 5.6 0 0 0 2.07-4.22 5.68 5.68 0 0 0-.54-3.48zm-8.87 9.87a4.23 4.23 0 0 1-2.9-.62l.14-.08 4.8-2.77a.71.71 0 0 0 .36-.62v-6.78l2.03 1.17v5.62a4.24 4.24 0 0 1-4.43 4.08zm-7.66-3.83a4.2 4.2 0 0 1-.5-2.93l.14.09 4.8 2.77a.71.71 0 0 0 .72 0l5.87-3.39v2.35l-4.87 2.81a4.24 4.24 0 0 1-6.16-1.7zm-1.07-8.52a4.2 4.2 0 0 1 2.4-2.31v.17l4.8 2.77a.71.71 0 0 0 .72 0l5.87 3.39-2.03 1.17-4.87-2.81a4.24 4.24 0 0 1-6.89-2.38zm13.9 3.09l-4.8-2.77a.71.71 0 0 0-.72 0l-5.87 3.39 2.03-1.17 4.87 2.81a4.24 4.24 0 0 1 6.89 2.38 4.2 4.2 0 0 1-2.4 2.31v-.17l-4.8-2.77zm1.57-2.87l-.14-.09-4.8-2.77a.71.71 0 0 0-.72 0l-5.87 3.39V8.9l4.87-2.81a4.24 4.24 0 0 1 6.16 1.7 4.2 4.2 0 0 1 .5 2.93zm-7.14-1.92l2.36 1.36v2.73l-2.36 1.36-2.36-1.36V8.95l2.36-1.36z" />
+  </svg>
+);
+
+// 15. Alibaba Qwen Official Logo
+export const QwenLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="24" height="24" rx="6" fill="#615CED" />
+    <path 
+      d="M12 5L17.5 8.2V14.6L12 17.8L6.5 14.6V8.2L12 5Z" 
+      stroke="#FFFFFF" 
+      strokeWidth="1.8" 
+      strokeLinejoin="round" 
+    />
+    <circle cx="12" cy="11.4" r="2.2" fill="#FFFFFF" />
+  </svg>
+);
+
+// 16. Ollama Sovereign Local Logo ($0.00)
+export const OllamaSovereignLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="24" height="24" rx="6" fill="#10B981" fillOpacity="0.15" stroke="#10B981" strokeWidth="1.2" />
+    <path 
+      d="M8 17V12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12V17M10 17V14M14 17V14M9 6L10 8M15 6L14 8" 
+      stroke="#10B981" 
+      strokeWidth="1.8" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+  </svg>
+);
+
+// 17. Laya Coprocessor System 1 CPU Logo (0 MB VRAM)
+export const LayaLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="24" height="24" rx="6" fill="#047857" />
+    <path 
+      d="M7 8H17M7 12H14M7 16H11" 
+      stroke="#34D399" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+    <circle cx="17" cy="15" r="2" fill="#34D399" />
+  </svg>
+);
+
 // Helper function to render any logo dynamically by ID
 export const renderOfficialLogo = (appId: string, className = 'w-4 h-4'): React.ReactNode => {
   const normalized = appId.toLowerCase().replace(/[@#_\-\s]/g, '');
@@ -252,6 +365,26 @@ export const renderOfficialLogo = (appId: string, className = 'w-4 h-4'): React.
     case 'googleagenda':
     case 'googlecalendar':
       return <GoogleCalendarLogo className={className} />;
+    case 'gemini':
+    case 'googlegemini':
+      return <GoogleGeminiLogo className={className} />;
+    case 'claude':
+    case 'anthropic':
+    case 'anthropicclaude':
+      return <AnthropicClaudeLogo className={className} />;
+    case 'openai':
+    case 'chatgpt':
+    case 'gpt4':
+      return <OpenAILogo className={className} />;
+    case 'qwen':
+    case 'qwencoder':
+      return <QwenLogo className={className} />;
+    case 'ollama':
+    case 'ollamasovereign':
+      return <OllamaSovereignLogo className={className} />;
+    case 'laya':
+    case 'layacoprocessor':
+      return <LayaLogo className={className} />;
     default:
       return null;
   }

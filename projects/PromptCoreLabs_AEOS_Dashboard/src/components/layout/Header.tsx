@@ -82,6 +82,24 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         )}
 
+        {/* Seletor Rápido de Idioma de 1º Nível (Padrão Read.AI / Jumpad) */}
+        <div className="hidden sm:flex items-center space-x-0.5 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700/80 text-[10px] font-mono">
+          {(['pt', 'en', 'es'] as Language[]).map(l => (
+            <button
+              key={l}
+              onClick={() => onLanguageChange(l)}
+              className={`px-1.5 py-0.5 rounded transition uppercase font-semibold ${
+                lang === l
+                  ? 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white shadow-xs font-bold'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+              }`}
+              title={l === 'pt' ? 'Português (Brasil)' : l === 'en' ? 'English (US)' : 'Español'}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+
         {/* Clickable User Avatar & Dropdown */}
         <div className="relative">
           <button
