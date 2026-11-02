@@ -20,7 +20,8 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("pcl.laya")
 if not logger.handlers:
-    handler = logging.StreamHandler(sys.stdout)
+    # MCP stdio exige que logs sejam direcionados para stderr para não poluir o canal JSON-RPC
+    handler = logging.StreamHandler(sys.stderr)
     handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] [Laya] %(message)s"))
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
