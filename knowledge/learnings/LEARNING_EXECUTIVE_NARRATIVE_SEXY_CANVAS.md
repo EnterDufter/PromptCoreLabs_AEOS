@@ -88,3 +88,4 @@ Sempre que redigir documentos, READMEs, pitches, landing pages ou sumários exec
 3. **Apresente a vitória de 4.95 / 5.0 (Soberba) e o custo $0.00 (Ganância).**
 4. **Finalize com a paz de espírito da segurança blindada (Segurança) e conforto da interface (Preguiça).**
 5. **Nunca deixe jargões isolados como "protocolo cego" ou "Zero-Bin" sem a devida contextualização.**
+

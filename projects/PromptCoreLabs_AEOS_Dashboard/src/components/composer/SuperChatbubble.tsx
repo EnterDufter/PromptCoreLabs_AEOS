@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Send, Cpu, ChevronDown, ShieldCheck, Zap, Database, 
   FileText, Check, ChevronRight, User, Sparkles, Globe
@@ -103,6 +104,45 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   const [mentionPosition, setMentionPosition] = useState<number | null>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const modelMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const modelMenuRef = useRef<HTMLDivElement>(null);
+
+  // Fechar o menu de orquestração ao clicar fora ou pressionar Escape
+  useEffect(() => {
+    if (!showModelMenu) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        modelMenuRef.current && 
+        !modelMenuRef.current.contains(target) &&
+        modelMenuButtonRef.current &&
+        !modelMenuButtonRef.current.contains(target)
+      ) {
+        setShowModelMenu(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowModelMenu(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showModelMenu]);
+
+  // Cálculo da posição do Portal flutuante (Bottom-Right ancorado ao botão sem sofrer cortes de contêineres)
+  const getModelMenuPortalStyle = (): React.CSSProperties => {
+    if (!modelMenuButtonRef.current) return { display: 'none' };
+    const rect = modelMenuButtonRef.current.getBoundingClientRect();
+    return {
+      position: 'fixed',
+      bottom: `${window.innerHeight - rect.top + 8}px`,
+      right: `${Math.max(16, window.innerWidth - rect.right)}px`,
+      zIndex: 9999,
+    };
+  };
 
   const MENTIONS_CATALOG: MentionOption[] = [
     // Apps (Ordem exata do benchmark Jumpad.ai da captura de tela 0:05 / 1:46)
@@ -290,6 +330,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
             {/* PCL Cognitive Orchestration Console */}
             <div className="relative">
               <button
+                ref={modelMenuButtonRef}
                 onClick={() => setShowModelMenu(!showModelMenu)}
                 className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600 transition flex items-center space-x-1.5 shadow-xs"
                 title="Console de Orquestração Cognitiva PCL AEOS"
@@ -299,8 +340,12 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
 
-              {showModelMenu && (
-                <div className="absolute right-0 bottom-9 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 z-50 text-xs animate-in fade-in duration-100">
+              {showModelMenu && createPortal(
+                <div
+                  ref={modelMenuRef}
+                  style={getModelMenuPortalStyle()}
+                  className="w-80 max-w-[calc(100vw-32px)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 text-xs animate-in fade-in duration-100"
+                >
                   {/* Cabeçalho do Console PCL */}
                   <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1.5 flex items-center justify-between">
                     <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center space-x-1">
@@ -358,7 +403,8 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
                       );
                     })}
                   </div>
-                </div>
+                </div>,
+                document.body
               )}
             </div>
 

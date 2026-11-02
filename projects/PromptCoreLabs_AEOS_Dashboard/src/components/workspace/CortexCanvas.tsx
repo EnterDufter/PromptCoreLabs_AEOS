@@ -420,14 +420,16 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
         </div>
       </div>
 
-      {/* Dotted Grid Viewport Area */}
-      <div 
-        ref={containerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        className="flex-1 relative overflow-hidden select-none"
+      {/* Main Workspace Area: Dotted Grid Viewport + Right Inspector Drawer */}
+      <div className="flex-1 relative flex overflow-hidden">
+        {/* Dotted Grid Viewport Area */}
+        <div 
+          ref={containerRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          className="flex-1 h-full relative overflow-hidden select-none"
         style={{
           cursor: isPanning ? 'grabbing' : panMode ? 'grab' : 'default',
           backgroundImage: 'radial-gradient(#94a3b8 1.2px, transparent 1.2px)',
@@ -532,7 +534,10 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
               return (
                 <div
                   key={node.id}
-                  onClick={() => setSelectedNodeId(node.id)}
+                  onClick={() => {
+                    setSelectedNodeId(node.id);
+                    setInspectorExpanded(true);
+                  }}
                   style={{ left: `${node.x}px`, top: `${node.y}px` }}
                   className={`cortex-card absolute w-[155px] p-2.5 rounded-xl border shadow-sm cursor-pointer transition-all duration-200 ${
                     isSelected
@@ -563,185 +568,192 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
         </div>
       </div>
 
-      {/* INSPECTOR INTERATIVO RICO (Substitui completamente o rodapé estático cortado ❓) */}
-      <div className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10 shadow-xl transition-all duration-200">
-        {/* Header do Inspector com Seletor de Abas & Botão de Expansão */}
-        <div className="px-4 py-2 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <div className="flex items-center space-x-3 overflow-x-auto">
-            <div className="flex items-center space-x-1.5">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Inspecionando:</span>
-              <span className="font-bold text-xs text-slate-900 dark:text-slate-100">
-                {selectedNode.title}
-              </span>
-              <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold ${
-                selectedNode.status === 'completed' 
-                  ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
-                  : selectedNode.status === 'active'
-                  ? 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 animate-pulse'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
-              }`}>
-                {selectedNode.status.toUpperCase()}
-              </span>
+        {/* Botão flutuante para reabrir inspector quando fechado */}
+        {!inspectorExpanded && (
+          <button
+            onClick={() => setInspectorExpanded(true)}
+            className="absolute top-3 right-3 z-10 px-2.5 py-1.5 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md backdrop-blur-md text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center space-x-1.5"
+            title="Abrir Inspector Lateral"
+          >
+            <Activity className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Inspecionar Nó</span>
+          </button>
+        )}
+
+        {/* DRAWER LATERAL DIREITO DO INSPECTOR (Largura 320px–384px, altura 100%, sem roubar espaço vertical do DAG) */}
+        {inspectorExpanded && (
+          <aside className="w-80 md:w-96 border-l border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-20 shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-200">
+            {/* Header do Drawer */}
+            <div className="p-3 bg-slate-50/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <div className="flex items-center space-x-2 min-w-0">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Nó:</span>
+                <span className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate">
+                  {selectedNode.title}
+                </span>
+                <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold flex-shrink-0 ${
+                  selectedNode.status === 'completed' 
+                    ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
+                    : selectedNode.status === 'active'
+                    ? 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 animate-pulse'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                }`}>
+                  {selectedNode.status.toUpperCase()}
+                </span>
+              </div>
+              <button
+                onClick={() => setInspectorExpanded(false)}
+                className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
+                title="Fechar Inspector"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
-            {/* Abas do Inspector */}
-            <div className="flex items-center space-x-1 ml-4 border-l border-slate-200 dark:border-slate-800 pl-4">
+            {/* Abas Superiores do Drawer */}
+            <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-950/50 p-1 space-x-1">
               <button
-                onClick={() => { setActiveInspectorTab('telemetry'); setInspectorExpanded(true); }}
-                className={`px-2.5 py-1 rounded text-xs font-medium transition flex items-center space-x-1 ${
-                  activeInspectorTab === 'telemetry' && inspectorExpanded
+                onClick={() => setActiveInspectorTab('telemetry')}
+                className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition flex items-center justify-center space-x-1 ${
+                  activeInspectorTab === 'telemetry'
                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <Activity className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Telemetria & SLA</span>
+                <span>Telemetria</span>
               </button>
 
               <button
-                onClick={() => { setActiveInspectorTab('payload'); setInspectorExpanded(true); }}
-                className={`px-2.5 py-1 rounded text-xs font-medium transition flex items-center space-x-1 ${
-                  activeInspectorTab === 'payload' && inspectorExpanded
+                onClick={() => setActiveInspectorTab('payload')}
+                className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition flex items-center justify-center space-x-1 ${
+                  activeInspectorTab === 'payload'
                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <FileJson className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Payload JSON</span>
+                <span>Payload</span>
               </button>
 
               <button
-                onClick={() => { setActiveInspectorTab('governance'); setInspectorExpanded(true); }}
-                className={`px-2.5 py-1 rounded text-xs font-medium transition flex items-center space-x-1 ${
-                  activeInspectorTab === 'governance' && inspectorExpanded
+                onClick={() => setActiveInspectorTab('governance')}
+                className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition flex items-center justify-center space-x-1 ${
+                  activeInspectorTab === 'governance'
                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
-                <span>Governança & SHA-256</span>
+                <span>Governança</span>
               </button>
             </div>
-          </div>
 
-          {/* Botão de Toggle Expansão */}
-          <button
-            onClick={() => setInspectorExpanded(!inspectorExpanded)}
-            className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition"
-            title={inspectorExpanded ? 'Recolher Inspector' : 'Expandir Inspector'}
-          >
-            {inspectorExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-          </button>
-        </div>
-
-        {/* Conteúdo Expansível do Inspector */}
-        {inspectorExpanded && (
-          <div className="p-3 text-xs max-h-48 overflow-y-auto custom-scrollbar">
-            {activeInspectorTab === 'telemetry' && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase">Latência de Execução</span>
-                  <div className="flex items-center space-x-1.5">
-                    <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                    <span className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100">{selectedNode.latency}</span>
+            {/* Conteúdo com rolagem vertical limpa */}
+            <div className="flex-1 p-3 text-xs overflow-y-auto custom-scrollbar space-y-3">
+              {activeInspectorTab === 'telemetry' && (
+                <div className="space-y-2.5">
+                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase">Latência de Execução</span>
+                    <div className="flex items-center space-x-1.5">
+                      <Clock className="w-3.5 h-3.5 text-emerald-500" />
+                      <span className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100">{selectedNode.latency}</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500">Alvo SLA: {selectedNode.slaTarget}</span>
                   </div>
-                  <span className="text-[10px] text-slate-500">Alvo: {selectedNode.slaTarget}</span>
-                </div>
 
-                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase">Hardware & Isolamento</span>
-                  <div className="flex items-center space-x-1.5">
-                    <Server className="w-3.5 h-3.5 text-indigo-500" />
-                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">{selectedNode.hardware}</span>
+                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase">Hardware & Isolamento</span>
+                    <div className="flex items-center space-x-1.5">
+                      <Server className="w-3.5 h-3.5 text-indigo-500" />
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">{selectedNode.hardware}</span>
+                    </div>
+                    <span className="text-[10px] font-mono font-medium text-emerald-600 dark:text-emerald-400">VRAM: {selectedNode.vram}</span>
                   </div>
-                  <span className="text-[10px] font-mono font-medium text-emerald-600 dark:text-emerald-400">VRAM: {selectedNode.vram}</span>
-                </div>
 
-                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase">Stage Gate Vinculado</span>
-                  <div className="flex items-center space-x-1.5">
-                    <Shield className="w-3.5 h-3.5 text-blue-500" />
-                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">{selectedNode.stageGate}</span>
+                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase">Stage Gate Vinculado</span>
+                    <div className="flex items-center space-x-1.5">
+                      <Shield className="w-3.5 h-3.5 text-blue-500" />
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">{selectedNode.stageGate}</span>
+                    </div>
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Validado sem violações</span>
                   </div>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Validado sem violações</span>
-                </div>
 
-                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase">Descrição Funcional</span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">
-                    {selectedNode.detail}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {activeInspectorTab === 'payload' && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase">Input & Output Payloads (JSON Estruturado)</span>
-                  <button
-                    onClick={handleCopyPayloadJson}
-                    className="flex items-center space-x-1 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] transition"
-                  >
-                    {copiedPayload ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedPayload ? 'Copiado!' : 'Copiar JSON'}</span>
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <div className="bg-slate-950 text-slate-200 p-2.5 rounded-lg font-mono text-[10.5px] overflow-x-auto custom-scrollbar border border-slate-800">
-                    <span className="text-slate-500 block mb-1 text-[9px] uppercase">// INPUT PAYLOAD</span>
-                    <pre>{JSON.stringify(selectedNode.inputPayload, null, 2)}</pre>
-                  </div>
-                  <div className="bg-slate-950 text-slate-200 p-2.5 rounded-lg font-mono text-[10.5px] overflow-x-auto custom-scrollbar border border-slate-800">
-                    <span className="text-emerald-400 block mb-1 text-[9px] uppercase">// OUTPUT TELEMETRY PAYLOAD</span>
-                    <pre>{JSON.stringify(selectedNode.outputPayload, null, 2)}</pre>
+                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase">Descrição Funcional</span>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {selectedNode.detail}
+                    </p>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {activeInspectorTab === 'governance' && (
-              <div className="space-y-2.5">
-                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
-                  <div>
-                    <span className="text-[10px] font-mono text-slate-400 block">HASH CRIPTOGRÁFICO SHA-256 DO NÓ</span>
-                    <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400 select-all">
+              {activeInspectorTab === 'payload' && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase">Payloads Estruturados</span>
+                    <button
+                      onClick={handleCopyPayloadJson}
+                      className="flex items-center space-x-1 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] transition"
+                    >
+                      {copiedPayload ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedPayload ? 'Copiado!' : 'Copiar JSON'}</span>
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="bg-slate-950 text-slate-200 p-2.5 rounded-lg font-mono text-[10px] overflow-x-auto custom-scrollbar border border-slate-800">
+                      <span className="text-slate-500 block mb-1 text-[9px] uppercase">// INPUT PAYLOAD</span>
+                      <pre>{JSON.stringify(selectedNode.inputPayload, null, 2)}</pre>
+                    </div>
+                    <div className="bg-slate-950 text-slate-200 p-2.5 rounded-lg font-mono text-[10px] overflow-x-auto custom-scrollbar border border-slate-800">
+                      <span className="text-emerald-400 block mb-1 text-[9px] uppercase">// OUTPUT TELEMETRY</span>
+                      <pre>{JSON.stringify(selectedNode.outputPayload, null, 2)}</pre>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeInspectorTab === 'governance' && (
+                <div className="space-y-3">
+                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase">Hash SHA-256 Imutável</span>
+                    <span className="font-mono text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 break-all select-all block">
                       {selectedNode.sha256}
                     </span>
+                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono text-[9px] font-bold">
+                      CONFORME AUDITORIA
+                    </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono text-[10px] font-bold">
-                    IMUTÁVEL
-                  </span>
+
+                  <div className="space-y-2 text-[11px]">
+                    <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold block">ISO/IEC 27001</span>
+                        <span className="text-[10px] text-slate-500">Controles A.12 e A.14</span>
+                      </div>
+                    </div>
+
+                    <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold block">ISO/IEC 42001</span>
+                        <span className="text-[10px] text-slate-500">Governança Ética IA</span>
+                      </div>
+                    </div>
+
+                    <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold block">LGPD Art. 6º & 46</span>
+                        <span className="text-[10px] text-slate-500">Privacidade by Design</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-3 gap-2 text-[11px]">
-                  <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <div>
-                      <span className="font-semibold block">ISO/IEC 27001</span>
-                      <span className="text-[10px] text-slate-500">Controle A.12 e A.14</span>
-                    </div>
-                  </div>
-
-                  <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <div>
-                      <span className="font-semibold block">ISO/IEC 42001</span>
-                      <span className="text-[10px] text-slate-500">Governança Ética IA</span>
-                    </div>
-                  </div>
-
-                  <div className="p-2 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <div>
-                      <span className="font-semibold block">LGPD Art. 6º & 46</span>
-                      <span className="text-[10px] text-slate-500">Privacidade by Design</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          </aside>
         )}
       </div>
     </div>

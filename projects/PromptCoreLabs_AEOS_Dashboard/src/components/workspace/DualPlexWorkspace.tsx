@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   MessageSquare, Cpu, Columns, Layers, Bot, User, ShieldCheck, 
   FileText, ExternalLink, Play, Clock, Sparkles, Copy, Check,
-  Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown
+  Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown,
+  BookOpen
 } from 'lucide-react';
 import { Conversation, ChatMessage, Artifact } from '../../types';
 import { AgentNarrationPanel } from './AgentNarrationPanel';
@@ -20,6 +21,8 @@ interface DualPlexWorkspaceProps {
   onNewConversation?: () => void;
   onOpenArtifact: (art: Artifact) => void;
   onCreateBranch?: (messageId: string) => void;
+  viewMode?: 'chat' | 'canvas' | 'dual';
+  onViewModeChange?: (mode: 'chat' | 'canvas' | 'dual') => void;
 }
 
 export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
@@ -29,9 +32,18 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
   onCloseConversation,
   onNewConversation,
   onOpenArtifact,
-  onCreateBranch
+  onCreateBranch,
+  viewMode: controlledViewMode,
+  onViewModeChange
 }) => {
-  const [viewMode, setViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
+  const [internalViewMode, setInternalViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
+  const viewMode = controlledViewMode !== undefined ? controlledViewMode : internalViewMode;
+
+  const handleSetViewMode = (mode: 'chat' | 'canvas' | 'dual') => {
+    setInternalViewMode(mode);
+    onViewModeChange?.(mode);
+  };
+
   const [showNarration, setShowNarration] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
@@ -132,7 +144,7 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
         {/* View Mode Toggle: Chat Only | Canvas Only | Dual-Plex Split */}
         <div className="flex items-center space-x-1 bg-white dark:bg-slate-900 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex-shrink-0">
           <button
-            onClick={() => setViewMode('chat')}
+            onClick={() => handleSetViewMode('chat')}
             className={`px-2 py-1 rounded transition flex items-center space-x-1 ${
               viewMode === 'chat'
                 ? 'bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-semibold'
@@ -144,7 +156,7 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
           </button>
 
           <button
-            onClick={() => setViewMode('canvas')}
+            onClick={() => handleSetViewMode('canvas')}
             className={`px-2 py-1 rounded transition flex items-center space-x-1 ${
               viewMode === 'canvas'
                 ? 'bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-semibold'
@@ -156,7 +168,7 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
           </button>
 
           <button
-            onClick={() => setViewMode('dual')}
+            onClick={() => handleSetViewMode('dual')}
             className={`px-2 py-1 rounded transition flex items-center space-x-1 ${
               viewMode === 'dual'
                 ? 'bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-semibold'
@@ -246,43 +258,79 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                         </div>
                       )}
 
-                      {/* Fontes e Referências Desacopladas (Padrão Gemini / Perplexity) */}
-                      {msg.webReferences && msg.webReferences.length > 0 && (
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                          <details className="group/sources text-xs">
-                            <summary className="cursor-pointer list-none flex items-center space-x-2 py-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition select-none">
-                              <span className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 text-[10px] font-medium text-slate-700 dark:text-slate-300">
-                                <Globe className="w-3 h-3 text-sky-500" />
-                                <span>Fontes Consultadas ({msg.webReferences.length})</span>
-                              </span>
-                              <ChevronDown className="w-3.5 h-3.5 text-slate-400 transition-transform group-open/sources:rotate-180" />
-                            </summary>
+                      {/* Fontes e Referências Desacopladas Bipartidas (ADR-0007 / Padrão Gemini + Soberania PCL) */}
+                      {msg.webReferences && msg.webReferences.length > 0 && (() => {
+                        const canonicalRefs = msg.webReferences.filter(ref => 
+                          ref.source.includes('Canônico') || 
+                          ref.source.includes('PCL') || 
+                          (ref as any).sourceType === 'local_canonical' ||
+                          ref.url.includes('PromptCoreLabs_AEOS') ||
+                          ref.url.includes('knowledge/')
+                        );
+                        const webRefs = msg.webReferences.filter(ref => !canonicalRefs.includes(ref));
 
-                            <div className="pt-2 flex flex-wrap gap-1.5 animate-in fade-in duration-150">
-                              {msg.webReferences.map((ref, idx) => {
-                                const isCanonical = ref.source.includes('Canônico') || ref.source.includes('PCL');
-                                return (
-                                  <a
-                                    key={idx}
-                                    href={ref.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    title={ref.title}
-                                    className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] transition max-w-[280px] shadow-2xs ${
-                                      isCanonical
-                                        ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:border-emerald-400'
-                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 dark:hover:border-sky-500'
-                                    }`}
-                                  >
-                                    <span className="truncate">{ref.title}</span>
-                                    <ExternalLink className="w-2.5 h-2.5 opacity-50 flex-shrink-0" />
-                                  </a>
-                                );
-                              })}
-                            </div>
-                          </details>
-                        </div>
-                      )}
+                        return (
+                          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
+                            {/* Pílula 1: Acervo Canônico PCL (Governado / RAG Soberano) */}
+                            {canonicalRefs.length > 0 && (
+                              <details className="group/canonical text-xs">
+                                <summary className="cursor-pointer list-none flex items-center space-x-2 py-0.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition select-none">
+                                  <span className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 text-[10px] font-medium text-emerald-800 dark:text-emerald-300">
+                                    <BookOpen className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                    <span>🏛️ Acervo Canônico PCL ({canonicalRefs.length})</span>
+                                  </span>
+                                  <ChevronDown className="w-3.5 h-3.5 text-emerald-500 transition-transform group-open/canonical:rotate-180" />
+                                </summary>
+
+                                <div className="pt-2 flex flex-wrap gap-1.5 animate-in fade-in duration-150">
+                                  {canonicalRefs.map((ref, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={ref.url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      title={ref.title}
+                                      className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] transition max-w-[280px] shadow-2xs bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-200/80 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:border-emerald-400"
+                                    >
+                                      <span className="truncate">{ref.title}</span>
+                                      <ExternalLink className="w-2.5 h-2.5 opacity-50 flex-shrink-0" />
+                                    </a>
+                                  ))}
+                                </div>
+                              </details>
+                            )}
+
+                            {/* Pílula 2: Fontes Web Verificadas (Pesquisa Externa com Citações Neutras) */}
+                            {webRefs.length > 0 && (
+                              <details className="group/web text-xs">
+                                <summary className="cursor-pointer list-none flex items-center space-x-2 py-0.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition select-none">
+                                  <span className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 text-[10px] font-medium text-slate-700 dark:text-slate-300">
+                                    <Globe className="w-3 h-3 text-sky-500" />
+                                    <span>🌐 Fontes Web Verificadas ({webRefs.length})</span>
+                                  </span>
+                                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 transition-transform group-open/web:rotate-180" />
+                                </summary>
+
+                                <div className="pt-2 flex flex-wrap gap-1.5 animate-in fade-in duration-150">
+                                  {webRefs.map((ref, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={ref.url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      title={ref.title}
+                                      className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] transition max-w-[280px] shadow-2xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 dark:hover:border-sky-500"
+                                    >
+                                      <span className="truncate">{ref.title}</span>
+                                      <ExternalLink className="w-2.5 h-2.5 opacity-50 flex-shrink-0" />
+                                    </a>
+                                  ))}
+                                </div>
+                              </details>
+                            )}
+                          </div>
+                        );
+                      })()}
 
                       {/* Attached Artifacts */}
                       {msg.artifacts && msg.artifacts.length > 0 && (

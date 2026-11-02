@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<string>('security');
   const [activeMainView, setActiveMainView] = useState<'chat' | 'meetings' | 'flows'>('chat');
+  const [workspaceViewMode, setWorkspaceViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
 
   // Refração Dinâmica de Luz controlada pelo cursor do mouse (Design System Liquid Glass)
   useEffect(() => {
@@ -605,13 +606,17 @@ export const App: React.FC = () => {
                 onNewConversation={handleNewConversation}
                 onOpenArtifact={art => setActiveArtifact(art)}
                 onCreateBranch={handleCreateBranch}
+                viewMode={workspaceViewMode}
+                onViewModeChange={setWorkspaceViewMode}
               />
 
-              <SuperChatbubble
-                onSendMessage={handleSendMessage}
-                usedTokens={14200}
-                maxTokens={128000}
-              />
+              {workspaceViewMode !== 'canvas' && (
+                <SuperChatbubble
+                  onSendMessage={handleSendMessage}
+                  usedTokens={14200}
+                  maxTokens={128000}
+                />
+              )}
             </>
           ) : activeMainView === 'meetings' ? (
             <MeetingsIntelligenceView onOpenArtifact={art => setActiveArtifact(art)} />
