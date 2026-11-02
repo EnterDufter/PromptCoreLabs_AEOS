@@ -11,6 +11,7 @@ import { TokenAquaOrb } from './TokenAquaOrb';
 import { piiGuardService } from '../../services/security/piiGuardService';
 import { OMNIROUTE_MODELS, ModelOption } from '../../services/llm/omniRouteService';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface SuperChatbubbleProps {
   onSendMessage: (text: string, webSearch?: boolean, profileId?: string) => void;
@@ -173,6 +174,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   usedTokens = 14200,
   maxTokens = 128000
 }) => {
+  const { t } = useI18n();
   const [text, setText] = useState('');
   const [selectedProfile, setSelectedProfile] = useState<CognitiveProfile>(COGNITIVE_PROFILES[0]); // Síntese Executiva por padrão
   const [selectedSpecificModel, setSelectedSpecificModel] = useState<AIModelDetails | null>(null);
@@ -484,7 +486,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Pergunte ao PCL AEOS ou use @ para sistemas corporativos e # para documentos..."
+          placeholder={t.composer.placeholder}
           rows={2}
           className="w-full bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-400 text-xs focus:outline-none resize-none custom-scrollbar"
         />

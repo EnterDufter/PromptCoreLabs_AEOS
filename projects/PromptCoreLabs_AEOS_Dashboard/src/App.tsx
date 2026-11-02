@@ -14,9 +14,10 @@ import { layaCoprocessorService } from './services/laya/layaCoprocessorService';
 import { webSearchService } from './services/search/webSearchService';
 import { intelligentGroundingService } from './services/grounding/intelligentGroundingService';
 import { ChatMessage } from './types';
+import { useI18n } from './i18n/I18nContext';
 
 export const App: React.FC = () => {
-  const [lang, setLang] = useState<Language>('pt');
+  const { lang, setLang, t } = useI18n();
   const [theme, setTheme] = useState<Theme>('light');
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(true);
@@ -649,11 +650,15 @@ export const App: React.FC = () => {
         onClose={() => setActiveArtifact(null)}
       />
 
-      {/* Unified Administration & Governance Settings Modal */}
+      {/* Unified Administration & Governance Settings Modal (Fullscreen Window) */}
       {settingsOpen && (
         <SettingsModal
           user={userProfile}
           defaultTab={settingsTab}
+          lang={lang}
+          onLanguageChange={setLang}
+          theme={theme}
+          onThemeToggle={handleToggleTheme}
           onClose={() => setSettingsOpen(false)}
         />
       )}

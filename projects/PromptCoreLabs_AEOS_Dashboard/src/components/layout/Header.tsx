@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings } from 'lucide-react';
 import { Language, Theme, UserProfile } from '../../types';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface HeaderProps {
   user: UserProfile;
@@ -23,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleStatusPanel,
   isStatusPanelOpen = false
 }) => {
+  const { t } = useI18n();
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   return (
@@ -78,27 +80,9 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="hidden sm:inline">Telemetria & Status</span>
+            <span className="hidden sm:inline">{t.header.telemetry}</span>
           </button>
         )}
-
-        {/* Seletor Rápido de Idioma de 1º Nível (Padrão Read.AI / Jumpad) */}
-        <div className="hidden sm:flex items-center space-x-0.5 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700/80 text-[10px] font-mono">
-          {(['pt', 'en', 'es'] as Language[]).map(l => (
-            <button
-              key={l}
-              onClick={() => onLanguageChange(l)}
-              className={`px-1.5 py-0.5 rounded transition uppercase font-semibold ${
-                lang === l
-                  ? 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white shadow-xs font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
-              }`}
-              title={l === 'pt' ? 'Português (Brasil)' : l === 'en' ? 'English (US)' : 'Español'}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
 
         {/* Clickable User Avatar & Dropdown */}
         <div className="relative">
@@ -128,28 +112,22 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
 
-              {/* Idioma integrado no Dropdown do Usuário */}
-              <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <span className="text-slate-500 text-[11px] flex items-center space-x-1">
-                  <Globe className="w-3.5 h-3.5" />
-                  <span>Idioma</span>
+              {/* Idioma integrado no Dropdown do Usuário (Redireciona para o Painel Geral de Configurações) */}
+              <button
+                onClick={() => {
+                  setShowUserDropdown(false);
+                  onOpenSettings('general');
+                }}
+                className="w-full px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/60 transition text-left"
+              >
+                <span className="text-slate-600 dark:text-slate-300 text-[11px] flex items-center space-x-1.5">
+                  <Globe className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{t.settings.general}</span>
                 </span>
-                <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded border border-slate-200 dark:border-slate-700">
-                  {(['pt', 'en', 'es'] as Language[]).map(l => (
-                    <button
-                      key={l}
-                      onClick={() => onLanguageChange(l)}
-                      className={`px-1.5 py-0.5 rounded transition uppercase text-[10px] ${
-                        lang === l
-                          ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm font-bold'
-                          : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                      }`}
-                    >
-                      {l}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                  {lang.toUpperCase()}
+                </span>
+              </button>
 
               {/* Tema Light/Dark integrado no Dropdown do Usuário */}
               <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">

@@ -6,6 +6,7 @@ import {
   Check, X
 } from 'lucide-react';
 import { Project, Conversation } from '../../types';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -36,6 +37,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   onMoveConversation,
   onCreateProject
 }) => {
+  const { t } = useI18n();
   const [searchTerm, setSearchTerm] = useState('');
   
   // Largura redimensionável da barra lateral (entre 240px e 480px)
@@ -152,21 +154,21 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
   // Agrupamento por períodos exatos da imagem original
   const periodsConfig = [
-    { label: 'Hoje', items: filteredConversations.filter(c => c.dateGroup === 'Hoje') },
-    { label: 'Ontem', items: filteredConversations.filter(c => c.dateGroup === 'Ontem') },
-    { label: 'Últimos 7 dias', items: filteredConversations.filter(c => c.dateGroup === 'Últimos 7 dias') },
-    { label: 'Últimos 15 dias', items: filteredConversations.filter(c => c.dateGroup === 'Últimos 15 dias') },
-    { label: 'Últimos 30 dias', items: filteredConversations.filter(c => c.dateGroup === 'Últimos 30 dias') },
+    { label: t.sidebar.today, items: filteredConversations.filter(c => c.dateGroup === 'Hoje') },
+    { label: t.sidebar.yesterday, items: filteredConversations.filter(c => c.dateGroup === 'Ontem') },
+    { label: t.sidebar.last7days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 7 dias') },
+    { label: t.sidebar.last15days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 15 dias') },
+    { label: t.sidebar.last30days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 30 dias') },
   ];
 
   // 1. MODO COLAPSADO (W-16)
   if (collapsed) {
     const tier1Items = [
-      { id: 'chat', icon: 'forum', label: 'Conversas & Chat' },
-      { id: 'meetings', icon: 'video_camera_front', label: 'Reuniões & Atas' },
-      { id: 'flows', icon: 'account_tree', label: 'Fluxos de Automação' },
-      { id: 'projects', icon: 'folder_open', label: 'Projetos' },
-      { id: 'artifacts', icon: 'article', label: 'Artefatos & Relatórios' },
+      { id: 'chat', icon: 'forum', label: t.sidebar.chat },
+      { id: 'meetings', icon: 'video_camera_front', label: t.sidebar.meetings },
+      { id: 'flows', icon: 'account_tree', label: t.sidebar.flows },
+      { id: 'projects', icon: 'folder_open', label: t.sidebar.projects },
+      { id: 'artifacts', icon: 'article', label: t.sidebar.artifacts },
     ];
 
     return (
@@ -248,7 +250,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
           className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-slate-950 text-white dark:bg-slate-100 dark:text-slate-950 font-medium text-xs hover:opacity-90 shadow-sm transition"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Nova Conversa</span>
+          <span>{t.sidebar.newChat}</span>
         </button>
         <button
           onClick={onToggleCollapse}
@@ -262,11 +264,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       {/* 2º GRADE TIER 1: 5 Ícones de Navegação */}
       <div className="px-2 py-1.5 grid grid-cols-5 gap-1 border-b border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-900/50">
         {[
-          { id: 'chat', icon: 'forum', label: 'Chat', active: activeView === 'chat' },
-          { id: 'meetings', icon: 'video_camera_front', label: 'Reuniões', active: activeView === 'meetings' },
-          { id: 'flows', icon: 'account_tree', label: 'Fluxos', active: activeView === 'flows' },
-          { id: 'projects', icon: 'folder_open', label: 'Projetos' },
-          { id: 'artifacts', icon: 'article', label: 'Artefatos' },
+          { id: 'chat', icon: 'forum', label: t.sidebar.chat, active: activeView === 'chat' },
+          { id: 'meetings', icon: 'video_camera_front', label: t.sidebar.meetings, active: activeView === 'meetings' },
+          { id: 'flows', icon: 'account_tree', label: t.sidebar.flows, active: activeView === 'flows' },
+          { id: 'projects', icon: 'folder_open', label: t.sidebar.projects },
+          { id: 'artifacts', icon: 'article', label: t.sidebar.artifacts },
         ].map((mod) => (
           <button
             key={mod.id}
@@ -404,7 +406,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
           <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
           <input
             type="text"
-            placeholder="Buscar conversas..."
+            placeholder={t.sidebar.search}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-xs"
@@ -526,10 +528,10 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       <div className="p-2.5 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-400 flex items-center justify-between bg-slate-100/40 dark:bg-slate-900/40">
         <div className="flex items-center space-x-1.5 truncate">
           <Database className="w-3.5 h-3.5 text-slate-400" />
-          <span className="truncate">PCL SQLite Local</span>
+          <span className="truncate">{t.sidebar.sqliteLocal}</span>
         </div>
         <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-          Sincronizado
+          {t.sidebar.synchronized}
         </span>
       </div>
     </aside>
