@@ -1,23 +1,25 @@
 ---
-title: "Especificação Funcional e Arquitetural do PCL Cockpit v3.5"
+title: "Especificação Funcional e Arquitetural do PCL Cockpit v3.5 (Substituída pela v3.6)"
 system_scope: "PCL Cockpit"
 kernel_version: "v3.5.0"
 type: "Architecture_Spec"
-status: "Approved"
-rag_tags: [pcl_cockpit, architecture, specifications, fast_path, liquid_glass, dual_plex, cortex_canvas]
+status: "Superseded"
+superseded_by: "PCL_COCKPIT_SPEC_V3.6.md"
+rag_tags: [pcl_cockpit, legacy_v3.5, superseded, liquid_glass, dual_plex]
 created_at: "2026-10-29"
-last_updated: "2026-10-29"
+last_updated: "2026-11-01"
 author: "PromptCore Labs Architecture"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
 
-# 🖥️ Especificação Funcional & Arquitetural: PCL Cockpit v3.5
+# 🖥️ Especificação Funcional & Arquitetural: PCL Cockpit v3.5 *(Histórico — Substituída pela v3.6)*
 
-> **Definição Canônica:** O **PCL Cockpit** é a interface primária de pilotagem agêntica e orquestração cognitiva do PromptCoreLabs_AEOS, executada na porta local **`:3001`**. Prover governança em tempo real sobre modelos híbridos, observabilidade de grafos DAG e conformidade com normas ISO 27001 e ISO 42001.
+> [!WARNING]
+> **Documento Histórico Substituído (`Status: Superseded`):** Esta especificação refere-se ao marco arquitetural `v3.5` e foi formalmente superada pela **[`PCL_COCKPIT_SPEC_V3.6.md`](./PCL_COCKPIT_SPEC_V3.6.md)** e pelo **[`ADR-0007.md`](../architecture/ADR-0007.md)**, que introduziram Memória Multi-Turn com *Sliding Window*, *Intention Gating* determinístico em CPU via Laya e Desacoplamento Retrátil de Fontes. Consulte sempre a especificação **v3.6** como fonte primária vigente.
 
 ---
 
-## 1. Topologia de Apresentação (3 Colunas Retráteis)
+## 1. Topologia de Apresentação Consolidada na v3.5 (3 Colunas Retráteis)
 
 1. **Left Utility Sidebar (64px a 260px):**
    - Acordeão de Projetos (`Next Gen Sports`, `Arch Living`, `Defesa B2B`) com conversas aninhadas e contador de agentes ativos.
@@ -36,30 +38,23 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 2. Componentes Centrais de Interação
+## 2. Componentes Centrais de Interação Introduzidos na v3.5
 
 ### 2.1. Super-Chatbubble Composer
 - **TokenAquaOrb 3D:** Esfera vítrea Aqua OS X renderizada com gradientes radiais, especularidade física e keyframes de glow temporal (5s e 2s), morfando para pílula no hover para exibir o consumo numérico de tokens.
 - **Console de Orquestração Cognitiva PCL:** Seletor com 4 perfis operacionais:
-  1. *Síntese Executiva:* Fast-path Cloud via Gemini 3.5 Flash-Lite (~3.4s).
+  1. *Síntese Executiva:* Fast-Path Cloud via Gemini 3.5 Flash-Lite (~3.4s).
   2. *Raciocínio Profundo & Código:* Modelos de raciocínio avançado (Claude 3.5 Sonnet / GPT-4o).
   3. *Soberano Local $0.00:* Enclave 100% on-premise com Laya em CPU e Ollama em GPU RTX.
   4. *Roteamento Autônomo OmniRoute:* Seleção dinâmica por sensibilidade PII e restrição orçamentária.
-- **Sistema de Menções Táteis:**
-  - `@`: Catálogo de conectores corporativos com logotipos vetoriais oficiais (BigQuery, SAP, Sheets, HubSpot, Salesforce, Pipedrive, RD Station, Jira, Gmail, Calendar).
-  - `#`: Documentos e bases normativas do PCL AEOS.
+- **Sistema de Menções Táteis:** `@` para conectores corporativos (BigQuery, SAP, Sheets, HubSpot, Salesforce, Pipedrive, RD Station, Jira, Gmail, Calendar) e `#` para documentos normativos do PCL AEOS.
 - **PII Guard LGPD Inline:** Sanitização instantânea no cliente com badge visual alertando campos mascarados.
 
 ### 2.2. Cortex Canvas Interativo & Inspector de 3 Abas
-- Ao selecionar qualquer nó do grafo DAG no Canvas, o Inspector lateral se abre oferecendo 3 visões:
-  1. *Aba Telemetria & Logs:* Latência do nó em milissegundos, consumo de hardware (0 MB VRAM) e status de execução.
-  2. *Aba Inspeção de Payload:* JSON de entrada e saída com visualização de código formatado e botão de cópia.
-  3. *Aba Governança & Ações:* Trilha SHA-256 e acionamento de Stage Gates TLC v3.
+- Ao selecionar qualquer nó do grafo DAG no Canvas, o Inspector lateral exibe: *Aba Telemetria & Logs*, *Aba Inspeção de Payload* e *Aba Governança & Ações*.
 
 ### 2.3. PCL Artifact Drawer (Soberano)
-- Substitui drawers genéricos de mercado.
-- Largura ajustável por arrasto de mouse entre 380px e 850px.
-- 4 abas contextuais: *Documento*, *Audit Trail SHA-256*, *Custos & Tokens* e *LGPD/PII*.
+- Largura ajustável por arrasto de mouse entre 380px e 850px com 4 abas contextuais: *Documento*, *Audit Trail SHA-256*, *Custos & Tokens* e *LGPD/PII*.
 
 ---
 
@@ -67,14 +62,6 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 | Rota / Endpoint | Função de Engenharia | Latência Típica |
 | :--- | :--- | :--- |
-| **`POST /api/aeos/infer`** | Gateway unificado com Fast-Path para Google Gemini 3.5 Flash-Lite via chave criptografada AES-256-GCM do OmniRoute em memória, parser SSE nativo para `:20130` e failover imediato para Ollama local (`:11434`, `qwen2.5-coder:7b`). | **~3.4s a 6.4s** (Cloud) / **~800ms** (Local) |
-| **`POST /api/aeos/search`** | Busca web paralela em Wikipedia API, ArXiv e bases científicas no Node.js sem restrições de CORS. | **~250ms a 400ms** |
+| **`POST /api/aeos/infer`** | Gateway unificado com Fast-Path para Google Gemini 3.5 Flash-Lite via chave criptografada AES-256-GCM do OmniRoute em memória, parser SSE nativo (`open-sse`) para `:20130` e failover imediato para Ollama local (`:11434`, `qwen2.5-coder:7b`). *(Evoluído para Multi-Turn completo na v3.6).* | **~3.4s a 6.4s** (Cloud) / **~800ms** (Local) |
+| **`POST /api/aeos/search`** | Busca web paralela em Wikipedia API, ArXiv e bases científicas no Node.js sem restrições de CORS. *(Submetida a Intention Gating Laya na v3.6).* | **~250ms a 400ms** |
 | **`GET /api/aeos/status`** | Socket Probes TCP sub-segundo em 250ms checando portas 20130, 11434, 20140 e 5432. | **< 30ms** |
-
----
-
-## 4. Invariantes de Conformidade
-- **Zero Mocks:** Toda resposta exibida decorre de inferência real; funções estáticas de contingência são estritamente proibidas.
-- **Isolamento de Hardware:** O microserviço Laya opera com 0 MB de VRAM na GPU local.
-- **Segurança de Sessão:** Strict 2 Devices Guard ativo, impedindo a concorrência não autorizada de estações.
-

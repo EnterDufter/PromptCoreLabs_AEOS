@@ -1,38 +1,60 @@
-# Artigo Técnico: Governança TLC Spec-Driven v3 & 5 Stage Gates — PCL AEOS
+# Artigo Técnico: Governança TLC Spec-Driven v3, Norma `PCL-AEOS-NORM-01` & 5 Stage Gates (v3.6)
 
-==================================================
-1. PRINCÍPIOS DA GOVERNANÇA SPEC-DRIVEN
-==================================================
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Em inteligência artificial corporativa, autonomia sem freios gera risco jurídico, financeiro e reputacional. A governança **TLC Spec-Driven v3** garante que nenhum código produtivo, gasto em nuvem ou mudança arquitetural ocorra sem especificação prévia, auditoria técnica adversária e **aprovação final exclusiva do operador humano**.
 
-A governança do **PCL AEOS** garante que nenhuma linha de código de produção seja escrita sem especificações prévias aprovadas e validadas por testes adversários de QA e verificações de segurança do CISO.
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Regida pela norma soberana **`PCL-AEOS-NORM-01`** (`AGENTS.md`), articula **5 Stage Gates sequenciais** (`specify.md` ➔ `design.md` ➔ `tasks.md` ➔ `validate.md` ➔ `STATE.md`), triagem Dual-Track SDD (`ADR-0009`: *Lean* vs. *Full*), *tool-call gating* em CPU via Laya (`:20140`) e atesto criptográfico **SHA-256** na Fase 5 do **PCL Cockpit v3.6 (`:3001`)**.
 
 ---
 
-## 2. MATRIZ DOS 5 STAGE GATES SEQUENCIAIS
+## 1. Esteira Panorâmica dos 5 Stage Gates Sequenciais (Padrão Cortex v7)
 
 ```mermaid
-graph LR
-    G1["Gate 1: Specify Gate\n(specify.md)"] --> G2["Gate 2: Design Gate\n(design.md)"]
-    G2 --> G3["Gate 3: Tasks Gate\n(tasks.md)"]
-    G3 --> G4["Gate 4: Execute & QA\n(validate.md)"]
-    G4 --> G5["Gate 5: Signoff Final\n(STATE.md)"]
+flowchart LR
+    classDef g12 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef g34 fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef qa fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef sign fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
 
-    style G1 fill:#2b6cb0,color:#fff
-    style G2 fill:#2b6cb0,color:#fff
-    style G3 fill:#2b6cb0,color:#fff
-    style G4 fill:#2c5282,color:#fff
-    style G5 fill:#1a365d,color:#fff
+    subgraph FaseSpec ["Gates 1 & 2: Especificação & Design"]
+        direction TB
+        G1["<b>Gate 1: Specify (specify.md)</b><br/>Escopo, FRs, NFRs & Invariantes"]:::g12
+        G2["<b>Gate 2: Design (design.md)</b><br/>C4 Model, ADRs & Narrativa Dual"]:::g12
+        G1 --> G2
+    end
+
+    subgraph FaseExec ["Gates 3 & 4: Tarefas & Execução QA"]
+        direction TB
+        G3["<b>Gate 3: Tasks (tasks.md)</b><br/>Backlog atômico & Tool Gating Laya"]:::g34
+        G4["<b>Gate 4: Execute & QA (validate.md)</b><br/>Build Exit 0, Zero Mocks & CISO Scan"]:::qa
+        G3 --> G4
+    end
+
+    subgraph FaseSign ["Gate 5: Homologação Soberana"]
+        direction TB
+        G5["<b>🎯 Gate 5: Signoff Humano (STATE.md)</b><br/>Autoridade Irrevogável + Hash SHA-256"]:::sign
+    end
+
+    FaseSpec ==>|"Aprovação de Plano"| FaseExec ==>|"Evidência Auditada"| FaseSign
 ```
-
-### Detalhamento dos Gates:
-1. **Gate 1 — Specify Gate (`specify.md`)**: Definição do escopo, problemas, Requisitos Funcionais (FR-001+) e Requisitos Não Funcionais (NFR-001+). Autoridade: *Planner Agent / Strategist_One*.
-2. **Gate 2 — Design Gate (`design.md`)**: Arquitetura de software, diagramação C4 Model e Matriz de Rastreabilidade. Autoridade: *Lead TLC Engineer / Cortex*.
-3. **Gate 3 — Tasks Gate (`tasks.md`)**: Decomposição em tarefas atômicas executáveis (`TASK-001+`) com critérios claros de aceite. Autoridade: *Planner Agent*.
-4. **Gate 4 — Execute & QA Gate (`validate.md`)**: Execução de código pelo Builder, suíte de testes adversários pelo Reviewer QA e varredura Zero Secret Leak pelo CISO. Autoridade: *Reviewer QA / CISO Agent*.
-5. **Gate 5 — Signoff Final (`STATE.md`)**: Validação de compliance constitucional da Foundation e autorização de fechamento pelo Operador Humano. Autoridade: *Auditor Agent / Operador Humano*.
 
 ---
 
-## 3. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Ciclo de validação Spec-Driven.
-- 🔵 **[gov-stage-gates-matrix.html](../../diagrams/interactive/gov-stage-gates-matrix.html)**: Matriz dos 5 Stage Gates sequenciais.
+## 2. Detalhamento Normativo dos Gates & RACI
+
+| Stage Gate | Artefato Canônico | Validações Obrigatórias (v3.6) | Autoridade RACI |
+| :---: | :--- | :--- | :--- |
+| **Gate 1** | `specify.md` | Definição de problema, Requisitos Funcionais (`FR-001+`), Não Funcionais (`NFR-001+`) e consulta ao Cold Storage (`HIP-001`–`008`). | *Planner Agent / Strategist_One* (`R`) |
+| **Gate 2** | `design.md` | Modelagem C4, diagramas Cortex v7 (`9/9 checks showcase`), conformidade `0 MB VRAM` Laya e plano de rollback. | *Lead TLC Engineer / Persona `/cortex`* (`R`) |
+| **Gate 3** | `tasks.md` | Quebra em tarefas determinísticas (`TASK-001+`) com confinamento de ferramentas e verificação prévia Laya (`RACI: R/C`). | *Planner Agent / `/laya`* (`R/C`) |
+| **Gate 4** | `validate.md` | Compilação `npm run build` (`Exit Code 0`), integridade `UTF-8` pura, *Zero Secret Leak* e política *Zero Mocks*. | *Builder / Reviewer QA / CISO Agent* (`R`) |
+| **Gate 5** | `STATE.md` + `SHA-256` | Atesto criptográfico imutável no `PCLArtifactDrawer` / PostgreSQL 17 e **homologação final exclusiva do humano**. | **Operador Humano** (`A` — Soberano) |
+
+---
+
+## 3. Integração com Diagramas Interativos
+
+* 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)** — Sequência formal de validação Spec-Driven entre agentes e gates.
+* 🔵 **[gov-stage-gates-matrix.html](../../diagrams/interactive/gov-stage-gates-matrix.html)** — Matriz interativa completa dos 5 Stage Gates sequenciais.
+* ⚡ **[seq-cockpit-v36-cognitive-pipeline.html](../../diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html)** — Atesto SHA-256 na Fase 5 do Live Execution Stepper.

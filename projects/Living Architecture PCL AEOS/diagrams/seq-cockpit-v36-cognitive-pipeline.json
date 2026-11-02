@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Pipeline Cognitivo PCL Cockpit v3.6 (5 Fases)",
+    "subtitle": "Memória Multi-Turn, Intention Gating Laya em CPU (0 MB VRAM), Fontes Retráteis e Auditoria SHA-256",
+    "output": "projects/Living Architecture PCL AEOS/diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html",
+    "viewBox": [1120, 820],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "triagem-cpu",
+        "label": "1. Triagem Laya CPU (~20ms)",
+        "focus": ["operador", "cockpit", "laya"],
+        "note": "Janela deslizante Multi-Turn submetida ao sensor Laya INT8 em CPU com 0 MB VRAM."
+      },
+      {
+        "id": "grounding-seletivo",
+        "label": "2–3. Grounding Seletivo",
+        "focus": ["cockpit", "acervo", "web"],
+        "note": "Consulta Warm/Cold RAG e busca web acionadas apenas quando a intenção justifica."
+      },
+      {
+        "id": "sintese-auditoria",
+        "label": "4–5. Síntese & Atesto SHA-256",
+        "focus": ["cockpit", "omniroute", "auditdb", "operador"],
+        "note": "Fast-Path AES-256-GCM / Ollama $0.00 com pílula retrátil de fontes e recibo SHA-256."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "operador",
+      "type": "external",
+      "label": "Operador",
+      "sublabel": "Multi-Turn"
+    },
+    {
+      "id": "cockpit",
+      "type": "frontend",
+      "label": "PCL Cockpit",
+      "sublabel": "UI :3001"
+    },
+    {
+      "id": "laya",
+      "type": "security",
+      "label": "Laya CPU",
+      "sublabel": "INT8 :20140"
+    },
+    {
+      "id": "acervo",
+      "type": "database",
+      "label": "Acervo RAG",
+      "sublabel": "Warm & Cold"
+    },
+    {
+      "id": "web",
+      "type": "external",
+      "label": "Busca Web",
+      "sublabel": "Wiki & ArXiv"
+    },
+    {
+      "id": "omniroute",
+      "type": "cloud",
+      "label": "OmniRoute",
+      "sublabel": "Gemini/Local"
+    },
+    {
+      "id": "auditdb",
+      "type": "database",
+      "label": "Postgres 17",
+      "sublabel": "SHA-256"
+    }
+  ],
+  "segments": [
+    { "from": 165, "to": 310, "label": "Fase 1: Triagem CPU" },
+    { "from": 330, "to": 510, "label": "Fases 2 e 3: Grounding" },
+    { "from": 530, "to": 735, "label": "Fases 4 e 5: Síntese + SHA-256" }
+  ],
+  "messages": [
+    {
+      "id": "msg-prompt",
+      "from": "operador",
+      "to": "cockpit",
+      "y": 190,
+      "label": "Prompt + Sliding Window",
+      "variant": "emphasis"
+    },
+    {
+      "id": "msg-laya-req",
+      "from": "cockpit",
+      "to": "laya",
+      "y": 240,
+      "label": "Intention Gate O(1)",
+      "variant": "security"
+    },
+    {
+      "id": "msg-laya-res",
+      "from": "laya",
+      "to": "cockpit",
+      "y": 285,
+      "label": "Rota tipada (~22ms)",
+      "variant": "return"
+    },
+    {
+      "id": "msg-rag-req",
+      "from": "cockpit",
+      "to": "acervo",
+      "y": 355,
+      "label": "Consulta ADRs & Specs (>= 0.40)",
+      "variant": "default"
+    },
+    {
+      "id": "msg-rag-res",
+      "from": "acervo",
+      "to": "cockpit",
+      "y": 400,
+      "label": "Evidências Warm/Cold",
+      "variant": "return"
+    },
+    {
+      "id": "msg-web-req",
+      "from": "cockpit",
+      "to": "web",
+      "y": 448,
+      "label": "Busca condicional (se web_search)",
+      "variant": "dashed"
+    },
+    {
+      "id": "msg-web-res",
+      "from": "web",
+      "to": "cockpit",
+      "y": 492,
+      "label": "Fatos contemporâneos",
+      "variant": "return"
+    },
+    {
+      "id": "msg-gen-req",
+      "from": "cockpit",
+      "to": "omniroute",
+      "y": 558,
+      "label": "POST /infer (AES-256 open-sse)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "msg-gen-res",
+      "from": "omniroute",
+      "to": "cockpit",
+      "y": 608,
+      "label": "Stream multi-turn fundamentado",
+      "variant": "return"
+    },
+    {
+      "id": "msg-sha-write",
+      "from": "cockpit",
+      "to": "auditdb",
+      "y": 660,
+      "label": "Grava recibo SHA-256",
+      "variant": "security"
+    },
+    {
+      "id": "msg-ui-render",
+      "from": "cockpit",
+      "to": "operador",
+      "y": 715,
+      "label": "Resposta + Pílula de Fontes (n)",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    { "participant": "cockpit", "from": 185, "to": 722, "type": "frontend" },
+    { "participant": "laya", "from": 234, "to": 292, "type": "security" },
+    { "participant": "acervo", "from": 349, "to": 407, "type": "database" },
+    { "participant": "web", "from": 442, "to": 499, "type": "external" },
+    { "participant": "omniroute", "from": 552, "to": 615, "type": "cloud" },
+    { "participant": "auditdb", "from": 654, "to": 688, "type": "database" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Consistência Multi-Turn (4.95 / 5.0)",
+      "items": [
+        "Sliding Window preserva resolução anafórica e síntese cross-turn",
+        "Liderança empírica sobre Gemini (4.45), ChatGPT (4.30) e Copilot (3.80)",
+        "Normalização estrita de papéis user/model sem perda de contexto"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Laya Sistema 1 em CPU (0 MB VRAM)",
+      "items": [
+        "Single forward pass INT8 em ~20ms a 35ms (complexidade O(1))",
+        "Omissão limpa de busca web em perguntas conceituais (general_chat)",
+        "GPU RTX 3050 100% preservada para failover Ollama local a $0.00"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Fontes Retráteis & Prova SHA-256",
+      "items": [
+        "Pílula 'Fontes Consultadas (n) v' desacoplada da leitura executiva",
+        "Cofre AES-256-GCM + decodificador universal open-sse + sondas TCP 300ms",
+        "Atesto criptográfico imutável SHA-256 em conformidade ISO 42001"
+      ]
+    }
+  ]
+}

@@ -1,107 +1,102 @@
-# SPEC-PCL-AEOS-CLASSIFIER-01: PCL Triage & System 1 Classifier Engine Specification
+# SPEC-PCL-AEOS-CLASSIFIER-01: PCL Triage, Intention Gating & System 1 Classifier Engine
 
-**Versão:** 2.0-Sovereign (Laya System One)  
-**Status:** Approved & Implemented (Ports & Adapters Architecture / Laya MCP Native)  
-**Autor:** Forward Deployed Architecture (FDA) / PCL AI Squad  
-**Escopo:** OmniRoute AI Gateway (:20130), Antigravity IDE, PCL Core Engine, Laya MCP Server  
+**Versão:** `3.6-Sovereign` (Laya System One + Cockpit Intention Gating)  
+**Status:** Approved & Implemented (Ports & Adapters Architecture / Laya MCP & HTTP Native)  
+**Autor:** Forward Deployed Architecture (FDA) / PromptCore Labs Cognitive Systems  
+**Escopo:** PCL Cockpit (`:3001`), OmniRoute AI Gateway (`:20130`), Antigravity IDE, Laya Server (`:20140`)  
 **Padrão Arquitetural:** Hexagonal Architecture (Ports & Adapters) / Strategy Pattern  
-**Normas de Governança:** ISO/IEC 27001 & ISO/IEC 42001  
+**Normas de Governança:** `PCL-AEOS-NORM-01`, ISO/IEC 27001 & ISO/IEC 42001  
+
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Usar um grande modelo generativo em nuvem apenas para decidir *qual ferramenta acionar* é como contratar um conselho diretor para triar correspondência: lento (`1s a 3s`) e caro. O **PCL Classifier Engine (Laya System One)** realiza essa triagem localmente em **~20 milissegundos** na CPU comum com **custo `$0.00`**, eliminando até 70% de chamadas desnecessárias e evitando que buscas irrelevantes poluam respostas executivas.
+
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Especifica a porta hexagonal de classificação não-autorregressiva em complexidade **`O(1)`** (*single forward pass*), executada pelo modelo **`cross-encoder/nli-MiniLM-2-L6-H768` quantizado em INT8 (`CPUExecutionProvider`, `0 MB VRAM`)** via MCP `stdio` (`~0.014ms` em lote) e REST (`:20140`, `< 35ms`), incluindo o **Intention Gating v3.6** (`general_chat | internal_rag | web_search`).
 
 ---
 
-## 1. Diretriz Arquitetural: Abstração & Soberania do Sistema 1
-
-Para garantir que o **PCL AEOS** opere como um Sistema Operacional de IA Soberano, o componente de decisão e triagem ultrarrápida é formalizado como o **PCL Classifier Engine**, implementado nativamente pelo **Coprocessador Laya System One**.
-
-A arquitetura do AEOS opera em modelo de portas e adaptadores, permitindo comunicação direta local em altíssima velocidade via **Model Context Protocol (MCP)** e exposição em microsserviço no container do **OmniRoute AI Gateway (:20130)** para blindagem financeira (*EBITDA Shield*).
+## 1. Topologia Hexagonal Panorâmica do Sistema 1 (Padrão Cortex v7)
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px', 'fontFamily': 'Inter, sans-serif' }}}%%
-flowchart TD
-    subgraph Core["🏛️ PCL AEOS Core"]
-        IDE["<b>Antigravity IDE & Squad de Agentes</b>"]
+flowchart LR
+    classDef core fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef canal fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef fall fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Clientes ["1. Consumidores Soberanos"]
+        direction TB
+        Cockpit["<b>🖥️ PCL Cockpit v3.6 (:3001)</b><br/>Fase 1 do Live Stepper (Intention Gate)"]:::core
+        IDE["<b>🤖 Antigravity IDE & 15 Agentes</b><br/>Guardrails TLC v3 & RAG Gate"]:::core
+        Cockpit --> IDE
     end
 
-    subgraph Canais["⚡ Duplo Canal de Comunicação"]
-        Canal1["<b>Canal 1: Local MCP (stdio)</b><br/>• Protocolo nativo JSON-RPC<br/>• Latência ~0.014ms em CPU<br/>• Primitivas: binary, choice, score, contradiction"]
-        Canal2["<b>Canal 2: OmniRoute Gateway (:20130)</b><br/>• Firewall semântico EBITDA Shield<br/>• Encaminhamento REST para o container local"]
+    subgraph Canais ["2. Portas & Adaptadores de Transporte"]
+        direction TB
+        CanalMCP["<b>Canal 1: Local MCP (stdio)</b><br/>JSON-RPC nativo • ~0.014ms batch"]:::canal
+        CanalREST["<b>Canal 2: HTTP REST & OmniRoute</b><br/>Porta :20140 / Probe TCP 250–300ms"]:::canal
+        CanalMCP --> CanalREST
     end
 
-    subgraph Engine["🧠 Motor de Classificação Soberano"]
-        LayaCore["<b>⭐ Laya System One Coprocessor</b><br/><i>Microsserviço em CPU Local (:20140 / INT8 ONNX)</i><br/>• SLA &lt; 15ms | Custo $0.00 | 0 MB VRAM"]
+    subgraph Motor ["3. Motor Sistema 1 em CPU (0 MB VRAM)"]
+        direction TB
+        LayaCore["<b>⚡ Laya System One Coprocessor</b><br/>nli-MiniLM-2-L6-H768 ONNX INT8 AVX2"]:::laya
+        Symbolic["<b>Graceful Deterministic Engine</b><br/>Fallback simbólico local zero erro 500"]:::canal
+        LayaCore --> Symbolic
     end
 
-    subgraph Fallback["🛡️ Contingência de Exceção"]
-        CloudFallback["<b>Cloud Structured LLM Fallback</b><br/><i>Acionado apenas na indisponibilidade do container local</i>"]
+    subgraph Contingencia ["4. Saída Tipada & Contingência"]
+        direction TB
+        TypedOut["<b>🎯 Decisão Tipada O(1) ($0.00)</b><br/>general_chat | internal_rag | web_search"]:::laya
+        CloudFall["<b>Cloud Structured JSON Fallback</b><br/>Apenas se container local desligado"]:::fall
+        TypedOut --> CloudFall
     end
 
-    IDE ==>|"MCP Direto (Alta Velocidade)"| Canal1
-    IDE -.->|"HTTP / REST"| Canal2
-    Canal1 ==>|"Execução em CPU"| LayaCore
-    Canal2 ==>|"Consome porta :20140"| LayaCore
-    Canal2 -.->|"Fallback"| CloudFallback
-
-    classDef core fill:#0b1329,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef canal fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef laya fill:#1e3a8a,stroke:#60a5fa,stroke-width:2.5px,color:#fff;
-    classDef fallback fill:#1c1917,stroke:#78716c,stroke-width:1.5px,color:#a8a29e;
-
-    class IDE core;
-    class Canal1,Canal2 canal;
-    class LayaCore laya;
-    class CloudFallback fallback;
+    Clientes ==> Canais ==> Motor ==> Contingencia
 ```
 
 ---
 
-## 2. Contrato da Interface Abstrata (`PCL Classifier Port`)
+## 2. Fundamentação Teórica: Sistema 1 (`O(1)`) vs. Sistema 2 (`O(N)`) e `Laya` vs. `JEV`
 
-Qualquer provedor de classificação integrado ao PCL AEOS implementa rigorosamente as quatro primitivas determinísticas abaixo:
+Uma evidência central consolidada nos testes comparativos da v3.6 é a distinção algorítmica entre classificadores não-autorregressivos locais e orquestradores SaaS baseados em geração de tokens:
+
+| Critério Arquitetural | Coprocessador Laya System One (PCL AEOS v3.6) | JEV (*TypeSafe AI*) / Orquestradores LLM SaaS |
+| :--- | :--- | :--- |
+| **Origem & Licenciamento** | Paradigma aberto *Convai Innovations* (**Apache 2.0**), empacotado soberanamente em `services/pcl-laya`. | Serviço comercial fechado em nuvem (*SaaS API*) com cobrança recorrente por volume de chamadas. |
+| **Complexidade Computacional** | **`O(1)` Não-Autorregressivo:** Um único *forward pass* matricial produz logits calibrados diretamente. | **`O(N)` Autorregressivo (nos LLMs comuns) ou RTT Cloud:** Sofre latência de rede externa (`300ms–2.500ms`). |
+| **Consumo de GPU Local** | **`0 MB de VRAM`** (`100% CPU Host` via ONNX Runtime INT8, `~78.9 MB` em RAM). | N/A (dependência obrigatória de conectividade externa e envio do prompt a terceiros). |
+| **Privacidade & Soberania** | **100% On-Premise:** Prompts confidenciais são triados sem sair da máquina do operador. | Tráfego externo de metadados e prompts de roteamento para infraestrutura de terceiros. |
+
+---
+
+## 3. Contrato da Interface Abstrata (`PCL Classifier Port`)
+
+Qualquer provedor acoplado ao PCL AEOS implementa rigorosamente cinco primitivas determinísticas com retorno JSON tipado:
 
 1. **`evaluate_binary(state, query) -> { result: boolean, confidence: float }`**
-   - Respostas estritas de sim/não ou verdadeiro/falso sem geração de texto.
+   - Decisão booleana estrita sem geração de texto (ex: *Answerability Gate* `>= 0.40`).
 2. **`evaluate_choice(state, query, options[]) -> { selected: string, confidence: float }`**
-   - Seleção determinística dentre uma lista fixa de opções.
+   - Seleção determinística dentre opções fechadas (ex: roteamento de squad ou perfil cognitivo).
 3. **`evaluate_score(state, query, min, max) -> { score: float, confidence: float }`**
-   - Atribuição de pontuação numérica dentro de um intervalo calibrado.
-4. **`check_contradiction(premise, hypothesis) -> { contradiction: boolean, confidence: float }`**
-   - Verificação instantânea de conflito ou staleness entre premissas documentais e afirmações.
-
-### Requisitos Inegociáveis do Motor
-- **Latência:** Resposta entre **0.014ms (via MCP local) e < 35ms (via REST Docker)**.
-- **Segurança de Tipos (Type Safety):** Garantia absoluta de conformidade ao schema JSON, eliminando quebras de pipeline e alucinações de texto.
-- **EBITDA Shield / Economia de Tokens:** Isenção total de cobrança de tokens de saída (*zero output token generation*, custo \$0.00).
-- **Consumo de Hardware:** 0 MB de VRAM na GPU; execução 100% em CPU com quantização INT8.
+   - Pontuação escalar contínua calibrada para relevância documental e risco operacional.
+4. **`check_contradiction(premise, hypothesis) -> { contradiction: boolean, label: "entailment"|"contradiction"|"neutral", confidence: float }`**
+   - Juiz lógico NLI com **93,3% de recall** auditado para reconciliação de `memory.claims` e *staleness*.
+5. **`evaluate_cockpit_intent(history, query) -> { mode: "general_chat"|"internal_rag"|"web_search", needsWebSearch: boolean, needsCanonicalRAG: boolean }` *(Novo na v3.6 — `ADR-0007`)*:**
+   - Governa a Fase 1 do **Live Execution Stepper** no PCL Cockpit (`:3001`), eliminando buscas web compulsórias em perguntas teóricas (`HIP-007`) e preservando fluidez natural sem jargão interno em perguntas gerais (`HIP-006`).
 
 ---
 
-## 3. Mapeamento de Provedores (Adapters)
+## 4. Mapeamento de Adaptadores & Interfaces Operacionais
 
-### **3.1. Provedor Canônico Soberano: Laya System One Coprocessor**
-- **Descrição:** Motor neural do Sistema 1 local baseado no modelo **`cross-encoder/nli-MiniLM-2-L6-H768`** em formato ONNX quantizado (INT8 / AVX2, ~78.9 MB), calibrado para inferência em linguagem natural (NLI - 3 classes: *contradiction*, *entailment*, *neutral*) e decisões reflexas ultrarrápidas, sem dependência de nuvem.
-- **Caso de Uso no AEOS:** Triagem primária de prompts no Antigravity IDE, verificação instantânea de contradições no RAG e na reconciliação de memória (supersessão automática de claims), classificação de intenções em microssegundos e guardrails pré-execução no pipeline TLC.
-- **Arquitetura Dual-Engine:** Opera nativamente com o motor neural ONNX Runtime em CPU (`CPUExecutionProvider`). Caso os binários ONNX não estejam disponíveis no ambiente mínimo, reverte com transparência absoluta para o motor determinístico simbólico (*Graceful Fallback*), garantindo tolerância zero a falhas (zero erro 500).
-- **Interfaces:**
-  - **Canal Local:** MCP Server (`services/pcl-laya/src/mcp_server.py`) via `stdio` (tools: `laya_evaluate_nli`, `laya_evaluate_binary`, `laya_check_contradiction`, `laya_evaluate_choice`, `laya_evaluate_score`, `laya_evaluate_batch`, `laya_health`).
-  - **Canal de Rede:** Endpoint HTTP REST no container `pcl-laya:20140` (`/v1/classifier/evaluate`, `/v1/classifier/evaluate/nli`, `/health`).
-- **Custo:** \$0.00 / 0 MB GPU VRAM / 100% Offline em CPU.
+### 4.1. Adaptador Primário: `pcl-laya` Dual-Engine (`CPU INT8` + Simbólico)
+* **Canal Local MCP (`stdio`):** `services/pcl-laya/src/mcp_server.py` registrado em `.agents/mcp_config.json` (`laya_evaluate_nli`, `laya_evaluate_binary`, `laya_check_contradiction`, `laya_evaluate_choice`, `laya_evaluate_score`, `laya_evaluate_batch`, `laya_health`).
+* **Canal HTTP Microsserviço (`:20140`):** Endpoints `/v1/classifier/evaluate`, `/v1/classifier/evaluate/nli` e `/health`, monitorados por sonda TCP de `250–300ms` no PCL Cockpit.
+* **Resiliência Zero Erro 500:** Na ausência temporária do contêiner Docker, o módulo `intelligentGroundingService.ts` aplica heurística simbólica determinística local com semântica idêntica, mantendo zero dependência de mocks estáticos.
 
-### **3.2. Provedor Alternativo de Borda: Local Compiled ONNX Runtime**
-- **Descrição:** Classificador embarcado compilado para ambientes bare-metal de baixíssimo consumo energético.
-- **Caso de Uso:** Ambiência de borda com *air-gap* total ou requisitos de hardware ultrarrestringido.
-
-### **3.3. Provedor de Contingência: Cloud Structured Fallback**
-- **Descrição:** Adaptador para saídas estruturadas via Amazon Bedrock, Google Vertex AI ou OpenAI Structured Outputs (JSON Schema estrito).
-- **Caso de Uso:** Fallback secundário ativado apenas na hipótese de parada deliberada dos serviços locais.
-
----
-
-## 4. Configuração no OmniRoute AI Gateway (:20130)
-
-O OmniRoute gerencia a integração dinâmica com o Laya através de variáveis de ambiente no `docker-compose.aeos.yml`:
+### 4.2. Configuração no `docker-compose.aeos.yml` / OmniRoute (`:20130`)
 
 ```yaml
-# Trecho de configuração no OmniRoute Gateway
 OMNIROUTE_CLASSIFIER_PROVIDER: "laya"
 OMNIROUTE_LAYA_ENDPOINT: "http://pcl-laya:20140"
 OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED: "true"
@@ -109,7 +104,6 @@ OMNIROUTE_CLASSIFIER_FAILOVER_ENABLED: "true"
 
 ---
 
-## 5. Integração com Antigravity IDE & Agentes
+## 5. Enquadramento Normativo RACI (`AGENTS.md` Seção 4)
 
-1. O **Antigravity IDE** acessa diretamente o Laya MCP Server registrado em `.agents/mcp_config.json`, garantindo decisão instantânea em CPU antes de qualquer inferência de modelo pesado.
-2. O **OmniRoute Gateway** consome o Laya na porta `:20140` como firewall semântico e protetor de custos (*EBITDA Shield*).
+O Laya System One opera estritamente como **sensor consultivo de alta velocidade (`RACI: R/C`)**. Nenhuma classificação automatizada substitui a aprovação soberana humana nos **Stage Gates TLC v3** em operações financeiras, destrutivas ou de deploy produtivo.

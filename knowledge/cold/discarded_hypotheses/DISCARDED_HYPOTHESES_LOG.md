@@ -1,23 +1,56 @@
 ---
 title: "Registro Canônico de Hipóteses e Decisões Técnicas Descartadas (Cold Storage)"
 system_scope: "PCL AEOS Kernel / PCL Cockpit"
-kernel_version: "v3.5.0"
+kernel_version: "v3.6.0"
 type: "Cold_Log"
 status: "Rejected"
-rag_tags: [cold_storage, discarded_hypotheses, architecture, anti_patterns, lessons_learned, decisions]
+rag_tags: [cold_storage, discarded_hypotheses, architecture, anti_patterns, lessons_learned, decisions, v3.6, hip_001_008]
 created_at: "2026-10-29"
-last_updated: "2026-10-29"
+last_updated: "2026-11-01"
 author: "PromptCore Labs Architecture"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
 
-# 🧊 Registro Canônico de Hipóteses Descartadas & Anti-Patterns (Cold Storage)
+# 🧊 Registro Canônico de Hipóteses Descartadas & Anti-Patterns (Cold Storage — v3.6)
 
-> **Objetivo Normativo:** Preservar a memória histórica das decisões de engenharia, registrando explicitamente as abordagens que foram avaliadas, testadas e formalmente **rejeitadas**. Este documento atua como uma salvaguarda contra regressões, impedindo que futuras iterações ou novos agentes de IA reintroduzam erros, complexidades ou custos já superados.
+> **Objetivo Normativo:** Preservar a memória histórica negativa das decisões de engenharia (`HIP-001` a `HIP-008`), registrando explicitamente as abordagens que foram avaliadas, testadas e formalmente **rejeitadas**. Este documento atua como salvaguarda contra regressões, impedindo que futuras iterações ou agentes de IA reintroduzam erros, custos ou gargalos já superados.
+>
+> **👔 Visão Executiva & Valor de Negócio:** Funciona como a **Memória Imunológica Corporativa** da empresa: documenta por que alternativas caras, lentas ou arriscadas (bancos em nuvem pagos, respostas simuladas, buscas forçadas ou chats sem memória) foram vetadas, protegendo o EBITDA e evitando retrabalho estratégico.
+>
+> **🛠️ Visão de Engenharia & Invariantes Físicos:** Repositório físico da camada térmica fria (`knowledge/cold/`), consultado seletivamente pelo **PCL Cockpit (:3001)** apenas quando o **Intention Gating** do Laya (`~20–35ms`, `0 MB VRAM`) detecta auditoria histórica de decisões ou análise de anti-patterns (`ADR-0005` e `ADR-0007`).
+
+```mermaid
+flowchart LR
+    classDef alert fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef sys fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Rej1 ["1. Infra & UI Rejeitadas"]
+        direction TB
+        H1["<b>HIP-001 a HIP-003</b><br/>Neo4j JVM • Bitrix Drawer • Mocks"]:::alert
+        H2["<b>HIP-004 e HIP-005</b><br/>Timeouts 60s • JSON sobre SSE"]:::alert
+        H1 --> H2
+    end
+
+    subgraph Rej2 ["2. Crises Cognitivas v3.5"]
+        direction TB
+        H3["<b>HIP-006 e HIP-007</b><br/>Jargão Forçado • Web Compulsória"]:::alert
+        H4["<b>HIP-008</b><br/>Chat Stateless (Amnésia)"]:::alert
+        H3 --> H4
+    end
+
+    subgraph Sol ["3. Padrão Soberano v3.6"]
+        direction TB
+        S1["<b>PGVector + Probe 300ms + SSE</b><br/>Zero Mocks • PCLArtifactDrawer"]:::sys
+        S2["<b>Multi-Turn + Laya Gating CPU</b><br/>ADR-0007 • Pílulas Retráteis"]:::sys
+        S1 --> S2
+    end
+
+    Rej1 ==> Rej2 ==> Sol
+```
 
 ---
 
-## 1. Descarte de Grafos de Conhecimento via Stack JVM Dedicada (Neo4j / Graphiti Cloud)
+## 1. `HIP-001` — Descarte de Grafos de Conhecimento via Stack JVM Dedicada (Neo4j / Graphiti Cloud)
 
 * **Hipótese Original:** Implantar uma instância do Neo4j ou adotar um SaaS de grafos gerenciado (Graphiti Cloud / Zep) para armazenar relacionamentos semânticos entre artefatos e entidades corporativas.
 * **Motivo da Rejeição:**
@@ -27,7 +60,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 2. Descarte de Componente de Gaveta Genérico / SaaS (Bitrix24 Slide-Over)
+## 2. `HIP-002` — Descarte de Componente de Gaveta Genérico / SaaS (Bitrix24 Slide-Over)
 
 * **Hipótese Original:** Manter um componente rotulado como `BitrixSlideOver.tsx` emulando uma interface genérica inspirada no Bitrix24 para visualização de artefatos.
 * **Motivo da Rejeição:**
@@ -37,7 +70,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 3. Descarte de Respostas Mockadas / Pré-Fabricadas (Hardcoded Mocks)
+## 3. `HIP-003` — Descarte de Respostas Mockadas / Pré-Fabricadas (Hardcoded Mocks)
 
 * **Hipótese Original:** Utilizar funções estáticas de contingência (como `generateRichResponse` em `omniRouteService.ts`) que retornavam textos fixos com tabelas pré-formatadas (ex: dados de salários de TI em São Paulo) quando os gateways upstream atrasavam.
 * **Motivo da Rejeição:**
@@ -47,7 +80,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 4. Descarte de Timeouts Longos de Rede (25s a 60s) em Contêineres Offline
+## 4. `HIP-004` — Descarte de Timeouts Longos de Rede (25s a 60s) em Contêineres Offline
 
 * **Hipótese Original:** Delegar a gestão de timeouts ao comportamento padrão do Node.js/Fetch (`AbortSignal.timeout(25000)` a `60000ms`) nas chamadas HTTP para os serviços locais (`:20130` OmniRoute, `:20140` Laya).
 * **Motivo da Rejeição:**
@@ -56,7 +89,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 5. Descarte de Parsing JSON Monolítico sobre Streams SSE (`open-sse`)
+## 5. `HIP-005` — Descarte de Parsing JSON Monolítico sobre Streams SSE (`open-sse`)
 
 * **Hipótese Original:** Tratar o endpoint `/v1/chat/completions` do OmniRoute como uma API JSON padrão síncrona executando `await response.json()`.
 * **Motivo da Rejeição:**
@@ -66,7 +99,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 6. Descarte de Injeção Indiscriminada de Contexto Interno em Consultas Abertas
+## 6. `HIP-006` — Descarte de Injeção Indiscriminada de Contexto Interno em Consultas Abertas
 
 * **Hipótese Original:** Injetar o acervo canônico corporativo (ADRs e diretrizes internas do PCL AEOS) no prompt de sistema de toda e qualquer mensagem enviada ao chat.
 * **Motivo da Rejeição:**
@@ -78,7 +111,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 7. Descarte de Grounding Web Obrigatório e Injeção Forçada de Fontes (Crise v3.5)
+## 7. `HIP-007` — Descarte de Grounding Web Obrigatório e Injeção Forçada de Fontes (Crise v3.5)
 
 * **Hipótese Original:** Executar busca na internet (Wikipedia / DuckDuckGo) e injetar fontes externas compulsoriamente em 100% das mensagens submetidas ao Cockpit, exibindo cartões de links ao final de cada interação.
 * **Motivo da Rejeição:**
@@ -88,7 +121,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 
 ---
 
-## 8. Descarte de Memória Stateless / Single-Turn nos Modelos de Nuvem
+## 8. `HIP-008` — Descarte de Memória Stateless / Single-Turn nos Modelos de Nuvem
 
 * **Hipótese Original:** Tratar cada requisição de chat de forma isolada, enviando apenas o prompt atual (`messages: [{ role: 'user', content: prompt }]`) para economizar largura de banda e tokens.
 * **Motivo da Rejeição:**

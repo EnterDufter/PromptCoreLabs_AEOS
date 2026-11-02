@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>PCL AEOS — Catálogo Visual de Diagramas Mermaid (Revisão Calibrada v7)</title>
+  <title>PCL AEOS v3.6 — Catálogo Visual de Diagramas Mermaid (Revisão Calibrada Cortex v7)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -158,9 +158,9 @@
 <body>
   <div class="container">
     <header>
-      <h1>PCL AEOS — Catálogo Visual de Diagramas Mermaid (Revisão Calibrada v7)</h1>
-      <p>Caixas mais largas com leitura horizontal suave, padrão colunar do Diagrama 7 aplicado aos Diagramas 4, 6 e 11, espaçamento uniforme no Diagrama 10 e inversão com alinhamento vertical no Diagrama 14.</p>
-      <span class="badge">Layout: Caixas Largas Proporcionais • Padrão Diagrama 7 nos Diags 4, 6, 11 • Spacing Calibrado</span>
+      <h1>PCL AEOS v3.6 — Catálogo Visual de Diagramas Mermaid (Revisão Calibrada Cortex v7)</h1>
+      <p>Catálogo canônico de 18 diagramas panorâmicos (<code>flowchart LR</code> e <code>sequenceDiagram</code>) com caixas largas em 2 linhas, distribuição colunar, anti-clipping CSS, contraste WCAG AAA e cobertura integral da evolução cognitiva do <strong>PCL Cockpit v3.6</strong> (Diagramas 16, 17 e 18).</p>
+      <span class="badge">Padrão Cortex v7 • 18 Diagramas Auditados • UTF-8 Puro • Anti-Clipping &amp; WCAG AAA</span>
     </header>
 
     <!-- DIAGRAMA 1 -->
@@ -436,49 +436,50 @@ flowchart LR
     <div class="diagram-card" id="diag8">
       <div class="diagram-header">
         <div>
-          <div class="diagram-title">Diagrama 8 • Manual dos 15 Agentes: Organograma da Holding (Paperclip)</div>
+          <div class="diagram-title">Diagrama 8 • Manual dos 15 Agentes: Organograma da Holding (Paperclip &amp; Cockpit :3001)</div>
           <div class="diagram-meta">projects/Living Architecture PCL AEOS/docs/agents-squads/README.md</div>
         </div>
-        <span class="status-pill status-calibrated">3 Colunas Equilibradas</span>
+        <span class="status-pill status-calibrated">Panorâmico LR Colunar</span>
       </div>
       <div class="mermaid-container">
         <pre class="mermaid">
-flowchart TD
-    classDef ceo fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
-    classDef tlc fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
-    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
-    classDef biz fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
-    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
+flowchart LR
+    classDef ceo fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef tlc fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef biz fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
-    CEO["👑 <b>CEO PromptCore Labs</b><br/>ai-pricing • create-rfc • tlc-spec-driven"]:::ceo
-
-    subgraph F1 ["Frente 1: Software & DevSecOps"]
+    subgraph Comando ["Pilotagem Soberana"]
         direction TB
-        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software"]:::tlc
-        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps"]:::sec
-        Agile["<b>bot-agile-master</b><br/>Agile QA"]:::tlc
+        CEO["👑 <b>CEO PromptCore Labs</b><br/>Autoridade Humana + Cockpit :3001"]:::ceo
+    end
+
+    subgraph F1 ["Frente 1: Software &amp; DevSecOps"]
+        direction TB
+        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software &amp; Specs"]:::tlc
+        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps &amp; Zero Secret Leak"]:::sec
+        Agile["<b>Planner / Builder / QA</b><br/>Esteira Determinística TLC v3"]:::tlc
         TLC --> CISO --> Agile
     end
 
-    subgraph F2 ["Frente 2: Marketing & Growth"]
+    subgraph F2 ["Frente 2: Data, Produto &amp; Growth"]
         direction TB
-        RevOps["<b>RevOps_Architect</b><br/>Head Growth"]:::mkt
-        Neuro["<b>Neuromarketing</b><br/>CMO Lead"]:::mkt
-        Data["<b>Data_Insight</b><br/>Data Science"]:::mkt
+        RevOps["<b>RevOps_Architect</b><br/>Head Growth &amp; GTM"]:::mkt
+        Neuro["<b>Neuromarketing</b><br/>Design &amp; Percepção Executiva"]:::mkt
+        Data["<b>Data_Insight</b><br/>RAG, Telemetria &amp; Analytics"]:::mkt
         RevOps --> Neuro --> Data
     end
 
-    subgraph F3 ["Frente 3: Consultoria & FinOps"]
+    subgraph F3 ["Frente 3: Estratégia, Legal &amp; FinOps"]
         direction TB
-        Strat["<b>Strategist_One</b><br/>Head Consulting"]:::biz
-        Fin["<b>Financial_Advisor</b><br/>CFO Lead"]:::biz
-        Legal["<b>Compliance_Steward</b><br/>LegalOps"]:::biz
+        Strat["<b>Strategist_One</b><br/>Head AI Consulting"]:::biz
+        Fin["<b>Financial_Advisor</b><br/>CFO Lead &amp; EBITDA Shield"]:::biz
+        Legal["<b>Compliance &amp; Skills_Mgr</b><br/>LGPD, ADRs &amp; AI Academy"]:::biz
         Strat --> Fin --> Legal
     end
 
-    CEO ==> F1
-    CEO ==> F2
-    CEO ==> F3
+    Comando ==> F1 ==> F2 ==> F3
         </pre>
       </div>
     </div>
@@ -684,50 +685,51 @@ sequenceDiagram
     <div class="diagram-card" id="diag14">
       <div class="diagram-header">
         <div>
-          <div class="diagram-title">Diagrama 14 • README Master: Inferência Híbrida & Failover Local (0 MB VRAM)</div>
-          <div class="diagram-meta">README.md</div>
+          <div class="diagram-title">Diagrama 14 • README Master: Inferência Híbrida, Fast-Path &amp; Failover Local (0 MB VRAM Laya)</div>
+          <div class="diagram-meta">README.md • docs/hybrid-inference-architecture.md</div>
         </div>
-        <span class="status-pill status-calibrated">Panorâmico LR (Rota 2 Acima de Rota 3)</span>
+        <span class="status-pill status-calibrated">Panorâmico LR (Rota Online Acima de Local)</span>
       </div>
       <div class="mermaid-container">
         <pre class="mermaid">
 flowchart LR
     classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
     classDef c0 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
-    classDef c1 fill:#78350f,stroke:#f59e0b,stroke-width:1.5px,color:#ffffff;
-    classDef c2 fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
-    classDef out fill:#022c22,stroke:#10b981,stroke-width:1.5px,color:#ffffff;
+    classDef c1 fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef c2 fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef out fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
 
-    subgraph Entrada ["1. Ponto de Entrada"]
+    subgraph Entrada ["1. Entrada &amp; Triagem CPU"]
         direction TB
-        Harness["<b>Agente PCL</b><br/>Antigravity IDE & Terminal"]:::req
-        Gateway["<b>OmniRoute Gateway</b><br/>Porta :20130"]:::req
+        Harness["<b>PCL Cockpit :3001 &amp; IDE</b><br/>Laya CPU INT8 (0 MB VRAM)"]:::req
+        Gateway["<b>OmniRoute :20130 + TCP Probe</b><br/>Fail-fast em 250–300ms"]:::req
         Harness --> Gateway
     end
 
-    subgraph Tier0 ["2. Rota Primária: Nuvem"]
+    subgraph Tier0 ["2. Rota Primária Online (0 MB VRAM GPU)"]
         direction LR
-        APIs["<b>APIs Soberanas Free Tier</b><br/>Gemini 2.5 Pro / DeepSeek V3"]:::c0
-        RespCloud["<b>Resposta Nuvem</b><br/>Latência: ~1.5s • Zero Custo"]:::out
+        APIs["<b>Fast-Path Cloud Cifrado</b><br/>Gemini 3.5 Flash-Lite / 3.6 Flash"]:::c0
+        RespCloud["<b>Stream open-sse (~1.2s–3.4s)</b><br/>RTX 3050 100% em Repouso"]:::c0
         APIs --> RespCloud
     end
 
-    subgraph TierLocal ["3. Contingência: Local (0 MB VRAM)"]
+    subgraph TierLocal ["3. Contingência Soberana Local ($0.00)"]
         direction LR
-        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (CPU)"]:::c1
-        L2["<b>LM Studio :1234</b><br/>DeepSeek-Coder-V2 (CPU)"]:::c2
-        RespLocal["<b>Resposta Local</b><br/>0 MB VRAM • 100% Offline"]:::out
-        L1 -.->|"Fallback L2"| L2
+        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (GPU RTX ~4.7GB)"]:::c1
+        L2["<b>LM Studio :1234</b><br/>DeepSeek-V2-Lite MoE (VRAM+RAM)"]:::c2
+        RespLocal["<b>Continuidade 100% Offline</b><br/>Desalocação auto ao voltar rede"]:::out
+        L1 -.->|"Tarefa MoE"| L2
         L2 --> RespLocal
     end
 
-    Saida["🎯 <b>Execução Concluída</b><br/>Retorno ao Agente IDE"]:::out
+    Saida["🎯 <b>Execução Concluída</b><br/>Retorno Auditado SHA-256"]:::c0
 
-    Gateway ==>|"1. Conexão Normal"| APIs
-    Gateway -.->|"2. Failover Timeout"| L1
+    Gateway ==>|"1. Rede Ativa"| APIs
+    Gateway -.->|"2. Queda / On-Prem"| L1
 
-    RespCloud ==>|"Resposta Nuvem"| Saida
-    RespLocal -.->|"Resposta Offline"| Saida
+    RespCloud ==>|"Entrega Online"| Saida
+    L1 ==>|"Entrega Nível 1"| Saida
+    RespLocal -.->|"Entrega Nível 2"| Saida
         </pre>
       </div>
     </div>
@@ -772,6 +774,145 @@ flowchart LR
 
     DecLaya ==>|"Homologação Imediata"| Saida
     DecLLM -.->|"Homologação Assíncrona"| Saida
+        </pre>
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 16 -->
+    <div class="diagram-card" id="diag16">
+      <div class="diagram-header">
+        <div>
+          <div class="diagram-title">Diagrama 16 • PCL Cockpit v3.6: Pipeline Cognitivo em 5 Fases (Live Execution Stepper)</div>
+          <div class="diagram-meta">knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md • index.html (#cockpit-v36)</div>
+        </div>
+        <span class="status-pill status-approved">Novo v3.6 Homologado</span>
+      </div>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart LR
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef rag fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef search fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef gen fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef audit fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+
+    subgraph F1["Fase 1: Triagem (~20ms)"]
+        direction TB
+        P1["<b>Laya CPU INT8 (:20140)</b><br/>0 MB VRAM • Intention Gate O(1)"]:::laya
+    end
+
+    subgraph F2["Fase 2: Base Canônica"]
+        direction TB
+        P2["<b>Acervo Warm &amp; Cold RAG</b><br/>Specs v3.6 &amp; ADRs (&gt;= 0.40)"]:::rag
+    end
+
+    subgraph F3["Fase 3: Pesquisa Web"]
+        direction TB
+        P3["<b>Gating Condicional</b><br/>Wiki/ArXiv ou Omitida sem ruído"]:::search
+    end
+
+    subgraph F4["Fase 4: Síntese Multi-Turn"]
+        direction TB
+        P4["<b>Fast-Path / Ollama Local</b><br/>Sliding Window + open-sse"]:::gen
+    end
+
+    subgraph F5["Fase 5: Atesto Imutável"]
+        direction TB
+        P5["<b>Pílula + Hash SHA-256</b><br/>Fontes retráteis &amp; prova ACID"]:::audit
+    end
+
+    F1 ==> F2 ==> F3 ==> F4 ==> F5
+        </pre>
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 17 -->
+    <div class="diagram-card" id="diag17">
+      <div class="diagram-header">
+        <div>
+          <div class="diagram-title">Diagrama 17 • Passo 3 v3.6: Memória Temporal (memory.*) vs. Governança Física RAG (knowledge/)</div>
+          <div class="diagram-meta">memory/README.md • knowledge/README.md • index.html (#fase-3)</div>
+        </div>
+        <span class="status-pill status-approved">Novo v3.6 Homologado</span>
+      </div>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart LR
+    classDef shortM fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef warm fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef temp fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Turno ["1. Sessão Multi-Turn (:3001)"]
+        direction TB
+        SW["<b>Sliding Window Contígua</b><br/>Anáfora &amp; Síntese Cross-Turn"]:::shortM
+        Gate["<b>Laya Intention Gate (CPU)</b><br/>0 MB VRAM • ~20ms • O(1)"]:::laya
+        SW --> Gate
+    end
+
+    subgraph Fisica ["2. Governança Física (knowledge/)"]
+        direction TB
+        Warm["<b>🔥 Warm Storage</b><br/>Specs v3.6, ADRs &amp; Matriz 4.95"]:::warm
+        Cold["<b>🧊 Cold Storage &amp; Learnings</b><br/>HIP-001..008 &amp; AGENTS.md"]:::warm
+        Warm --> Cold
+    end
+
+    subgraph Temporal ["3. Memória Temporal (memory.*)"]
+        direction TB
+        PGV["<b>PGVector 768D + Claims</b><br/>Score &gt;= 0.40 &amp; NLI 93.3%"]:::temp
+        Stale["<b>Staleness Daemon (0.2s)</b><br/>Hash SHA-256 + Git Commit"]:::temp
+        PGV --> Stale
+    end
+
+    subgraph Entrega ["4. Resposta Auditada v3.6"]
+        direction TB
+        Out["<b>🎯 Síntese Sem Poluição</b><br/>Pílula Retrátil + Recibo SHA-256"]:::laya
+    end
+
+    Turno ==> Fisica ==> Temporal ==> Entrega
+        </pre>
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 18 -->
+    <div class="diagram-card" id="diag18">
+      <div class="diagram-header">
+        <div>
+          <div class="diagram-title">Diagrama 18 • Inteligência Competitiva: PCL Cockpit v3.6 (4.95/5.0) vs. Provedores Globais</div>
+          <div class="diagram-meta">knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md</div>
+        </div>
+        <span class="status-pill status-approved">Novo v3.6 Homologado</span>
+      </div>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+flowchart LR
+    classDef market fill:#0f172a,stroke:#64748b,stroke-width:1.5px,color:#ffffff;
+    classDef pcl fill:#0c2340,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef win fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+
+    subgraph MKT["1. Referências de Mercado (Insumos)"]
+        direction TB
+        JUMP["<b>Jumpad.ai &amp; Read.ai</b><br/>UX @mentions • Lock-in Cloud SaaS"]:::market
+        BIG["<b>ChatGPT, Gemini, Claude &amp; Copilot</b><br/>LLMs de Fronteira • Caixa-Preta sem Gates"]:::market
+        JUMP --> BIG
+    end
+
+    subgraph CORE["2. Substrato Soberano PCL Cockpit v3.6"]
+        direction TB
+        C1["<b>Laya System 1 (CPU INT8)</b><br/>0 MB VRAM • Triagem O(1) em ~20ms"]:::pcl
+        C2["<b>Multi-Turn + Intention Gating</b><br/>Sliding Window &amp; Fontes Retráteis"]:::pcl
+        C3["<b>OmniRoute Fast-Path + Local</b><br/>Gemini AES-256-GCM ➔ Ollama $0.00"]:::pcl
+        C1 --> C2 --> C3
+    end
+
+    subgraph ADV["3. Diferenciais Irrefutáveis (4.95 / 5.0)"]
+        direction TB
+        A1["<b>Live Stepper 5 Fases + SHA-256</b><br/>Telemetria aberta &amp; prova ISO 42001"]:::win
+        A2["<b>Zero-Bin Custody &amp; PII Guard</b><br/>BYOS local + sanitização LGPD inline"]:::win
+        A1 --> A2
+    end
+
+    MKT ==>|"Absorção Seletiva de UX"| CORE ==>|"Superioridade Auditável"| ADV
         </pre>
       </div>
     </div>

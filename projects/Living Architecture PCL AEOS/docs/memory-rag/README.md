@@ -1,139 +1,136 @@
-# Módulo RAG Vetorial & Memory Dataflow — PCL AEOS
+# Módulo RAG Vetorial, Memória Multi-Turn & Memory Dataflow — PCL AEOS v3.6
 
-> ℹ️ **Documentação de Migração Legada (DIAG-LEG-01)**: Se você deseja consultar a especificação de sanitização e migração do acervo `legacy/`, [clique aqui para abrir o artigo oficial de Migração Legada](../legacy-migration/README.md).
+> ℹ️ **Documentação de Migração Legada (`DIAG-LEG-01`):** Para consultar a especificação de sanitização e migração do acervo `legacy/`, [abra o artigo oficial de Migração Legada](../legacy-migration/README.md).
 
-==================================================
-1. ARQUITETURA DA MEMÓRIA ORGANIZACIONAL
-==================================================
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** A arquitetura de memória **v3.6** resolve definitivamente os dois maiores gargalos de assistentes corporativos: a **amnésia entre perguntas** e a **alucinação por documentos irrelevantes**. O resultado foi comprovado no benchmark cego oficial (**4.95 / 5.0**), operando com banco vetorial próprio a **`$0.00`/mês** e referências organizadas em pílula retrátil limpa.
 
-O módulo **Memory** do **PromptCoreLabs_AEOS** é a camada responsável pela persistência computacional, indexação vetorial, gerenciamento de contexto e cache semântico de toda a plataforma.
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Articula o **Modelo Temporal Operacional** (`Sliding Window Multi-Turn` + schema `memory.*` no PostgreSQL 17 `PGVector 768D HNSW`) com o **Modelo Físico de Governança RAG** (`knowledge/warm/`, `cold/`, `learnings/`), filtrados em `~20ms` pelo coprocessador **Laya CPU INT8 (`0 MB VRAM`, `score >= 0.40`)** sob `ADR-0005` e `ADR-0007`.
 
-Ao contrário do módulo `knowledge/` (que armazena documentação legível por humanos em markdown estático), o módulo `memory/` armazena e consulta índices vetoriais, embeddings e métricas legíveis por máquinas e interpretados por agentes de IA via **RAG (Retrieval-Augmented Generation)**.
+---
 
-## 1.1. ARQUITETURA DE MEMÓRIA TRIPARTIDA & SLIDING WINDOW (v3.6)
+## 1. Clarificação Canônica v3.6: Modelo Temporal (`memory.*`) vs. Governança Física (`knowledge/`)
 
-### 1.0. CLARIFICAÇÃO CANÔNICA: MODELO TEMPORAL vs. GOVERNANÇA DE ARQUIVOS
-No PCL AEOS v3.6, estabelece-se a distinção soberana entre duas dimensões complementares de memória:
-1. **Modelo Temporal Operacional (Memória Tripartida em Runtime):** Gerencia os ciclos de vida dos dados em memória de execução (Curto Prazo: sessão/sliding window; Médio Prazo: vetores PGVector; Longo Prazo: histórico imutável).
-2. **Modelo Físico de Governança RAG (Taxonomia em `knowledge/`):** Estrutura canônica de armazenamento de artefatos indexáveis para auditabilidade (Warm Storage: ADRs e especificações ativas; Cold Storage: logs exaustivos e hipóteses descartadas; Learnings: diretrizes canônicas de agentes).
+1. **Modelo Temporal Operacional (Runtime & Banco `memory.*`):** Governa o ciclo de vida dinâmico da informação em execução — **Curto Prazo** (*Sliding Window Multi-Turn* com resolução anafórica e KV-Cache), **Médio Prazo** (vetores `768D` `nomic-embed-text` e claims `Tiers 1–4` no PGVector) e **Longo Prazo** (recibos SHA-256, `STATE.md` e snapshots AES-256 no Cloudflare R2).
+2. **Modelo Físico de Governança RAG (`knowledge/`):** Estrutura declarativa versionada em Git para consulta humana e indexação determinística (`#documentos`) — **Warm Storage** (`PCL_COCKPIT_SPEC_V3.6.md`, `ADR-0007.md`, Matriz Competitiva), **Cold Storage** (`HIP-001` a `HIP-008` descartadas) e **Learnings** (`AGENTS.md`).
 
-A inteligência operacional do **PCL-AEOS** opera sobre uma estrutura de memória tripartida e multi-temporal:
+### Arquitetura Panorâmica das Camadas de Memória (Padrão Cortex v7)
 
 ```mermaid
-graph TD
-    classDef shortM fill:#131b2e,stroke:#38bdf8,stroke-width:2px,color:#fff;
-    classDef medM fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#fff;
-    classDef longM fill:#1e1b4b,stroke:#c084fc,stroke-width:2px,color:#fff;
-    classDef db fill:#312e81,stroke:#a855f7,stroke-width:1.5px,color:#fff;
+flowchart LR
+    classDef shortM fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef gateM fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef medM fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef longM fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
 
-    subgraph L1["1. Memória de Curto Prazo (Sessão & Runtime)"]
-        direction LR
-        S1["Active Agent Context<br/><i>(Conversa & Prompt)</i>"]:::shortM
-        S2["Sub-Agent Scratchpads<br/><i>(Execução Temporária)</i>"]:::shortM
-        S3["OmniRoute Prompt Cache<br/><i>(Cache de KV-Tokens)</i>"]:::shortM
+    subgraph L1["1. Curto Prazo (Sessão v3.6)"]
+        direction TB
+        S1["<b>Sliding Window Multi-Turn</b><br/>Histórico contíguo & anáfora (:3001)"]:::shortM
+        S2["<b>EBITDA Shield Prompt Cache</b><br/>Hashes semânticos & KV-Tokens"]:::shortM
+        S1 --> S2
     end
 
-    subgraph L2["2. Memória de Médio Prazo (PGVector RAG Semântico)"]
-        direction LR
-        M1["Markdown Docs & ADRs<br/><i>(specify.md, design.md)</i>"]:::medM
-        M2["Vector Embeddings<br/><i>(768D / nomic-embed-text)</i>"]:::medM
-        M3["Cosine Similarity Search<br/><i>(pgvector <=> HNSW)</i>"]:::medM
+    subgraph LG["2. Sensor Sistema 1 (CPU)"]
+        direction TB
+        G1["<b>Laya Intention & RAG Gate</b><br/>ONNX INT8 • 0 MB VRAM (~20ms)"]:::gateM
+        G2["<b>Filtro Relevância >= 0.40</b><br/>Zero poluição em chat conceitual"]:::gateM
+        G1 --> G2
     end
 
-    subgraph L3["3. Memória de Longo Prazo (Estado & Governança)"]
-        direction LR
-        H1["Paperclip Sprint History<br/><i>(COMPANY.md :3100)</i>"]:::longM
-        H2["FOUNDATION.md & Rules<br/><i>(Regras Constitucionais)</i>"]:::longM
-        H3["Constitutional STATE.md<br/><i>(Assinaturas de Gates)</i>"]:::longM
+    subgraph L2["3. Médio Prazo (PGVector & Warm)"]
+        direction TB
+        M1["<b>Acervo knowledge/warm & cold</b><br/>Specs v3.6, ADRs & Anti-Patterns"]:::medM
+        M2["<b>pcl-db :5432 (memory.*)</b><br/>Embeddings 768D HNSW & Claims"]:::medM
+        M1 --> M2
     end
 
-    subgraph DB["Base de Dados Relacional & Vetorial (pcl-db PostgreSQL :5432)"]
-        T1[("Tabela documents")]:::db
-        T2[("Tabela document_chunks")]:::db
-        T3[("Tabela embeddings (pgvector)")]:::db
-        T4[("Tabela execution_memory_logs")]:::db
+    subgraph L3["4. Longo Prazo & Prova Imutável"]
+        direction TB
+        H1["<b>Evidence Receipts SHA-256</b><br/>Vínculo criptográfico Git + Pílula"]:::longM
+        H2["<b>Cold Backup R2 AES-256</b><br/>DRP Tripartido (RTO = 7,18s)"]:::longM
+        H1 --> H2
     end
 
-    L1 -->|Flush & Summarize| L2
-    L2 -->|Persistência no Banco| DB
-    L3 -->|Governança & Veto| L1
+    L1 ==> LG ==> L2 ==> L3
 ```
 
 ### Matriz Comparativa das Camadas de Memória
 
-| Camada | Escopo | Retenção / Vida Útil | Latência | Tecnologia / Repositório |
-|---|---|---|---|---|
-| **Curto Prazo (v3.6)** | Contexto ativo multi-turn, anáfora e janela deslizante | Duração da sessão com orçamento contíguo | `< 10ms` | OmniRoute Multi-Turn Buffer + KV-Cache |
-| **Gating Sensor (Laya)**| Triagem não-autorregressiva de intenção em CPU | Decisão instantânea por requisição | `~20ms a 35ms`| Laya System One ONNX INT8 (**0 MB VRAM**) |
-| **Médio Prazo** | Conhecimento semântico do projeto (RAG) | Duração do ciclo de vida do repositório | `< 150ms` | PGVector (PostgreSQL 17 :5432) |
-| **Longo Prazo** | Histórico executivo, ADRs e Constituição | Permanente (Imutável) | `< 50ms` | Paperclip (`COMPANY.md`), `STATE.md`, Git |
+| Camada | Escopo Funcional | Retenção / Vida Útil | Latência | Tecnologia / Repositório |
+| :--- | :--- | :--- | :---: | :--- |
+| **Curto Prazo (v3.6)** | Contexto ativo multi-turn, anáfora e janela deslizante | Sessão ativa com orçamento contíguo `K` | `< 10ms` | Multi-Turn Buffer (`omniRouteService.ts`) |
+| **Gating Sensor (Laya)** | Triagem não-autorregressiva `O(1)` de intenção e relevância | Decisão instantânea por turno | `~20ms a 35ms` | Laya System One ONNX INT8 (**`0 MB VRAM`**) |
+| **Médio Prazo (RAG)** | Conhecimento semântico e normas vigentes (`warm/` + vetores) | Ciclo de vida evolutivo do monorepo | `~15ms a 120ms` | `knowledge/warm/` + PGVector (`PostgreSQL 17 :5432`) |
+| **Longo Prazo & Cold** | Constituição, ADRs, hipóteses descartadas e DRP | Permanente e auditável (Imutável) | `< 50ms` / `7,18s` RTO | `knowledge/cold/`, `memory.evidence_receipts`, Cloudflare R2 |
 
 ---
 
-## 2. PIPELINE DE RAG LOCAL & BUSCA VETORIAL
+## 2. Os 5 Paradigmas de RAG & Pipeline Vetorial Local (Cortex v7)
+
+O ecossistema implementa cinco estágios complementares: **(1) Vector RAG 768D**, **(2) Hybrid Lexical+Semantic RAG**, **(3) Cross-Encoder NLI Reranking**, **(4) Temporal Graph-RAG (`claims` + `superseded_by`)** e **(5) Conditional Agentic Gated RAG (`ADR-0007`)**:
 
 ```mermaid
-graph TD
-    subgraph IngestionPipeline["1. Ingestão & Chunking"]
-        SRC["Módulos Markdown (.md)"] --> PARSE["Context Parser & Hashing"]
-        PARSE --> CHUNK["Chunking Inteligente (800-1200 chars, overlap 150-200)"]
+flowchart LR
+    classDef ing fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef emb fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef ret fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef out fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+
+    subgraph P1["1. Ingestão & Hashing"]
+        direction TB
+        SRC["<b>Módulos Markdown (.md)</b><br/>YAML Frontmatter + Títulos"]:::ing
+        CHUNK["<b>Chunking Semântico</b><br/>800–1200 chars (overlap 150–200)"]:::ing
+        SRC --> CHUNK
     end
 
-    subgraph EmbeddingPipeline["2. Geração de Embeddings & Banco"]
-        CHUNK --> EMBED["Ollama API / nomic-embed-text (768 dimensões)"]
-        EMBED --> PG["PostgreSQL 17 / pcl-db (Extensão pgvector)"]
+    subgraph P2["2. Vetorização Local ($0.00)"]
+        direction TB
+        EMBED["<b>Ollama nomic-embed-text</b><br/>Vetores densos de 768 dimensões"]:::emb
+        PG["<b>PostgreSQL 17 (pgvector)</b><br/>Índice HNSW (m=16, ef=64)"]:::emb
+        EMBED --> PG
     end
 
-    subgraph RetrievalPipeline["3. Consulta & Injeção de Contexto"]
-        USER["Prompt do Agente"] --> SIM["Search Cosseno / HNSW Index"]
-        PG --> SIM
-        SIM --> CTX["Payload de Contexto Enriquecido"]
-        CTX --> OMNI["OmniRoute AI Gateway (:20130)"]
-        OMNI --> LLM["Modelo de Linguagem (Cloud / GPU Local)"]
+    subgraph P3["3. Recuperação & Gating v3.6"]
+        direction TB
+        SIM["<b>Busca Híbrida + Cosseno (<=>)</b><br/>Candidatos Top-K + Filtro Status"]:::ret
+        LAYA["<b>Laya NLI Rerank & Gate</b><br/>Score >= 0.40 + Check Contradição"]:::ret
+        SIM --> LAYA
     end
 
-    IngestionPipeline --> EmbeddingPipeline
-    EmbeddingPipeline --> RetrievalPipeline
+    subgraph P4["4. Síntese Desacoplada"]
+        direction TB
+        GEN["<b>OmniRoute / Fast-Path / Local</b><br/>Resposta fluida sem jargão forçado"]:::out
+        PILL["<b>Pílula 'Fontes Consultadas (n) v'</b><br/>Expansão sob demanda + SHA-256"]:::out
+        GEN --> PILL
+    end
+
+    P1 ==> P2 ==> P3 ==> P4
 ```
 
 ---
 
-## 3. ESPECIFICAÇÃO DE CHUNKING & REGRAS DE INDEXAÇÃO
+## 3. Especificação de Chunking & Metadados do Vetor (`JSONB`)
 
-### Regras de Segmentação de Texto
-- **Tamanho do Chunk**: 800 a 1200 caracteres (~200 a 300 tokens por fatia).
-- **Sobreposição (Overlap)**: 150 a 200 caracteres para preservação de contexto contíguo.
-- **Divisão Semântica**: Respeita a estrutura do documento utilizando delimitadores de linha (`===`) ou títulos Markdown (`#`, `##`, `###`).
-
-### Estrutura de Payload e Metadados do Vetor (`JSONB`)
-Cada vetor armazenado no `pcl-db` contém a seguinte estrutura de metadados obrigatórios:
+* **Tamanho do Chunk:** `800` a `1200` caracteres (`~200` a `300` tokens por fatia) com *overlap* de `150` a `200` caracteres.
+* **Divisão Semântica:** Respeita hierarquia Markdown (`#`, `##`, `###`) e cabeçalhos YAML Frontmatter (`status: Approved | Superseded | Rejected`).
 
 ```json
 {
-  "source_file": "foundation/FOUNDATION.md",
-  "section": "1. PRINCÍPIOS FUNDAMENTAIS",
-  "last_modified": "2026-07-30T21:40:00Z",
+  "source_file": "knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md",
+  "section": "2. Pipeline Cognitivo em 5 Fases",
+  "kernel_version": "v3.6.0",
+  "status": "Approved",
   "taxonomy": "AEOS",
-  "layer": "Foundation",
-  "sha_commit": "a1b2c3d4e5f67890",
-  "tokens": 245
+  "layer": "Warm_Storage",
+  "sha_commit": "89a8f6d",
+  "tokens": 260
 }
 ```
 
 ---
 
-## 4. INFRAESTRUTURA DE BANCO VETORIAL (`pcl-db`)
-
-A persistência vetorial roda dentro do contêiner Docker `pcl-db` (PostgreSQL 17 com extensão `pgvector` habilitada):
-
-- **Porta do Banco**: `5432`
-- **Banco de Dados**: `paperclip`
-- **Tabela de Vetores**: `document_chunks`
-- **Tabela de Logs e Telemetria**: `agent_execution_logs`
-- **Algoritmo de Similaridade**: Distância por Cosseno (`<=>`)
-- **Aceleração de Índice**: Índice HNSW (`m=16`, `ef_construction=64`)
-
-### Tabela Relacional E-R (`document_chunks` & `agent_execution_logs`)
+## 4. Infraestrutura Relacional & Vetorial (`pcl-db :5432`)
 
 ```mermaid
 erDiagram
@@ -159,8 +156,9 @@ erDiagram
 
 ---
 
-## 5. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-Este módulo refere-se diretamente aos diagramas do Portal Mestre:
-- 🟡 **[data-rag-memory.html](../../diagrams/interactive/data-rag-memory.html)**: Lineage do pipeline de ingestão e busca vetorial RAG.
-- 🔄 **[data-legacy-migration.html](../../diagrams/interactive/data-legacy-migration.html)**: Dataflow de sanitização e migração do acervo legado (Ver **[Documentação de Migração Legada](../legacy-migration/README.md)**).
-- 💜 **[obs-audit-trail.html](../../diagrams/interactive/obs-audit-trail.html)**: Coleta de logs de execução e métricas de tokens no `pcl-db`.
+## 5. Integração com Diagramas Interativos
+
+* ⚡ **[seq-cockpit-v36-cognitive-pipeline.html](../../diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html)** — Pipeline Multi-Turn, Intention Gating e Fontes Retráteis v3.6.
+* 🟡 **[data-rag-memory.html](../../diagrams/interactive/data-rag-memory.html)** — Dataflow completo de ingestão e busca vetorial RAG.
+* 🔄 **[data-legacy-migration.html](../../diagrams/interactive/data-legacy-migration.html)** — Pipeline de sanitização e migração do acervo legado.
+* 💜 **[obs-audit-trail.html](../../diagrams/interactive/obs-audit-trail.html)** — Coleta de telemetria e recibos de auditoria no `pcl-db`.

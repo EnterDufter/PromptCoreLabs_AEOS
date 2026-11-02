@@ -11,14 +11,41 @@ author: "PromptCore Labs Architecture & Cognitive Systems"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
 
-# 📚 Índice Canônico de Decisões de Arquitetura (ADRs)
+# 📚 Índice Canônico de Decisões de Arquitetura (ADRs 0001–0010)
 
-| ADR ID | Título Oficial | Status | Foco Tecnológico |
-| :--- | :--- | :--- | :--- |
-| **ADR-0001** | Estruturação de Governança Determinística Orientada a Especificação (TLC Spec-Driven v3) | Accepted | Metodologia de desenvolvimento e conformidade de gates. |
-| **ADR-0002** | Isolamento de Ambientes, Rede Mesh Tailscale e Segregação de Portas | Accepted | Segurança de rede local, Zero Trust e túneis encriptados. |
-| **ADR-0003** | Arquitetura do Gateway Híbrido de Modelos OmniRoute (:20130) | Accepted | Roteamento multi-provedor (Cloud vs. Local Ollama) com auditoria. |
-| **ADR-0004** | Orquestrador de Arquitetura e Guardião de Grafos DAG (Cortex Engine) | Accepted | Observabilidade, visualização de grafos e integridade de artefatos. |
-| **ADR-0005** | Evolução da Memória Cognitiva Tripartida, Temporal Graph-RAG e Coprocessador System One (Laya) | Accepted | PGVector no PostgreSQL 17 + Laya em CPU (INT8 / 0 MB VRAM) vs. Jev (TypeSafe AI). |
-| **ADR-0006** | Plano de Continuidade de Negócios e Recuperação de Desastres (DRP Tripartido Cloudflare R2) | Accepted | Backup e restore off-site criptografado em AES-256 com RTO < 15min. |
-| **ADR-0007** | Arquitetura de Memória Multi-Turn, Gating Inteligente e Desacoplamento de Fontes no PCL Cockpit | Accepted | Memória multi-turn sliding window, gating com Laya em CPU, fontes retráteis e auditoria SHA-256. |
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Toda decisão estrutural do ecossistema **PromptCoreLabs_AEOS** é formalizada como um *Architecture Decision Record (ADR)* auditável. Esse catálogo unificado garante previsibilidade de custos (`$0.00` em operação soberana), soberania sobre dados corporativos e rastreabilidade normativa perante auditorias ISO/IEC 27001 e ISO/IEC 42001.
+
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Para eliminar divergências entre diretórios do monorepo, todos os ADRs reais do repositório estão harmonizados em **3 Trilhas Canônicas** (`architecture/decisions/`, `knowledge/warm/architecture/` e `projects/Living Architecture PCL AEOS/docs/adrs/`), sob a norma soberana **`PCL-AEOS-NORM-01`**.
+
+---
+
+## Trilha 1: Fundação do Kernel & Memória Tripartida (`ADR-0001` a `ADR-0005`)
+
+| ADR ID | Título Oficial | Status | Arquivo Canônico & Foco Tecnológico |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0001`** | Segregação do Módulo Memory do Módulo Knowledge & Isolamento por Schema | Accepted | `architecture/decisions/ADR-0001-memory-module-segregation.md` — Separação entre governança física (`knowledge/`) e persistência vetorial (`memory.*`). |
+| **`ADR-0002`** | Bootstrap como Ponto de Entrada Oficial & Segregação Perimetral | Accepted | `architecture/decisions/ADR-0002-bootstrap-as-official-entry-point.md` — Onboarding padronizado Spec-Driven e topologia inicial segura. |
+| **`ADR-0003`** | Higiene Constitucional da Foundation & Orquestração Soberana | Accepted | `architecture/decisions/ADR-0003-foundation-documentation-hygiene.md` — `FOUNDATION.md` como norma imutável e governança de gateways (`OmniRoute :20130`). |
+| **`ADR-0004`** | Implementação Concorrente de Knowledge & Runtime Harness | Accepted | `architecture/decisions/ADR-0004-knowledge-runtime-concurrent-implementation.md` — Paralelismo disciplinado entre acervo declarativo e contêineres locais. |
+| **`ADR-0005`** | Evolução da Memória Cognitiva Tripartida, Temporal Graph-RAG e Coprocessador System One (Laya) | Accepted | `architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md` — PGVector no PostgreSQL 17 (`memory.*`) + Laya CPU INT8 (`0 MB VRAM`). |
+
+---
+
+## Trilha 2: Continuidade DRP & Evolução Cognitiva do Cockpit (`ADR-0006` e `ADR-0007`)
+
+| ADR ID | Título Oficial | Status | Arquivo Canônico & Foco Tecnológico |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0006`** | Plano de Continuidade de Negócios e Recuperação de Desastres (DRP Tripartido Cloudflare R2) | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md` — Backup off-site AES-256 gratuito com `RTO = 7,18s` (SLA `<= 15min`). |
+| **`ADR-0007`** | Arquitetura de Memória Multi-Turn, Gating Inteligente e Desacoplamento de Fontes no PCL Cockpit v3.6 | Accepted | `knowledge/warm/architecture/ADR-0007.md` — Sliding Window multi-turn, Intention Gating Laya em CPU, pílula retrátil de fontes e auditoria SHA-256 (**4.95 / 5.0**). |
+
+---
+
+## Trilha 3: Governança Operacional, Volumes & Harness (`ADR-0008` a `ADR-0010`)
+
+| ADR ID | Título Oficial | Status | Arquivo Canônico & Foco Tecnológico |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0008`** | Governança de Persistência de Volumes Docker e Namespace Isolation | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0008-docker-volume-persistence-governance.md` — Binding explícito de volumes e proteção contra perda de estado. |
+| **`ADR-0009`** | Governança do Triage Gate e Abordagem Dual-Track SDD (Lean vs. Full) | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0009-triage-gate-dual-track-sdd.md` — Triagem dinâmica entre rota enxuta (`tlc-spec-lean`) e 5 Stage Gates completos. |
+| **`ADR-0010`** | Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md` — Acoplamento das squads sob ISO/IEC 27001 e ISO/IEC 42001. |

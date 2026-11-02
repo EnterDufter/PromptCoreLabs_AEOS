@@ -1,58 +1,58 @@
-# Registros de Decisões Arquiteturais (ADRs) — PCL AEOS
+# Registros de Decisões Arquiteturais (ADRs 0001–0010) — PCL AEOS v3.6
 
-==================================================
-1. VISÃO GERAL DOS ADRS
-==================================================
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Os **Architecture Decision Records (ADRs)** constituem o livro societário-tecnológico da arquitetura **PromptCoreLabs_AEOS**. Eles documentam *por que* cada decisão estratégica foi tomada, protegendo a organização contra lock-in de fornecedores, custos ocultos em dólar e perda de memória institucional.
 
-Os **Architecture Decision Records (ADRs)** registram todas as decisões arquiteturais permanentes que alteram a estrutura, módulos, princípios, governança e escolhas tecnológicas da plataforma **PromptCoreLabs_AEOS**.
-
-Cada ADR é imutável: uma decisão aceita nunca é excluída, apenas substituída por uma decisão posterior (`Superseded`) se os requisitos mudarem.
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Imutáveis por definição (decisões superadas recebem status `Superseded`, jamais são apagadas), os ADRs do monorepo estão unificados em **3 Trilhas Canônicas** sincronizadas com `knowledge/warm/architecture/ADR_INDEX.md` sob a norma **`PCL-AEOS-NORM-01`**.
 
 ---
 
-## 2. REGRAS DE CONVENÇÃO E GOVERNANÇA
+## 1. Ciclo de Vida Normativo de um ADR
 
-- **Formato do Arquivo**: `ADR-[4-DÍGITOS]-[titulo-em-kebab-case].md`
-- **Ciclo de Vida do Status**:
-  - `Proposed` — Em análise pelo arquiteto / persona Cortex.
-  - `Accepted` — Decisão aprovada e em vigor no PCL AEOS.
-  - `Superseded` — Substituído por uma decisão mais recente.
-  - `Deprecated` — Obsoleto por mudança de paradigma.
-  - `Rejected` — Recusado após avaliação técnica.
+```mermaid
+flowchart LR
+    classDef prop fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef acc fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef sup fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
----
-
-## 3. CATÁLOGO COMPLETO DE DECISÕES ARQUITETURAIS (ADR-0001 A ADR-0009)
-
-| ID | Título da Decisão Arquitetural | Status | Data | Impacto Principal |
-|---|---|---|---|---|
-| **ADR-0001** | Segregação do Módulo Memory do Módulo Knowledge | **Accepted** | 2026-07-08 | Separação entre documentação legível por humanos (`knowledge/`) e banco vetorial/embeddings (`memory/`). |
-| **ADR-0002** | Bootstrap como Ponto de Entrada Oficial de Primeiro Nível | **Accepted** | 2026-07-08 | Padronização de onboarding e instanciação Spec-Driven via diretório `bootstrap/`. |
-| **ADR-0003** | Higiene da Documentação Constitucional da Foundation v1.0 | **Accepted** | 2026-07-08 | Estabelecimento do `FOUNDATION.md` como constituição imutável da plataforma. |
-| **ADR-0004** | Implementação Concorrente de Knowledge e Runtime | **Accepted** | 2026-07-08 | Paralelismo na construção de playbooks e contêineres do Harness local. |
-| **ADR-0005** | Unificação do AI Gateway via OmniRoute no Harness | **Accepted** | 2026-07-15 | Proxy unificado de inferência (porta `:20130`), prompt caching e fallback dinâmico. |
-| **ADR-0006** | Adoção do PCL Cortex Visual Engine para Living Architecture | **Accepted** | 2026-07-25 | Motor visual Cortex para validação e compilação de diagramas interativos HTML. |
-| **ADR-0007** | Metodologia Governança TLC Spec-Driven v3 & 5 Stage Gates | **Accepted** | 2026-07-30 | Exigência da suíte `.specs/` (`specify.md`, `design.md`, `tasks.md`, `validate.md`) para todo projeto. |
-| **ADR-0008** | Governança de Persistência de Volumes Docker e Namespace Isolation | **Accepted** | 2026-09-12 | Obrigatoriedade de binding externo nos volumes do Docker Compose e trava de segurança para o agente. |
-| **ADR-0009** | Governança do Triage Gate e Abordagem Dual-Track SDD (Lean vs Full) | **Accepted** | 2026-09-12 | Triagem dinâmica entre Rota Lean (tlc-spec-lean) e Rota Full SDD (5 Stage Gates). |
-| **ADR-0010** | Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness | **Accepted** | 2026-09-17 | Substituição de squad-vibe-coding por squad-prototyping e acoplamento do Antigravity IDE às squads sob ISO 42001/27001. |
+    P["<b>1. Proposed</b><br/>Análise técnica & Cold Check"]:::prop ==> A["<b>2. Accepted (Vigente)</b><br/>Norma ativa no Warm Storage"]:::acc
+    A -.->|"Evolução de Versão"| S["<b>3. Superseded / Rejected</b><br/>Preservado para auditoria histórica"]:::sup
+```
 
 ---
 
-## 4. DETALHAMENTO DAS DECISÕES CHAVE
+## 2. Catálogo Canônico Unificado (`ADR-0001` a `ADR-0010`)
 
-### 📍 **ADR-0001: Memory vs. Knowledge Segregation**
-- **Contexto**: Evitar acoplamento entre a documentação em markdown estático e o armazenamento vetorial de embeddings (PGVector no PostgreSQL).
-- **Justificativa**: Alta coesão e independência tecnológica. Permitir troca do motor de busca vetorial sem alterar a documentação.
+### Trilha 1: Fundação do Kernel & Memória Tripartida (`architecture/decisions/`)
 
-### 📍 **ADR-0005: OmniRoute AI Gateway Unification**
-- **Contexto**: Necessidade de controlar custos de token, latência e disponibilidade entre modelos locais (Ollama/LM Studio) e Cloud (Gemini/Claude).
-- **Justificativa**: EBITDA Shield (cache de prompt), fallback automático sem quebrar a sessão do agente e auditoria centralizada.
+| ID | Título Oficial da Decisão | Status | Impacto Estrutural Principal |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0001`** | Segregação do Módulo `memory/` do Módulo `knowledge/` | **Accepted** | Separa documentação declarativa humana (`knowledge/`) da persistência vetorial/relacional (`memory.*`). |
+| **`ADR-0002`** | `bootstrap/` como Ponto de Entrada Oficial de Primeiro Nível | **Accepted** | Padroniza onboarding, provisionamento inicial e instanciação Spec-Driven. |
+| **`ADR-0003`** | Higiene Constitucional da Foundation (`FOUNDATION.md`) | **Accepted** | Consolida a constituição imutável da plataforma e governança de gateways (`OmniRoute :20130`). |
+| **`ADR-0004`** | Implementação Concorrente de `knowledge/` e `runtime/` | **Accepted** | Viabiliza evolução paralela entre playbooks normativos e contêineres Docker locais. |
+| **`ADR-0005`** | Memória Cognitiva Tripartida, Temporal Graph-RAG & Laya System One | **Accepted** | Institui `memory.*` no PostgreSQL 17 + PGVector (`$0.00`, sem Neo4j) e coprocessador Laya em CPU (`0 MB VRAM`). |
 
-### 📍 **ADR-0006: PCL Cortex Visual Engine & Living Architecture**
-- **Contexto**: Documentações em imagem estática se tornam obsoletas rapidamente.
-- **Justificativa**: Renderização visual dinâmica 100% soberana em HTML interativo autocontido com SVG inline e validação de regras de composição em tempo de build.
+### Trilha 2: Continuidade DRP & Evolução Cognitiva v3.6 (`docs/adrs/` & `knowledge/warm/`)
 
-### 📍 **ADR-0007: TLC Spec-Driven v3 Governance**
-- **Contexto**: Prevenção de escrita direta de código de produção sem alinhamento de escopo, design e validação QA.
-- **Justificativa**: Disciplinaridade atômica via 5 Stage Gates sequenciais e rastreabilidade bidirecional.
+| ID | Título Oficial da Decisão | Status | Impacto Estrutural Principal |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0006`** | Plano de Recuperação de Desastres Tripartido no Cloudflare R2 (`ADR-006`) | **Accepted** | Snapshots cifrados AES-256 a `$0.00`/mês com `RTO = 7,18s` homologado em laboratório (SLA `<= 15min`). |
+| **`ADR-0007`** | **Memória Multi-Turn, Intention Gating & Desacoplamento de Fontes no PCL Cockpit v3.6** | **Accepted** | **Sliding Window multi-turn, triagem seletiva Laya CPU (`~20ms`), pílula retrátil de fontes e placar `4.95 / 5.0` no benchmark cego.** |
+
+### Trilha 3: Volumes, Dual-Track SDD & Harness Operacional (`docs/adrs/`)
+
+| ID | Título Oficial da Decisão | Status | Impacto Estrutural Principal |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0008`** | Governança de Persistência de Volumes Docker & Namespace Isolation | **Accepted** | Binding explícito de volumes persistentes e travas contra destruição acidental de dados. |
+| **`ADR-0009`** | Governança do Triage Gate & Abordagem Dual-Track SDD (*Lean vs. Full*) | **Accepted** | Seleção proporcional entre rota ágil (`tlc-spec-lean`) e rito completo de 5 Stage Gates. |
+| **`ADR-0010`** | Refatoração da Squad Prototyping & Integração Auditável do Antigravity Harness | **Accepted** | Governança ISO/IEC 27001 e ISO/IEC 42001 unificando squads e assistente de engenharia. |
+
+---
+
+## 3. Destaques Executivos das Decisões Recentes (`ADR-0005` a `ADR-0007`)
+
+* **📍 `ADR-0005` (Memória Tripartida + Laya CPU INT8):** Eliminou `4–8 GB` de RAM de servidores JVM de grafos (`HIP-001`) e manteve `100%` da GPU RTX 3050 livre ao executar inferência lógica NLI em CPU (`22,3ms`, `93,3%` recall).
+* **📍 `ADR-0006` (Resiliência Imutável R2):** Assegurou continuidade empresarial contra perda catastrófica de host com restauração completa verificada em `7,18 segundos`.
+* **📍 `ADR-0007` (Revolução Cognitiva do PCL Cockpit v3.6):** Erradicou a amnésia single-turn (`HIP-008`) e a busca web compulsória (`HIP-007`), consolidando o **Live Execution Stepper de 5 Fases** e a liderança empírica sobre assistentes comerciais fechados.

@@ -1,70 +1,80 @@
-# Guia Técnico de Otimização de VRAM & Ciclo de Vida Reativo (PCL AEOS)
+# Guia Técnico de Otimização de VRAM & Ciclo de Vida Reativo (PCL AEOS v3.6)
 
-**Host Target**: Lenovo LOQ 15IAX9  
-**Especificações do Host**:
-* **CPU**: Intel Core i5-12450HX (8 núcleos / 12 threads)
+**Host Homologado de Referência**: Lenovo LOQ 15IAX9  
+* **CPU**: Intel Core i5-12450HX (8 núcleos / 12 threads — aloja 100% do Laya System One INT8)
 * **RAM**: 16 GB DDR5 4800MHz
-* **GPU**: NVIDIA GeForce RTX 3050 Laptop (6 GB VRAM GDDR6 Dedicada)
-* **Armazenamento SSD**: ~78 GB livres
-* **OS**: Windows 11 64-bit + Docker Desktop (WSL2 Engine)
+* **GPU**: NVIDIA GeForce RTX 3050 Laptop (**6 GB VRAM GDDR6 Dedicada**)
+* **OS & Runtime**: Windows 11 64-bit + Docker Desktop (WSL2 Engine) + PCL Cockpit (`:3001`)
+
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Em vez de exigir placas de vídeo corporativas de dezenas de milhares de reais, a engenharia de memória do **PCL AEOS v3.6** extrai desempenho de classe empresarial de um notebook padrão de 6 GB de VRAM, mantendo a máquina silenciosa, fria e responsiva durante o expediente conectado (`0 MB de VRAM` ocupada).
+
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Cumpre rigorosamente o **Invariante de Hardware `PCL-AEOS-NORM-01`**: o classificador e juiz semântico **Laya System One (`:20140`)** opera 100% em CPU (`CPUExecutionProvider` ONNX INT8, `~78.9 MB RAM`, **`0 MB VRAM`**), preservando os `6.144 MB` da RTX 3050 exclusivamente para os pesos `Q4_K_M` (`~4.7 GB`) + KV-Cache (`~640 MB`) do modelo generativo no failover offline.
 
 ---
 
-## 1. Princípio Arquitetural: Alocação Reativa Sob Demanda (Trigger-Based)
+## 1. Arquitetura de Alocação Reativa Sob Demanda (Padrão Cortex v7)
 
-Diferente de abordagens tradicionais que mantêm modelos pesados constantemente alocados na GPU (consumindo recursos do sistema durante a navegação/trabalho convencional), o **PCL AEOS** adota um **Ciclo de Vida Reativo baseado em Gatilhos de Estado**:
+Diferente de stacks locais que mantêm múltiplos modelos residentes na GPU disputando VRAM e causando *thrashing* para PCIe/RAM, o PCL AEOS separa fisicamente **Sistema 1 (CPU)** e **Sistema 2 (GPU sob demanda)**:
 
 ```mermaid
-flowchart TD
-    Daemon[Watcher Daemon: watch_network_trigger.ps1] --> Router{Status da Conexão}
+flowchart LR
+    classDef cpu fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef watch fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef vram fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef moe fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
-    subgraph EstadoOnline [1. Estado Primário Online]
+    subgraph CPUHost ["1. CPU i5-12450HX (Permanente)"]
         direction TB
-        Router -->|Rede Ativa / Ping OK| CloudOp[OmniRoute Roteia para Cloud APIs]
-        CloudOp --> ZeroVRAM[RTX 3050 em Repouso: 0 MB VRAM]
+        Laya["<b>Laya System One (:20140)</b><br/>ONNX INT8 AVX2 • 0 MB VRAM (~20ms)"]:::cpu
+        Watcher["<b>Daemon & TCP Probes (300ms)</b><br/>Monitora conectividade e portas"]:::watch
+        Laya --> Watcher
     end
 
-    subgraph EstadoOffline [2. Failover Local Sob Demanda]
+    subgraph GPUOnline ["2A. GPU RTX 3050 — Modo Online"]
         direction TB
-        Router -.->|Queda de Rede / Timeout| TriggerOff[Dispara on_offline_event.ps1]
-        TriggerOff --> L1[Nível 1: Ollama qwen2.5-coder:7b<br>100% VRAM ~4.7 GB]
-        L1 -.->|Se Indisponível ou MoE| L2[Nível 2: LM Studio DeepSeek MoE<br>GPU Offload VRAM + RAM]
+        Idle["<b>Estado Primário: 0 MB VRAM</b><br/>Fast-Path Gemini assume geração"]:::cpu
     end
 
-    subgraph EstadoRestauracao [3. Restauração & Desalocação]
+    subgraph GPUOffline ["2B. GPU RTX 3050 — Modo Offline ($0.00)"]
         direction TB
-        Router -.->|Rede Restabelecida| TriggerOn[Dispara on_online_event.ps1]
-        TriggerOn --> Unload[lms unload --all e ollama stop]
-        Unload --> ZeroReturn[Retorno Estrito a 0 MB VRAM]
+        N1["<b>Nível 1: Qwen 2.5 Coder 7B</b><br/>~4.7 GB Pesos + 640 MB KV-Cache"]:::vram
+        N2["<b>Nível 2: DeepSeek-V2-Lite MoE</b><br/>Offload Híbrido 6GB VRAM + 16GB DDR5"]:::moe
+        N1 -.->|"Se MoE exigido"| N2
     end
 
-    ZeroReturn -->|GPU 100% Liberada| Router
+    Reset["<b>🎯 Restauração Automática</b><br/>ollama stop & lms unload ➔ 0 MB"]:::cpu
+
+    Watcher ==>|"Rede Ativa"| Idle
+    Watcher -.->|"Queda de Rede"| N1
+    Idle ==> Reset
+    N1 ==>|"Rede Voltou"| Reset
+    N2 ==>|"Rede Voltou"| Reset
 ```
 
 ---
 
-## 2. Dimensionamento de VRAM quando acionado no modo Offline
+## 2. Orçamento Matemático de VRAM no Modo Offline (RTX 3050 — `6.00 GB`)
 
-Quando o gatilho offline é disparado, a governança em 2 níveis garante estabilidade total sem estouro de VRAM na RTX 3050 (6 GB):
+Por que a proibição de modelos auxiliares na GPU (`AGENTS.md` Seção 2.1) é vital? Se um reranker ou classificador de embeddings alocasse apenas `1.2 GB` na placa de vídeo, o modelo principal de 7B transbordaria para a RAM do sistema, derrubando a velocidade de geração em até `5x`. Com o Laya em CPU (`0 MB VRAM`), o orçamento fecha com folga térmica e computacional:
 
-### Nível 1: `Qwen2.5-Coder-7B-Instruct (Q4_K_M)` no Ollama Local
-* **Tamanho do Peso**: ~4.7 GB (Quantização `Q4_K_M`)
-* **Camadas Offloaded para GPU**: 100% na VRAM (RTX 3050)
-* **Context Window Ideal**: **8192 tokens** (~640 MB KV Cache)
-* **Consumo Total VRAM**: ~4.7 GB / 6.00 GB (🟢 100% Seguro e Rápido)
+| Componente em Execução Offline | Onde Reside | Consumo de VRAM (RTX 3050) | Margem de Segurança |
+| :--- | :---: | :---: | :--- |
+| **Laya System One (`nli-MiniLM-2-L6-H768` INT8)** | **CPU Host (DDR5)** | **`0 MB`** | Zero impacto na placa de vídeo |
+| **Pesos `qwen2.5-coder:7b-instruct-q4_K_M` (Nível 1)** | **GPU GDDR6 (100% Layers)** | **`~4.70 GB`** | Carregamento integral sem *split* |
+| **KV-Cache Contextual (`8192` tokens, Flash Attention)** | **GPU GDDR6** | **`~0.64 GB`** | Suporta janelas multi-turn fluidas |
+| **Overhead Driver WDDM / Compositor Windows 11** | **GPU GDDR6** | **`~0.45 GB`** | Estabilidade gráfica sem *stutter* |
+| **Total Alocado no Pico Offline (Nível 1)** | **Consolidado** | **`~5.79 GB / 6.00 GB`** | **🟢 100% Seguro (Zero OOM)** |
 
-### Nível 2: `DeepSeek-Coder-V2-Lite-Instruct (Q4_K_S)` no LM Studio
-* **Tamanho do Peso**: ~8.88 GiB (Arquitetura MoE: 16B parâmetros totais / 2.4B ativos)
-* **Alocação de Memória**: GPU Offload híbrido (camadas iniciais na VRAM e camadas complementares nos 16 GB de RAM DDR5)
-* **Context Window Ideal**: **8192 tokens** com Flash Attention habilitado
-* **Finalidade**: Refatorações extensas, arquitetura complexa e raciocínio profundo quando o Nível 1 não bastar
+### Nível 2 Complementar: `DeepSeek-Coder-V2-Lite-Instruct (Q4_K_S)` no LM Studio (`:1234`)
+* **Tamanho Total**: `~8.88 GiB` (Arquitetura MoE: `16B` parâmetros totais / apenas `2.4B` parâmetros ativos por token).
+* **Alocação Híbrida**: Camadas de atenção críticas na VRAM (`6 GB`) + especialistas MoE nos `16 GB DDR5` (`4800MHz`), mantendo contexto de `8192` tokens com Flash Attention habilitado para refatorações profundas.
 
 ---
 
-## 3. Scripts de Controle de Estado (`scripts/windows/`)
+## 3. Automação Determinística de Estado (`scripts/windows/`)
 
-Os scripts automatizam a governança de hardware sem necessidade de intervenção humana:
-
-1. **`watch_network_trigger.ps1`**: Monitor de conectividade em tempo real (amostragem a cada 10 segundos).
-2. **`on_offline_event.ps1`**: Assegura a prontidão do Ollama (Porta 11434) e do LM Studio Server (Porta 1234).
-3. **`on_online_event.ps1`**: Descarrega instantaneamente todos os modelos (`lms unload --all` e `ollama stop`), restaurando **0 MB de VRAM**.
+1. **`watch_network_trigger.ps1`**: Monitor de conectividade em tempo real (amostragem a cada `10s`), complementado pelas sondas TCP de `250–300ms` do PCL Cockpit (`:3001`).
+2. **`on_offline_event.ps1`**: Garante prontidão imediata do Ollama (`:11434`) e do LM Studio Server (`:1234`) sem intervenção manual.
+3. **`on_online_event.ps1`**: Descarrega instantaneamente todos os pesos locais (`lms unload --all` e `ollama stop`), devolvendo a GPU ao estado estrito de **`0 MB de VRAM`**.

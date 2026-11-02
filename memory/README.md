@@ -1,90 +1,100 @@
-==================================================
-OBJETIVO
-==================================================
+# 🧠 Módulo Memory — Memória Temporal, Multi-Turn & Graph-RAG Soberano (PCL AEOS v3.6)
 
-O módulo Memory do PromptCoreLabs_AEOS é responsável pela memória organizacional, persistência computacional, contexto persistente, indexação de RAG e caches semânticos da plataforma.
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Enquanto assistentes comuns sofrem de "amnésia" entre turnos ou inventam dados desatualizados, o módulo **Memory** do PCL AEOS v3.6 combina **retenção conversacional multi-turn contínua** com uma **memória corporativa auditável em SHA-256** que roda a **`$0.00`/mês** dentro do PostgreSQL existente — sem servidores extras de grafos e com zero alucinação sobre normas internas.
 
-Toda a persistência de conhecimento ativo dos agentes e do Runtime é gerenciada a partir deste módulo.
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Gerencia a **Memória Temporal Computacional (`memory.*` no PostgreSQL 17 + PGVector 768D)** e o contrato de **Janela Deslizante Multi-Turn (`ADR-0007`)** do PCL Cockpit (`:3001`), operando em simbiose com o coprocessador **Laya System One** (`CPU INT8`, `0 MB VRAM`, Answerability Gate `>= 0.40`) e o sentinela determinístico de deriva (`DeterministicStalenessVerifier`).
 
-==================================================
-POSIÇÃO ARQUITETURAL
-==================================================
+---
 
-O módulo Memory está situado na camada de suporte ao conhecimento e inteligência operacional:
+## 1. Distinção Canônica: Memória Temporal (`memory/`) vs. Governança Física (`knowledge/`)
 
-Foundation
-↓
-Governance
-↓
-Bootstrap
-↓
-Knowledge / Memory
-↓
-Agents
+Uma premissa central da versão **v3.6** é não confundir os dois substratos complementares de conhecimento do ecossistema:
 
-A Memory trabalha em estreita colaboração com o Knowledge. Enquanto o Knowledge armazena documentação legível por humanos e playbooks estáticos, a Memory armazena índices lógicos, bancos vetoriais e logs históricos legíveis por máquinas e interpretados por agentes de IA.
+| Dimensão Arquitetural | Memória Temporal em Runtime (`memory/` & `memory.*`) | Governança Física Canônica (`knowledge/`) |
+| :--- | :--- | :--- |
+| **Natureza & Formato** | Índices vetoriais 768D (`HNSW`), grafo temporal de entidades/claims, sessões multi-turn e recibos SHA-256 em banco relacional ACID. | Documentos Markdown declarativos versionados no Git com YAML Frontmatter (`PCL-AEOS-NORM-01`). |
+| **Camadas Internas** | `memory.entities`, `memory.claims`, `memory.evidence_receipts`, `memory.document_chunks` + `Sliding Window` ativa no Cockpit. | **`warm/`** (specs v3.6 vigentes), **`cold/`** (`HIP-001` a `HIP-008` descartadas), **`learnings/`** (`AGENTS.md`) + `playbooks/`, `patterns/`, `catalog/`. |
+| **Consumidor Primário** | Motores de busca híbrida, reconciliador de contradições NLI e pipeline multi-turn dos agentes/Cockpit. | Humanos (executivos e engenheiros), Portal GitHub Pages e indexador local do PCL Cockpit (`#documentos`). |
+| **Custo & Infraestrutura** | `$0.00` — Confinado ao schema isolado `memory.*` no `pcl-db` (`:5432`), sem JVM Neo4j (`HIP-001`). | `$0.00` — Versionado diretamente no repositório Git com backup criptografado AES-256 no Cloudflare R2. |
 
-==================================================
-ESTRUTURA DO MÓDULO
-==================================================
+---
 
-memory/
-├── README.md                        ← este documento
-│
-├── rag/
-│   ├── README.md                    ← princípios de RAG no AEOS
-│   ├── vector-infrastructure.md     ← especificações de banco de dados vetorial
-│   └── indexing-rules.md            ← regras de processamento e chunks de dados
-│
-└── context/
-    ├── README.md                    ← papel do contexto persistente
-    └── execution-history.md         ← persistência do histórico de Execution Cells
+## 2. Os 5 Paradigmas de RAG Suportados & Evolução Multi-Turn v3.6
 
-==================================================
-PRINCÍPIOS DA MEMÓRIA
-==================================================
+O motor cognitivo do PCL AEOS consolida cinco paradigmas progressivos de recuperação e memória:
+1. **Standard Dense Vector RAG:** Embeddings locais `nomic-embed-text` (`768D`) indexados via `HNSW` no PGVector.
+2. **Hybrid Lexical + Semantic RAG:** Combinação de busca vetorial densa com correspondência exata de identificadores normativos (`ADR-0007`, portas, hashes e tags).
+3. **Cross-Encoder NLI Reranking & Answerability Gate:** Triagem em CPU pelo **Laya System One** (`< 35ms`, `0.014ms` via MCP stdio). Se `score < 0.40`, aplica *Fast Exit* (`0 tokens` gastos).
+4. **Temporal Graph-RAG Soberano (`ADR-0005`):** Rastreamento temporal de afirmações (`claims`) com níveis de autoridade (`Tiers 1–4`), supersessão histórica (`superseded_by`) e prova criptográfica (`evidence_receipts`).
+5. **Agentic Conditional Gated RAG + Multi-Turn Sliding Window (`ADR-0007` / v3.6):** No **PCL Cockpit (`:3001`)**, a memória conversacional preserva o histórico contíguo de turnos (`user`/`assistant`) com orçamento dinâmico de janela (resolvendo anáforas e sínteses cross-turn), enquanto o *Intention Gating* aciona `internal_rag` ou `web_search` apenas quando necessário, exibindo referências em pílula retrátil (`Fontes Consultadas (n) v`).
 
-1. Persistência Desacoplada
-   A memória existe de forma separada do ciclo de vida das sessões dos agentes. A destruição ou reinicialização de um contêiner de agente não deve corromper a base de conhecimento persistente.
+---
 
-2. Soberania e Local-First
-   Os índices vetoriais e dados de contexto devem ser armazenados localmente e criptografados, em conformidade com as regras de governança e segurança do AEOS.
-
-3. Rastreabilidade de Origem
-   Cada elemento indexado na memória vetorial deve apontar de volta para o arquivo fonte original do repositório, garantindo que o agente possa auditar a fonte primária.
-
-==================================================
-DIAGRAMA DE FLUXO: PIPELINE DE RAG TEMPORAL AUTOCORRETIVO
-==================================================
-
-Processamento de documentos, busca semântica híbrida e validação determinística de staleness:
+## 3. Pipeline Panorâmico de Memória Multi-Turn & RAG Autocorretivo (Cortex v7)
 
 ```mermaid
-graph TD
-    A[Módulos Core .md] -->|Hierarchical Vectorless Parsing| B[Seções e Títulos]
-    B -->|Local Ollama / nomic-embed-text| C[Embeddings 768D]
-    C -->|Schema memory.*| D[(pcl-db / PGVector HNSW)]
-    A -->|SHA-256 + Git Hash| E[(memory.evidence_receipts)]
+flowchart LR
+    classDef ing fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef db fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef gen fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef alert fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
-    Q[Prompt / Pergunta do Agente] --> F[PCLHybridRAGEngine]
-    F -->|Busca Híbrida 768D| D
-    D -->|Candidatos Top-K| G[pcl-laya / System One (MCP stdio & Docker)]
-    G -->|Classificador CPU <35ms (MCP: 0.014ms)| H{Score >= 0.40?}
-    H -->|Não: Fora de Domínio| I[Fast Exit: 0 Tokens Gastos]
-    H -->|Sim: Evidência Forte| J[Formatação de Bloco de Evidência]
-    J -->|Injeção Sufixo / EBITDA Shield| K[OmniRoute :20130 / LLM]
+    subgraph Ingestao ["1. Ingestão & Selo SHA-256"]
+        direction TB
+        Docs["<b>Acervo Canônico .md</b><br/>knowledge/warm, cold & ADRs"]:::ing
+        Embed["<b>Chunking + Embeddings 768D</b><br/>nomic-embed-text + Git Hash"]:::ing
+        Docs --> Embed
+    end
 
-    Daemon[DeterministicStalenessVerifier] -->|Crontab / Daemon| E
-    Daemon -->|SHA-256 Drift Detection| L{Arquivo Fonte Mudou?}
-    L -->|Sim| M[Status = STALE sem gastar tokens]
-    L -->|Não| N[Status = TRUSTED]
+    subgraph Banco ["2. Persistência Isolada (pcl-db :5432)"]
+        direction TB
+        PGV["<b>Schema memory.* (PGVector)</b><br/>document_chunks & entities"]:::db
+        Receipts["<b>Claims & Evidence Receipts</b><br/>Tiers 1–4 + Hash SHA-256"]:::db
+        Stale["<b>Staleness Daemon (0.2s)</b><br/>Detecta drift sem gastar tokens"]:::alert
+        PGV --> Receipts --> Stale
+    end
+
+    subgraph Gating ["3. Gating Laya CPU & Multi-Turn"]
+        direction TB
+        Prompt["<b>Sessão Multi-Turn (:3001)</b><br/>Sliding Window + Anáfora"]:::gen
+        LayaGate["<b>Laya System One (CPU INT8)</b><br/>0 MB VRAM • Intenção & Score >= 0.40"]:::laya
+        Prompt --> LayaGate
+    end
+
+    subgraph Sintese ["4. Síntese & Entrega Auditada"]
+        direction TB
+        FastExit["<b>Rota Direta / Fast Exit</b><br/>Zero poluição de fontes em chat puro"]:::gen
+        Grounded["<b>Síntese Fundamentada + Pílula</b><br/>OmniRoute/Gemini + Recibo SHA-256"]:::laya
+        FastExit --> Grounded
+    end
+
+    Ingestao ==> Banco ==> Gating ==> Sintese
 ```
 
-==================================================
-DIAGRAMA ERD: SCHEMA MEMORY (ISOLAMENTO TOTAL)
-==================================================
+---
 
-O schema `memory.*` isola totalmente as estruturas de memória do schema operacional `public` do Paperclip:
+## 4. Estrutura do Módulo
+
+```text
+memory/
+├── README.md                        ← Arquitetura canônica da Memória v3.6 (este documento)
+├── rag/
+│   ├── README.md                    ← Princípios de RAG híbrido e gating no AEOS
+│   ├── vector-infrastructure.md     ← Especificações PGVector 768D HNSW
+│   └── indexing-rules.md            ← Regras de parsing hierárquico e chunks
+└── context/
+    ├── README.md                    ← Papel do contexto persistente e Sliding Window
+    └── execution-history.md         ← Histórico auditável de Execution Cells
+```
+
+---
+
+## 5. Modelo Entidade-Relacionamento: Schema `memory.*` (Isolamento Total)
+
+O schema `memory.*` isola integralmente as estruturas cognitivas do schema operacional `public` do Paperclip (`ADR-0001` e `ADR-0005`):
 
 ```mermaid
 erDiagram
@@ -130,61 +140,52 @@ erDiagram
     }
 ```
 
-==================================================
-GUIA OPERACIONAL: TESTES E EXECUÇÃO (FASES 1, 2, 3 E 4)
-==================================================
+---
 
-### 1. Ingestão de Documentos Arquiteturais (Fase 2)
-Indexa os documentos no schema `memory` com hashing SHA-256, Git hash e embeddings nomic-embed-text (768D):
+## 6. Guia Operacional: Comandos de Execução e Validação
+
+### 1. Ingestão de Documentos Arquiteturais
+Indexa os documentos no schema `memory.*` com hash SHA-256, commit Git e embeddings `nomic-embed-text` (`768D`):
 ```bash
 python scripts/memory/ingest_docs.py
 ```
 
-### 2. Extração Multimodelo de Claims com Proveniência (Fase 3)
-Extrai claims ontológicas categorizadas por níveis de autoridade formal (Tiers 1 a 4):
+### 2. Extração Multimodelo de Claims com Proveniência
+Extrai afirmações ontológicas categorizadas por níveis formais de autoridade (`Tiers 1 a 4`):
 ```bash
 python scripts/memory/claim_extractor.py
 ```
 
-### 3. Motor de Reconciliação Canônica & SSOT (Fase 3)
-Harmoniza contradições multimodelo aplicando a Máquina de Estados da Hierarquia de Verdade PCL:
+### 3. Motor de Reconciliação Canônica & SSOT
+Harmoniza contradições aplicando a Máquina de Estados da Hierarquia de Verdade (`PCL-AEOS-NORM-01`):
 ```bash
 python scripts/memory/reconciliation_engine.py
 ```
 
-### 4. Confinamento Agêntico & Tool Call Gating (Fase 4)
-Executa o harness do worker daemon confinado ao Gate 3 com interceptação de comandos perigosos via Laya:
+### 4. Confinamento Agêntico & Tool Call Gating
+Executa o worker daemon confinado ao Stage Gate 3 com interceptação de comandos sensíveis via Laya:
 ```bash
 python scripts/agent/worker_daemon.py
 ```
 
-### 5. Plano de Recuperação de Desastres (DRP) Tripartido (Fase 4)
-Restaura os schemas `public` e `memory` em tempo recorde (< 10 segundos) com auditoria de integridade:
+### 5. Plano de Recuperação de Desastres (DRP) Tripartido (`RTO = 7,18s`)
+Restaura os schemas `public` e `memory` a partir do backup cifrado AES-256 com auditoria de integridade:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/backup/restore-aeos-tripartido.ps1
 ```
 
-### 6. Execução da Suite de Validação do Stage Gate 4
-Valida confinamento ao Gate 3, tool call gating, parada no Gate 4 e disaster recovery RTO <= 15 min:
+### 6. Suíte de Validação do Stage Gate 4 & Staleness Daemon
 ```bash
 python scripts/tests/test_phase4_validation.py
-```
-
-### 7. Execução Manual do Staleness Daemon
-Verifica a integridade de todas as claims contra os hashes atuais dos arquivos no repositório:
-```bash
 python scripts/memory/staleness_verifier.py
 ```
 
-==================================================
-FONTES DE REFERÊNCIA
-==================================================
+---
 
-foundation/FOUNDATION.md
-architecture/modules.md
-architecture/principles.md
-architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md
-specs/pcl-aeos-evolution/spec-pcl-aeos-temporal-graph-rag-and-reconciliation.md
+## 7. Referências Normativas Canônicas
 
-
-
+* `AGENTS.md` (`PCL-AEOS-NORM-01` — Diretrizes Soberanas v3.6)
+* `knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md`
+* `knowledge/warm/architecture/ADR-0007.md`
+* `architecture/decisions/ADR-0005-tripartite-memory-system-one-evolution.md`
+* `knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md`

@@ -1,245 +1,192 @@
-# Manual de Especificação dos 15 Agentes e Squads do PCL AEOS
+# Manual de Especificação dos 15 Agentes, Personas Cognitivas & Squads — PCL AEOS v3.6
 
-==================================================
-1. VISÃO GERAL DA SQUAD DE AGENTES
-==================================================
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio:** Em vez de depender de um único "assistente generalista" propenso a erros, o **PCL AEOS v3.6** organiza uma força de trabalho digital com **15 agentes especializados em 4 Squads** (Estratégia, Engenharia, SecOps/FinOps e Data/Growth) mais **2 Personas Cognitivas transversais (`/cortex` e `/laya`)**, sempre subordinadas à autoridade humana nos Stage Gates.
 
-O **PromptCoreLabs_AEOS** opera sob uma arquitetura de múltiplos agentes autônomos e especializados (**Multi-Agent System - MAS**). Cada agente possui um contrato operacional estrito, limites de autonomia delimitados, entradas/saídas padronizadas e uma atribuição clara na matriz de responsabilidade da plataforma.
-
-A orquestração visual dos agentes é gerida pelo **PaperClip Dashboard** (porta `:3100`), e a inteligência de visualização de arquitetura é conduzida pela persona **Cortex** através do **PCL Cortex Visual Engine**.
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes:** Sistema Multi-Agente (*MAS*) regido por **`AGENTS.md` (`PCL-AEOS-NORM-01`)**, coordenado operacionalmente pelo **Paperclip (`:3100`)** e pilotado executivamente pelo **PCL Cockpit v3.6 (`:3001`)**, com *tool-call gating* em CPU (`0 MB VRAM`) e rastreabilidade criptográfica **SHA-256**.
 
 ---
 
-## 2. MATRIZ DE RESPONSABILIDADE DOS 15 AGENTES
+## 1. Personas Cognitivas Transversais na v3.6 (`/cortex` & `/laya`)
+
+Além das squads departamentais, dois motores atuam em tempo real na interface do **PCL Cockpit (`:3001`)** e no **Antigravity IDE**:
+* **🧠 Persona `/cortex` (Orquestrador de Arquitetura & Guardião Visual):** Governa os Stage Gates TLC v3, renderiza o **Cortex Canvas (DAG interativo)** no Cockpit e audita todos os diagramas HTML/Mermaid sob o padrão Cortex v7 (anti-clipping e contraste WCAG AAA). *Autoridade RACI: Propositor técnico; jamais aprova deploy ou gastos sem aval humano.*
+* **⚡ Persona `/laya` (Coprocessador de Sistema 1 em CPU):** Sensor consultivo não-autorregressivo (`ONNX INT8`, **`0 MB VRAM`**, `~20ms–35ms`) responsável pelo **Intention Gating v3.6** (`general_chat | internal_rag | web_search`), *Answerability Gate* (`>= 0.40`) e detecção NLI de contradições (`93,3%` recall).
+
+---
+
+## 2. Matriz Panorâmica de Responsabilidade dos 15 Agentes (Cortex v7)
 
 ```mermaid
 flowchart LR
-    classDef s1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
-    classDef s2 fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
-    classDef s3 fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
-    classDef s4 fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef s1 fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef s2 fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef s3 fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef s4 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
 
     subgraph Squad1 ["1. Estratégia & Governança"]
         direction TB
-        A1["<b>Strategist_One</b><br/>Visão & OKRs"]:::s1
-        A2["<b>Lead_TLC_Engineer</b><br/>Arquitetura Viva"]:::s1
-        A3["<b>Auditor_Agent</b><br/>Compliance & Gates"]:::s1
+        A1["<b>Strategist_One</b><br/>Visão, OKRs & Battlecards"]:::s1
+        A2["<b>Lead_TLC_Engineer</b><br/>Arquitetura & Padrões SDD"]:::s1
+        A3["<b>Auditor_Agent + Cortex</b><br/>Compliance Gates & Living Arch"]:::s1
         A1 --> A2 --> A3
     end
 
-    subgraph Squad2 ["2. Engenharia TLC"]
+    subgraph Squad2 ["2. Engenharia TLC (Core Loop)"]
         direction TB
-        A4["<b>Planner_Agent</b><br/>Tasks & Backlog"]:::s2
-        A5["<b>Builder_Agent</b><br/>Código & Diffs"]:::s2
-        A6["<b>Reviewer_QA</b><br/>Testes & Cobertura"]:::s2
+        A4["<b>Planner_Agent</b><br/>Decomposição tasks.md"]:::s2
+        A5["<b>Builder_Agent</b><br/>Código Cirúrgico & Diffs"]:::s2
+        A6["<b>Reviewer_QA</b><br/>Testes Adversários Zero Mocks"]:::s2
         A4 --> A5 --> A6
     end
 
     subgraph Squad3 ["3. SecOps & FinOps"]
         direction TB
-        A7["<b>CISO_Security</b><br/>Zero Trust & Mesh"]:::s3
-        A8["<b>BizOps_Controller</b><br/>Processos & Métricas"]:::s3
-        A9["<b>Financial_Advisor</b><br/>FinOps & EBITDA"]:::s3
+        A7["<b>CISO_Security</b><br/>Zero Trust, Vault & PII Guard"]:::s3
+        A8["<b>BizOps_Controller</b><br/>Cadência, SLAs & Métricas"]:::s3
+        A9["<b>Financial_Advisor</b><br/>EBITDA Shield & FinOps $0.00"]:::s3
         A7 --> A8 --> A9
     end
 
-    subgraph Squad4 ["4. Data & Growth"]
+    subgraph Squad4 ["4. Data, Legal & Growth"]
         direction TB
-        A10["<b>RevOps_Architect</b><br/>GTM & Vendas"]:::s4
-        A11["<b>Data_Insight</b><br/>RAG & Vetores"]:::s4
-        A12["<b>Neuromarketing</b><br/>Branding & Canvas"]:::s4
-        A13["<b>Compliance_Steward</b><br/>LegalOps & LGPD"]:::s4
-        A14["<b>Skills_Manager</b><br/>People Ops & Skills"]:::s4
-        A10 --> A11 --> A12 --> A13 --> A14
+        A10["<b>RevOps_Architect</b><br/>GTM, ICP & Funil B2B"]:::s4
+        A11["<b>Data_Insight</b><br/>PGVector RAG & Benchmarks"]:::s4
+        A12["<b>Neuromarketing</b><br/>UX Liquid Glass & Posicionamento"]:::s4
+        A13["<b>Compliance & Skills_Mgr</b><br/>LGPD, ISO 42001 & Curadoria Skills"]:::s4
+        A10 --> A11 --> A12 --> A13
     end
 
-    Squad1 ==>|"Diretrizes"| Squad2
-    Squad2 ==>|"Segurança"| Squad3
-    Squad3 ==>|"Escala"| Squad4
+    Squad1 ==>|"Diretrizes"| Squad2 ==>|"Blindagem"| Squad3 ==>|"Escala"| Squad4
 ```
 
 ---
 
-## 2.1. ESTRUTURA ORGANIZACIONAL NO PAPERCLIP (ORG CHART DA HOLDING)
+## 2.1. Estrutura Organizacional da Holding no Paperclip (`flowchart LR` Cortex v7)
 
 ```mermaid
-flowchart TD
-    classDef ceo fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
-    classDef tlc fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
-    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
-    classDef biz fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
-    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.2px,color:#ffffff;
+flowchart LR
+    classDef ceo fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef tlc fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef mkt fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef biz fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef sec fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
-    CEO["👑 <b>CEO PromptCore Labs</b><br/>ai-pricing • create-rfc • tlc-spec-driven"]:::ceo
+    subgraph Comando ["Pilotagem Soberana"]
+        direction TB
+        CEO["<b>👑 CEO PromptCore Labs</b><br/>Autoridade Humana + Cockpit :3001"]:::ceo
+    end
 
     subgraph F1 ["Frente 1: Software & DevSecOps"]
         direction TB
-        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software"]:::tlc
-        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps"]:::sec
-        Agile["<b>bot-agile-master</b><br/>Agile QA"]:::tlc
+        TLC["<b>Lead_TLC_Engineer</b><br/>Head Software & Specs"]:::tlc
+        CISO["<b>CISO_Security_Agent</b><br/>DevSecOps & Zero Secret Leak"]:::sec
+        Agile["<b>Planner / Builder / QA</b><br/>Esteira Determinística TLC v3"]:::tlc
         TLC --> CISO --> Agile
     end
 
-    subgraph F2 ["Frente 2: Marketing & Growth"]
+    subgraph F2 ["Frente 2: Data, Produto & Growth"]
         direction TB
-        RevOps["<b>RevOps_Architect</b><br/>Head Growth"]:::mkt
-        Neuro["<b>Neuromarketing</b><br/>CMO Lead"]:::mkt
-        Data["<b>Data_Insight</b><br/>Data Science"]:::mkt
+        RevOps["<b>RevOps_Architect</b><br/>Head Growth & GTM"]:::mkt
+        Neuro["<b>Neuromarketing</b><br/>Design & Percepção Executiva"]:::mkt
+        Data["<b>Data_Insight</b><br/>RAG, Telemetria & Analytics"]:::mkt
         RevOps --> Neuro --> Data
     end
 
-    subgraph F3 ["Frente 3: Consultoria & FinOps"]
+    subgraph F3 ["Frente 3: Estratégia, Legal & FinOps"]
         direction TB
-        Strat["<b>Strategist_One</b><br/>Head Consulting"]:::biz
-        Fin["<b>Financial_Advisor</b><br/>CFO Lead"]:::biz
-        Legal["<b>Compliance_Steward</b><br/>LegalOps"]:::biz
+        Strat["<b>Strategist_One</b><br/>Head AI Consulting"]:::biz
+        Fin["<b>Financial_Advisor</b><br/>CFO Lead & EBITDA Shield"]:::biz
+        Legal["<b>Compliance & Skills_Mgr</b><br/>LGPD, ADRs & AI Academy"]:::biz
         Strat --> Fin --> Legal
     end
 
-    CEO ==> F1
-    CEO ==> F2
-    CEO ==> F3
+    Comando ==> F1 ==> F2 ==> F3
 ```
-
 
 ---
 
-## 2.2. MATRIZ DE DISTRIBUIÇÃO DE SKILLS (PAPERCLIP + TLC SKILLS)
+## 2.2. Matriz de Distribuição de Skills (Paperclip + TLC Skills)
 
-| Agente / Papel | Liderança / Atuação nas Verticais | Skills Originais (Paperclip) | Novas TLC Skills Adicionadas |
-|---|---|---|---|
+| Agente / Papel | Liderança / Atuação nas Verticais | Skills Originais (Paperclip) | TLC Skills Soberanas |
+| :--- | :--- | :--- | :--- |
 | **CEO** | Orquestração Geral PCL, Venture Studio | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `summarize-meeting` | `ai-pricing`, `create-rfc`, `tlc-spec-driven` |
 | **Strategist_One** | Head de AI Consulting, GovTech & Estratégia | `brainstorm-okrs`, `north-star-metric`, `product-vision`, `outcome-roadmap`, `swot-analysis`, `lean-canvas`, `competitor-analysis`, `business-model`, `competitive-battlecard` | `ai-pricing`, `create-rfc` |
 | **RevOps_Architect** | Head de RevOps, CRM, Automação & Vendas B2B | `ideal-customer-profile`, `gtm-strategy`, `gtm-motions`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `customer-journey-map` | `ai-sdr`, `ai-cold-outreach` |
 | **Neuromarketing_Strategist** | Head de Marketing Digital, Branding & Mídia | `marketing-ideas`, `positioning-ideas`, `product-name`, `value-prop-statements`, `customer-journey-map`, `user-personas` | `ai-seo`, `ai-ugc-ads` |
-| **Data_Insight_Agent** | Lead de Data & Analytics, BI e Customer Success | `ab-test-analysis`, `metrics-dashboard`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `product-vision` | `ai-seo`, `best-practices` |
+| **Data_Insight_Agent** | Lead de Data & Analytics, BI e RAG | `ab-test-analysis`, `metrics-dashboard`, `cohort-analysis`, `growth-loops`, `user-segmentation`, `product-vision` | `ai-seo`, `best-practices` |
 | **Lead_TLC_Engineer** | Head de Software Studio & Prototipagem | `user-stories`, `create-prd`, `sprint-plan`, `test-scenarios`, `prioritize-features`, `outcome-roadmap` | `tlc-spec-driven`, `create-adr`, `best-practices`, `perf-astro` |
 | **BizOps_Controller** | Lead de Operações, Qualidade e Processos | `sprint-plan`, `prioritization-frameworks`, `prioritize-features`, `release-notes`, `summarize-meeting`, `retro` | `tlc-spec-driven`, `best-practices` |
 | **CISO_Security_Agent** | Head de DevSecOps, CyberSecurity & Cloud | `pre-mortem`, `privacy-policy`, `test-scenarios` | `aws-advisor`, `best-practices` |
-| **Financial_Advisor** | Head de Financeiro, FinOps, Pricing & E-Commerce | `pricing-strategy`, `monetization-strategy`, `market-sizing`, `summarize-interview`, `draft-nda` | `ai-pricing` |
+| **Financial_Advisor** | Head de Financeiro, FinOps & Pricing | `pricing-strategy`, `monetization-strategy`, `market-sizing`, `summarize-interview`, `draft-nda` | `ai-pricing` |
 | **Compliance_Steward** | Lead de Jurídico, LGPD & Compliance | `draft-nda`, `privacy-policy` | `create-adr` |
 | **Skills_Manager** | Lead de RH, People Ops & AI Academy | `review-resume`, `interview-script`, `summarize-interview`, `grammar-check` | `agent-skills-cli` |
 
 ---
 
-## 2.3. MATRIZ DE FUNCIONAMENTO DOS COMANDOS SLASH & GOVERNANÇA (ANTIGRAVITY IDE)
+## 2.3. Comandos Slash & Governança no Antigravity IDE
 
 ```mermaid
 flowchart LR
-    classDef gate fill:#0f172a,stroke:#38bdf8,stroke-width:1.2px,color:#ffffff;
-    classDef cmd fill:#1e3a8a,stroke:#60a5fa,stroke-width:1.2px,color:#ffffff;
+    classDef cmd fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
     classDef app fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
-    classDef sub fill:#3b0764,stroke:#c084fc,stroke-width:1.2px,color:#ffffff;
+    classDef sub fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
 
-    subgraph G1 ["Gate 1: Inception"]
+    subgraph G1 ["Gate 1: Inception & Planejamento"]
         direction TB
-        C_Grill["<b>/grill-me</b><br/>Entrevista & Design"]:::cmd
-        C_Boost["<b>/boost</b><br/>Refatoração Arch"]:::cmd
+        C_Grill["<b>/plan & /grill-me</b><br/>Especificação & Design Dual"]:::cmd
+        C_Boost["<b>/boost & /cortex</b><br/>Revisão Profunda & Diagramas"]:::cmd
+        C_Grill --> C_Boost
     end
 
-    subgraph G2 ["Gate 2: Aprovação"]
+    subgraph G2 ["Gate 2: Autoridade Humana"]
         direction TB
-        C_Plan["<b>Human-in-the-Loop</b><br/>Assinatura do Plano"]:::app
+        C_Plan["<b>Human-in-the-Loop</b><br/>Aprovação Soberana do Plano"]:::app
     end
 
-    subgraph G3 ["Gates 3-5: Construção"]
+    subgraph G3 ["Gates 3–4: Construção & QA"]
         direction TB
-        C_Goal["<b>/goal</b><br/>Execução Autônoma"]:::app
-        C_Subs["<b>Subagentes</b><br/>Testes & Infra"]:::sub
+        C_Goal["<b>/goal</b><br/>Execução Completa até Exit Code 0"]:::app
+        C_Subs["<b>Subagentes & Gates</b><br/>Verificação UTF-8, Build & Schema"]:::sub
+        C_Goal --> C_Subs
     end
 
-    subgraph G6 ["Gate 6: Auditoria"]
+    subgraph G5 ["Gate 5: Homologação & Memória"]
         direction TB
-        C_Walk["<b>Walkthrough</b><br/>Validação QA"]:::cmd
-        C_Learn["<b>/learn</b><br/>Gravação nos KIs"]:::sub
+        C_Learn["<b>/learn + Warm/Cold RAG</b><br/>Persistência Institucional"]:::sub
     end
 
-    G1 ==>|"Specs Aprovadas"| G2
-    G2 ==>|"Autorização Soberana"| G3
-    G3 ==>|"Código Validado"| G6
+    G1 ==>|"Specs Prontas"| G2 ==>|"Proceed"| G3 ==>|"Auditado"| G5
 ```
 
 ---
 
-## 3. ESPECIFICAÇÃO DETALHADA DOS 15 AGENTES
+## 3. Especificação Detalhada dos 15 Agentes
 
-### 🛠️ Squad Core de Engenharia (Spec-Driven Loop)
+### 🛠️ Squad Core de Engenharia (*Spec-Driven Loop*)
+1. **Planner Agent (`planner.md`):** Decompõe `specify.md` e `design.md` em tarefas atômicas ordenadas (`tasks.md`). *Não escreve código de produção.*
+2. **Builder Agent (`builder.md`):** Executa escrita cirúrgica de código e refatorações estritamente vinculadas ao `tasks.md`, validando `npm run build` (`Exit Code 0`).
+3. **Reviewer QA (`reviewer-qa.md`):** Executa testes adversários, auditoria de integridade UTF-8 e bloqueia qualquer mock estático (`Zero Mocks`).
+4. **Auditor Agent (`auditor.md`):** Verifica conformidade constitucional com `FOUNDATION.md` e `AGENTS.md`, detendo poder de veto antes do Signoff humano.
 
-#### 1. **Planner Agent** (`planner.md`)
-- **Propósito**: Decomposição de especificações aprovadas (`specify.md` e `design.md`) em planos de tarefas atômicos e ordenados em `tasks.md`.
-- **Limites de Autonomia**: Não escreve código de produção; não modifica o arquivo `specify.md` sem autorização.
-- **Entradas**: `specify.md`, `design.md`, `FOUNDATION.md`.
-- **Saídas**: `tasks.md`, checklist de validação por tarefas.
-
-#### 2. **Builder Agent** (`builder.md`)
-- **Propósito**: Escrita cirúrgica de código-fonte, criação de arquivos e refatoração respeitando estritamente o backlog do `tasks.md`.
-- **Limites de Autonomia**: Não altera dependências globais sem consultar o Planner; não remove testes sem autorização do QA.
-- **Entradas**: `tasks.md`, arquivos existentes no workspace.
-- **Saídas**: Código modificado, novos arquivos, diffs em markdown.
-
-#### 3. **Reviewer QA** (`reviewer-qa.md`)
-- **Propósito**: Testes adversários, execução de testes unitários/integrados, auditoria de cobertura de código e verificação de regressão.
-- **Limites de Autonomia**: Não aprova código com testes falhando; não aceita mocks genéricos para mascarar erros.
-- **Entradas**: Código gerado pelo Builder, suíte de testes.
-- **Saídas**: `validate.md`, relatórios de erros, aprovação do gate de testes.
-
-#### 4. **Auditor Agent** (`auditor.md`)
-- **Propósito**: Validação de compliance constitucional com a `Foundation` e selamento dos Stage Gates de governança.
-- **Limites de Autonomia**: Não altera regras constitucionais; possui poder de veto no Stage Gate 5.
-- **Entradas**: `validate.md`, `FOUNDATION.md`, logs de execução.
-- **Saídas**: Assinatura final do gate e selamento em `STATE.md`.
+### 🏛️ Squad Executiva, Departamental & Cognitiva
+5. **Strategist_One (`strategist-one.md`):** Visão corporativa, OKRs, matrizes competitivas e posicionamento estratégico.
+6. **Lead TLC Engineer (`lead-tlc-engineer.md`):** Guardião técnico da metodologia TLC v3, ADRs e integridade do monorepo.
+7. **CISO Security Agent (`ciso-security-agent.md`):** Zero Trust, cofre `AES-256-GCM`, **PII Guard LGPD** e varredura *Zero Secret Leak*.
+8. **BizOps Controller (`bizops-controller.md`):** Fluxo operacional, SLAs de entrega e eliminação de gargalos entre squads.
+9. **RevOps Architect (`revops-architect.md`):** Arquitetura de aquisição B2B, ICP e métricas de retenção.
+10. **Financial Advisor (`financial-advisor.md`):** Governança do *EBITDA Shield*, auditoria de tokens e preservação do invariante `$0.00` local.
+11. **Neuromarketing Strategist (`neuromarketing-strategist.md`):** Ergonomia cognitiva, *Liquid Glass Bento Grid* e clareza executiva.
+12. **Data Insight Agent (`data-insight-agent.md`):** Otimização de embeddings `768D`, PGVector `HNSW` e protocolos de benchmark empírico.
+13. **Compliance Steward (`compliance-steward.md`):** Alinhamento LGPD, ISO/IEC 27001, ISO/IEC 42001 e custódia *Zero-Bin*.
+14. **Skills Manager (`skills-manager.md`):** Curadoria de skills (`SKILL.md`), plugins e evolução de `knowledge/learnings/`.
+15. **Persona Cortex (`cortex/SKILL.md`):** Síntese visual interativa (`archify.mjs`), governança Mermaid Cortex v7 e manutenção da Arquitetura Viva.
 
 ---
 
-### 🏛️ Squad Executiva & Departamental
+## 4. Integração com os Diagramas Interativos
 
-#### 5. **Strategist_One** (`strategist-one.md`)
-- **Liderança**: Departamento de Estratégia & Visão Corporativa.
-- **Propósito**: Definição da North Star Metric, desdobramento de OKRs estratégicos e alinhamento do portfólio de produtos.
-
-#### 6. **Lead TLC Engineer** (`lead-tlc-engineer.md`)
-- **Liderança**: Departamento de Engenharia de Sistemas & Arquitetura.
-- **Propósito**: Garantia da integridade arquitetural do PCL AEOS, padronização da metodologia TLC v3 e resolução de débitos técnicos.
-
-#### 7. **CISO Security Agent** (`ciso-security-agent.md`)
-- **Liderança**: Departamento de Segurança & Infraestrutura Zero Trust.
-- **Propósito**: Sanitização de chaves de API, varredura adversária contra vazamento de segredos e imunização da rede mesh.
-
-#### 8. **BizOps Controller** (`bizops-controller.md`)
-- **Liderança**: Departamento de BizOps & Processos Ágeis.
-- **Propósito**: Monitoramento do fluxo de entrega, cadência de sprints dos agentes e eliminação de gargalos no pipeline.
-
-#### 9. **RevOps Architect** (`revops-architect.md`)
-- **Liderança**: Departamento de Growth & Funil GTM.
-- **Propósito**: Arquitetura do funil de conversão, integração de rotas de aquisição e métricas de retenção de usuários.
-
-#### 10. **Financial Advisor** (`financial-advisor.md`)
-- **Liderança**: Departamento de FinOps & Back Office.
-- **Propósito**: Controle do EBITDA Shield, precificação de inferências de IA, contagem de tokens e DRE real-time.
-
-#### 11. **Neuromarketing Strategist** (`neuromarketing-strategist.md`)
-- **Liderança**: Departamento de Branding & Percepção de Valor.
-- **Propósito**: Design de experiência visual, gatilhos de engajamento, Sexy Canvas e linguagem de alta percepção de valor.
-
-#### 12. **Data Insight Agent** (`data-insight-agent.md`)
-- **Liderança**: Departamento de Data Science & RAG.
-- **Propósito**: Análise de embeddings vetoriais no PostgreSQL (`pcl-db`), otimização de busca vetorial e modelos preditivos.
-
-#### 13. **Compliance Steward** (`compliance-steward.md`)
-- **Liderança**: Departamento LegalOps & Compliance Regulatório.
-- **Propósito**: Proteção de Propriedade Intelectual (PI), alinhamento com a LGPD e governança contratual.
-
-#### 14. **Skills Manager** (`skills-manager.md`)
-- **Liderança**: Departamento de People Ops & Gestão de Conhecimento.
-- **Propósito**: Curadoria do repositório de skills dos agentes, onboarding de novos integrantes e handoff de sessão.
-
-#### 15. **Persona Cortex** (Inteligência & Arquitetura Viva)
-- **Liderança**: Núcleo de Visualização & PCL Cortex Visual Engine.
-- **Propósito**: Ingestão de metadados do repositório, validação de limites de layout, compilação de diagramas interativos HTML e manutenção do Portal Mestre.
-
----
-
-## 4. INTEGRAÇÃO COM OS DIAGRAMAS INTERATIVOS
-Esta especificação detalhada conecta-se diretamente aos diagramas do Portal Mestre:
-- 🔵 **[agents-squad-map.html](../../diagrams/interactive/agents-squad-map.html)**: Visualização da orquestração de papéis.
-- 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)**: Sequência de execução entre Planner, Builder, QA e Auditor.
+* 🔵 **[agents-squad-map.html](../../diagrams/interactive/agents-squad-map.html)** — Mapa interativo de orquestração dos 15 agentes e squads.
+* 🟢 **[seq-tlc-execution.html](../../diagrams/interactive/seq-tlc-execution.html)** — Sequência formal entre Planner, Builder, Reviewer QA e Auditor.
+* ⚡ **[seq-cockpit-v36-cognitive-pipeline.html](../../diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html)** — Atuação conjunta de `/laya` e `/cortex` no pipeline v3.6.

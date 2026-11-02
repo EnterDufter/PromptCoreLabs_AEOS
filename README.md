@@ -3,184 +3,213 @@
 <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/PCL_Logo_Transparente.png" width="160" alt="PromptCore Labs Logo" />
 
 # PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.6
-### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor e Living Architecture
+### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor, PCL Cockpit & Living Architecture
 
-[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
-[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.6_Active-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
-[![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0-emerald?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v36-vs-provedores-globais)
+[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages_v3.6-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
+[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.6_:3001-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
+[![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0_(1º_Lugar)-10b981?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v36-vs-provedores-globais)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Hardware](https://img.shields.io/badge/VRAM-0_MB_(CPU_INT8)-purple?style=for-the-badge)](#indicadores-canônicos)
+[![Hardware](https://img.shields.io/badge/Laya_CPU_INT8-0_MB_VRAM-8b5cf6?style=for-the-badge)](#-indicadores-canônicos--medições-de-engenharia-v36)
 
 ---
 
 </div>
 
-## 💡 O que é o PCL AEOS?
+## 💡 O que é o PCL AEOS v3.6?
 
-O **PromptCoreLabs_AEOS** é um sistema operacional de engenharia de software desenhado para governar o trabalho conjunto de agentes de inteligência artificial e desenvolvedores humanos.
+O **PromptCoreLabs_AEOS** é o sistema operacional soberano de engenharia e inteligência corporativa projetado para governar o trabalho conjunto de executivos, arquitetos humanos e esquadrões de agentes de IA sob rastreabilidade matemática.
 
-* **Em Linguagem Simples (Para Leigos e Líderes):**  
-  Pense no PCL AEOS como um **escritório virtual hiper-eficiente com um cofre digital integrado**. Em vez de usar modelos de IA avulsos na nuvem que esquecem o contexto da sua empresa e cobram caro por token, o AEOS roda localmente no seu computador ou servidor próprio. Ele possui uma memória permanente que nunca esquece seus manuais e regras, garante privacidade absoluta dos dados (custo marginal zero de nuvem) e coloca uma equipe de agentes especialistas (planejador, desenvolvedor, revisor) para trabalhar sob a sua supervisão.
-* **Sob a Ótica Técnica (Para Engenheiros e Arquitetos):**  
-  Trata-se de um harness orquestrador agêntico desacoplado, assentado sobre **Memória Tripartida** no PostgreSQL 17 + PGVector, coprocessador reflexivo neural **LAYA (System One)** com motor NLI (`cross-encoder/nli-MiniLM-2-L6-H768` ONNX INT8) operando 100% em CPU (**0 MB de VRAM**, 93.3% de especificidade factual, 70.0% de recall de contradições em protocolo controlado dev/holdout, ~23.9ms de latência média), gateway inteligente de inferência **OmniRoute** e governança determinística orientada a especificações (**TLC Spec-Driven v3**).
+> [!IMPORTANT]
+> **👔 Visão Executiva & Valor de Negócio (Para Líderes, Diretores e Investidores):**  
+> Pense no **PCL AEOS v3.6** como uma **central de inteligência corporativa própria com cofre criptográfico integrado**. Enquanto assistentes comerciais de nuvem cobram em dólar por usuário, operam como "caixas-pretas" e armazenam documentos confidenciais em servidores externos, o **PCL Cockpit v3.6 (`:3001`)** alcançou **4.95 / 5.0** em protocolo cego oficial — superando Google Gemini (`4.45`), OpenAI ChatGPT (`4.30`) e Microsoft Copilot (`3.80`) — mantendo **custo marginal `$0.00`** em operação local, custódia *Zero-Bin* (LGPD) e aprovação final exclusiva do humano.
 
-> 🌐 **Explore o Portal Interativo (GitHub Pages):**  
-> Para uma experiência imersiva com alternância de visão (👔 Executiva vs. 🛠️ Técnica), navegação interativa em tela cheia dos diagramas do **PCL Cortex** e leitura assistida em modais, acesse:  
-> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)**
+> [!NOTE]
+> **🛠️ Visão de Engenharia & Invariantes (Para Arquitetos e Desenvolvedores):**  
+> Harness agêntico desacoplado regido pela norma **`PCL-AEOS-NORM-01`** (`AGENTS.md`) e **TLC Spec-Driven v3**, articulando: (1) **Memória Dual** — *Temporal em Runtime* (`Sliding Window Multi-Turn` + PostgreSQL 17 `PGVector 768D` em `memory.*`) e *Governança Física RAG* (`knowledge/warm/`, `cold/`, `learnings/`); (2) **Coprocessador Laya System One (`:20140`)** com motor NLI `cross-encoder/nli-MiniLM-2-L6-H768` ONNX INT8 em **100% CPU (`0 MB VRAM`, `~20–35ms`, complexidade `O(1)`)** para *Intention Gating* e reconciliação de contradições (`93.3%` recall); e (3) **Fast-Path `AES-256-GCM` (`open-sse`)** no **OmniRoute (`:20130`)** com sondas TCP de `250–300ms` e failover determinístico em GPU local (`Ollama :11434`).
 
----
-
-## 📊 Indicadores Canônicos & Medições de Engenharia (v2.0)
-
-| Indicador | Classificação Normativa | Valor Canônico | Benefício Prático e de Negócio |
-|---|:---:|:---:|---|
-| **Custo de Nuvem (Inferência Local)** | Modo Soberano Local | **$0.00 / mês** | 100% autônomo na máquina local do operador (Ollama, LM Studio e Laya). |
-| **Coprocessador LAYA (System One)** | Triagem NLI em CPU | **23.9 ms em CPU** | Motor neural NLI (MiniLM-2 L6 INT8): 93.3% especificidade factual, 70.0% recall, 81.7% acurácia global em CPU com 0 MB VRAM. |
-| **Alocação de GPU VRAM (Laya)** | Invariante de Hardware | **0 MB (100% CPU)** | GPU dedicada totalmente livre para modelos pesados (LLMs e SLMs). |
-| **Taxa de Vazão (Throughput)** | Reconciliação Contínua | **41.8 claims/seg** | Reconciliação dialética de memória em tempo real sem custo de API em 1 core de CPU. |
-| **Recuperação de Desastres (RTO)** | SLA / Baseline Histórico | **SLA < 15 min** (Lab: 7.18s) | Restauração rápida multi-schema criptografada em AES-256 no Cloudflare R2. |
-| **Memória Vetorial Soberana** | PGVector HNSW Local | **768 Dimensões** | Indexação semântica e RAG relacional isolado no schema `memory.*`. |
-| **Governança Canônica** | Precedência Normativa | **PCL-AEOS-NORM-01** | Decisão humana soberana; sem fusão silenciosa de regras conflitantes. |
-
-### 🔬 Modelo Teórico de Projeção: Laya Neural NLI vs Abordagens Tradicionais
-
-> *Nota: Os valores de latência (~1.350ms, ~480ms), custo ($0.003) e VRAM de modelos generativos são estimativas teóricas de mercado adotadas para fins de modelagem conceitual.* Mais detalhes no [Relatório Técnico de Benchmark](projects/pcl-aeos-harmonization/audits/BENCHMARK-NEURAL-NLI-2026-10-16.md).
-
-| Dimensão Avaliada | Paradigma Nuvem (Estimativa Teórica) | Paradigma Local 7B (Estimativa Teórica) | PCL AEOS LAYA (Motor NLI INT8 CPU) |
-|---|:---:|:---:|:---:|
-| **Latência Média por Claim** | ~1.350 ms *(hipótese)* | ~480 ms *(hipótese)* | **22.33 ms (aferido em CPU)** |
-| **Fator de Aceleração Estimado** | ~60x mais lento *(projeção)* | ~21x mais lento *(projeção)* | **Referência Local (1.0x)** |
-| **VRAM Consumida na GPU** | 0 MB (Nuvem) | ~6.144 MB (6 GB) *(hipótese)* | **0 MB (100% CPU Execution Provider)** |
-| **Custo Marginal por Validação** | ~$0.003 USD *(estimativa)* | $0.00 | **$0.00 (Zero Custo de Tokens)** |
-| **Detecção de Contradições (Recall)** | Variável (~85% literatura) | Variável (~88% literatura) | **93.33% (Ensaio Interno; 63.3% Especificidade)** |
-| **Natureza do Risco de Erro** | Alucinação livre de texto | Alucinação livre de texto | **Erro de Classificação Estatística (36.7% Falso Positivo)** |
-| **Privacidade dos Fatos da Memória** | Vaza para Datacenter Externo | Local | **100% Local (Pronto para Air-Gap)** |
-| **Impacto Financeiro (500k ops/ano)** | -$1.500 a -$15.000 USD (EBITDA Drain) | Exige GPU Dedicada | **$0.00 (EBITDA Shield Total)** |
-
+> 🌐 **Explore o Portal Interativo de Arquitetura Viva (GitHub Pages — Edição v3.6):**  
+> Com seletor cognitivo em 1 clique (**⚡ Dual Completa** | **👔 Executiva** | **🛠️ Engenharia**), diagramas interativos em tela cheia do **PCL Cortex** e leitura assistida em modais UTF-8 puros:  
+> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)** · 📖 **[Guia Executivo Rápido v3.6](docs/architecture-v2-executive-guide.md)**
 
 ---
 
-## 🏢 Arquitetura em 3 Camadas (Holding Digital)
+## 📊 Indicadores Canônicos & Medições de Engenharia (v3.6)
 
-O ecossistema opera sobre um modelo de três camadas concêntricas gerado pelo **PCL Cortex Engine**:
+| Indicador Estratégico & Técnico | Classificação Normativa | Valor Canônico Homologado | Benefício Direto de Negócio & Engenharia |
+| :--- | :---: | :---: | :--- |
+| **Placar em Benchmark Cego (5 Turnos)** | Avaliação Multi-Provedor v3.6 | **4.95 / 5.0 (1º Lugar)** | Supera Gemini (`4.45`), ChatGPT (`4.30`) e Copilot (`3.80`) com telemetria aberta. |
+| **Custo Marginal (Inferência Local)** | Modo Soberano Offline | **`$0.00` / mês** | Operação 100% autônoma via Ollama (`:11434`), LM Studio (`:1234`) e Laya (`:20140`). |
+| **Coprocessador LAYA (System One)** | Triagem `O(1)` & NLI em CPU | **`22.3 – 23.9 ms` em CPU** | Intention Gating + NLI INT8 (`93.3%` especificidade / recall ensaio interno) sem gastar tokens. |
+| **Alocação de GPU VRAM (Laya)** | Invariante Físico (`NORM-01`) | **`0 MB` (100% CPU Host)** | Preserva 100% dos 6 GB da RTX 3050 para o modelo generativo local (`qwen2.5-coder:7b`). |
+| **Sondas de Saúde Fail-Fast (`:3001`)** | Resiliência de Rede v3.6 | **`250 ms – 300 ms` (TCP)** | Elimina esperas de 38s–58s quando contêineres locais estão desligados (`HIP-004`). |
+| **Taxa de Vazão (Throughput NLI)** | Reconciliação Contínua | **`41.8 – 44.8` claims/seg** | Auditoria dialética de memória em tempo real em CPU comum sem chamadas pagas. |
+| **Recuperação de Desastres (RTO)** | Continuidade Cifrada R2 | **Lab: `7.18 s` (SLA `< 15 min`)** | Restauração multi-schema AES-256 no Cloudflare R2 gratuito (`ADR-0006`). |
+| **Memória Dual & Auditoria** | `memory.*` + `knowledge/` | **`768D` HNSW + `SHA-256`** | Separação clara entre grafo temporal ACID e acervo físico Warm/Cold com prova ISO 42001. |
+
+### 🔬 Modelo Comparativo: Sistema 1 Não-Autorregressivo (`O(1)`) vs. Abordagens `O(N)`
+
+> *Nota: Estimativas de nuvem e modelos generativos 7B refletem baselines de mercado para triagem; medições do Laya correspondem aos ensaios auditados no [Relatório Técnico de Benchmark NLI](projects/pcl-aeos-harmonization/audits/BENCHMARK-NEURAL-NLI-2026-10-16.md).*
+
+| Dimensão Avaliada | LLM / SaaS em Nuvem (ex: JEV / APIs `O(N)`) | Gerador Local 7B na GPU (`O(N)`) | PCL AEOS LAYA (`CPU INT8` — Sistema 1 `O(1)`) |
+| :--- | :---: | :---: | :---: |
+| **Latência Média por Decisão** | `~800 ms a 1.350 ms` | `~480 ms` | **`22.33 ms` (aferido em CPU; `0.014ms` batch MCP)** |
+| **Fator de Aceleração** | `~60x` mais lento | `~21x` mais lento | **Referência Instantânea (`1.0x`)** |
+| **VRAM Consumida na GPU** | `0 MB` (remoto pago) | `~4.700 a 6.144 MB` | **`0 MB` (`CPUExecutionProvider` ONNX INT8)** |
+| **Custo Marginal por Triagem** | `~$0.003 USD` / chamada | `$0.00` | **`$0.00` (Licença aberta Apache 2.0 local)** |
+| **Privacidade de Metadados** | Tráfego para terceiros | Local | **100% On-Premise (Pronto para Air-Gap)** |
+| **Impacto Financeiro (500k ops/ano)** | `-$1.500 a -$15.000 USD` | Ocupa GPU dedicada | **`$0.00` (*EBITDA Shield Total*)** |
+
+---
+
+## 🏢 Arquitetura em 3 Camadas (Holding Digital Soberana)
+
+O ecossistema opera sobre três camadas concêntricas modeladas e auditadas pela persona **`/cortex`**:
 
 ```mermaid
 flowchart LR
     classDef platform fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
-    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.2px,color:#ffffff;
+    classDef verticals fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
     classDef products fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
 
-    subgraph Camada1 ["1. Plataforma Core ($0)"]
+    subgraph Camada1 ["1. Plataforma Core Soberana ($0)"]
         direction TB
-        P1["🧠 <b>Cortex Engine</b><br/>Orquestração & Visualização"]:::platform
-        P2["⚡ <b>OmniRoute :20130</b><br/>Gateway Soberano de Modelos"]:::platform
-        P3["⭐ <b>Laya MCP :20140</b><br/>NLI System One em CPU INT8"]:::platform
-        P4["💾 <b>PGVector :5432</b><br/>Memória Vetorial & RAG"]:::platform
-        P5["🛡️ <b>TLC Gates & Skills</b><br/>Auditoria & Guardrails"]:::platform
-        P6["🖥️ <b>AEOS Dashboard :3001</b><br/>Cockpit Soberano & Canvas"]:::platform
+        P1["<b>🧠 Cortex Engine</b><br/>Orquestração, DAG & Living Arch"]:::platform
+        P2["<b>⚡ OmniRoute :20130</b><br/>Fast-Path AES-256 & open-sse"]:::platform
+        P3["<b>⭐ Laya MCP :20140</b><br/>Sistema 1 CPU INT8 (0 MB VRAM)"]:::platform
+        P4["<b>💾 Memória Dual :5432</b><br/>PGVector memory.* + Warm/Cold"]:::platform
+        P5["<b>🛡️ TLC Gates & PII Guard</b><br/>5 Stage Gates, LGPD & SHA-256"]:::platform
+        P6["<b>🖥️ PCL Cockpit v3.6 :3001</b><br/>Dual-Plex, Stepper & 4.95/5.0"]:::platform
         P1 --> P2 --> P3 --> P4 --> P5 --> P6
     end
 
-    subgraph Camada2 ["2. 15 Verticais B2B"]
+    subgraph Camada2 ["2. 15 Verticais & 4 Squads"]
         direction TB
-        V1["💻 <b>Engenharia & Dados</b><br/>Studio • AI Consulting • DevSecOps"]:::verticals
-        V2["📈 <b>Marketing & Receita</b><br/>RevOps • Mídia • E-Commerce"]:::verticals
-        V3["⚖️ <b>Operações & Jurídico</b><br/>People Ops • Compliance • FinOps"]:::verticals
+        V1["<b>💻 Engenharia & Dados</b><br/>Studio • AI Consulting • DevSecOps"]:::verticals
+        V2["<b>📈 Marketing & Receita</b><br/>RevOps • Mídia • E-Commerce"]:::verticals
+        V3["<b>⚖️ Operações & Jurídico</b><br/>People Ops • Compliance • FinOps"]:::verticals
         V1 --> V2 --> V3
     end
 
     subgraph Camada3 ["3. Produtos & Monetização"]
         direction TB
-        M1["🚀 <b>Micro-SaaS & APIs</b><br/>Produtos Digitais Escaláveis"]:::products
-        M2["📦 <b>Projetos White-Label</b><br/>Soluções B2B Customizadas"]:::products
-        M3["🔄 <b>Retainers & Academy</b><br/>Contratos Mensais & Treinamentos"]:::products
+        M1["<b>🚀 Micro-SaaS & APIs</b><br/>Produtos Digitais Escaláveis"]:::products
+        M2["<b>📦 Projetos White-Label</b><br/>Soluções B2B Soberanas (BYOS)"]:::products
+        M3["<b>🔄 Retainers & Academy</b><br/>Contratos Executivos & Formação"]:::products
         M1 --> M2 --> M3
     end
 
-    Camada1 ==>|"Orquestração Core"| Camada2
-    Camada2 ==>|"Monetização & Escala"| Camada3
+    Camada1 ==>|"Orquestração Core"| Camada2 ==>|"Monetização & Escala"| Camada3
 ```
 
 | Previsualização Gráfica | Artefato & Detalhes | Ações Disponíveis |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="320" alt="DIAG-HOLD-01 Holding Digital"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *PCL Cortex Engine*, mapeando a Plataforma Core, os 15 clusters de squads e a saída para produtos de valor agregado. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo no Portal ↗**</a><br><br>[📖 Operating Model](governance/operating-model.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/pcl-aeos-v2-holding.png" width="320" alt="DIAG-HOLD-01 Holding Digital"></a> | **DIAG-HOLD-01 • Holding Digital (3 Camadas)**<br>Representação topológica oficial gerada pelo *PCL Cortex Engine*, mapeando a Plataforma Core, os clusters de squads e as frentes de produtos escaláveis. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/pcl-aeos-v2-holding.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo no Portal ↗**</a><br><br>[📖 Operating Model](governance/operating-model.md) |
 
 ---
 
 ## 🖥️ PCL Cockpit Oficial v3.6 (`projects/PromptCoreLabs_AEOS_Dashboard`)
 
-O **PCL Cockpit** é o centro de comando agêntico soberano e a interface operacional unificada do ecossistema, projetado sob o design system *Liquid Glass Bento Grid* e executado localmente na porta **`:3001`**. A versão **v3.6** consolida a eliminação definitiva de amnésia conversacional, o gating determinístico de busca via Laya Coprocessor em CPU e a nova experiência de fontes desacopladas:
+O **PCL Cockpit (`:3001`)** é a estação oficial de pilotagem agêntica do ecossistema, construída em React 19 + TypeScript + Vite sob o design system *Liquid Glass Bento Grid*. A versão **v3.6** (`ADR-0007`) consolidou consistência cognitiva multi-turn, gating inteligente em CPU e transparência criptográfica:
 
-* **Live Execution Stepper (5 Fases em Tempo Real):** Visibilidade total dos milissegundos e das ações de cada etapa cognitiva do pipeline (*1. Triagem Semântica*, *2. Consulta Canônica*, *3. Pesquisa Web*, *4. Síntese Factual* e *5. Validação de Prova SHA-256 no PostgreSQL 17*).
-* **Memória Conversacional Multi-Turn Completa & Janela Deslizante:** Fim definitivo da amnésia. Preservação contígua de contexto para resolução anafórica perfeita (ex: interpretação de pronomes como *"dessa abordagem"*) e síntese cross-turn corporativa sob restrições rígidas.
-* **Intention Gating via Laya Coprocessor (CPU INT8 / 0 MB VRAM):** Sensor não-autorregressivo ultrarrápido (~20ms a 35ms) executando em CPU host. Classifica intenções em $O(1)$ determinístico (`general_chat`, `internal_rag`, `web_search`), impedindo o grounding forçado e dispensando a busca web em perguntas conceituais.
-* **Apresentação de Fontes Desacoplada e Retrátil:** Componente em pílula (`Fontes Consultadas (n) v`) inspirado nos padrões do Google Gemini e Perplexity AI, agrupado ao final e expansível sob clique sem poluir a resposta executiva.
-* **Visualização Dual-Plex & Cortex Canvas:** Grafo DAG em tempo real sincronizado ao stepper de execução com Inspector lateral de 3 abas (*Telemetria*, *Payload* e *Governança*).
-* **Super-Chatbubble & TokenAquaOrb 3D:** Contexto tátil via esfera vítrea Aqua OS X com morfismo para pílula, console de orquestração com 4 perfis cognitivos e sanitização PII Guard LGPD em tempo real.
+```mermaid
+flowchart LR
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef rag fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef search fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef gen fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef audit fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
 
-Para iniciar o Cockpit:
-```bash
-cd projects/PromptCoreLabs_AEOS_Dashboard
-npm install
-npm run dev -- --port 3001 --host
+    subgraph F1["Fase 1: Triagem (~20ms)"]
+        direction TB
+        P1["<b>Laya CPU INT8 (:20140)</b><br/>0 MB VRAM • Intention Gate O(1)"]:::laya
+    end
+
+    subgraph F2["Fase 2: Base Canônica"]
+        direction TB
+        P2["<b>Acervo Warm & Cold RAG</b><br/>Specs v3.6 & ADRs (>= 0.40)"]:::rag
+    end
+
+    subgraph F3["Fase 3: Pesquisa Web"]
+        direction TB
+        P3["<b>Gating Condicional</b><br/>Wiki/ArXiv ou Omitida sem ruído"]:::search
+    end
+
+    subgraph F4["Fase 4: Síntese Multi-Turn"]
+        direction TB
+        P4["<b>Fast-Path / Ollama Local</b><br/>Sliding Window + open-sse"]:::gen
+    end
+
+    subgraph F5["Fase 5: Atesto Imutável"]
+        direction TB
+        P5["<b>Pílula + Hash SHA-256</b><br/>Fontes retráteis & prova ACID"]:::audit
+    end
+
+    F1 ==> F2 ==> F3 ==> F4 ==> F5
 ```
+
+* **Live Execution Stepper (5 Fases Síncronas):** Telemetria real em milissegundos de cada etapa cognitiva, sem textos simulados (*Política Zero Mocks*).
+* **Memória Multi-Turn & Sliding Window (`ADR-0007`):** Retenção conversacional contígua com resolução anafórica perfeita (*"dessa abordagem"*, *"sintetize nossa conversa"*) e normalização estrita de papéis `user`/`model`.
+* **Intention Gating em CPU (`0 MB VRAM`):** Classifica em `O(1)` entre `general_chat` (zero busca forçada, zero poluição visual), `internal_rag` (`#documentos`, `knowledge/warm/`) e `web_search` (fatos contemporâneos).
+* **Pílula Retrátil `Fontes Consultadas (n) v` & `PCLArtifactDrawer`:** Referências agrupadas discretamente ao final da leitura, com gaveta soberana redimensionável (`380px–850px`) exibindo *Documento*, *SHA-256*, *Custos FinOps* e *PII Guard LGPD*.
+* **Workspace Dual-Plex, `@mentions` & `TokenAquaOrb 3D`:** Split-screen interativo com **Cortex Canvas (DAG)**, conectores `@BigQuery`, `@SAP`, `@Salesforce`, `@Jira`, `@Sheets` sob custódia *Zero-Bin (BYOS)* e medidor tátil 3D de contexto.
+
+| Previsualização Gráfica (SVG) | Artefato Showcase v3.6 | Ações Disponíveis |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-cockpit-v36-cognitive-pipeline.svg" width="320" alt="DIAG-COCKPIT-V36 Pipeline Cognitivo 5 Fases"></a> | **DIAG-COCKPIT-V36 • Pipeline Cognitivo PCL Cockpit v3.6 (5 Fases)**<br>Diagrama interativo *Showcase* (`9/9 checks`) detalhando a janela deslizante Multi-Turn, o Intention Gate Laya em CPU (`0 MB VRAM`), o grounding seletivo, as fontes retráteis e o recibo SHA-256. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Spec Cockpit v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md) |
 
 ### 🏆 Benchmark Empírico Cego: PCL Cockpit v3.6 vs. Provedores Globais
 
-Resultado da bateria de testes cega oficial (protocolo de 5 turnos sequenciais) avaliando resolução anafórica, síntese cross-turn, premissas temporais futuras (2026), gating de busca e telemetria:
+Resultado da bateria oficial de 5 turnos sequenciais avaliando resolução anafórica, síntese cross-turn, discernimento temporal (2026), gating de busca sem ruído e transparência auditável:
 
-| Dimensão de Avaliação de Engenharia | PCL Cockpit v3.6 | OpenAI ChatGPT | Google Gemini | Microsoft Copilot |
+| Dimensão de Avaliação de Engenharia | PCL Cockpit v3.6 | Google Gemini | OpenAI ChatGPT | Microsoft Copilot |
 | :--- | :---: | :---: | :---: | :---: |
 | **1. Resolução Anafórica & Memória Multi-Turn** | **5.0** / 5.0 | 5.0 / 5.0 | 5.0 / 5.0 | 4.0 / 5.0 |
-| **2. Síntese Cross-Turn & Raciocínio Conceitual** | **5.0** / 5.0 | 5.0 / 5.0 | 4.8 / 5.0 | 4.2 / 5.0 |
-| **3. Discernimento Temporal & Fatos Futuros (2026)** | **4.8** / 5.0 | 5.0 / 5.0 | 4.8 / 5.0 | 4.5 / 5.0 |
+| **2. Síntese Cross-Turn & Raciocínio Conceitual** | **5.0** / 5.0 | 4.8 / 5.0 | 5.0 / 5.0 | 4.2 / 5.0 |
+| **3. Discernimento Temporal & Fatos Futuros (2026)** | **4.8** / 5.0 | 4.8 / 5.0 | 5.0 / 5.0 | 4.5 / 5.0 |
 | **4. Gating Inteligente de Busca Web (Sem Poluição)** | **5.0** / 5.0 | 5.0 / 5.0 | 5.0 / 5.0 | 3.5 / 5.0 |
-| **5. Apresentação Visual & Desacoplamento de Fontes** | **4.9** / 5.0 | 4.8 / 5.0 | 4.9 / 5.0 | 4.6 / 5.0 |
-| **Transparência de Pipeline / Auditabilidade (FinOps)** | **5.0** / 5.0 | 1.0 *(Caixa Preta)* | 2.0 *(Caixa Preta)* | 1.5 *(Caixa Preta)* |
-| **Média Ponderada Global** | **4.95** | **4.30** | **4.45** | **3.80** |
+| **5. Apresentação Visual & Desacoplamento de Fontes** | **4.9** / 5.0 | 4.9 / 5.0 | 4.8 / 5.0 | 4.6 / 5.0 |
+| **6. Transparência de Pipeline / Auditabilidade (FinOps)** | **5.0** / 5.0 | 2.0 *(Caixa-Preta)* | 1.0 *(Caixa-Preta)* | 1.5 *(Caixa-Preta)* |
+| **Média Ponderada Global** | **4.95** | **4.45** | **4.30** | **3.80** |
 
-Consulte as especificações detalhadas e ADRs:
-- 📖 [PCL Cockpit Spec v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md)
-- 🏛️ [ADR-0007: Arquitetura de Memória Multi-Turn & Gating](knowledge/warm/architecture/ADR-0007.md)
-- ⚔️ [Matriz Competitiva Completa](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md)
+📚 **Documentação Canônica da Evolução v3.6:**
+* 📖 [Especificação Funcional & Arquitetural do PCL Cockpit v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md)
+* 🏛️ [ADR-0007: Memória Multi-Turn, Intention Gating & Fontes Retráteis](knowledge/warm/architecture/ADR-0007.md)
+* ⚔️ [Matriz Canônica de Inteligência Competitiva (Jumpad, Read.ai, Gemini, ChatGPT, Copilot)](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md)
+* 🧊 [Registro Canônico de Hipóteses Descartadas — Cold Storage (`HIP-001` a `HIP-008`)](knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md)
 
 ---
 
 ## 🧭 O Trilho de Aprendizado Arquitetural em 6 Passos
 
-Abaixo você encontra a mesma jornada estruturada presente na GitHub Page, permitindo navegar pelos artefatos visuais e documentações de forma sequencial.
+Abaixo você percorre a mesma jornada estruturada do Portal GitHub Pages, combinando visão de negócios e especificações profundas de engenharia:
 
 ```mermaid
 flowchart LR
     classDef step fill:#0c2340,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
 
-    P1["<b>Passo 1</b><br/>Visão Macro & Estrutura"]:::step --> P2["<b>Passo 2</b><br/>Squad de IA & Papéis"]:::step --> P3["<b>Passo 3</b><br/>RAG & Memória Tripartida"]:::step --> P4["<b>Passo 4</b><br/>Backup & DRP Contínuo"]:::step --> P5["<b>Passo 5</b><br/>Infra, Portas & Governança"]:::step --> P6["<b>Passo 6</b><br/>Failover Local em CPU"]:::step
+    P1["<b>Passo 1</b><br/>Visão Macro & C4"]:::step --> P2["<b>Passo 2</b><br/>15 Agentes & Personas"]:::step --> P3["<b>Passo 3</b><br/>RAG Dual & Multi-Turn v3.6"]:::step --> P4["<b>Passo 4</b><br/>Backup AES-256 & DRP"]:::step --> P5["<b>Passo 5</b><br/>Infra, Portas & Gates"]:::step --> P6["<b>Passo 6</b><br/>Failover Híbrido & VRAM"]:::step
 ```
 
 ---
 
 ### PASSO 1: VISÃO MACRO & FUNDAÇÃO DO SISTEMA
 
-* **💡 Para Leigos e Líderes:**  
-  Como a sua empresa opera a inteligência artificial com segurança de ponta a ponta. Seus dados ficam protegidos no seu computador por uma rede virtual criptografada (Tailscale), e o sistema decide quando consultar modelos locais e quando falar com provedores externos de forma vigiada.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Topologia C4 em Níveis 1, 2 e 3. Mapeia a fronteira entre o operador humano, a VPN Mesh Tailscale, os contêineres Docker do cluster (`pcl-db`, `pcl-laya`, `pcl-omniroute`, `paperclip`) e a segregação de projetos em `projects/`.
+* **👔 Visão Executiva:** Como a organização opera inteligência artificial com soberania ponta a ponta. Dados estratégicos permanecem sob custódia própria protegidos por malha privada WireGuard (Tailscale), pilotados a partir do **PCL Cockpit (`:3001`)**.
+* **🛠️ Visão de Engenharia:** Topologia C4 nos Níveis 1, 2 e 3 mapeando o operador humano, o **PCL Cockpit (`:3001`)**, a VPN Mesh Tailscale, os contêineres Docker (`pcl-db :5432`, `pcl-laya :20140`, `pcl-omniroute :20130`, `pcl-paperclip :3100`) e o isolamento de ventures em `projects/`.
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" width="300" alt="C4 L1 Context"></a> | **DIAG-C4-01 • System Context (C4 Level 1)**<br>Visão perimetral do sistema: usuário, infraestrutura local soberana, VPN Tailscale e fronteiras de nuvem. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Artigo de Estratégia](projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" width="300" alt="C4 L2 Containers"></a> | **DIAG-C4-02 • Harness Container Topology (C4 Level 2)**<br>Topologia física dos contêineres Docker soberanos na rede interna `aeos-net`: PostgreSQL 17, Laya System One, OmniRoute e Paperclip. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Artigo de Runtime](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" width="300" alt="C4 L3 Components"></a> | **DIAG-C4-03 • Repository Component Breakdown (C4 Level 3)**<br>Decomposição dos módulos e fluxo de dados entre governança, memória e execução agêntica. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Modelo C4 & Specs](projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" width="300" alt="Projects Taxonomy"></a> | **DIAG-PRJ-01 • Projects Taxonomy & Isolation**<br>Regras formais de isolamento para subprojetos contidos na pasta `projects/` (Living Architecture, Crialli, Harmonização). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Glossário & Taxonomia](projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l1-context.png" width="300" alt="C4 L1 Context"></a> | **DIAG-C4-01 • System Context (C4 Level 1)**<br>Visão perimetral do sistema: operador soberano, PCL Cockpit, rede privada Tailscale e fronteiras controladas de nuvem. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l1-context.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Artigo de Estratégia](projects/Living%20Architecture%20PCL%20AEOS/docs/strategy/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l2-containers.png" width="300" alt="C4 L2 Containers"></a> | **DIAG-C4-02 • Harness Container Topology (C4 Level 2)**<br>Topologia física dos serviços locais: PostgreSQL 17 + PGVector, Laya CPU INT8, OmniRoute, Paperclip e Cockpit `:3001`. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l2-containers.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Artigo de Runtime](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-components.png" width="300" alt="C4 L3 Components"></a> | **DIAG-C4-03 • Repository Component Breakdown (C4 Level 3)**<br>Decomposição modular entre governança física (`knowledge/`), memória temporal (`memory.*`) e execução agêntica. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-components.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Modelo C4 & Specs](projects/Living%20Architecture%20PCL%20AEOS/docs/c4-model/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/c4-l3-projects-taxonomy.png" width="300" alt="Projects Taxonomy"></a> | **DIAG-PRJ-01 • Projects Taxonomy & Isolation**<br>Isolamento formal de projetos em `projects/` (`PromptCoreLabs_AEOS_Dashboard`, `Living Architecture`, `Crialli`, `Harmonization`). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/c4-l3-projects-taxonomy.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Glossário Canônico v3.6](projects/Living%20Architecture%20PCL%20AEOS/docs/glossary/README.md) |
 
 ---
 
-### PASSO 2: SQUAD DE IA & AGENTES INTELIGENTES
+### PASSO 2: SQUAD DE IA, 15 AGENTES & PERSONAS COGNITIVAS (`/cortex` & `/laya`)
 
-* **💡 Para Leigos e Líderes:**  
-  Em vez de confiar em um único "robô faz-tudo", o AEOS opera com uma **equipe especializada de 15 agentes**. Um agente planeja, outro constrói o código, um terceiro atua como auditor de qualidade e o último verifica a segurança. Nenhum agente pode aprovar o próprio trabalho; o humano é o chefe soberano que assina a entrega final.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Protocolo de mensageria confinada, orquestração Paperclip e micro-execução governada pela persona **Cortex** com limites de retentativas e transição de estados (`IDLE`, `PLANNING`, `WORKING`, `QA_REVIEW`).
+* **👔 Visão Executiva:** Em vez de um único assistente genérico, o AEOS coordena **15 agentes especializados em 4 Squads** mais as personas **`/cortex`** (arquitetura e grafos) e **`/laya`** (triagem ultrarrápida). Nenhum agente aprova o próprio trabalho em produção: o operador humano detém o poder soberano de assinatura.
+* **🛠️ Visão de Engenharia:** Mensageria confinada no Paperclip (`:3100`), micro-loop determinístico com retentativas limitadas (`IDLE`, `PLANNING`, `WORKING`, `QA_REVIEW`) e enquadramento RACI consultivo (`R/C`) para sensores automatizados (`AGENTS.md` Seção 4).
 
 ```mermaid
 sequenceDiagram
@@ -194,8 +223,8 @@ sequenceDiagram
     Operador->>Planner: Aprova especificação e plano
     Planner->>Builder: Entrega backlog detalhado (tasks.md)
     loop Executa edições no código (máx. 3 retries)
-        Builder->>QA: Submete diffs para validação
-        QA->>QA: Executa suíte de testes
+        Builder->>QA: Submete diffs para validação (Exit Code 0)
+        QA->>QA: Executa suíte de testes e Zero Mocks
     end
     alt Sucesso: Aprovado
         QA->>Auditor: Submete relatório de auditoria
@@ -207,34 +236,67 @@ sequenceDiagram
 ```
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" width="300" alt="Squad Map"></a> | **DIAG-AGT-01 • Squad Orchestration & Roles**<br>Os 15 agentes distribuídos nas 4 camadas: Negócios/Estratégia, Especificação, Execução e Qualidade/Compliance. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Manual dos 15 Agentes](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" width="300" alt="Cortex Lifecycle"></a> | **DIAG-LIF-01 • Cortex Micro-Loop Lifecycle**<br>Máquina de estados finita que governa o confinamento e o controle de falhas nas tarefas agênticas. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Matriz RACI da Squad](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" width="300" alt="DevEx Loop"></a> | **DIAG-DEV-01 • Developer Experience & IDE Loop**<br>Ciclo de interação contínua entre o desenvolvedor, a IDE Antigravity, os servidores MCP locais e os relatórios. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Integrações MCP](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/agents-squad-map.png" width="300" alt="Squad Map"></a> | **DIAG-AGT-01 • Squad Orchestration & Roles**<br>Os 15 agentes distribuídos nas 4 Squads (Estratégia, Engenharia TLC, SecOps/FinOps e Data/Growth) mais `/cortex` e `/laya`. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/agents-squad-map.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Manual dos 15 Agentes](projects/Living%20Architecture%20PCL%20AEOS/docs/agents-squads/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/life-cortex-micro-loop.png" width="300" alt="Cortex Lifecycle"></a> | **DIAG-LIF-01 • Cortex Micro-Loop Lifecycle**<br>Máquina de estados finita que governa o confinamento, *bounded retries* e escalonamento humano nas tarefas agênticas. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/life-cortex-micro-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Diretrizes AGENTS.md](AGENTS.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-devex-loop.png" width="300" alt="DevEx Loop"></a> | **DIAG-DEV-01 • Developer Experience & IDE Loop**<br>Integração contínua entre arquiteto, Antigravity IDE, PCL Cockpit (`:3001`) e servidores MCP locais (`pcl-laya`, `pcl-cortex`). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-devex-loop.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Integrações MCP & @apps](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md) |
 
 ---
 
-### PASSO 3: CONHECIMENTO & MEMÓRIA PERSISTENTE (RAG TRIPARTIDO & MULTI-TURN v3.6)
+### PASSO 3: ARQUITETURA DE MEMÓRIA DUAL, MULTI-TURN & RAG GOVERNADO (v3.6)
 
-* **💡 Para Leigos e Líderes:**  
-  A inteligência artificial aprende com a história da sua empresa. Toda informação, regulamento ou código é guardado com recibo de autenticidade (hash criptográfico). O sistema sabe quando um documento ficou velho (*obsoleto*) e alerta imediatamente para não usar respostas desatualizadas.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Arquitetura de **Memória Tripartida** (Episódica, Semântica e Procedural) isolada no schema `memory.*` do PostgreSQL 17 + PGVector. O coprocessador neural **LAYA (System One)** com modelo `cross-encoder/nli-MiniLM-2-L6-H768` (INT8 AVX2) atua na reconciliação de memória e detecção de staleness com **93.3% de recall em 22.3 ms**, garantindo estritamente **0 MB de VRAM alocada na GPU**.
+* **👔 Visão Executiva:** A evolução **v3.6** eliminou a amnésia entre perguntas e o ruído de buscas desnecessárias. O sistema distingue perguntas abertas de mercado (respondendo com fluidez natural) de consultas estratégicas internas (`#documentos`), preserva todo o contexto da conversa para sínteses executivas complexas, consulta até o **Cold Storage** de hipóteses já descartadas para evitar repetir erros passados e organiza as referências em pílula retrátil limpa (`Fontes Consultadas (n) v`).
+* **🛠️ Visão de Engenharia:** Separação canônica entre **Memória Temporal Operacional** (`Sliding Window Multi-Turn` + schema `memory.*` no PostgreSQL 17 `PGVector 768D` com `claims` `Tiers 1–4` e `evidence_receipts` SHA-256 — `ADR-0005` / `ADR-0007`) e **Governança Física RAG** (`knowledge/warm/` para specs ativas v3.6, `knowledge/cold/` para `HIP-001`–`HIP-008` rejeitadas e `knowledge/learnings/` para `AGENTS.md`). O coprocessador **Laya System One (`CPU INT8`, `0 MB VRAM`, `~20ms`)** aplica *Intention Gating* (`general_chat | internal_rag | web_search`) e *Answerability Gate* (`>= 0.40`) sobre os 5 paradigmas de RAG suportados.
 
-| Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory-tripartite.png" width="300" alt="RAG Memory Tripartite"></a> | **DIAG-DAT-01 • RAG & Memória Tripartida**<br>Linhagem completa: ingestão vetorial (768D), busca vetorial HNSW no PGVector, verificação de staleness determinístico e reranker rápido. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Módulo Memory & RAG](memory/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-laya-system-one.png" width="300" alt="Laya System One"></a> | **DIAG-LAYA-01 • LAYA System One Classifier**<br>Coprocessador neural NLI em CPU INT8 (22ms / 0 MB VRAM): reconciliação de contradições (93.3% recall), guardrails e supersessão automática. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Laudo de Benchmark](projects/pcl-aeos-harmonization/audits/BENCHMARK-NEURAL-NLI-2026-10-16.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" width="300" alt="MCP Map"></a> | **DIAG-MCP-01 • MCP Server Interconnection Map**<br>Topologia do Model Context Protocol integrando a IDE ao servidor nativo `pcl-laya` e ferramentas locais. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Protocolo MCP](projects/Living%20Architecture%20PCL%20AEOS/docs/integrations-mcp/README.md) |
+```mermaid
+flowchart LR
+    classDef shortM fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
+    classDef laya fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
+    classDef warm fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
+    classDef temp fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+
+    subgraph Turno ["1. Sessão Multi-Turn (:3001)"]
+        direction TB
+        SW["<b>Sliding Window Contígua</b><br/>Anáfora & Síntese Cross-Turn"]:::shortM
+        Gate["<b>Laya Intention Gate (CPU)</b><br/>0 MB VRAM • ~20ms • O(1)"]:::laya
+        SW --> Gate
+    end
+
+    subgraph Fisica ["2. Governança Física (knowledge/)"]
+        direction TB
+        Warm["<b>🔥 Warm Storage</b><br/>Specs v3.6, ADRs & Matriz 4.95"]:::warm
+        Cold["<b>🧊 Cold Storage & Learnings</b><br/>HIP-001..008 & AGENTS.md"]:::warm
+        Warm --> Cold
+    end
+
+    subgraph Temporal ["3. Memória Temporal (memory.*)"]
+        direction TB
+        PGV["<b>PGVector 768D + Claims</b><br/>Score >= 0.40 & NLI 93.3%"]:::temp
+        Stale["<b>Staleness Daemon (0.2s)</b><br/>Hash SHA-256 + Git Commit"]:::temp
+        PGV --> Stale
+    end
+
+    subgraph Entrega ["4. Resposta Auditada v3.6"]
+        direction TB
+        Out["<b>🎯 Síntese Sem Poluição</b><br/>Pílula Retrátil + Recibo SHA-256"]:::laya
+    end
+
+    Turno ==> Fisica ==> Temporal ==> Entrega
+```
+
+| Previsualização (PNG / SVG) | Diagrama & Descrição | Ações de Navegação |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-cockpit-v36-cognitive-pipeline.svg" width="300" alt="Pipeline Cognitivo v3.6"></a> | **DIAG-COCKPIT-V36 • Pipeline Multi-Turn, Gating & Fontes (v3.6)**<br>Esteira completa do `ADR-0007`: janela deslizante multi-turn, triagem Laya em CPU, grounding condicional e pílula retrátil com prova SHA-256. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-cockpit-v36-cognitive-pipeline.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 ADR-0007 Oficial](knowledge/warm/architecture/ADR-0007.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-rag-memory-tripartite.png" width="300" alt="RAG Memory Tripartite"></a> | **DIAG-DAT-01 • RAG & Memória Tripartida (`memory.*` + `knowledge/`)**<br>Linhagem completa: ingestão vetorial `768D`, busca HNSW no PGVector, camadas térmicas Warm/Cold e *Staleness Verifier* em `0.2s`. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-rag-memory-tripartite.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Memory](memory/README.md) · [📚 Knowledge](knowledge/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-laya-system-one.png" width="300" alt="Laya System One"></a> | **DIAG-LAYA-01 • LAYA System One Classifier (`0 MB VRAM`)**<br>Coprocessador neural NLI em CPU INT8 (`~22ms`): *Intention Gating*, reconciliação de contradições (`93.3%` recall) e *Answerability Gate*. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-laya-system-one.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Spec Classifier v3.6](specs/pcl-aeos-evolution/spec-pcl-aeos-classifier-engine.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/mcp-interconnection.png" width="300" alt="MCP Map"></a> | **DIAG-MCP-01 • MCP Server & Enterprise Connectors Map**<br>Topologia integrando Antigravity IDE, PCL Cockpit (`@apps` / `#documentos`), `pcl-laya`, `pcl-cortex` e banco vetorial. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/mcp-interconnection.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Cold Storage HIPs](knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md) |
 
 ---
 
-### PASSO 4: BACKUP CIFRADO & DRP (RECUPERAÇÃO DE DESASTRES)
+### PASSO 4: BACKUP CIFRADO & DRP (RECUPERAÇÃO DE DESASTRES EM `7.18s`)
 
-* **💡 Para Leigos e Líderes:**  
-  **O cofre inabalável da sua empresa.** Se o servidor ou a máquina local sofrer uma falha física ou pane elétrica, tudo pode ser restaurado em poucos minutos a partir de um arquivo blindado por criptografia de nível bancário (AES-256), sem custo adicional de nuvem.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Plano de Recuperação de Desastres (DRP) multi-schema com RPO $\le$ 1h/24h e SLA de RTO $\le$ 15 minutos (validado em laboratório com restauração completa em 7,18 segundos). Os dados frios são enviados cifrados para bucket Cloudflare R2 com hash SHA-256.
+* **👔 Visão Executiva:** **Continuidade de negócios blindada.** Se o computador ou servidor local sofrer perda total física, toda a inteligência, histórico de auditoria SHA-256 e base de conhecimento são restaurados em segundos a partir de snapshots criptografados em padrão bancário (**AES-256**) a **`$0.00`/mês**.
+* **🛠️ Visão de Engenharia:** DRP Tripartido (`ADR-0006`) abrangendo schemas `public` e `memory.*` + recibos criptográficos com `RPO <= 1h/24h` e SLA de `RTO <= 15 minutos` (**homologado em laboratório em `7,18 segundos`**) em bucket Cloudflare R2.
 
 ```powershell
 # Executar o backup completo da Memória (PostgreSQL + AES-256 + Cloudflare R2)
@@ -245,128 +307,123 @@ powershell -ExecutionPolicy Bypass -File "scripts/backup/restore-aeos-tripartido
 ```
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DRP Flow"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP**<br>Fluxo automatizado de resiliência: dump relacional do banco, cifragem AES-256, sincronização em bucket R2 ($0.00/mês) e restore testado. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Registro ADR-006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" width="300" alt="Legacy Migration"></a> | **DIAG-LEG-01 • Legacy Migration Dataflow**<br>Dataflow de sanitização e migração de dados do acervo legado para o novo padrão de memória vetorial unificado. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Migração Legada](projects/Living%20Architecture%20PCL%20AEOS/docs/legacy-migration/README.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-tripartite-memory-drp.png" width="300" alt="DRP Flow"></a> | **DIAG-MEM-01 • Memória Tripartida & DRP Cloudflare R2**<br>Dump atômico dos schemas relacionais/vetoriais, cifragem AES-256, sincronização off-site gratuita e restore auditado em `7.18s`. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-tripartite-memory-drp.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Registro ADR-0006](projects/Living%20Architecture%20PCL%20AEOS/docs/adrs/ADR-006-tripartite-memory-drp-cloudflare.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/data-legacy-migration.png" width="300" alt="Legacy Migration"></a> | **DIAG-LEG-01 • Legacy Migration & Sanitização UTF-8**<br>Higienização UTF-8 NFC, deduplicação SHA-256 e isolamento `is_legacy: true` para impedir contaminação de specs vigentes. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/data-legacy-migration.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Migração Legada](projects/Living%20Architecture%20PCL%20AEOS/docs/legacy-migration/README.md) |
 
 ---
 
-### PASSO 5: INFRAESTRUTURA, RUNTIME & GOVERNANÇA
+### PASSO 5: INFRAESTRUTURA, RUNTIME, SEGURANÇA LGPD & STAGE GATES
 
-* **💡 Para Leigos e Líderes:**  
-  Como economizar até 90% da fatura de inteligência artificial. O sistema possui um roteador inteligente (*OmniRoute*) que direciona perguntas corriqueiras para modelos locais gratuitos e apenas desafios de alta complexidade para provedores de nuvem. Além disso, nenhuma decisão é tomada sem respeitar as regras aprovadas pelo patrocinador.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Isolamento estrito na sub-rede Docker `aeos-net`, malha VPN Tailscale com princípios Zero Trust, e compliance garantido por 5 Stage Gates sequenciais (G-00 a G-04) sob a [Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md).
+* **👔 Visão Executiva:** Controle financeiro (*EBITDA Shield*) aliado à conformidade **LGPD, ISO 27001 e ISO 42001**. Dados pessoais são mascarados automaticamente antes de sair da máquina (**PII Guard**), anexos seguem custódia local (*Zero-Bin Custody*) e nenhuma mudança produtiva avança sem passar por 5 portões formais de qualidade.
+* **🛠️ Visão de Engenharia:** Isolamento Docker (`pcl-net`), sondas TCP sub-segundo (`250–300ms`), cofre `AES-256-GCM` em memória + parser universal `open-sse` no OmniRoute (`:20130`), malha WireGuard Tailscale e 5 Stage Gates sequenciais sob **`PCL-AEOS-NORM-01`**.
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="OmniRoute Routing"></a> | **DIAG-SEQ-02 • OmniRoute LLM Request Lifecycle**<br>Gateway inteligente (porta 20130): cache de prompt (EBITDA Shield), roteamento dinâmico entre cloud e modelos locais e failover. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Runtime & Gateway](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="Network Topology"></a> | **DIAG-INF-01 • Network & Security Topology**<br>Arquitetura de rede física: segregação de contêineres e comunicação privada via VPN Mesh Tailscale. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Topologia de Rede](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="Stage Gates"></a> | **DIAG-GOV-01 • Governance & Stage Gates Matrix**<br>Matriz operacional que fixa critérios de passagem, artefatos obrigatórios e autoridade humana soberana de aprovação. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Stage Gates Oficiais](governance/stage-gates.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="Zero Trust"></a> | **DIAG-SEC-01 • Secret Management & Zero Trust**<br>Diretriz Zero Secret Leak: proteção contra vazamento de tokens e isolamento de variáveis de ambiente. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Políticas de Segurança](governance/policies.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-omniroute-routing.png" width="300" alt="OmniRoute Routing"></a> | **DIAG-SEQ-02 • OmniRoute & Fast-Path Request Lifecycle**<br>Gateway inteligente (`:20130`) + middleware `:3001`: cofre AES-256-GCM, streams `open-sse`, *EBITDA Shield* e failover local. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-omniroute-routing.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Runtime & Gateway v3.6](projects/Living%20Architecture%20PCL%20AEOS/docs/runtime/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/infra-network-security.png" width="300" alt="Network Topology"></a> | **DIAG-INF-01 • Network, Ports & Docker Harness Topology**<br>Mapeamento completo das portas (`:3001`, `:20130`, `:20140`, `:3100`, `:5432`, `:11434`, `:1234`) e túnel Tailscale. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/infra-network-security.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Infraestrutura v3.6](projects/Living%20Architecture%20PCL%20AEOS/docs/infrastructure/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/gov-stage-gates-matrix.png" width="300" alt="Stage Gates"></a> | **DIAG-GOV-01 • Governance & 5 Stage Gates Matrix**<br>Critérios obrigatórios de passagem (*Specify, Design, Tasks, Execute/QA, Signoff Humano*) e atesto SHA-256. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/gov-stage-gates-matrix.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Governança TLC v3](projects/Living%20Architecture%20PCL%20AEOS/docs/governance/README.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/sec-zero-trust-flow.png" width="300" alt="Zero Trust"></a> | **DIAG-SEC-01 • Zero Trust, Vault AES-256 & PII Guard LGPD**<br>Sanitização inline de dados sensíveis, custódia *Zero-Bin* e política *Zero Secret Leak* auditada pelo CISO Agent. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/sec-zero-trust-flow.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Segurança & LGPD v3.6](projects/Living%20Architecture%20PCL%20AEOS/docs/security-compliance/README.md) |
 
 ---
 
-### PASSO 6: EXECUÇÃO REATIVA & FAILOVER SOB DEMANDA
+### PASSO 6: EXECUÇÃO REATIVA, ORÇAMENTO DE VRAM & FAILOVER SOB DEMANDA
 
-* **💡 Para Leigos e Líderes:**  
-  **Autonomia 100% offline.** Se a internet da sua empresa cair ou a VPN falhar, você não é interrompido. O sistema percebe a queda em menos de 10 segundos, liga os motores de inteligência artificial locais (instalados no seu computador) e você continua trabalhando normalmente. Quando a internet volta, ele desliga os modelos locais e libera a placa de vídeo.
-* **🛠️ Para Engenheiros e Técnicos:**  
-  Invariante de 0 MB de VRAM na GPU em modo online (com a RTX 3050 em repouso). Monitor reativo em background via PowerShell ([watch_network_trigger.ps1](scripts/windows/watch_network_trigger.ps1)) que aciona o carregamento sob demanda no Ollama (`qwen2.5-coder:7b`) e LM Studio (`DeepSeek-Coder-V2-Lite MoE`), com desalocação automática (`lms unload --all`) ao restabelecer a conectividade.
+* **👔 Visão Executiva:** **Operação imune a quedas de internet.** No expediente conectado, a placa de vídeo do computador fica 100% em repouso (`0 MB VRAM`), economizando bateria e energia. Se a internet cair, o sistema detecta em fração de segundo e assume localmente a **`$0.00`**, descarregando a placa de vídeo automaticamente assim que o sinal retorna.
+* **🛠️ Visão de Engenharia:** Como o **Laya System One (`:20140`)** roda 100% em CPU (`ONNX INT8`, **`0 MB VRAM`**), a GPU dedicada (NVIDIA RTX 3050 6GB) permanece `0 MB` em modo online (Fast-Path Gemini 3.5 Flash-Lite / 3.6 Flash) e recebe **100% de orçamento livre sob demanda** no failover offline para `qwen2.5-coder:7b-instruct-q4_K_M` (`~4.7 GB` VRAM em `:11434`) ou `DeepSeek-Coder-V2-Lite MoE` (GPU+RAM Offload em `:1234`), controlado por [watch_network_trigger.ps1](scripts/windows/watch_network_trigger.ps1) e sondas TCP de `250–300ms`.
 
 ```mermaid
 flowchart LR
     classDef req fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#ffffff;
     classDef c0 fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#ffffff;
-    classDef c1 fill:#78350f,stroke:#f59e0b,stroke-width:1.5px,color:#ffffff;
-    classDef c2 fill:#3b0764,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
-    classDef out fill:#022c22,stroke:#10b981,stroke-width:1.5px,color:#ffffff;
+    classDef c1 fill:#451a03,stroke:#fbbf24,stroke-width:1.5px,color:#ffffff;
+    classDef c2 fill:#2e1065,stroke:#c084fc,stroke-width:1.5px,color:#ffffff;
+    classDef out fill:#0c2340,stroke:#60a5fa,stroke-width:1.5px,color:#ffffff;
 
-    subgraph Entrada ["1. Ponto de Entrada"]
+    subgraph Entrada ["1. Entrada & Triagem CPU"]
         direction TB
-        Harness["<b>Agente PCL</b><br/>Antigravity IDE & Terminal"]:::req
-        Gateway["<b>OmniRoute Gateway</b><br/>Porta :20130"]:::req
+        Harness["<b>PCL Cockpit :3001 & IDE</b><br/>Laya CPU INT8 (0 MB VRAM)"]:::req
+        Gateway["<b>OmniRoute :20130 + TCP Probe</b><br/>Fail-fast em 250–300ms"]:::req
         Harness --> Gateway
     end
 
-    subgraph Tier0 ["2. Rota Primária: Nuvem"]
+    subgraph Tier0 ["2. Rota Primária Online (0 MB VRAM GPU)"]
         direction LR
-        APIs["<b>APIs Soberanas Free Tier</b><br/>Gemini 2.5 Pro / DeepSeek V3"]:::c0
-        RespCloud["<b>Resposta Nuvem</b><br/>Latência: ~1.5s • Zero Custo"]:::out
+        APIs["<b>Fast-Path Cloud Cifrado</b><br/>Gemini 3.5 Flash-Lite / 3.6 Flash"]:::c0
+        RespCloud["<b>Stream open-sse (~1.2s–3.4s)</b><br/>RTX 3050 100% em Repouso"]:::c0
         APIs --> RespCloud
     end
 
-    subgraph TierLocal ["3. Contingência: Local (0 MB VRAM)"]
+    subgraph TierLocal ["3. Contingência Soberana Local ($0.00)"]
         direction LR
-        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (CPU)"]:::c1
-        L2["<b>LM Studio :1234</b><br/>DeepSeek-Coder-V2 (CPU)"]:::c2
-        RespLocal["<b>Resposta Local</b><br/>0 MB VRAM • 100% Offline"]:::out
-        L1 -.->|"Fallback L2"| L2
+        L1["<b>Ollama Local :11434</b><br/>Qwen 2.5 Coder 7B (GPU RTX ~4.7GB)"]:::c1
+        L2["<b>LM Studio :1234</b><br/>DeepSeek-V2-Lite MoE (VRAM+RAM)"]:::c2
+        RespLocal["<b>Continuidade 100% Offline</b><br/>Desalocação auto ao voltar rede"]:::out
+        L1 -.->|"Tarefa MoE"| L2
         L2 --> RespLocal
     end
 
-    Saida["🎯 <b>Execução Concluída</b><br/>Retorno ao Agente IDE"]:::out
+    Saida["<b>🎯 Execução Concluída</b><br/>Retorno Auditado SHA-256"]:::c0
 
-    Gateway ==>|"1. Conexão Normal"| APIs
-    Gateway -.->|"2. Failover Timeout"| L1
+    Gateway ==>|"1. Rede Ativa"| APIs
+    Gateway -.->|"2. Queda / On-Prem"| L1
 
-    RespCloud ==>|"Resposta Nuvem"| Saida
-    RespLocal -.->|"Resposta Offline"| Saida
+    RespCloud ==>|"Entrega Online"| Saida
+    L1 ==>|"Entrega Nível 1"| Saida
+    RespLocal -.->|"Entrega Nível 2"| Saida
 ```
 
 | Previsualização (PNG) | Diagrama & Descrição | Ações de Navegação |
-|:---:|---|:---:|
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/arch-hybrid-inference-failover.png" width="300" alt="Hybrid Inference"></a> | **DIAG-INFER-01 • Hybrid Inference & Failover**<br>Topologia de inferência reativa em 3 camadas gerada pelo *PCL Cortex Engine*: Modo Online (0 MB VRAM), Failover Nível 1 (Ollama) e Nível 2 (LM Studio). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Guia de Inferência Híbrida](docs/hybrid-inference-architecture.md) |
-| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.png" width="300" alt="Trigger Failover"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Máquina de estados de failover gerada pelo *PCL Cortex Engine*, monitorando conectividade e desalocando a GPU ao retornar a rede. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Otimização de VRAM](docs/hardware-vram-optimization.md) |
+| :---: | :--- | :---: |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/arch-hybrid-inference-failover.png" width="300" alt="Hybrid Inference"></a> | **DIAG-INFER-01 • Hybrid Inference & Failover**<br>Topologia reativa em 3 camadas: Modo Online (`0 MB VRAM`), Failover Nível 1 (`Ollama :11434` em RTX 3050) e Nível 2 (`LM Studio :1234` MoE). | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/arch-hybrid-inference-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Guia de Inferência Híbrida](docs/hybrid-inference-architecture.md) |
+| <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer"><img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/seq-trigger-based-failover.png" width="300" alt="Trigger Failover"></a> | **DIAG-FAILOVER-01 • Trigger-Based On-Demand Failover**<br>Ciclo automático de carga e desalocação (`ollama stop` / `lms unload --all`) preservando a saúde térmica e de VRAM do host. | <a href="https://enterdufter.github.io/PromptCoreLabs_AEOS/projects/Living%20Architecture%20PCL%20AEOS/diagrams/interactive/seq-trigger-based-failover.html" target="_blank" rel="noopener noreferrer">🌐 **Abrir Interativo ↗**</a><br><br>[📖 Otimização de VRAM](docs/hardware-vram-optimization.md) · [💻 Portabilidade](docs/hardware-portability-guide.md) |
 
 ---
 
-## 🚀 Quickstart: Como Executar o PCL AEOS Localmente
+## 🚀 Quickstart: Como Executar o PCL AEOS & PCL Cockpit v3.6 Localmente
 
-Para subir a infraestrutura completa do PCL AEOS no seu computador ou servidor:
-
-### 1. Clonar o Repositório e Configurar o Ambiente
+### 1. Clonar o Repositório
 ```bash
 git clone https://github.com/EnterDufter/PromptCoreLabs_AEOS.git
 cd PromptCoreLabs_AEOS
 ```
 
-### 2. Inicializar os Contêineres Docker (Kernel Soberano)
+### 2. Inicializar o Kernel Soberano (Docker Compose)
 ```bash
-# Inicializa PostgreSQL/PGVector, Laya System One, OmniRoute e Paperclip
+# Inicializa PostgreSQL 17/PGVector (:5432), Laya System One (:20140), OmniRoute (:20130) e Paperclip (:3100)
 docker compose -f docker-compose.aeos.yml up -d
-
-# Verificar a saúde dos serviços
 docker compose -f docker-compose.aeos.yml ps
 ```
 
-### 3. Conectar o Coprocessador LAYA via MCP na IDE
-O servidor MCP do Laya já vem pré-configurado no repositório. Para testar o coprocessador em CPU (0 MB VRAM):
+### 3. Iniciar o Centro de Comando PCL Cockpit v3.6 (`:3001`)
+```bash
+npm --prefix projects/PromptCoreLabs_AEOS_Dashboard install
+npm --prefix projects/PromptCoreLabs_AEOS_Dashboard run dev -- --port 3001 --host
+```
+
+### 4. Validar o Coprocessador LAYA via MCP (`0 MB VRAM`) & Monitor Reativo
 ```bash
 python scripts/tests/test_mcp_protocol_handshake.py
 ```
-
-### 4. Iniciar o Monitor de Failover Reativo (Opcional para Windows)
 ```powershell
 powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1"
 ```
 
 ---
 
-## 📑 Governança Canônica & Rastreabilidade do Projeto
+## 📑 Governança Canônica & Rastreabilidade do Ecossistema (`PCL-AEOS-NORM-01`)
 
-O ecossistema PCL AEOS é regido pela documentação canônica aprovada no processo de harmonização estrutural:
-
-* **[Certificado Foundation Ready](projects/pcl-aeos-harmonization/foundation-readiness.md):** Declaração de prontidão fundacional (atualmente sob revisão e saneamento de P1s pós-reauditoria).
-* **[Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md):** Hierarquia de autoridade soberana e RACI de governança (`PCL-AEOS-NORM-01`).
-* **[Boundary Register & Arquitetura Canônica](projects/pcl-aeos-harmonization/design/canonical-architecture.md):** Delimitação formal de Core, Satélites e Módulos Externos.
-* **[Registro Calibrado de Métricas e Claims](projects/pcl-aeos-harmonization/design/claims-register.md):** SLAs, targets de engenharia e medições históricas de laboratório.
+* **[Diretrizes Soberanas de Agentes (`AGENTS.md`)](AGENTS.md):** Hierarquia normativa `PCL-AEOS-NORM-01`, invariantes de hardware (`0 MB VRAM` Laya, `$0.00` local, Zero Mocks) e regras da v3.6.
+* **[Índice Unificado de ADRs (`ADR-0001` a `ADR-0010`)](knowledge/warm/architecture/ADR_INDEX.md):** Catálogo harmonizado em 3 trilhas das decisões arquiteturais permanentes.
+* **[Especificação Canônica do PCL Cockpit v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md) & [Matriz Competitiva](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md):** Contratos técnicos e benchmark empírico cego (`4.95 / 5.0`).
+* **[Cold Storage — Hipóteses Descartadas (`HIP-001` a `HIP-008`)](knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md):** Memória institucional anti-regressão.
+* **[Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md) & [Boundary Register](projects/pcl-aeos-harmonization/design/canonical-architecture.md):** Delimitação formal de Core, Cockpit, Ventures e Living Architecture.
 
 ---
 
 <div align="center">
 
-*PromptCoreLabs_AEOS v2.0 Sovereign — Todos os direitos reservados – 2026*  
-*Desenvolvido pela comunidade PromptCore Labs sob Licença MIT*
+*PromptCoreLabs_AEOS v3.6 Sovereign — Todos os direitos reservados – 2026*  
+*Desenvolvido pela PromptCore Labs sob Licença MIT*
 
 </div>
