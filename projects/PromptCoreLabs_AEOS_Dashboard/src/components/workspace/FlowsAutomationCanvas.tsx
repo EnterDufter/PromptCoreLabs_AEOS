@@ -5,7 +5,8 @@ import {
   ZoomIn, ZoomOut, Maximize2, Move, RotateCcw,
   Copy, Check, ShieldCheck, Terminal, MapPin,
   Layers, ExternalLink, Activity, Info, GitBranch,
-  ChevronDown, CheckCheck, Share2, Download, AlertCircle
+  ChevronDown, CheckCheck, Share2, Download, AlertCircle,
+  Search, Filter, Bot, Cpu, Database, Server, GitFork
 } from 'lucide-react';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
 
@@ -312,6 +313,208 @@ export const PRESET_FLOWS: FlowDefinition[] = [
   }
 ];
 
+export interface CatalogItem {
+  id: string;
+  name: string;
+  appId: string;
+  type: FlowNode['type'];
+  category: 'trigger' | 'decision' | 'agent' | 'mcp' | 'logic' | 'governance';
+  categoryLabel: string;
+  subtitle: string;
+  description: string;
+  inputPayload: Record<string, any>;
+  outputPayload: Record<string, any>;
+}
+
+export const RICH_NODE_CATALOG: CatalogItem[] = [
+  // 1. Gatilhos (Triggers)
+  {
+    id: 'trigger-sap-invoice',
+    name: 'Gatilho: Fatura SAP ERP',
+    appId: 'sap',
+    type: 'trigger',
+    category: 'trigger',
+    categoryLabel: 'Gatilhos',
+    subtitle: 'SAP ERP • Webhook Financeiro',
+    description: 'Dispara quando faturas ou ordens de pagamento ultrapassam prazo de vencimento.',
+    inputPayload: { event: 'INVOICE_OVERDUE', thresholdDays: 15 },
+    outputPayload: { faturaId: 'FAT-2026-9812', cliente: 'Acme Corp', valor: 'R$ 48.500,00' }
+  },
+  {
+    id: 'trigger-rd-lead',
+    name: 'Gatilho: Conversão Inbound',
+    appId: 'rdstation',
+    type: 'trigger',
+    category: 'trigger',
+    categoryLabel: 'Gatilhos',
+    subtitle: 'RD Station • Webhook Conversão',
+    description: 'Inicia o fluxo instantaneamente ao receber novo lead qualificado com score > 80.',
+    inputPayload: { formId: 'FORM_ENTERPRISE_2026', leadScoreMin: 80 },
+    outputPayload: { leadId: 'RD-LEAD-5542', score: 94, empresa: 'Next Logistics' }
+  },
+  {
+    id: 'trigger-bq-stream',
+    name: 'Gatilho: Ingestão BigQuery',
+    appId: 'bigquery',
+    type: 'trigger',
+    category: 'trigger',
+    categoryLabel: 'Gatilhos',
+    subtitle: 'Google BigQuery • CDC / Streaming',
+    description: 'Monitora partições de auditoria para detectar anomalias ou novas transações.',
+    inputPayload: { dataset: 'corp_analytics', scanFields: ['cpf', 'rg', 'valor'] },
+    outputPayload: { recordsFound: 1420, sensibilityLevel: 'HIGH_RISK' }
+  },
+  {
+    id: 'trigger-hubspot-deal',
+    name: 'Gatilho: Deal Estagnado',
+    appId: 'hubspot',
+    type: 'trigger',
+    category: 'trigger',
+    categoryLabel: 'Gatilhos',
+    subtitle: 'HubSpot CRM • Pipeline Scanner',
+    description: 'Dispara alerta quando negociações VIP ficam sem interação há mais de 5 dias.',
+    inputPayload: { stage: 'Proposal Sent', inactivityDays: 5 },
+    outputPayload: { dealId: 'HUB-DEAL-8891', valor: 'R$ 120.000,00' }
+  },
+  // 2. Decisão & Laya Gates (Decision)
+  {
+    id: 'decision-laya-intent',
+    name: 'Laya Intention Gate (CPU INT8)',
+    appId: 'laya',
+    type: 'ai_decision',
+    category: 'decision',
+    categoryLabel: 'Laya & Cortex Gates',
+    subtitle: 'Laya System 1 • 0 MB VRAM (:20140)',
+    description: 'Classificação ultrarrápida (22ms, O(1)) em CPU para rotear intenções sem gastar tokens.',
+    inputPayload: { text: 'Solicitação de reembolso pendente', confidenceThreshold: 0.85 },
+    outputPayload: { route: 'FINANCE_FASTPATH', latencyMs: 22.4, vramAllocated: '0 MB' }
+  },
+  {
+    id: 'decision-cortex-tlc',
+    name: 'Stage Gate TLC Spec-Driven v3',
+    appId: 'cortex',
+    type: 'ai_decision',
+    category: 'decision',
+    categoryLabel: 'Laya & Cortex Gates',
+    subtitle: 'Cortex Engine • Auditoria Imparcial',
+    description: 'Validação matemática de invariantes arquiteturais antes de qualquer mutação de dados.',
+    inputPayload: { stageGate: 'GATE_2_FINOPS', budgetCap: '$19,200.00' },
+    outputPayload: { compliancePassed: true, violations: 0, sha256: 'a1b2c3d4...' }
+  },
+  // 3. Esquadrões de Agentes (Agents)
+  {
+    id: 'agent-finops',
+    name: 'Agente Fiscal & Cobrança Amigável',
+    appId: 'cortex',
+    type: 'ai_decision',
+    category: 'agent',
+    categoryLabel: 'Agentes Especialistas',
+    subtitle: 'Esquadrão Financeiro PCL',
+    description: 'Calcula renegociação ótima e redige proposta de acordo amigável com base no perfil de crédito.',
+    inputPayload: { diasAtraso: 18, historico: '92% Pontual' },
+    outputPayload: { tom: 'Cordial com Lembrete', proposta: 'Desconto de 5% à vista' }
+  },
+  {
+    id: 'agent-lgpd',
+    name: 'Agente de Anonimização PII Guard',
+    appId: 'cortex',
+    type: 'ai_decision',
+    category: 'agent',
+    categoryLabel: 'Agentes Especialistas',
+    subtitle: 'Segurança & LGPD Art. 6º',
+    description: 'Sanitiza nomes, CPFs, cartões e registros sensíveis com sal criptográfico HMAC-SHA256.',
+    inputPayload: { fieldsToMask: ['cpf', 'email', 'telefone'] },
+    outputPayload: { sanitizedRecords: 1420, complianceScore: '100% LGPD' }
+  },
+  // 4. Servidores MCP & Conectores (MCP)
+  {
+    id: 'mcp-stitch-ui',
+    name: 'Stitch MCP: Gerador UI',
+    appId: 'cortex',
+    type: 'action',
+    category: 'mcp',
+    categoryLabel: 'Servidores MCP',
+    subtitle: 'Stitch MCP • Prototipagem Visual',
+    description: 'Gera e baixa telas e componentes React em conformidade com o Design System.',
+    inputPayload: { prompt: 'Dashboard de conciliação fiscal', framework: 'React' },
+    outputPayload: { screenId: 'SCR-9901', downloadUrl: '/api/stitch/dl/9901' }
+  },
+  {
+    id: 'mcp-salesforce-query',
+    name: 'Salesforce CRM: Query Decisores',
+    appId: 'salesforce',
+    type: 'action',
+    category: 'mcp',
+    categoryLabel: 'Servidores MCP',
+    subtitle: 'Salesforce CRM • SOQL Search',
+    description: 'Recupera organograma de decisores e contatos associados à conta corporativa.',
+    inputPayload: { accountId: 'ACC-891', query: 'CFO, Finance Director' },
+    outputPayload: { contact: 'Carlos Silva', email: 'carlos@acme.corp' }
+  },
+  {
+    id: 'mcp-jira-issue',
+    name: 'Jira: Criar Issue de Onboarding',
+    appId: 'jira',
+    type: 'action',
+    category: 'mcp',
+    categoryLabel: 'Servidores MCP',
+    subtitle: 'Jira Software • Issue Tracker',
+    description: 'Cria tarefas com estimativa de SLA no backlog da equipe correspondente.',
+    inputPayload: { projectKey: 'SQUAD_EXP', issueType: 'Task' },
+    outputPayload: { issueKey: 'EXP-1042', status: 'TO DO' }
+  },
+  {
+    id: 'mcp-gmail-notify',
+    name: 'Gmail: Notificação Executiva',
+    appId: 'gmail',
+    type: 'notification',
+    category: 'mcp',
+    categoryLabel: 'Servidores MCP',
+    subtitle: 'Gmail Workspace • Envio Oficial',
+    description: 'Envia e-mail formatado com assinatura auditável SHA-256 e minuta pré-aprovada.',
+    inputPayload: { to: 'diretoria@acme.corp', subject: 'Relatório Executivo PCL' },
+    outputPayload: { statusEnvio: 'ENVIADO', messageId: 'msg_87654321' }
+  },
+  // 5. Controle de Fluxo Lógico (Logic)
+  {
+    id: 'logic-conditional-branch',
+    name: 'Ramificação Condicional (If/Else)',
+    appId: 'cortex',
+    type: 'action',
+    category: 'logic',
+    categoryLabel: 'Controle de Fluxo',
+    subtitle: 'Logic Engine • Split por Score',
+    description: 'Bifurca o fluxo de execução com base no valor de variáveis ou probabilidade de risco.',
+    inputPayload: { condition: 'valor > 50000 && score > 80' },
+    outputPayload: { branchSelected: 'TRUE_PATH_VIP' }
+  },
+  {
+    id: 'logic-parallel-batch',
+    name: 'Execução Paralela (Fan-out)',
+    appId: 'cortex',
+    type: 'action',
+    category: 'logic',
+    categoryLabel: 'Controle de Fluxo',
+    subtitle: 'Batch Processor • Multi-Thread',
+    description: 'Dispara múltiplos ramos simultâneos e aguarda a conclusão consolidada.',
+    inputPayload: { branches: ['AUDIT_PII', 'DISPATCH_EMAIL', 'SYNC_CRM'] },
+    outputPayload: { totalTasks: 3, allSucceeded: true }
+  },
+  // 6. Governança & Hasher (Governance)
+  {
+    id: 'gov-sha256-signer',
+    name: 'Assinador Criptográfico SHA-256',
+    appId: 'cortex',
+    type: 'action',
+    category: 'governance',
+    categoryLabel: 'Governança & Auditoria',
+    subtitle: 'Trilha Imutável • PostgreSQL 17',
+    description: 'Gera hash SHA-256 imutável de todo o payload do fluxo para conformidade ISO 27001.',
+    inputPayload: { payload: 'ALL_NODE_OUTPUTS', hashingAlgorithm: 'SHA-256' },
+    outputPayload: { sha256: '9f8e7d6c5b4a3210987654321fedcba0', auditStatus: 'RECORDED' }
+  }
+];
+
 export const FlowsAutomationCanvas: React.FC = () => {
   // Controle de Múltiplos Fluxos em Abas (Até 5 abas simultâneas)
   const [openFlows, setOpenFlows] = useState<FlowDefinition[]>(PRESET_FLOWS.slice(0, 3));
@@ -332,9 +535,12 @@ export const FlowsAutomationCanvas: React.FC = () => {
 
   // Estados de Controle de Execução e Modais
   const [isRunning, setIsRunning] = useState(false);
+  const [flowExecutionCompleted, setFlowExecutionCompleted] = useState(false);
   const [activeTab, setActiveTab] = useState<'variables' | 'logs' | 'governance'>('variables');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [isAddNodeOpen, setIsAddNodeOpen] = useState(false);
+  const [catalogSearch, setCatalogSearch] = useState('');
+  const [catalogCategory, setCatalogCategory] = useState<string>('all');
   const [isVersionDropdownOpen, setIsVersionDropdownOpen] = useState(false);
   const [isCloneModalOpen, setIsCloneModalOpen] = useState(false);
   const [cloneSuccessMsg, setCloneSuccessMsg] = useState<string | null>(null);
@@ -413,6 +619,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
   // Execução Sequencial do Grafo DAG
   const handleRunFlow = () => {
     setIsRunning(true);
+    setFlowExecutionCompleted(false);
     let currentIndex = 0;
 
     setNodes(prev => prev.map((n, i) => ({
@@ -432,6 +639,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
         clearInterval(interval);
         setNodes(prev => prev.map(n => ({ ...n, status: 'success' })));
         setIsRunning(false);
+        setFlowExecutionCompleted(true);
       }
     }, 550);
   };
@@ -503,22 +711,41 @@ export const FlowsAutomationCanvas: React.FC = () => {
     setIsVersionDropdownOpen(false);
   };
 
-  // Adicionar novo nó
-  const handleAddSampleNode = (appId: string, name: string, type: FlowNode['type']) => {
+  // Adicionar novo nó selecionado do Catálogo Rico
+  const handleAddCatalogNode = (item: CatalogItem) => {
     const newNode: FlowNode = {
       id: `node-${Date.now()}`,
-      name,
-      type,
-      appId,
-      subtitle: `${appId.toUpperCase()} • Automação Soberana`,
+      name: item.name,
+      type: item.type,
+      appId: item.appId,
+      subtitle: item.subtitle,
       status: 'idle',
-      executionTimeMs: 75,
-      inputPayload: { action: 'EXECUTE', autoApprove: true },
-      outputPayload: { status: 'SUCESSO_CONECTADO', timestamp: new Date().toISOString() }
+      executionTimeMs: Math.floor(Math.random() * 80) + 40,
+      inputPayload: item.inputPayload,
+      outputPayload: item.outputPayload
     };
     setNodes(prev => [...prev, newNode]);
     setIsAddNodeOpen(false);
     setSelectedNode(newNode);
+    setCatalogSearch('');
+    setCatalogCategory('all');
+  };
+
+  // Alias retrocompatível para nós rápidos
+  const handleAddSampleNode = (appId: string, name: string, type: FlowNode['type']) => {
+    const found = RICH_NODE_CATALOG.find(i => i.appId === appId) || {
+      id: `custom-${Date.now()}`,
+      name,
+      type,
+      appId,
+      category: 'agent' as const,
+      categoryLabel: 'Ação',
+      subtitle: `${appId.toUpperCase()} • Automação Soberana`,
+      description: 'Executa operação no conector selecionado',
+      inputPayload: { action: 'EXECUTE', autoApprove: true },
+      outputPayload: { status: 'SUCESSO_CONECTADO', timestamp: new Date().toISOString() }
+    };
+    handleAddCatalogNode(found as CatalogItem);
   };
 
   return (
@@ -769,29 +996,134 @@ export const FlowsAutomationCanvas: React.FC = () => {
           </button>
         </div>
 
-        {/* Dynamic Minimap Overlay com Deslocamento Anti-Sobreposição */}
+        {/* Banner Flutuante de Sucesso & Atestação Criptográfica SHA-256 */}
+        {flowExecutionCompleted && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-white/95 dark:bg-slate-900/95 border border-emerald-500/50 text-slate-800 dark:text-slate-100 px-4 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center space-x-3 text-xs animate-in fade-in slide-in-from-top duration-200">
+            <div className="flex items-center space-x-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">Fluxo DAG Executado com Sucesso</span>
+            </div>
+            <div className="w-[1px] h-3.5 bg-slate-200 dark:bg-slate-700" />
+            <div className="flex items-center space-x-1 text-slate-500 dark:text-slate-400">
+              <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span className="font-mono text-[11px]">
+                {nodes.reduce((acc, n) => acc + (n.executionTimeMs || 45), 0)}ms acumulados
+              </span>
+            </div>
+            <div className="w-[1px] h-3.5 bg-slate-200 dark:bg-slate-700" />
+            <div className="flex items-center space-x-1 text-emerald-600 dark:text-emerald-400 font-mono text-[11px]" title="Atestação de Integridade Criptográfica SHA-256">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>SHA-256: 7f8c...3a1e</span>
+            </div>
+            <button 
+              onClick={() => setFlowExecutionCompleted(false)}
+              className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition ml-1"
+              title="Fechar resumo"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Dynamic Minimap Overlay com Projeção Geométrica Reativa & Indicador de Viewport */}
         {showMinimap && (
           <div 
-            className={`absolute ${selectedNode ? 'right-[440px]' : 'right-6'} bottom-6 w-48 h-28 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-20 p-2 overflow-hidden pointer-events-none control-panel select-none transition-all duration-300`}
+            className={`absolute ${selectedNode ? 'right-[440px]' : 'right-6'} bottom-6 w-56 h-36 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-20 p-2.5 overflow-hidden control-panel select-none transition-all duration-300 flex flex-col`}
           >
-            <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mb-1 border-b border-slate-100 dark:border-slate-800 pb-1">
-              <span>MINIMAPA DAG</span>
-              <span>1:10</span>
+            <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mb-1.5 border-b border-slate-100 dark:border-slate-800 pb-1">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">MINIMAPA DAG</span>
+              <span>{Math.round(zoom * 100)}% zoom</span>
             </div>
-            <div className="relative w-full h-20 bg-slate-50 dark:bg-slate-950 rounded border border-slate-200 dark:border-slate-800 flex items-center justify-around px-2">
-              {nodes.map(n => (
-                <div 
-                  key={n.id} 
-                  className={`w-3 h-3 rounded-full ${
-                    n.status === 'success' 
-                      ? 'bg-emerald-500 ring-2 ring-emerald-300' 
-                      : n.status === 'running' 
-                      ? 'bg-amber-500 animate-ping' 
-                      : 'bg-slate-300 dark:bg-slate-700'
-                  }`} 
-                />
-              ))}
-            </div>
+            
+            {/* Geometric Miniature Canvas with Viewport Indicator */}
+            {(() => {
+              const mapW = 204;
+              const mapH = 92;
+              const totalWorldW = Math.max(1400, (nodes.length - 1) * 360 + 340);
+              const totalWorldH = 380;
+              const sX = mapW / totalWorldW;
+              const sY = mapH / totalWorldH;
+
+              const cW = containerRef.current ? containerRef.current.clientWidth : 1200;
+              const cH = containerRef.current ? containerRef.current.clientHeight : 700;
+
+              const vpWorldX = -pan.x / zoom;
+              const vpWorldY = -pan.y / zoom;
+              const vpWorldW = cW / zoom;
+              const vpWorldH = cH / zoom;
+
+              const vpMapX = Math.max(0, Math.min(mapW - 12, vpWorldX * sX));
+              const vpMapY = Math.max(0, Math.min(mapH - 12, vpWorldY * sY));
+              const vpMapW = Math.max(18, Math.min(mapW - vpMapX, vpWorldW * sX));
+              const vpMapH = Math.max(14, Math.min(mapH - vpMapY, vpWorldH * sY));
+
+              return (
+                <div className="relative w-full flex-1 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200/80 dark:border-slate-800/80 overflow-hidden">
+                  <svg className="w-full h-full pointer-events-none" viewBox={`0 0 ${mapW} ${mapH}`}>
+                    {/* Linhas conectando os nós no minimapa */}
+                    {nodes.map((node, idx) => {
+                      if (idx === nodes.length - 1) return null;
+                      const x1 = (idx * 360 + 290) * sX;
+                      const y1 = 120 * sY;
+                      const x2 = ((idx + 1) * 360) * sX;
+                      const y2 = 120 * sY;
+                      return (
+                        <line
+                          key={`minimap-edge-${node.id}`}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke={node.status === 'success' ? '#10b981' : '#94a3b8'}
+                          strokeWidth="1.5"
+                          strokeDasharray={node.status === 'success' ? 'none' : '2,2'}
+                          strokeOpacity={node.status === 'success' ? '0.9' : '0.5'}
+                        />
+                      );
+                    })}
+
+                    {/* Retângulos proporcionais de cada nó no minimapa */}
+                    {nodes.map((node, idx) => {
+                      const nX = (idx * 360) * sX;
+                      const nY = 40 * sY;
+                      const nW = Math.max(22, 290 * sX);
+                      const nH = Math.max(14, 160 * sY);
+                      const isSuccess = node.status === 'success';
+                      const isRunning = node.status === 'running';
+
+                      return (
+                        <g key={`minimap-node-${node.id}`}>
+                          <rect
+                            x={nX}
+                            y={nY}
+                            width={nW}
+                            height={nH}
+                            rx="3"
+                            fill={isSuccess ? '#10b981' : isRunning ? '#f59e0b' : '#64748b'}
+                            fillOpacity={isSuccess ? '0.85' : isRunning ? '0.95' : '0.4'}
+                            stroke={isSuccess ? '#059669' : isRunning ? '#d97706' : '#475569'}
+                            strokeWidth="1"
+                          />
+                        </g>
+                      );
+                    })}
+
+                    {/* Viewport Frustum / Câmera Atual */}
+                    <rect
+                      x={vpMapX}
+                      y={vpMapY}
+                      width={vpMapW}
+                      height={vpMapH}
+                      rx="3"
+                      fill="rgba(16, 185, 129, 0.12)"
+                      stroke="#10b981"
+                      strokeWidth="1.5"
+                      strokeDasharray="none"
+                    />
+                  </svg>
+                </div>
+              );
+            })()}
           </div>
         )}
 
@@ -1081,46 +1413,141 @@ export const FlowsAutomationCanvas: React.FC = () => {
         )}
       </div>
 
-      {/* Modal: Adicionar Novo Nó ao Grafo DAG */}
+      {/* Modal: Catálogo Rico de Nós & Conectores DAG */}
       {isAddNodeOpen && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div className="w-[440px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-5 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100 p-4">
+          <div className="w-[680px] max-w-[95vw] max-h-[85vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-5 flex flex-col space-y-3.5 overflow-hidden">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                <Plus className="w-4 h-4 text-emerald-500" />
-                <span>Adicionar Nó ao Pipeline DAG</span>
-              </h3>
-              <button onClick={() => setIsAddNodeOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+                  <GitFork className="w-4 h-4 text-emerald-500" />
+                  <span>Catálogo Rico de Nós & Conectores DAG</span>
+                </h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Selecione um nó catalogado com payloads e validações tipadas para compor o fluxo acíclico.
+                </p>
+              </div>
+              <button 
+                onClick={() => {
+                  setIsAddNodeOpen(false);
+                  setCatalogSearch('');
+                  setCatalogCategory('all');
+                }} 
+                className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-500">
-              Selecione o serviço ou conector oficial para compor o próximo passo acíclico:
-            </p>
-
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {[
-                { id: 'salesforce', name: 'Salesforce CRM', type: 'action' as const },
-                { id: 'hubspot', name: 'HubSpot Deals', type: 'action' as const },
-                { id: 'pipedrive', name: 'Pipedrive CRM', type: 'action' as const },
-                { id: 'rdstation', name: 'RD Station Leads', type: 'trigger' as const },
-                { id: 'sap', name: 'SAP ERP Financeiro', type: 'action' as const },
-                { id: 'jira', name: 'Jira Issue Ticket', type: 'action' as const },
-                { id: 'bigquery', name: 'Google BigQuery', type: 'action' as const },
-                { id: 'cortex', name: 'Validador Cortex', type: 'ai_decision' as const }
-              ].map(item => (
+            {/* Campo de Pesquisa em Tempo Real */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={catalogSearch}
+                onChange={e => setCatalogSearch(e.target.value)}
+                placeholder="Pesquisar por nome, conector, protocolo ou payload... (ex: SAP, Laya, LGPD, BigQuery, SHA-256)"
+                className="w-full pl-9 pr-8 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:border-emerald-500 transition"
+                autoFocus
+              />
+              {catalogSearch && (
                 <button
-                  key={item.id}
-                  onClick={() => handleAddSampleNode(item.id, item.name, item.type)}
-                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:bg-emerald-50/20 dark:hover:bg-emerald-950/20 transition flex items-center space-x-2 text-left"
+                  onClick={() => setCatalogSearch('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded"
                 >
-                  <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                    {item.id === 'cortex' ? <Sparkles className="w-4 h-4 text-indigo-500" /> : renderOfficialLogo(item.id, 'w-4 h-4 object-contain')}
-                  </div>
-                  <span className="font-semibold text-xs text-slate-800 dark:text-slate-200 truncate">{item.name}</span>
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Categorias em Pílulas de Filtro Rápido */}
+            <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 custom-scrollbar text-[11px]">
+              {[
+                { id: 'all', label: 'Todos os Nós' },
+                { id: 'trigger', label: 'Gatilhos' },
+                { id: 'decision', label: 'Laya & Cortex Gates' },
+                { id: 'agent', label: 'Agentes Especialistas' },
+                { id: 'mcp', label: 'Servidores MCP' },
+                { id: 'logic', label: 'Controle de Fluxo' },
+                { id: 'governance', label: 'Governança & Auditoria' }
+              ].map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setCatalogCategory(cat.id)}
+                  className={`px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition ${
+                    catalogCategory === cat.id
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {cat.label}
                 </button>
               ))}
+            </div>
+
+            {/* Grid de Nós Catalogados */}
+            <div className="grid grid-cols-2 gap-2.5 max-h-[380px] overflow-y-auto custom-scrollbar pr-1">
+              {RICH_NODE_CATALOG
+                .filter(item => {
+                  const matchesCat = catalogCategory === 'all' || item.category === catalogCategory;
+                  const matchesQuery = !catalogSearch.trim() ||
+                    item.name.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                    item.subtitle.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                    item.description.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                    item.appId.toLowerCase().includes(catalogSearch.toLowerCase());
+                  return matchesCat && matchesQuery;
+                })
+                .map(item => {
+                  const renderedLogo = renderOfficialLogo(item.appId, 'w-4 h-4 object-contain');
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleAddCatalogNode(item)}
+                      className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:bg-emerald-50/20 dark:hover:bg-emerald-950/20 transition flex flex-col text-left group space-y-1.5 bg-white dark:bg-slate-900"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center space-x-2 truncate">
+                          <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                            {renderedLogo || (
+                              item.category === 'decision' ? <Sparkles className="w-4 h-4 text-indigo-500" /> :
+                              item.category === 'agent' ? <Bot className="w-4 h-4 text-emerald-500" /> :
+                              item.category === 'governance' ? <ShieldCheck className="w-4 h-4 text-emerald-500" /> :
+                              item.category === 'logic' ? <GitFork className="w-4 h-4 text-amber-500" /> :
+                              <Cpu className="w-4 h-4 text-slate-400" />
+                            )}
+                          </div>
+                          <span className="font-semibold text-xs text-slate-800 dark:text-slate-200 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+                            {item.name}
+                          </span>
+                        </div>
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase flex-shrink-0 ml-1">
+                          {item.categoryLabel.split(' ')[0]}
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate font-mono">
+                        {item.subtitle}
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </button>
+                  );
+                })}
+              {RICH_NODE_CATALOG.filter(item => {
+                const matchesCat = catalogCategory === 'all' || item.category === catalogCategory;
+                const matchesQuery = !catalogSearch.trim() ||
+                  item.name.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                  item.subtitle.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                  item.description.toLowerCase().includes(catalogSearch.toLowerCase()) ||
+                  item.appId.toLowerCase().includes(catalogSearch.toLowerCase());
+                return matchesCat && matchesQuery;
+              }).length === 0 && (
+                <div className="col-span-2 py-8 text-center text-slate-400 space-y-1">
+                  <AlertCircle className="w-6 h-6 mx-auto text-slate-400/80 mb-2" />
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">Nenhum nó encontrado</p>
+                  <p className="text-[11px]">Tente outros termos ou limpe o filtro de categorias.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
