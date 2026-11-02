@@ -138,14 +138,15 @@ function pclAeosBackendPlugin(): Plugin {
 
         // 1. Endpoint de Status Rápido de Infraestrutura
         if (url.startsWith('/api/aeos/status') && req.method === 'GET') {
-          const [omnirouteUp, ollamaUp, layaUp, postgresUp] = await Promise.all([
+          const [omnirouteUp, ollamaUp, layaUp, postgresUp, paperclipUp] = await Promise.all([
             checkTcpPort('127.0.0.1', 20130, 250),
             checkTcpPort('127.0.0.1', 11434, 250),
             checkTcpPort('127.0.0.1', 20140, 250),
-            checkTcpPort('127.0.0.1', 5432, 250)
+            checkTcpPort('127.0.0.1', 5432, 250),
+            checkTcpPort('127.0.0.1', 3100, 250)
           ]);
           res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ omnirouteUp, ollamaUp, layaUp, postgresUp }));
+          res.end(JSON.stringify({ omnirouteUp, ollamaUp, layaUp, postgresUp, paperclipUp }));
           return;
         }
 
