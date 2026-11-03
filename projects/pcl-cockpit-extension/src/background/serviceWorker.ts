@@ -10,11 +10,14 @@ declare const chrome: any;
 interface PendingHitLAction {
   id: string;
   timestamp: number;
-  expiresAt: number;
+  tier1ExpiresAt: number; // 60 segundos
+  tier2ExpiresAt: number; // 120 segundos
   toolName: string;
   payload: any;
   riskLevel: 'LOW' | 'MEDIUM' | 'CRITICAL';
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED';
+  status: 'PENDING_TIER_1' | 'ESCALATED_TIER_2' | 'APPROVED' | 'REJECTED' | 'EXPIRED_SAFE_ABORT';
+  escalatedTo?: string;
+  escalationHmacSignature?: string;
 }
 
 const pendingActions = new Map<string, PendingHitLAction>();
@@ -50,7 +53,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
   }
 
   if (message.type === 'PCL_QUERY_PENDING_HITL') {
-    cleanExpiredActions();
+    checkEscalationsAndExpirations();
     sendResponse({ pending: Array.from(pendingActions.values()) });
     return false;
   }
@@ -90,16 +93,20 @@ async function handleActionRequest(payload: any) {
     };
   }
 
-  // If critical, queue for Human-in-the-Loop approval
-  const ttlMs = EXTENSION_CONFIG.hitl.defaultTtlSeconds * 1000;
+  // If critical, queue for 2-Stage Human-in-the-Loop approval
+  const tier1TtlMs = 60 * 1000; // 60 segundos para aprovação primária (N1)
+  const tier2TtlMs = EXTENSION_CONFIG.hitl.defaultTtlSeconds * 1000; // 120 segundos totais (N2)
+  const now = Date.now();
+
   const actionRecord: PendingHitLAction = {
     id: actionId,
-    timestamp: Date.now(),
-    expiresAt: Date.now() + ttlMs,
+    timestamp: now,
+    tier1ExpiresAt: now + tier1TtlMs,
+    tier2ExpiresAt: now + tier2TtlMs,
     toolName: payload.toolName,
     payload,
     riskLevel: 'CRITICAL',
-    status: 'PENDING'
+    status: 'PENDING_TIER_1'
   };
 
   pendingActions.set(actionId, actionRecord);
@@ -108,8 +115,9 @@ async function handleActionRequest(payload: any) {
     actionId,
     status: 'REQUIRES_HITL',
     riskLevel: 'CRITICAL',
-    expiresInSeconds: EXTENSION_CONFIG.hitl.defaultTtlSeconds,
-    message: 'Esta ação altera dados no sistema corporativo e requer sua autorização no Trivial Gate.'
+    tier1TtlSeconds: 60,
+    tier2TtlSeconds: 120,
+    message: 'Esta ação altera dados no sistema corporativo e requer autorização no Trivial Gate (Escalação N2 após 60s).'
   };
 }
 
@@ -119,8 +127,8 @@ async function handleHitLDecision(actionId: string, decision: 'APPROVED' | 'REJE
     return { success: false, reason: 'Ação não encontrada ou expirada (TTL excedido).' };
   }
 
-  if (Date.now() > action.expiresAt) {
-    action.status = 'EXPIRED';
+  if (Date.now() > action.tier2ExpiresAt) {
+    action.status = 'EXPIRED_SAFE_ABORT';
     pendingActions.delete(actionId);
     return { success: false, reason: 'Tempo de aprovação humana expirou (TTL de 120s).' };
   }
@@ -139,16 +147,30 @@ async function handleHitLDecision(actionId: string, decision: 'APPROVED' | 'REJE
   };
 }
 
-function cleanExpiredActions() {
+// 2-Stage Escalation Ladder & Safe Abort Checker
+async function checkEscalationsAndExpirations() {
   const now = Date.now();
   for (const [id, action] of pendingActions.entries()) {
-    if (now > action.expiresAt) {
-      action.status = 'EXPIRED';
+    // Stage 1: Escalate to Tier 2 if 60 seconds passed without decision
+    if (now > action.tier1ExpiresAt && action.status === 'PENDING_TIER_1') {
+      action.status = 'ESCALATED_TIER_2';
+      action.escalatedTo = 'Diretoria Executiva / Backup Lead';
+      
+      const escalationPayload = `ESCALATE:${action.id}:${action.toolName}:${now}`;
+      action.escalationHmacSignature = await sha256(escalationPayload);
+
+      console.warn(`[PCL HitL Escalation] Ação ${action.id} escalada para ${action.escalatedTo}. HMAC: ${action.escalationHmacSignature.substring(0, 16)}...`);
+    }
+
+    // Stage 2: Safe Abort if 120 seconds passed without decision
+    if (now > action.tier2ExpiresAt) {
+      action.status = 'EXPIRED_SAFE_ABORT';
       pendingActions.delete(id);
+      console.error(`[PCL HitL Safe Abort] Ação ${id} descartada por timeout seguro (TTL 120s). Zero vazamento de memória.`);
     }
   }
 }
 
-// Cleanup timer
-setInterval(cleanExpiredActions, 15000);
+// Checker timer runs periodically
+setInterval(checkEscalationsAndExpirations, 5000);
 

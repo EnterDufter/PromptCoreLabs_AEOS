@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ChevronRight, Bot, Activity, CheckCircle2, Clock, 
-  Server, Shield, Cpu, RefreshCw, Zap, AlertTriangle, Check, Radio
+  Server, Shield, Cpu, RefreshCw, Zap, AlertTriangle, Check, Radio,
+  Globe, XCircle, ExternalLink, Laptop
 } from 'lucide-react';
 import { Agent, ServiceStatus } from '../../types';
 import { daemonHealthService, TelemetrySnapshot } from '../../services/telemetry/daemonHealthService';
+
+export interface ExtensionSession {
+  id: string;
+  hostSystem: string;
+  tabTitle: string;
+  user: string;
+  injectedAt: string;
+  status: 'CONNECTED' | 'REVOKED';
+}
 
 interface RightSidebarStatusProps {
   collapsed: boolean;
@@ -27,6 +37,18 @@ export const RightSidebarStatus: React.FC<RightSidebarStatusProps> = ({
   // Telemetria Viva Real (Zero Mocks / Probes HTTP em Runtime)
   const [snapshot, setSnapshot] = useState<TelemetrySnapshot | null>(daemonHealthService.getSnapshot());
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Monitor de Sessões Injetadas da Companion Extension no Navegador
+  const [extensionSessions, setExtensionSessions] = useState<ExtensionSession[]>([
+    { id: 'sess-sfdc-01', hostSystem: 'Salesforce CRM', tabTitle: 'Oportunidade Acme Corp #4092', user: 'Eduardo (Admin)', injectedAt: '12m atrás', status: 'CONNECTED' },
+    { id: 'sess-jira-02', hostSystem: 'Jira Enterprise', tabTitle: 'Sprint 42 - PCL Backlog', user: 'Eduardo (Admin)', injectedAt: '4m atrás', status: 'CONNECTED' },
+    { id: 'sess-sap-03', hostSystem: 'SAP S/4HANA', tabTitle: 'Ordem de Compra #8812', user: 'Roberto (FinOps)', injectedAt: '1m atrás', status: 'CONNECTED' }
+  ]);
+
+  const handleRevokeSession = (sessionId: string) => {
+    setExtensionSessions(prev => prev.map(s => s.id === sessionId ? { ...s, status: 'REVOKED' } : s));
+    window.postMessage({ type: 'PCL_REVOKE_EXTENSION_SESSION', sessionId }, '*');
+  };
 
   useEffect(() => {
     const unsubscribe = daemonHealthService.subscribe((newSnapshot) => {
@@ -195,6 +217,62 @@ export const RightSidebarStatus: React.FC<RightSidebarStatusProps> = ({
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Section 2.5: Companion Extension Injected Sessions Monitor */}
+        <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center space-x-1">
+              <Laptop className="w-3 h-3 text-emerald-500" />
+              <span>Extensões Injetadas ({extensionSessions.filter(s => s.status === 'CONNECTED').length})</span>
+            </span>
+            <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Bunker Shadow DOM</span>
+            </span>
+          </div>
+
+          <div className="space-y-1.5">
+            {extensionSessions.map(sess => (
+              <div
+                key={sess.id}
+                className={`p-2 rounded-lg border transition ${
+                  sess.status === 'CONNECTED'
+                    ? 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800'
+                    : 'bg-slate-50 dark:bg-slate-950/60 border-slate-200/40 dark:border-slate-800/40 opacity-60'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-1.5 truncate">
+                    <span className={`w-1.5 h-1.5 rounded-full ${sess.status === 'CONNECTED' ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                    <span className="font-bold text-[11px] text-slate-800 dark:text-slate-200 truncate">
+                      {sess.hostSystem}
+                    </span>
+                  </div>
+                  {sess.status === 'CONNECTED' ? (
+                    <button
+                      onClick={() => handleRevokeSession(sess.id)}
+                      className="px-1.5 py-0.5 rounded text-[9px] font-mono text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 transition"
+                      title="Revogar credenciais de injeção imediatamente"
+                    >
+                      Revogar
+                    </button>
+                  ) : (
+                    <span className="text-[9px] font-mono text-slate-400">
+                      Revogado
+                    </span>
+                  )}
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {sess.tabTitle}
+                </div>
+                <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800/60 mt-1">
+                  <span>{sess.user}</span>
+                  <span>{sess.injectedAt}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

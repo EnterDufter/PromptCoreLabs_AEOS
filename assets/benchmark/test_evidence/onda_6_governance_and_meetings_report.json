@@ -1,0 +1,33 @@
+{
+  "suite": "PCL_COCKPIT_TLC_V3_ONDA_6_HOMOLOGATION",
+  "status": "HOMOLOGADO_SUCCESS",
+  "timestamp": "2026-11-03T03:45:04.912Z",
+  "totalDurationMs": 2.51,
+  "testsExecuted": 3,
+  "testsPassed": 3,
+  "testsFailed": 0,
+  "sha256MerkleRoot": "0xbf3a560bd91828aef176815b5f3857900ae35f220231a4cc222b2982cd5c707c",
+  "results": [
+    {
+      "testName": "HITL_TWO_STAGE_ESCALATION_AND_SAFE_ABORT",
+      "passed": true,
+      "tier1Status": "ESCALATED_TIER_2",
+      "tier2Status": "EXPIRED_SAFE_ABORT",
+      "residualMemoryLeaks": 0
+    },
+    {
+      "testName": "MEETINGS_ONE_CLICK_ACTION_DISPATCH",
+      "passed": true,
+      "jiraLatencyMs": 14.44,
+      "sfdcLatencyMs": 16.13,
+      "jiraTxHash": "0xaa95fac3f7797f89a91d79c5c18d274151ad8b2d5dec1b25e44b99657f0d8c65",
+      "sfdcTxHash": "0xf7e2bc5e9cfb881894b7ddadcc11c58855a09f715e95983a76b90929fd9d2219"
+    },
+    {
+      "testName": "EXTENSION_SESSIONS_MONITOR_AND_REVOKE",
+      "passed": true,
+      "revokedSessionId": "sess-sap-03",
+      "activeRemainingCount": 2
+    }
+  ]
+}

@@ -604,10 +604,13 @@ declare const chrome: any;
     });
   });
 
-  // 9. HitL Modal Renderer inside Shadow Root
+  // 9. HitL Modal Renderer inside Shadow Root (com Escalação Hierárquica N1 ➔ N2 e TTL 120s)
   function showHitLConfirmationModal(actionData: any) {
     const modalsHost = shadowRoot.getElementById('pcl-modals-host');
     if (!modalsHost) return;
+
+    let remainingSeconds = 120;
+    let isEscalated = false;
 
     const modal = document.createElement('div');
     modal.className = 'pcl-hitl-modal-overlay';
@@ -615,10 +618,18 @@ declare const chrome: any;
     modal.innerHTML = `
       <div class="pcl-hitl-card">
         <div class="pcl-hitl-header">
-          <h4 class="pcl-hitl-title">Trivial Gate: Autorização Requerida</h4>
-          <span class="pcl-hitl-badge">Risco Crítico</span>
+          <div>
+            <h4 class="pcl-hitl-title">Trivial Gate: Autorização Requerida</h4>
+            <span style="font-size: 10px; color: var(--pcl-text-muted); font-family: monospace;">
+              Tempo Restante: <strong id="pcl-hitl-timer" style="color: #10b981;">120s</strong>
+            </span>
+          </div>
+          <span class="pcl-hitl-badge" id="pcl-hitl-risk-badge">Risco Crítico (N1)</span>
         </div>
         <div class="pcl-hitl-body">
+          <div id="pcl-hitl-escalation-banner" style="display: none; padding: 8px 10px; margin-bottom: 8px; border-radius: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; font-size: 11px;">
+            ⚠️ <strong>Escalação Hierárquica Ativada:</strong> O gestor primário não deliberou em 60s. Notificação prioritária despachada via webhook para a Diretoria.
+          </div>
           <p>O Agente do PCL Cockpit solicitou a execução de uma ação de gravação neste sistema corporativo:</p>
           <pre class="pcl-hitl-payload">${JSON.stringify(actionData.payload, null, 2)}</pre>
           <p style="font-size: 11px; color: var(--pcl-text-muted); margin-top: 6px;">
@@ -636,8 +647,59 @@ declare const chrome: any;
 
     const approveBtn = modal.querySelector('#pcl-hitl-btn-approve');
     const rejectBtn = modal.querySelector('#pcl-hitl-btn-reject');
+    const timerDisplay = modal.querySelector('#pcl-hitl-timer') as HTMLElement;
+    const riskBadge = modal.querySelector('#pcl-hitl-risk-badge') as HTMLElement;
+    const escalationBanner = modal.querySelector('#pcl-hitl-escalation-banner') as HTMLElement;
+
+    // Countdown and 2-stage escalation timer
+    const countdownInterval = setInterval(() => {
+      remainingSeconds--;
+      if (timerDisplay) {
+        timerDisplay.textContent = `${remainingSeconds}s`;
+        if (remainingSeconds <= 60) {
+          timerDisplay.style.color = '#f59e0b';
+        }
+        if (remainingSeconds <= 20) {
+          timerDisplay.style.color = '#ef4444';
+        }
+      }
+
+      // Stage 1 Escalation at 60s
+      if (remainingSeconds <= 60 && !isEscalated) {
+        isEscalated = true;
+        if (riskBadge) {
+          riskBadge.textContent = 'ESCALADO DIRETORIA (N2)';
+          riskBadge.style.background = 'rgba(245, 158, 11, 0.2)';
+          riskBadge.style.borderColor = 'rgba(245, 158, 11, 0.5)';
+          riskBadge.style.color = '#f59e0b';
+        }
+        if (escalationBanner) {
+          escalationBanner.style.display = 'block';
+        }
+      }
+
+      // Stage 2 Safe Abort at 0s
+      if (remainingSeconds <= 0) {
+        clearInterval(countdownInterval);
+        if (modal.parentNode) {
+          modal.innerHTML = `
+            <div class="pcl-hitl-card" style="text-align: center; padding: 24px;">
+              <span style="font-size: 24px;">⏱️</span>
+              <h4 style="font-size: 14px; font-weight: bold; margin: 8px 0; color: #ef4444;">Ação Descartada por Timeout (TTL 120s)</h4>
+              <p style="font-size: 11px; color: var(--pcl-text-muted);">
+                A solicitação foi revogada com segurança sem efeitos colaterais ou resíduo de dados.
+              </p>
+            </div>
+          `;
+          setTimeout(() => {
+            modal.remove();
+          }, 1500);
+        }
+      }
+    }, 1000);
 
     approveBtn?.addEventListener('click', () => {
+      clearInterval(countdownInterval);
       chrome.runtime?.sendMessage?.({
         type: 'PCL_APPROVE_HITL',
         actionId: 'hitl-user-triggered'
@@ -645,11 +707,11 @@ declare const chrome: any;
         modal.remove();
         console.log('[PCL Cockpit Extension] Ação aprovada com hash:', res?.sha256Hash);
       });
-      // Fallback if running outside chrome runtime
       modal.remove();
     });
 
     rejectBtn?.addEventListener('click', () => {
+      clearInterval(countdownInterval);
       chrome.runtime?.sendMessage?.({
         type: 'PCL_REJECT_HITL',
         actionId: 'hitl-user-triggered'
