@@ -1,0 +1,87 @@
+{
+  "testSuite": "PCL Cockpit TLC-v3 E2E Automation - Fase 3",
+  "timestampUtc": "2026-11-03T02:56:06.380Z",
+  "kernelVersion": "v3.6.0",
+  "cockpitVersion": "v3.7.0",
+  "overallStatus": "HOMOLOGADO_COM_SUCESSO",
+  "durationMs": 21,
+  "stageGates": {
+    "gate3_3_hitlExperienceAndTtl": {
+      "stageGate": "3.3_HITL_EXPERIENCE_AND_TTL",
+      "passed": true,
+      "renderLatencyMs": 18.41,
+      "flowsTested": 4,
+      "memoryResidualZero": true,
+      "proofHashSha256": "4fed0cc761acc2285eeb05f65ab79735a42b2c4edd912f5686f41880b7151f34",
+      "results": [
+        {
+          "testName": "SHADOW_DOM_RENDER_LATENCY",
+          "latencyMs": 18.41,
+          "passed": true,
+          "timestamp": "2026-11-03T02:56:06.365Z"
+        },
+        {
+          "testName": "HUMAN_APPROVAL_FLOW",
+          "actionId": "hitl-act-1793674566368-01",
+          "status": "APPROVED",
+          "sha256Signature": "2c692ab9d7e93f6694c23f0211e615c90b5a000c4ba25f1d28941c8ab16cc49a",
+          "passed": true,
+          "timestamp": "2026-11-03T02:56:06.368Z"
+        },
+        {
+          "testName": "HUMAN_REJECTION_FLOW",
+          "actionId": "hitl-act-1793674566369-02",
+          "status": "REJECTED",
+          "sha256Signature": "8007619f4485bb6a7556c2cb11c318ddd6ba31a9e940b97f1ef5ffa7e11095e4",
+          "passed": true,
+          "timestamp": "2026-11-03T02:56:06.369Z"
+        },
+        {
+          "testName": "TTL_TIMEOUT_EXPIRATION",
+          "actionId": "hitl-act-1793674566371-03",
+          "status": "EXPIRED_SAFE_ABORT",
+          "sha256Signature": "079caeeeae79d0f218bdf76a947522ea0e14bd466eb6ce08a560608031bc8a76",
+          "passed": true,
+          "timestamp": "2026-11-03T02:56:06.371Z"
+        }
+      ]
+    },
+    "gate3_4_multiChannelWebhooks": {
+      "stageGate": "3.4_MULTICHANNEL_HITL_WEBHOOKS",
+      "passed": true,
+      "channelsTested": 2,
+      "averageLatencyMs": 23.59,
+      "proofHashSha256": "a68420d29cacb7c407fb686ec2bc94df05cf266e78b9bda571d4735f311d8201",
+      "results": [
+        {
+          "channel": "Slack Enterprise (#pcl-governance-alerts)",
+          "platform": "Slack",
+          "format": "BlockKit",
+          "deliveryLatencyMs": 24.46,
+          "hmacSignature": "1717eb8658d6af5b18f9ae7d5f4196b6cba42ce1b68f8b2d304ea7d0483b33e7",
+          "status": "DELIVERED_HTTP_200",
+          "passed": true
+        },
+        {
+          "channel": "Microsoft Teams (Board & Compliance Channel)",
+          "platform": "Teams",
+          "format": "AdaptiveCard",
+          "deliveryLatencyMs": 22.73,
+          "hmacSignature": "947225abe7722fa51aaa58edb997b5554b88661dc61b32f331fe371dd9fa6634",
+          "status": "DELIVERED_HTTP_200",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "cryptographicProof": {
+    "merkleRootSha256": "e56ba3279d51b18f7ab681caa16dec7ea8abec01771651d4496fde5168ac9407",
+    "attestationAuthority": "PCL-AEOS-TLC-V3-HARNESS",
+    "governancePolicies": {
+      "shadowDomEncapsulation": true,
+      "ttlCountdownEnforced": true,
+      "multiChannelHmacSigned": true,
+      "zeroDataResidualVerified": true
+    }
+  }
+}
