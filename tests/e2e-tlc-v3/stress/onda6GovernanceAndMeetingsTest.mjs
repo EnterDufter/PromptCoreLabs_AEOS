@@ -196,3 +196,4 @@ if (process.argv[1]?.endsWith('onda6GovernanceAndMeetingsTest.mjs')) {
     process.exit(r.status === 'HOMOLOGADO_SUCCESS' ? 0 : 1);
   });
 }
+
