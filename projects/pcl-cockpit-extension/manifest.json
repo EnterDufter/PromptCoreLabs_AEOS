@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "PCL Cockpit Companion — Sovereign AI & Trivial Gate",
+  "version": "3.7.0",
+  "description": "Extensão corporativa de injeção soberana em ERPs/CRMs legados com isolamento de Shadow DOM, aprovação HitL (Trivial Gate) e FinOps EBITDA Shield.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:3001/*",
+    "http://127.0.0.1:3001/*",
+    "http://localhost:20130/*",
+    "http://127.0.0.1:20130/*",
+    "http://localhost:20140/*",
+    "http://127.0.0.1:20140/*",
+    "*://*.salesforce.com/*",
+    "*://*.force.com/*",
+    "*://*.atlassian.net/*",
+    "*://mail.google.com/*",
+    "*://outlook.office.com/*",
+    "*://outlook.live.com/*"
+  ],
+  "background": {
+    "service_worker": "dist/background/serviceWorker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.salesforce.com/*",
+        "*://*.force.com/*",
+        "*://*.atlassian.net/*",
+        "*://mail.google.com/*",
+        "*://outlook.office.com/*",
+        "*://outlook.live.com/*",
+        "http://localhost:*/*",
+        "http://127.0.0.1:*/*"
+      ],
+      "js": ["dist/content/contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "PCL Cockpit Companion",
+    "default_popup": "public/popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dist/assets/*",
+        "public/icons/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

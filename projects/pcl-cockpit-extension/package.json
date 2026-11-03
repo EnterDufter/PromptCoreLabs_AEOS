@@ -1,0 +1,14 @@
+{
+  "name": "pcl-cockpit-extension",
+  "version": "3.7.0",
+  "description": "PCL Cockpit Companion Chrome Extension (Manifest V3) with Shadow DOM Isolation and HitL Governance",
+  "main": "dist/background/serviceWorker.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/chrome": "^0.0.280"
+  }
+}
