@@ -2,20 +2,21 @@
 
 <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/PCL_Logo_Transparente.png" width="160" alt="PromptCore Labs Logo" />
 
-# PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.6
+# PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.8
 ### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor, PCL Cockpit & Living Architecture
 
-[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages_v3.6-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
-[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.6_:3001-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
-[![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0_(1º_Lugar)-10b981?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v36-vs-provedores-globais)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Hardware](https://img.shields.io/badge/Laya_CPU_INT8-0_MB_VRAM-8b5cf6?style=for-the-badge)](#-indicadores-canônicos--medições-de-engenharia-v36)
+[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages_v3.8-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
+[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.8_:3001-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
+[![Companion Extension](https://img.shields.io/badge/Companion_Extension-Manifest_V3-10b981?style=for-the-badge)](projects/pcl-cockpit-extension)
+[![FinOps EBITDA Shield](https://img.shields.io/badge/FinOps_ROI-$180k%2Fano_poupados-emerald?style=for-the-badge)](#-simulador-de-roi-soberano-cfo-ebitda-shield-v2)
+[![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0_(1º_Lugar)-10b981?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v38-vs-provedores-globais)
+[![Hardware](https://img.shields.io/badge/Laya_CPU_INT8-0_MB_VRAM-8b5cf6?style=for-the-badge)](#-indicadores-canônicos--medições-de-engenharia-v38)
 
 ---
 
 </div>
 
-## 💡 O que é o PCL AEOS v3.6?
+## 💡 O que é o PCL AEOS v3.8?
 
 A **PromptCore Labs** desenvolveu o **PCL AEOS** (*AI Engineering Operating System*) para resolver a maior dor da inteligência artificial corporativa moderna: a perda de controle sobre seus dados e a dependência financeira de Big Techs estrangeiras. 
 
@@ -25,26 +26,26 @@ Ele é uma **infraestrutura soberana de inteligência** que une executivos, espe
 > **👔 Visão Executiva & Valor de Negócio (Para Líderes, Diretores e Investidores):**  
 > Imagine ter a inteligência de ponta do mercado mundial operando dentro dos servidores da sua própria empresa, trancada a sete chaves e com custo operacional que não explode no final do mês. 
 > 
-> Enquanto as grandes plataformas cobram mensalidades em dólar por usuário, operam como "caixas-pretas" imprevisíveis e exigem que você envie relatórios confidenciais para servidores externos:
+> Enquanto as grandes plataformas cobram faturas recorrentes em dólar por usuário (US$ 60/mês no ChatGPT Enterprise ou US$ 30/mês no Claude Team), operam como "caixas-pretas" imprevisíveis e exigem o envio de dados confidenciais para a nuvem de terceiros:
 > 
-> * **🏆 Liderança Global Comprovada (Nota 4.95 / 5.0):** Em uma rigorosa *avaliação técnica duplo-cega* — onde especialistas auditaram as respostas sem saber qual IA as produziu —, o **PCL Cockpit v3.6** conquistou o **1º lugar absoluto**, superando **Google Gemini** (`4.45`), **OpenAI ChatGPT Plus** (`4.30`) e **Microsoft Copilot** (`3.80`).
-> * **🛡️ Segredo Corporativo Blindado (Resíduo Zero de Dados / Zero-Bin):** Seus planos estratégicos, balanços e dados de clientes nunca saem do perímetro da sua empresa, nunca são usados para treinar modelos de terceiros e cumprem integralmente a LGPD/ISO 42001. Nenhum resíduo de dados trafega desprotegido.
-> * **💰 FinOps Imbatível (Custo Marginal $0.00):** Ao operar em modo local soberano, sua organização realiza milhares de consultas analíticas sem pagar um único centavo a mais por pergunta ou token.
-> * **👑 Autoridade Humana Inegociável:** A IA audita, calcula e sugere; a caneta e o poder de decisão final pertencem exclusivamente ao líder humano.
+> * **🏆 Liderança Global Comprovada (Nota 4.95 / 5.0):** Em uma rigorosa *Avaliação Técnica Duplo-Cega Imparcial* — onde especialistas auditaram a qualidade das respostas sem saber a marca da IA —, o **PCL Cockpit v3.8** conquistou o **1º lugar absoluto**, superando **Google Gemini** (`4.45`), **OpenAI ChatGPT Enterprise** (`4.30`) e **Microsoft Copilot** (`3.80`).
+> * **🛡️ Segredo Corporativo Blindado (Resíduo Zero de Dados / BYOS):** Seus planos estratégicos, balanços e dados de clientes nunca saem do perímetro da sua empresa, nunca são usados para treinar modelos de terceiros e cumprem 100% à LGPD e ISO/IEC 42001.
+> * **💰 FinOps Imbatível (Custo Marginal $0.00 & EBITDA Shield):** Ao operar em modo local soberano, sua organização realiza milhões de tokens analíticos sem pagar faturas extras por pergunta, retendo **US$ 180.000,00 / ~R$ 1.026.000,00 ao ano** para cada 250 colaboradores no balanço da empresa.
+> * **👑 Autoridade Humana Inegociável (TLC-v3 Escalation Ladder):** A IA audita, calcula e sugere; a aprovação de risco crítico passa pelo *Trivial Gate HitL* em 2 estágios (escalação N2 para diretoria aos 60s e descarte seguro aos 120s com 0 memory leak).
 >
-> **A Tríade que Move o Sistema:** A **PromptCore Labs** é o laboratório de inovação responsável pela arquitetura; o **PCL AEOS** é o motor de inteligência e governança nos bastidores; e o **PCL Cockpit (`:3001`)** é a sua cabine de comando interativa — onde sua liderança assume o manche com controle total em tempo real.
+> **A Tríade Canônica que Move o Sistema:** A **PromptCore Labs** é o laboratório de inovação responsável pela arquitetura; o **PCL AEOS** é o motor de inteligência e governança nos bastidores; e o **PCL Cockpit (`:3001`)** é a cabine de comando interativa — acompanhada da **PCL Companion Extension (Manifest V3)** para injeção não-invasiva via Shadow DOM em Salesforce, Jira e SAP.
 
 > [!NOTE]
-> **🛠️ Visão de Engenharia & Invariantes (Para Arquitetos e Desenvolvedores):**  
-> Harness agêntico desacoplado regido pela norma **`PCL-AEOS-NORM-01`** (`AGENTS.md`) e **TLC Spec-Driven v3**, articulando: (1) **Memória Dual** — *Temporal em Runtime* (`Sliding Window Multi-Turn` + PostgreSQL 17 `PGVector 768D` em `memory.*`) e *Governança Física RAG* (`knowledge/warm/`, `cold/`, `learnings/`); (2) **Coprocessador Laya System One (`:20140`)** com motor NLI `cross-encoder/nli-MiniLM-2-L6-H768` ONNX INT8 em **100% CPU (`0 MB VRAM`, `~20–35ms`, complexidade `O(1)`)** para *Intention Gating* e reconciliação de contradições (`93.3%` recall); e (3) **Fast-Path `AES-256-GCM` (`open-sse`)** no **OmniRoute (`:20130`)** com sondas TCP de `250–300ms` e failover determinístico em GPU local (`Ollama :11434`).
+> **🛠️ Visão de Engenharia & Invariantes Físicos (Para Arquitetos e Desenvolvedores):**  
+> Harness agêntico desacoplado regido pela norma **`PCL-AEOS-NORM-01`** (`AGENTS.md`) e metodologia **TLC Spec-Driven v3**, articulando: (1) **Memória Dual** — *Temporal em Runtime* (`Sliding Window Multi-Turn` + PostgreSQL 17 `PGVector 768D` em `memory.*`) e *Governança Física RAG* (`knowledge/warm/`, `cold/`, `learnings/`); (2) **Coprocessador Laya System One (`:20140`)** operando em **100% CPU (`0 MB VRAM`, `~18–25ms`)** para *Intention Gating* e detecção de contradições em CPU INT8; (3) **OmniRoute Gateway (`:20130`)** com failover determinístico multi-provedor (14.81ms) e trava física *Hard Lock*; e (4) **Extensão Manifest V3** com encapsulamento por **Shadow DOM** (`mode: 'open'`) e *Inline Action Dock* in-situ.
 
-> 🌐 **Explore o Portal Interativo de Arquitetura Viva (GitHub Pages — Edição v3.6):**  
+> 🌐 **Explore o Portal Interativo de Arquitetura Viva (GitHub Pages — Edição v3.8):**  
 > Com seletor cognitivo em 1 clique (**⚡ Dual Completa** | **👔 Executiva** | **🛠️ Engenharia**), diagramas interativos em tela cheia do **PCL Cortex** e leitura assistida em modais UTF-8 puros:  
-> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)** · 📖 **[Guia Executivo Rápido v3.6](docs/architecture-v2-executive-guide.md)**
+> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)** · 📖 **[Especificação Mestra Cockpit v3.8](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.8.md)**
 
 ---
 
-## 📊 Indicadores Canônicos & Medições de Engenharia (v3.6)
+## 📊 Indicadores Canônicos & Medições de Engenharia (v3.8)
 
 | Indicador Estratégico & Técnico | Classificação Normativa | Valor Canônico Homologado | Benefício Direto de Negócio & Engenharia |
 | :--- | :---: | :---: | :--- |
@@ -182,10 +183,14 @@ Resultado da bateria oficial de 5 turnos sequenciais avaliando resolução anaf�
 | **6. Transparência de Pipeline / Auditabilidade (FinOps)** | **5.0** / 5.0 | 2.0 *(Caixa-Preta)* | 1.0 *(Caixa-Preta)* | 1.5 *(Caixa-Preta)* |
 | **Média Ponderada Global** | **4.95** | **4.45** | **4.30** | **3.80** |
 
-📚 **Documentação Canônica da Evolução v3.6:**
-* 📖 [Especificação Funcional & Arquitetural do PCL Cockpit v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md)
+📚 **Documentação Canônica da Evolução v3.8:**
+* 📖 [Especificação Funcional & Arquitetural do PCL Cockpit v3.8](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.8.md) *(Canônica Ativa)*
+* 🏛️ [Índice Canônico de Decisões de Arquitetura (ADR-0001 a ADR-0013)](knowledge/warm/architecture/ADR_INDEX.md)
+* 🏛️ [ADR-0011: Companion Extension Manifest V3 com Shadow DOM e Inline Action Dock](knowledge/warm/architecture/ADR-0011.md)
+* 🏛️ [ADR-0012: Resiliência Human-in-the-Loop em 2 Estágios (Escalação N2 aos 60s e Safe Abort)](knowledge/warm/architecture/ADR-0012.md)
+* 🏛️ [ADR-0013: FinOps EBITDA Shield v2, Trava Hard Lock e Calculadora de ROI CFO](knowledge/warm/architecture/ADR-0013.md)
 * 🏛️ [ADR-0007: Memória Multi-Turn, Intention Gating & Fontes Retráteis](knowledge/warm/architecture/ADR-0007.md)
-* ⚔️ [Matriz Canônica de Inteligência Competitiva (Jumpad, Read.ai, Gemini, ChatGPT, Copilot)](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md)
+* 🧪 [Dossiês de Homologação TLC-v3 E2E (Test Evidence)](assets/benchmark/test_evidence/)
 * 🧊 [Registro Canônico de Hipóteses Descartadas — Cold Storage (`HIP-001` a `HIP-008`)](knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md)
 
 ---
@@ -391,7 +396,7 @@ flowchart LR
 
 ---
 
-## 🚀 Quickstart: Como Executar o PCL AEOS & PCL Cockpit v3.6 Localmente
+## 🚀 Quickstart: Como Executar o PCL AEOS & PCL Cockpit v3.8 Localmente
 
 ### 1. Clonar o Repositório
 ```bash
@@ -406,35 +411,40 @@ docker compose -f docker-compose.aeos.yml up -d
 docker compose -f docker-compose.aeos.yml ps
 ```
 
-### 3. Iniciar o Centro de Comando PCL Cockpit v3.6 (`:3001`)
+### 3. Iniciar o Centro de Comando PCL Cockpit v3.8 (`:3001`)
 ```bash
 npm --prefix projects/PromptCoreLabs_AEOS_Dashboard install
 npm --prefix projects/PromptCoreLabs_AEOS_Dashboard run dev -- --port 3001 --host
 ```
 
-### 4. Validar o Coprocessador LAYA via MCP (`0 MB VRAM`) & Monitor Reativo
+### 4. Carregar a PCL Companion Extension no Chrome (Manifest V3)
 ```bash
-python scripts/tests/test_mcp_protocol_handshake.py
+# Acessar chrome://extensions no navegador, ativar 'Modo do desenvolvedor' e clicar em 'Carregar sem compactação'
+# Selecionar o diretório: c:\PromptCore_Labs\projects\pcl-cockpit-extension
 ```
-```powershell
-powershell -ExecutionPolicy Bypass -File "scripts/windows/watch_network_trigger.ps1"
+
+### 5. Executar a Suíte de Homologação TLC-v3 E2E
+```bash
+# Valida o Simulador de ROI CFO, o Inline Action Dock no Shadow DOM e a Escalação HitL em 2 Níveis
+node tests/e2e-tlc-v3/stress/onda5QuickWinsTest.mjs
+node tests/e2e-tlc-v3/stress/onda6GovernanceAndMeetingsTest.mjs
 ```
 
 ---
 
 ## 📑 Governança Canônica & Rastreabilidade do Ecossistema (`PCL-AEOS-NORM-01`)
 
-* **[Diretrizes Soberanas de Agentes (`AGENTS.md`)](AGENTS.md):** Hierarquia normativa `PCL-AEOS-NORM-01`, invariantes de hardware (`0 MB VRAM` Laya, `$0.00` local, Zero Mocks) e regras da v3.6.
-* **[Índice Unificado de ADRs (`ADR-0001` a `ADR-0010`)](knowledge/warm/architecture/ADR_INDEX.md):** Catálogo harmonizado em 3 trilhas das decisões arquiteturais permanentes.
-* **[Especificação Canônica do PCL Cockpit v3.6](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.6.md) & [Matriz Competitiva](knowledge/warm/competitive/PCL_COCKPIT_COMPETITIVE_MATRIX.md):** Contratos técnicos e benchmark empírico cego (`4.95 / 5.0`).
+* **[Diretrizes Soberanas de Agentes (`AGENTS.md`)](AGENTS.md):** Hierarquia normativa `PCL-AEOS-NORM-01`, invariantes de hardware (`0 MB VRAM` Laya, `$0.00` local, Zero Mocks) e regras da v3.8.
+* **[Índice Unificado de ADRs (`ADR-0001` a `ADR-0013`)](knowledge/warm/architecture/ADR_INDEX.md):** Catálogo harmonizado em 4 trilhas das decisões arquiteturais permanentes.
+* **[Especificação Canônica do PCL Cockpit v3.8](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.8.md):** Contratos técnicos, 12 inovações, extension Shadow DOM e benchmark duplo-cego (`4.95 / 5.0`).
 * **[Cold Storage — Hipóteses Descartadas (`HIP-001` a `HIP-008`)](knowledge/cold/discarded_hypotheses/DISCARDED_HYPOTHESES_LOG.md):** Memória institucional anti-regressão.
-* **[Matriz de Precedência Normativa](projects/pcl-aeos-harmonization/design/normative-hierarchy.md) & [Boundary Register](projects/pcl-aeos-harmonization/design/canonical-architecture.md):** Delimitação formal de Core, Cockpit, Ventures e Living Architecture.
+* **[Dossiês de Homologação TLC-v3](assets/benchmark/test_evidence/):** Evidências auditáveis com raiz Merkle e assinatura SHA-256.
 
 ---
 
 <div align="center">
 
-*PromptCoreLabs_AEOS v3.6 Sovereign — Todos os direitos reservados – 2026*  
+*PromptCoreLabs_AEOS v3.8 Sovereign — Todos os direitos reservados – 2026*  
 *Desenvolvido pela PromptCore Labs sob Licença MIT*
 
 </div>

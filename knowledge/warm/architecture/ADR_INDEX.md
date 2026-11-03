@@ -1,17 +1,17 @@
 ---
 title: "Índice Canônico de Decisões de Arquitetura (ADRs)"
 system_scope: "PCL AEOS Kernel"
-kernel_version: "v3.6.0"
+kernel_version: "v3.8.0"
 type: "Architecture_Spec"
 status: "Approved"
-rag_tags: [adr, architecture, decisions, index, normative_hierarchy, v3.6]
+rag_tags: [adr, architecture, decisions, index, normative_hierarchy, v3.8]
 created_at: "2026-10-29"
-last_updated: "2026-11-01"
+last_updated: "2026-11-03"
 author: "PromptCore Labs Architecture & Cognitive Systems"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
 
-# 📚 Índice Canônico de Decisões de Arquitetura (ADRs 0001–0010)
+# 📚 Índice Canônico de Decisões de Arquitetura (ADRs 0001–0013)
 
 > [!IMPORTANT]
 > **👔 Visão Executiva & Valor de Negócio:** Toda decisão estrutural do ecossistema **PromptCoreLabs_AEOS** é formalizada como um *Architecture Decision Record (ADR)* auditável. Esse catálogo unificado garante previsibilidade de custos (`$0.00` em operação soberana), soberania sobre dados corporativos e rastreabilidade normativa perante auditorias ISO/IEC 27001 e ISO/IEC 42001.
@@ -49,3 +49,13 @@ normative_ref: "PCL-AEOS-NORM-01"
 | **`ADR-0008`** | Governança de Persistência de Volumes Docker e Namespace Isolation | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0008-docker-volume-persistence-governance.md` — Binding explícito de volumes e proteção contra perda de estado. |
 | **`ADR-0009`** | Governança do Triage Gate e Abordagem Dual-Track SDD (Lean vs. Full) | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0009-triage-gate-dual-track-sdd.md` — Triagem dinâmica entre rota enxuta (`tlc-spec-lean`) e 5 Stage Gates completos. |
 | **`ADR-0010`** | Refatoração da Squad Prototyping e Integração Auditável do Antigravity Harness | Accepted | `projects/Living Architecture PCL AEOS/docs/adrs/ADR-0010-squad-prototyping-and-antigravity-harness-integration.md` — Acoplamento das squads sob ISO/IEC 27001 e ISO/IEC 42001. |
+
+---
+
+## Trilha 4: Governança HitL, Extensões & FinOps v3.8 (`ADR-0011` a `ADR-0013`)
+
+| ADR ID | Título Oficial | Status | Arquivo Canônico & Foco Tecnológico |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0011`** | Companion Extension Manifest V3 com Encapsulamento Shadow DOM e Inline Action Dock | Accepted | `knowledge/warm/architecture/ADR-0011.md` — Isolamento estrito por Shadow DOM em Salesforce, Jira e SAP, com Inline Action Dock in-situ (12.6ms) e zero CSS bleeding. |
+| **`ADR-0012`** | Resiliência Human-in-the-Loop em 2 Estágios com Escalação N2 aos 60s e Descarte Seguro aos 120s | Accepted | `knowledge/warm/architecture/ADR-0012.md` — Escalação hierárquica automática via webhooks assinados com HMAC-SHA256 e descarte determinístico por TTL (0 memory leak). |
+| **`ADR-0013`** | FinOps EBITDA Shield v2, Trava Física Hard Lock e Calculadora Soberana de ROI Corporativo | Accepted | `knowledge/warm/architecture/ADR-0013.md` — Proteção contra cobranças extrativas em dólar, cálculo de US$ 180k/ano poupados e custo marginal $0.00 com 0 MB VRAM Laya. |

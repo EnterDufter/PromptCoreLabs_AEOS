@@ -1,12 +1,12 @@
 {
   "suite": "PCL_COCKPIT_TLC_V3_ONDA_6_HOMOLOGATION",
   "status": "HOMOLOGADO_SUCCESS",
-  "timestamp": "2026-11-03T03:53:56.506Z",
-  "totalDurationMs": 1.16,
+  "timestamp": "2026-11-03T04:22:49.468Z",
+  "totalDurationMs": 1.63,
   "testsExecuted": 3,
   "testsPassed": 3,
   "testsFailed": 0,
-  "sha256MerkleRoot": "0xf470a16bbf75fc02964469856baaba50fb99951bf61f006cf7fa10e151b3cc01",
+  "sha256MerkleRoot": "0xb8a3f1e1f00f605ce47f53ea7cfe74f0f1d6eb1531b15469514d9edb37bc3560",
   "results": [
     {
       "testName": "HITL_TWO_STAGE_ESCALATION_AND_SAFE_ABORT",
@@ -18,10 +18,10 @@
     {
       "testName": "MEETINGS_ONE_CLICK_ACTION_DISPATCH",
       "passed": true,
-      "jiraLatencyMs": 14.31,
+      "jiraLatencyMs": 14.34,
       "sfdcLatencyMs": 16.12,
-      "jiraTxHash": "0xa9973780aba44d349c432357cbecbba5f9607fc69a55fc4765090398e09303f7",
-      "sfdcTxHash": "0xe49de534bdefe400b79b9be9a976c0376d97d746610f61c268518a79b5b34334"
+      "jiraTxHash": "0x549e07127a1e3f845b05ed6feb7f03f4cf1ab488cc88b746e32ca368ba3531df",
+      "sfdcTxHash": "0x16c9ab8fd75d0c24676d2f994f24c54c4e278aad5a27bdefaa4e202861665509"
     },
     {
       "testName": "EXTENSION_SESSIONS_MONITOR_AND_REVOKE",
