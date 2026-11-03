@@ -110,7 +110,7 @@ export const CostsTokenDashboard: React.FC = () => {
       },
       institutionalTriad: {
         innovationHolding: "PromptCore Labs",
-        operatingSystem: "PCL AEOS Kernel v3.6.0",
+        operatingSystem: "PCL AEOS Kernel v3.8.0",
         controlCenter: "PCL Cockpit (:3001)"
       }
     };

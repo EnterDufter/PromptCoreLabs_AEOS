@@ -208,16 +208,29 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
             <div className="max-w-3xl mx-auto space-y-6">
               {conversation.messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 px-4 select-none animate-in fade-in duration-300">
-                  {/* PCL Cockpit Shield / Logo */}
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold text-2xl shadow-xl shadow-emerald-500/20 mb-3 ring-4 ring-emerald-500/10">
-                    PCL
+                  {/* Official PromptCore Labs Logo with Cyan Glow */}
+                  <div className="flex items-center justify-center mb-4 group select-none">
+                    <img 
+                      src="/assets/PCL_Logo_Transparente.png" 
+                      alt="PromptCore Labs Logo" 
+                      className="h-[120px] w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                      style={{ filter: 'drop-shadow(0 0 22px rgba(56, 189, 248, 0.55))' }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextEl = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextEl) nextEl.style.display = 'flex';
+                      }}
+                    />
+                    <div className="hidden w-24 h-24 rounded-2xl bg-gradient-to-tr from-sky-600 to-cyan-500 text-white items-center justify-center font-bold text-3xl shadow-xl shadow-cyan-500/30">
+                      PCL
+                    </div>
                   </div>
 
                   <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight text-center">
                     PCL Cockpit
                   </h2>
                   <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1 text-center max-w-md leading-relaxed">
-                    Sovereign AI Command Center • Como posso acelerar suas decisões de engenharia e liderança hoje?
+                    Cognitive Engineering Platform • Como posso acelerar suas decisões de engenharia e liderança hoje?
                   </p>
 
                   {/* 4 Executive Prompt Shortcut Cards */}

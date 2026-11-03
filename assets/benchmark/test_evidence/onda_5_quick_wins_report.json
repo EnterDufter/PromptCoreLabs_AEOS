@@ -1,12 +1,12 @@
 {
   "suite": "PCL_COCKPIT_TLC_V3_ONDA_5_HOMOLOGATION",
   "status": "HOMOLOGADO_SUCCESS",
-  "timestamp": "2026-11-03T04:22:43.078Z",
-  "totalDurationMs": 14.32,
+  "timestamp": "2026-11-03T05:52:57.399Z",
+  "totalDurationMs": 14.8,
   "testsExecuted": 5,
   "testsPassed": 5,
   "testsFailed": 0,
-  "sha256MerkleRoot": "efb9dc711d7052fe886702d925e94ea55ca7cfb6e279515498e618e5f11a8b2c",
+  "sha256MerkleRoot": "fa9f2d408c4c247f5e4ce7a4cc648e34aa7301ba6c6fb78f089c4b89e5ee0646",
   "results": [
     {
       "testName": "CFO_SOVEREIGN_ROI_PROJECTION",
@@ -40,7 +40,7 @@
     {
       "testName": "CFO_DOSSIER_CRYPTO_INTEGRITY",
       "passed": true,
-      "sha256MerkleProof": "0xefb9dc711d7052fe886702d925e94ea55ca7cfb6e279515498e618e5f11a8b2c"
+      "sha256MerkleProof": "0xfa9f2d408c4c247f5e4ce7a4cc648e34aa7301ba6c6fb78f089c4b89e5ee0646"
     }
   ]
 }

@@ -50,12 +50,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div>
           <div className="flex items-center space-x-2">
             <span className="font-semibold text-sm tracking-tight">PCL Cockpit</span>
-            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-              v3.6.0 PROD
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-700 font-semibold">
+              v3.8.0 PROD
             </span>
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 block -mt-0.5 font-sans">
-            Sovereign AI Command Center
+            Cognitive Engineering Platform
           </span>
         </div>
       </div>
