@@ -61,3 +61,4 @@ test.describe('Stage Gate 1: Isolamento de Shadow DOM e Mutabilidade de Seletore
     expect(isBubbleVisible).toBe(true);
   });
 });
+

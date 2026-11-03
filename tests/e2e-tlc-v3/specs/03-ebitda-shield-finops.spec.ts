@@ -43,3 +43,4 @@ test.describe('Stage Gate 3: FinOps Granular (EBITDA Shield) & Cache Semântico 
     expect(semanticCacheHit.latencyMs).toBeLessThan(10);
   });
 });
+

@@ -25,3 +25,4 @@ export const EXTENSION_CONFIG = {
     zIndex: 2147483647 // z-index máximo para flutuar sobre Salesforce/Jira/SAP
   }
 };
+

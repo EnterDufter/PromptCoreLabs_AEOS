@@ -1,0 +1,71 @@
+{
+  "testSuite": "PCL Cockpit TLC-v3 E2E Automation - Fase 2",
+  "timestampUtc": "2026-11-03T02:41:38.455Z",
+  "kernelVersion": "v3.6.0",
+  "cockpitVersion": "v3.7.0",
+  "overallStatus": "HOMOLOGADO_COM_SUCESSO",
+  "durationMs": 179,
+  "stageGates": {
+    "gate3_1_ebitdaShield": {
+      "stageGate": "3.1_EBITDA_SHIELD_STRESS",
+      "passed": true,
+      "hardLockTriggered": true,
+      "totalRerouted": 3,
+      "totalTokensSaved": 380000,
+      "totalDollarsSavedUSD": 7.15,
+      "testProofSha256": "61f51491f9337106c05fe8c521ee8a4ea839f749ddfc353f17c327c312a6a8f5"
+    },
+    "gate3_2_providerFailover": {
+      "stageGate": "3.2_PROVIDER_FAILOVER_STRESS",
+      "passed": true,
+      "scenariosTested": 3,
+      "averageSwitchLatencyMs": 14.81,
+      "zeroVramMaintained": true,
+      "proofHashSha256": "1cc3b72572f9bed4401f3df30a756795aa6f731cf3c0cbfe1090de67f1f1ebba",
+      "results": [
+        {
+          "primaryProvider": "Anthropic Cloud (Claude 3.5 Sonnet)",
+          "failureMode": "HTTP 503 SERVICE UNAVAILABLE",
+          "circuitBreakerTripped": true,
+          "failoverTarget": "Ollama qwen2.5-coder:7b-instruct-q4_K_M",
+          "failoverSwitchLatencyMs": 14.8,
+          "vramAllocatedMb": 0,
+          "executionProvider": "CPUExecutionProvider",
+          "status": "FAILOVER_SUCCESS_ZERO_DOWNTIME",
+          "timestamp": "2026-11-03T02:41:38.454Z"
+        },
+        {
+          "primaryProvider": "OpenAI Enterprise (GPT-4o)",
+          "failureMode": "GATEWAY TIMEOUT (504 > 5000ms)",
+          "circuitBreakerTripped": true,
+          "failoverTarget": "Ollama qwen2.5-coder:7b-instruct-q4_K_M",
+          "failoverSwitchLatencyMs": 14.82,
+          "vramAllocatedMb": 0,
+          "executionProvider": "CPUExecutionProvider",
+          "status": "FAILOVER_SUCCESS_ZERO_DOWNTIME",
+          "timestamp": "2026-11-03T02:41:38.454Z"
+        },
+        {
+          "primaryProvider": "Google Vertex AI (Gemini 1.5 Pro)",
+          "failureMode": "ECONNREFUSED / DNS RESOLUTION FAILURE",
+          "circuitBreakerTripped": true,
+          "failoverTarget": "Laya FastMCP System One (:20140)",
+          "failoverSwitchLatencyMs": 14.8,
+          "vramAllocatedMb": 0,
+          "executionProvider": "CPUExecutionProvider",
+          "status": "FAILOVER_SUCCESS_ZERO_DOWNTIME",
+          "timestamp": "2026-11-03T02:41:38.454Z"
+        }
+      ]
+    }
+  },
+  "cryptographicProof": {
+    "merkleRootSha256": "003656e0baf0cecb43dd2572eb062ba6689d4505ba131a4041dcc8194639c2d5",
+    "attestationAuthority": "PCL-AEOS-TLC-V3-HARNESS",
+    "hardwareInvariants": {
+      "coprocessorCpuINT8": true,
+      "vramAllocatedMb": 0,
+      "zeroDataResidualVerified": true
+    }
+  }
+}

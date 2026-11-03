@@ -270,3 +270,4 @@ import { EXTENSION_CONFIG } from '../config/extensionConfig';
 
   console.log('[PCL Cockpit Companion] Injetado com sucesso sob Shadow DOM fechado.');
 })();
+

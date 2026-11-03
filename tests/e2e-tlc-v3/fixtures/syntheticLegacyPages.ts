@@ -77,3 +77,4 @@ export const SYNTHETIC_PAGES = {
     </html>
   `
 };
+

@@ -61,3 +61,4 @@ test.describe('Stage Gate 2: Ciclo de Vida e Timeout do Human-in-the-Loop (HitL)
     expect(isModalOpen).toBe(false);
   });
 });
+

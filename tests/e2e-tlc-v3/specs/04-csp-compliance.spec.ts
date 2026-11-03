@@ -27,3 +27,4 @@ test.describe('Stage Gate 4: Bypass de Políticas Estritas de CSP e Hardened Chr
     expect(cspViolations.length).toBe(0);
   });
 });
+

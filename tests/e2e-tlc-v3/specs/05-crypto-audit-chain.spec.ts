@@ -41,3 +41,4 @@ test.describe('Stage Gate 5: Trilhas de Auditoria Invioláveis e Compliance Expo
     expect(tamperedHash).not.toBe(validHash);
   });
 });
+
