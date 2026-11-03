@@ -101,6 +101,15 @@ export interface Translations {
     squadAllocation: string;
     exportLedger: string;
     exportSuccess: string;
+    roiCalculator: string;
+    roiSubtitle: string;
+    employeesCount: string;
+    marketCloudCost: string;
+    pclSovereignCost: string;
+    monthlySavings: string;
+    annualSavings: string;
+    exportRoiDossier: string;
+    roiSimulate: string;
   };
   audit: {
     title: string;
@@ -218,7 +227,16 @@ export const translations: Record<Language, Translations> = {
       projectedMonth: 'Projeção de Faturamento',
       squadAllocation: 'Rateio Orçamentário por Squad',
       exportLedger: 'Exportar Livro-Razão FinOps (.csv)',
-      exportSuccess: 'Relatório Contábil exportado com sucesso!'
+      exportSuccess: 'Relatório Contábil exportado com sucesso!',
+      roiCalculator: 'Simulador de ROI Soberano CFO',
+      roiSubtitle: 'Cálculo executivo da economia obtida ao substituir faturas recorrentes de nuvens fechadas pela infraestrutura soberana PCL Cockpit.',
+      employeesCount: 'Número de Colaboradores / Licenças',
+      marketCloudCost: 'Custo de Mercado Nuvem Externa (US$ 60/mês/usuário)',
+      pclSovereignCost: 'Custo PCL Cockpit Soberano (Custo Marginal $0.00)',
+      monthlySavings: 'Economia Mensal Retida',
+      annualSavings: 'Economia Anual Líquida',
+      exportRoiDossier: 'Exportar Parecer Financeiro CFO (.json)',
+      roiSimulate: 'Simular Cenário de Economia'
     },
     audit: {
       title: 'Painel de Governança, Compliance & Audit Trail Imutável',
@@ -334,7 +352,16 @@ export const translations: Record<Language, Translations> = {
       projectedMonth: 'Projected Monthly Spend',
       squadAllocation: 'Budget Allocation by Squad',
       exportLedger: 'Export FinOps Ledger (.csv)',
-      exportSuccess: 'Accounting report exported successfully!'
+      exportSuccess: 'Accounting report exported successfully!',
+      roiCalculator: 'CFO Sovereign ROI Simulator',
+      roiSubtitle: 'Executive projection of savings achieved by replacing closed external cloud subscriptions with PCL Cockpit sovereign infrastructure.',
+      employeesCount: 'Number of Employees / Seats',
+      marketCloudCost: 'Market Cloud Cost ($60/user/mo)',
+      pclSovereignCost: 'PCL Cockpit Sovereign ($0.00 marginal cost)',
+      monthlySavings: 'Retained Monthly Savings',
+      annualSavings: 'Net Annual Savings',
+      exportRoiDossier: 'Export CFO Financial Dossier (.json)',
+      roiSimulate: 'Simulate Savings Scenario'
     },
     audit: {
       title: 'Governance, Compliance & Immutable Audit Trail',
@@ -450,7 +477,16 @@ export const translations: Record<Language, Translations> = {
       projectedMonth: 'Proyección Mensual',
       squadAllocation: 'Distribución Presupuestaria por Squad',
       exportLedger: 'Exportar Libro Mayor FinOps (.csv)',
-      exportSuccess: '¡Reporte contable exportado con éxito!'
+      exportSuccess: '¡Reporte contable exportado con éxito!',
+      roiCalculator: 'Simulador de ROI Soberano CFO',
+      roiSubtitle: 'Cálculo ejecutivo del ahorro obtenido al sustituir suscripciones de nubes cerradas por la infraestructura soberana PCL Cockpit.',
+      employeesCount: 'Número de Colaboradores / Licencias',
+      marketCloudCost: 'Costo de Mercado Nube Externa ($60/mes/usuario)',
+      pclSovereignCost: 'Costo PCL Cockpit Soberano (Costo Marginal $0.00)',
+      monthlySavings: 'Ahorro Mensual Retenido',
+      annualSavings: 'Ahorro Anual Neto',
+      exportRoiDossier: 'Exportar Informe Financiero CFO (.json)',
+      roiSimulate: 'Simular Escenario de Ahorro'
     },
     audit: {
       title: 'Panel de Gobernanza, Cumplimiento y Audit Trail Inmutable',

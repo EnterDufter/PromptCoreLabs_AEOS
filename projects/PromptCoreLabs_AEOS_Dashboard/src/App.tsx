@@ -37,6 +37,24 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Broadcast de Tema e Idioma para a Companion Extension e Enclave Local
+  useEffect(() => {
+    window.postMessage({
+      type: 'PCL_SYNC_PREFERENCES',
+      theme,
+      language: lang
+    }, '*');
+    try {
+      localStorage.setItem('pcl_cockpit_preferences', JSON.stringify({
+        theme,
+        language: lang,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch {
+      // safe fallback
+    }
+  }, [theme, lang]);
+
   const userProfile: UserProfile = {
     id: 'USR-001',
     name: 'Eduardo Antigravity',

@@ -5,6 +5,8 @@
 
 import { EXTENSION_CONFIG } from '../config/extensionConfig';
 
+declare const chrome: any;
+
 interface PendingHitLAction {
   id: string;
   timestamp: number;
@@ -26,7 +28,7 @@ async function sha256(message: string): Promise<string> {
 }
 
 // Background event listener
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
   if (message.type === 'PCL_CHECK_HEALTH') {
     checkDaemonsHealth().then(sendResponse);
     return true;
