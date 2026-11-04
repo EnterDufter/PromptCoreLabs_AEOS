@@ -85,7 +85,7 @@ normative_ref: "PCL-AEOS-NORM-01"
 1. **A Tríade Institucional Canônica:**
    - **🏢 PromptCore Labs (A Inovação / Holding):** O laboratório e holding de arquitetura de inteligência artificial soberana que concebe os padrões de governança, finops e blindagem regulatória para o ecossistema corporativo.
    - **⚙️ PCL AEOS (*AI Engineering Operating System* - O Sistema Operacional Soberano):** O motor de inteligência e governança nos bastidores que orquestra a colaboração entre líderes, especialistas humanos e esquadrões de agentes autônomos sob rastreabilidade matemática.
-   - **🖥️ PCL Cockpit (`:3001`) (A Cabine de Comando Interativa):** A interface executiva e técnica onde a liderança assume o controle em tempo real, visualiza o raciocínio das IAs, audita custos/latências e mantém a autoridade soberana irrevogável.
+   - **🖥️ PCL Cockpit (`:3001`) — Cognitive Engineering Platform (A Cabine de Comando Interativa):** A interface executiva e técnica onde a liderança assume o controle em tempo real, visualiza o raciocínio das IAs, audita custos/latências e mantém a autoridade soberana irrevogável.
 
 2. **Diretriz Anti-Jargão Hermético (Zero Hermetic Jargon para a Liderança):**
    - É expressamente proibido utilizar termos técnicos opacos ou herméticos em comunicações de negócio, sumários ou interfaces destinadas a C-Level, Diretores e Investidores sem a respectiva tradução canônica:

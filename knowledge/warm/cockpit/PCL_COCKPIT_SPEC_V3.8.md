@@ -64,10 +64,11 @@ flowchart LR
 
 ---
 
-## 2. As 12 Grandes Inovações Consolidadas na Versão v3.8
+## 2. As 13 Grandes Inovações Consolidadas na Versão v3.8
 
-### 1. Inicialização Limpa (Thread Zero com Hero State)
-- Ao abrir o Cockpit, a tela inicia em **Thread Zero** limpa, exibindo o *Executive Hero Empty State* com quatro cartões de ação rápida (*Análise de Arquitetura Cortex*, *Auditoria FinOps & ROI*, *Inteligência de Reuniões WhisperX* e *Gestor de Squads*), permitindo que o usuário comece uma thread inédita sem poluição de conversas anteriores.
+### 1. Inicialização Limpa (Thread Zero com Hero State & Identidade Visual Canônica)
+- Ao abrir o Cockpit, a tela inicia em **Thread Zero** limpa, exibindo o *Executive Hero Empty State* encabeçado pelo **Logo Oficial da PromptCore Labs** (`PCL_Logo_Transparente.png` em 120px com efeito *Cyan Glow* `drop-shadow(0 0 16px rgba(56, 189, 248, 0.45))`) e a assinatura canônica **"Cognitive Engineering Platform"** abaixo do título "PCL Cockpit".
+- O Hero State dispõe de quatro cartões de ação rápida (*Análise de Arquitetura Cortex*, *Auditoria FinOps & ROI*, *Inteligência de Reuniões WhisperX* e *Gestor de Squads*), permitindo que o usuário comece uma thread inédita sem poluição de conversas anteriores.
 
 ### 2. Higiene Constitucional & Purge de Nomes de Concorrentes
 - Eliminação absoluta de marcas e nomenclaturas de produtos de terceiros (*Tactiq, Jumpad, Read.ai*) do código-fonte, traduções e documentação técnica. 
@@ -115,6 +116,11 @@ flowchart LR
 - **Escalação em 2 Estágios:** Ação pendente no Trivial Gate aguarda 60s pelo aprovador primário (N1); ao expirar, transiciona para `ESCALATED_TIER_2`, disparando push prioritário via webhook assinado com `HMAC-SHA256` para a Diretoria; aos 120s, realiza descarte seguro (*Safe Abort*) com zero resíduo de dados.
 - **Despacho 1-Clique de Atas do WhisperX:** Botões ao lado de cada deliberação em [`MeetingsIntelligenceView.tsx`](file:///c:/PromptCore_Labs/projects/PromptCoreLabs_AEOS_Dashboard/src/components/workspace/MeetingsIntelligenceView.tsx) para criação imediata de issues no Jira ou atualização de oportunidades no Salesforce sob aprovação humana prévia.
 - **Monitor de Extensões Injetadas:** Visibilidade em tempo real das abas conectadas no painel lateral [`RightSidebarStatus.tsx`](file:///c:/PromptCore_Labs/projects/PromptCoreLabs_AEOS_Dashboard/src/components/layout/RightSidebarStatus.tsx) com botão de revogação remota instantânea.
+
+### 13. Automação de Inicialização em 1-Clique & Atalho Executivo de Desktop
+- **Script de Inicialização em 1-Clique (`Iniciar_PCL_Cockpit.bat`):** Automação pura ASCII compatível com Windows `cmd.exe` que inicializa o servidor Vite na porta `:3001` e abre instantaneamente o navegador padrão sem exigir digitação no terminal.
+- **Script PowerShell Homólogo (`Iniciar_PCL_Cockpit.ps1`):** Versão nativa com controle de janelas e tratamento de encerramento seguro.
+- **Gerador de Atalho de Área de Trabalho (`Criar_Atalho_Desktop.ps1`):** Script que provisiona o atalho `PCL Cockpit.lnk` na Área de Trabalho do usuário, incorporando o ícone canônico da holding (`assets/PCL_Logo.ico`) para acesso imediato com um único clique.
 
 ---
 

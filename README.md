@@ -33,7 +33,7 @@ Ele é uma **infraestrutura soberana de inteligência** que une executivos, espe
 > * **💰 FinOps Imbatível (Custo Marginal $0.00 & EBITDA Shield):** Ao operar em modo local soberano, sua organização realiza milhões de tokens analíticos sem pagar faturas extras por pergunta, retendo **US$ 180.000,00 / ~R$ 1.026.000,00 ao ano** para cada 250 colaboradores no balanço da empresa.
 > * **👑 Autoridade Humana Inegociável (TLC-v3 Escalation Ladder):** A IA audita, calcula e sugere; a aprovação de risco crítico passa pelo *Trivial Gate HitL* em 2 estágios (escalação N2 para diretoria aos 60s e descarte seguro aos 120s com 0 memory leak).
 >
-> **A Tríade Canônica que Move o Sistema:** A **PromptCore Labs** é o laboratório de inovação responsável pela arquitetura; o **PCL AEOS** é o motor de inteligência e governança nos bastidores; e o **PCL Cockpit (`:3001`)** é a cabine de comando interativa — acompanhada da **PCL Companion Extension (Manifest V3)** para injeção não-invasiva via Shadow DOM em Salesforce, Jira e SAP.
+> **A Tríade Canônica que Move o Sistema:** A **PromptCore Labs** é o laboratório de inovação responsável pela arquitetura; o **PCL AEOS** é o motor de inteligência e governança nos bastidores; e o **PCL Cockpit (`:3001`) — Cognitive Engineering Platform** é a cabine de comando interativa — acompanhada da **PCL Companion Extension (Manifest V3)** para injeção não-invasiva via Shadow DOM em Salesforce, Jira e SAP.
 
 > [!NOTE]
 > **🛠️ Visão de Engenharia & Invariantes Físicos (Para Arquitetos e Desenvolvedores):**  
@@ -411,7 +411,14 @@ docker compose -f docker-compose.aeos.yml up -d
 docker compose -f docker-compose.aeos.yml ps
 ```
 
-### 3. Iniciar o Centro de Comando PCL Cockpit v3.8 (`:3001`)
+### 3. Iniciar o PCL Cockpit v3.8 — Cognitive Engineering Platform (`:3001`)
+
+* **Opção A (1-Clique via Atalho / Executável):**  
+  Duplo clique no atalho **`PCL Cockpit`** na Área de Trabalho ou execute `Iniciar_PCL_Cockpit.bat` na raiz do repositório (inicializa o servidor Vite na porta `:3001` e abre automaticamente a interface no navegador padrão).  
+  > *Dica: Caso precise recriar o atalho com o ícone oficial Cyan Glow na Área de Trabalho:*  
+  > `powershell -ExecutionPolicy Bypass -File .\Criar_Atalho_Desktop.ps1`
+
+* **Opção B (Terminal / Linha de Comando):**
 ```bash
 npm --prefix projects/PromptCoreLabs_AEOS_Dashboard install
 npm --prefix projects/PromptCoreLabs_AEOS_Dashboard run dev -- --port 3001 --host
