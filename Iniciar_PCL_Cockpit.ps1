@@ -23,3 +23,4 @@ Start-Sleep -Seconds 3
 
 Write-Host "[OK] Abrindo PCL Cockpit no navegador padrao..." -ForegroundColor Green
 Start-Process "http://localhost:3001"
+
