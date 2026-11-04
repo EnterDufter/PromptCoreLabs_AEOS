@@ -1,5 +1,5 @@
 # ===================================================================
-# ⚡ Cria Atalho do PCL Cockpit na Area de Trabalho (Desktop)
+# Cria Atalho do PCL Cockpit na Area de Trabalho (Desktop)
 # com o Icone Oficial PCL_Logo.ico (Microchip Cyan Glow)
 # ===================================================================
 
@@ -16,7 +16,7 @@ if (-not (Test-Path $iconPath)) {
 $wshShell = New-Object -ComObject WScript.Shell
 $shortcut = $wshShell.CreateShortcut($shortcutPath)
 $shortcut.TargetPath = $targetBatch
-$shortcut.WorkingDirectory = "C:\PromptCore_Labs"
+$shortcut.WorkingDirectory = "C:\PromptCore_Labs\projects\PromptCoreLabs_AEOS_Dashboard"
 $shortcut.Description = "PCL Cockpit v3.8 - Cognitive Engineering Platform"
 
 if (Test-Path $iconPath) {

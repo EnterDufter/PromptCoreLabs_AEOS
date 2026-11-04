@@ -1,5 +1,5 @@
 # ===================================================================
-# ⚡ PROMPTCORE LABS - PCL COCKPIT v3.8.0
+# PROMPTCORE LABS - PCL COCKPIT v3.8.0
 # Cognitive Engineering Platform Launcher
 # ===================================================================
 
@@ -18,9 +18,8 @@ if ($portActive) {
 Write-Host "[1/2] Iniciando servidor Vite na porta 3001..." -ForegroundColor Yellow
 Start-Process powershell -ArgumentList "-NoExit", "-WindowStyle", "Minimized", "-Command", "Set-Location '$dashboardDir'; npm run dev"
 
-Write-Host "[2/2] Aguardando 3 segundos para inicializacao..." -ForegroundColor Gray
-Start-Sleep -Seconds 3
+Write-Host "[2/2] Aguardando 4 segundos para inicializacao..." -ForegroundColor Gray
+Start-Sleep -Seconds 4
 
 Write-Host "[OK] Abrindo PCL Cockpit no navegador padrao..." -ForegroundColor Green
 Start-Process "http://localhost:3001"
-
