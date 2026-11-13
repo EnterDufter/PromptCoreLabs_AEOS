@@ -3,15 +3,16 @@ import {
   MessageSquare, Cpu, Columns, Layers, Bot, User, ShieldCheck, 
   FileText, ExternalLink, Play, Clock, Sparkles, Copy, Check,
   Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown,
-  BookOpen, Zap, ArrowRight
+  BookOpen, Zap, ArrowRight, Presentation, Image as ImageIcon, Video as VideoIcon, Table as TableIcon
 } from 'lucide-react';
-import { Conversation, ChatMessage, Artifact } from '../../types';
+import { Conversation, ChatMessage, Artifact, TargetArtifactFormat } from '../../types';
 import { AgentNarrationPanel } from './AgentNarrationPanel';
 import { CortexCanvas } from './CortexCanvas';
 import { ActionPreviewCard } from './ActionPreviewCard';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
 import { LiveExecutionStepper } from './LiveExecutionStepper';
 import { MarkdownRenderer } from './MarkdownRenderer';
+import { sanitizeMarkdownForSpeech } from '../../services/audio/ttsSanitizer';
 
 interface DualPlexWorkspaceProps {
   conversation: Conversation;
@@ -21,6 +22,7 @@ interface DualPlexWorkspaceProps {
   onNewConversation?: () => void;
   onOpenArtifact: (art: Artifact) => void;
   onCreateBranch?: (messageId: string) => void;
+  onGenerateArtifactForMessage?: (msg: ChatMessage, format: TargetArtifactFormat) => void;
   viewMode?: 'chat' | 'canvas' | 'dual';
   onViewModeChange?: (mode: 'chat' | 'canvas' | 'dual') => void;
   onPromptCardClick?: (text: string) => void;
@@ -34,6 +36,7 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
   onNewConversation,
   onOpenArtifact,
   onCreateBranch,
+  onGenerateArtifactForMessage,
   viewMode: controlledViewMode,
   onViewModeChange,
   onPromptCardClick
@@ -49,6 +52,7 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
   const [showNarration, setShowNarration] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
+  const [transformingMsgId, setTransformingMsgId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll imediato para a última mensagem ao enviar ou receber respostas
@@ -79,7 +83,8 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
       setPlayingMessageId(null);
     } else {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+      const speechText = sanitizeMarkdownForSpeech(text);
+      const utterance = new SpeechSynthesisUtterance(speechText);
       utterance.lang = 'pt-BR';
       utterance.onend = () => setPlayingMessageId(null);
       utterance.onerror = () => setPlayingMessageId(null);
@@ -95,9 +100,9 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
     || conversation.messages[conversation.messages.length - 1];
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden select-none">
+    <div className="flex-1 flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden">
       {/* Top Workspace Bar: Multi-Conversation Tabs & Dual-Plex Mode Switcher */}
-      <div className="h-10 px-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center justify-between text-xs">
+      <div className="h-10 px-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center justify-between text-xs select-none">
         {/* Barra de Abas Multi-Conversa (Até 3 Conversas Simultâneas) */}
         <div className="flex items-center space-x-1.5 overflow-x-auto max-w-[65%] custom-scrollbar py-0.5">
           {openConversations.map(tabConv => {
@@ -230,11 +235,11 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                     PCL Cockpit
                   </h2>
                   <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1 text-center max-w-md leading-relaxed">
-                    Cognitive Engineering Platform • Como posso acelerar suas decisões de engenharia e liderança hoje?
+                    Cognitive Engineering Platform • Como podemos acelerar seus resultados hoje?
                   </p>
 
-                  {/* 4 Executive Prompt Shortcut Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-7 w-full max-w-2xl">
+                  {/* 2 Executive Prompt Shortcut Cards (Auditoria & Pesquisa Profunda) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-7 w-full max-w-xl">
                     {[
                       {
                         icon: Zap,
@@ -249,20 +254,6 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                         title: 'Pesquisa Profunda com Citações',
                         desc: 'Estruturar análise de mercado com árvore de hipóteses e fontes verificadas.',
                         prompt: 'Faça uma pesquisa profunda e síntese comparativa dos avanços de IA corporativa com resíduo zero de dados.'
-                      },
-                      {
-                        icon: Clock,
-                        iconColor: 'text-amber-500 bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800',
-                        title: 'Inteligência de Reuniões WhisperX',
-                        desc: 'Extrair atas executivas, deliberações e timestamps da última sessão.',
-                        prompt: 'Resuma os principais Action Items e decisões da reunião com clientes em atraso via WhisperX.'
-                      },
-                      {
-                        icon: Layers,
-                        iconColor: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/60 border-indigo-200 dark:border-indigo-800',
-                        title: 'Fluxos de Automação DAG',
-                        desc: 'Consultar ou disparar fluxos agênticos no Canvas de automação.',
-                        prompt: 'Quais clientes estão com pagamentos em atraso este mês? @SAP e @Salesforce'
                       }
                     ].map((card, i) => {
                       const Icon = card.icon;
@@ -321,15 +312,22 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                   {/* Message Bubble Container */}
                   <div className="space-y-2 max-w-2xl">
                     {/* Message Bubble */}
-                    <div className={`rounded-2xl p-4 text-xs space-y-2.5 transition-all ${
+                    <div className={`rounded-2xl p-4 text-xs space-y-2.5 transition-all select-text cursor-text ${
                       msg.sender === 'user'
                         ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700/60'
                         : 'bg-white dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border border-slate-200/70 dark:border-slate-800 shadow-sm'
                     }`}>
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                        <span className="font-semibold">{msg.senderName}</span>
-                        <span>{msg.timestamp}</span>
-                      </div>
+                      {/* Cabeçalho da Mensagem: Se for do usuário, omite nome redundante pois avatar externo EA já identifica */}
+                      {msg.sender !== 'user' ? (
+                        <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1 select-none">
+                          <span className="font-semibold">{msg.senderName}</span>
+                          <span>{msg.timestamp}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-end text-[10px] text-slate-400 dark:text-slate-500 mb-0.5 select-none">
+                          <span>{msg.timestamp}</span>
+                        </div>
+                      )}
 
                       {/* Live Execution Stepper: Feedback em tempo real durante e após a execução */}
                       {msg.steps && msg.steps.length > 0 && (
@@ -430,37 +428,163 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                         );
                       })()}
 
-                      {/* Attached Artifacts */}
+                      {/* Attached Artifacts — Hub de Artefatos Multimodais Inline na Conversa */}
                       {msg.artifacts && msg.artifacts.length > 0 && (
-                        <div className="space-y-2 pt-2 border-t border-slate-200/60 dark:border-slate-800">
-                          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wide block">
-                            Artefatos Gerados:
-                          </span>
-                          {msg.artifacts.map(art => (
-                            <div
-                              key={art.id}
-                              onClick={() => onOpenArtifact(art)}
-                              className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:bg-white dark:hover:bg-slate-900 cursor-pointer transition flex items-center justify-between group shadow-sm"
-                            >
-                              <div className="flex items-center space-x-2.5 truncate">
-                                <FileText className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                                <div className="truncate">
-                                  <span className="font-semibold text-xs text-slate-800 dark:text-slate-100 group-hover:text-emerald-500 transition truncate block">
-                                    {art.title}
-                                  </span>
-                                  <span className="text-[11px] text-slate-400 truncate block">
-                                    {art.summary}
-                                  </span>
+                        <div className="space-y-2.5 pt-3 border-t border-slate-200/70 dark:border-slate-800">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center space-x-1.5">
+                              <Sparkles className="w-3 h-3" />
+                              <span>Hub de Artefatos Multimodais na Conversa ({msg.artifacts.length})</span>
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-mono">Clique para abrir no Estúdio Soberano</span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {msg.artifacts.map(art => {
+                              const getArtifactIcon = () => {
+                                switch (art.type) {
+                                  case 'slide': return <Presentation className="w-4 h-4 text-amber-500 flex-shrink-0" />;
+                                  case 'table':
+                                  case 'sheet': return <TableIcon className="w-4 h-4 text-emerald-500 flex-shrink-0" />;
+                                  case 'image': return <ImageIcon className="w-4 h-4 text-sky-500 flex-shrink-0" />;
+                                  case 'audio': return <Volume2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />;
+                                  case 'video': return <VideoIcon className="w-4 h-4 text-purple-500 flex-shrink-0" />;
+                                  case 'app': return <Sparkles className="w-4 h-4 text-pink-500 flex-shrink-0" />;
+                                  case 'diagram': return <Layers className="w-4 h-4 text-indigo-500 flex-shrink-0" />;
+                                  default: return <FileText className="w-4 h-4 text-slate-500 flex-shrink-0" />;
+                                }
+                              };
+
+                              const getArtifactLabel = () => {
+                                switch (art.type) {
+                                  case 'slide': return 'Slides 16:9';
+                                  case 'table':
+                                  case 'sheet': return 'Tabela CSV';
+                                  case 'image': return 'Infográfico HD';
+                                  case 'audio': return 'Áudio WAV';
+                                  case 'video': return 'Vídeo 60fps';
+                                  case 'app': return 'App HTML5';
+                                  case 'diagram': return 'Diagrama SVG';
+                                  default: return 'Documento';
+                                }
+                              };
+
+                              const renderInlinePreview = () => {
+                                if (art.type === 'image' && art.mediaUrl) {
+                                  return (
+                                    <div className="h-20 w-full rounded-lg overflow-hidden bg-slate-950 border border-slate-800">
+                                      <img src={art.mediaUrl} alt={art.title} className="w-full h-full object-cover" />
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'diagram' && art.content.trim().startsWith('<svg')) {
+                                  return (
+                                    <div
+                                      className="h-20 w-full rounded-lg overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-1 [&_svg]:w-full [&_svg]:h-full"
+                                      dangerouslySetInnerHTML={{ __html: art.content }}
+                                    />
+                                  );
+                                }
+                                if (art.type === 'slide') {
+                                  const slideCount = art.content.split(/\n---\n/).length;
+                                  return (
+                                    <div className="h-16 w-full rounded-lg bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 px-3 py-2 flex items-center justify-between text-white">
+                                      <div className="truncate pr-2">
+                                        <span className="text-[9px] font-mono text-sky-400 uppercase block">Keynote Deck • {slideCount} Lâminas</span>
+                                        <span className="text-[11px] font-bold truncate block">{art.title}</span>
+                                      </div>
+                                      <Play className="w-4 h-4 text-amber-400 shrink-0" />
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'audio') {
+                                  return (
+                                    <div className="h-14 w-full rounded-lg bg-slate-950 border border-slate-800 px-3 flex items-center justify-between">
+                                      <div className="flex items-end space-x-0.5 h-6">
+                                        {[45, 80, 60, 95, 50, 85, 70, 100, 55, 75, 65, 90].map((h, i) => (
+                                          <span key={i} style={{ height: `${h}%` }} className="w-1 rounded-full bg-emerald-400" />
+                                        ))}
+                                      </div>
+                                      <span className="text-[10px] font-mono text-emerald-300 font-semibold">▶ WAV + Voz PT-BR</span>
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'video') {
+                                  return (
+                                    <div className="h-14 w-full rounded-lg bg-gradient-to-r from-purple-950 via-slate-950 to-indigo-950 border border-purple-800/40 px-3 flex items-center justify-between text-purple-200">
+                                      <span className="text-[10px] font-mono">🎬 4 Capítulos • Render Canvas 60fps</span>
+                                      <Play className="w-3.5 h-3.5 text-purple-400 fill-current" />
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'table' || art.type === 'sheet') {
+                                  return (
+                                    <div className="h-14 w-full rounded-lg bg-emerald-950/90 border border-emerald-800/50 px-3 flex items-center justify-between text-emerald-200 font-mono text-[10px]">
+                                      <span className="truncate pr-2">📊 {art.title}</span>
+                                      <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] shrink-0">{art.formatExt || '.xlsx'}</span>
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'infographic') {
+                                  return (
+                                    <div className="h-14 w-full rounded-lg bg-sky-950/90 border border-sky-800/50 px-3 flex items-center justify-between text-sky-200 font-mono text-[10px]">
+                                      <span className="truncate pr-2">📈 {art.title}</span>
+                                      <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[9px] shrink-0">Infográfico</span>
+                                    </div>
+                                  );
+                                }
+                                if (art.type === 'app') {
+                                  return (
+                                    <div className="h-14 w-full rounded-lg bg-slate-950 border border-pink-500/30 px-3 flex items-center justify-between text-pink-200 font-mono text-[10px]">
+                                      <span className="truncate pr-2">⚡ {art.title}</span>
+                                      <span className="px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300 text-[9px] shrink-0">LIVE</span>
+                                    </div>
+                                  );
+                                }
+                                return (
+                                  <div className="h-14 w-full rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 flex items-center justify-between text-slate-600 dark:text-slate-300 font-mono text-[10px]">
+                                    <span className="truncate pr-2">📄 {art.title}</span>
+                                    <span className="text-[9px] text-slate-400 shrink-0">{art.formatExt || '.md'}</span>
+                                  </div>
+                                );
+                              };
+
+                              return (
+                                <div
+                                  key={art.id}
+                                  data-testid={`inline-artifact-${art.id}`}
+                                  onClick={() => onOpenArtifact(art)}
+                                  className="p-3 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:shadow-md cursor-pointer transition flex flex-col justify-between space-y-2 group select-none"
+                                >
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center space-x-2 min-w-0">
+                                      {getArtifactIcon()}
+                                      <span className="font-bold text-xs text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition truncate">
+                                        {art.title}
+                                      </span>
+                                    </div>
+                                    <span className="px-1.5 py-0.5 rounded font-mono text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase shrink-0">
+                                      {getArtifactLabel()}
+                                    </span>
+                                  </div>
+
+                                  {renderInlinePreview()}
+
+                                  <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                                    <span className="truncate pr-2">{art.summary}</span>
+                                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold shrink-0 flex items-center space-x-1">
+                                      <span>Abrir</span>
+                                      <ExternalLink className="w-3 h-3" />
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                              <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 flex-shrink-0 ml-2" />
-                            </div>
-                          ))}
+                              );
+                            })}
+                          </div>
                         </div>
                       )}
 
                       {/* Actions Toolbar: Copiar, Compartilhar, Ouvir, Criar Branch */}
-                      <div className="flex items-center space-x-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/60 text-slate-400">
+                      <div className="flex items-center space-x-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/60 text-slate-400 select-none">
                         <button
                           onClick={() => handleCopyText(msg.id, msg.text)}
                           className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition flex items-center space-x-1"
@@ -503,6 +627,51 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                             <GitBranch className="w-3.5 h-3.5" />
                             <span className="text-[10px]">Branch</span>
                           </button>
+                        )}
+
+                        {/* Botão de Geração Cirúrgica de Artefato sob Demanda */}
+                        {msg.sender === 'agent' && onGenerateArtifactForMessage && (
+                          <div className="relative ml-auto">
+                            <button
+                              onClick={() => setTransformingMsgId(transformingMsgId === msg.id ? null : msg.id)}
+                              className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 transition flex items-center space-x-1 text-[10px] font-medium"
+                              title="Gerar um artefato multimodal a partir desta resposta"
+                            >
+                              <Sparkles className="w-3 h-3 text-emerald-600" />
+                              <span>Gerar Artefato ▾</span>
+                            </button>
+
+                            {transformingMsgId === msg.id && (
+                              <div className="absolute right-0 bottom-7 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl p-1 z-50 text-[11px] animate-in fade-in duration-100">
+                                <div className="px-2 py-1 text-[9px] font-mono uppercase text-slate-400 border-b border-slate-100 dark:border-slate-800 mb-1">
+                                  Transformar Resposta em:
+                                </div>
+                                {[
+                                  { label: 'Slides 16:9 (.pptx)', format: 'slide' as const, icon: Presentation },
+                                  { label: 'Planilha Analítica (.xlsx)', format: 'sheet' as const, icon: TableIcon },
+                                  { label: 'Diagrama Mermaid (.svg)', format: 'diagram' as const, icon: Layers },
+                                  { label: 'Infográfico & KPIs (.svg)', format: 'infographic' as const, icon: ImageIcon },
+                                  { label: 'Simulador Sandbox (.html)', format: 'app' as const, icon: Sparkles },
+                                  { label: 'Documento Executivo (.md)', format: 'doc' as const, icon: FileText }
+                                ].map((opt, i) => {
+                                  const IconC = opt.icon;
+                                  return (
+                                    <button
+                                      key={i}
+                                      onClick={() => {
+                                        onGenerateArtifactForMessage(msg, opt.format);
+                                        setTransformingMsgId(null);
+                                      }}
+                                      className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-1.5 transition text-slate-700 dark:text-slate-200"
+                                    >
+                                      <IconC className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                                      <span className="truncate">{opt.label}</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>

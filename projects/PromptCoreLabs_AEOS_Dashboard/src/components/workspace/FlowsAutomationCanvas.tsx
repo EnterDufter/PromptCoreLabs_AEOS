@@ -766,7 +766,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
                 }`}
                 title={flow.description}
               >
-                <span className="material-symbols-outlined text-[16px] text-emerald-600 dark:text-emerald-400">account_tree</span>
+                <GitBranch className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 <span className="truncate max-w-[140px] text-xs">{flow.name}</span>
                 <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200/60 dark:border-slate-700/60">
                   {flow.currentVersion.split(' ')[0]}
@@ -1559,7 +1559,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
           <div className="w-[500px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                <span className="material-symbols-outlined text-[18px] text-emerald-500">account_tree</span>
+                <GitBranch className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                 <span>Catálogo de Fluxos da Organização</span>
               </h3>
               <button onClick={() => setShowFlowsCatalog(false)} className="text-slate-400 hover:text-slate-600">

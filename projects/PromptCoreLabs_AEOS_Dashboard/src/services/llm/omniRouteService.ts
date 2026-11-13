@@ -122,7 +122,8 @@ class OmniRouteService {
     prompt: string,
     modelOption: ModelOption = OMNIROUTE_MODELS[0],
     profileId: string = 'sintese-executiva',
-    historyMessages?: ChatMessagePayload[]
+    historyMessages?: ChatMessagePayload[],
+    modelId?: string
   ): Promise<OmniRouteResponse> {
     const startTime = performance.now();
     const customApiKey = typeof window !== 'undefined'
@@ -148,6 +149,7 @@ class OmniRouteService {
           prompt,
           systemPrompt,
           profileId,
+          modelId,
           customApiKey,
           messages: conversationHistory
         })

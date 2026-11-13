@@ -47,9 +47,10 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
   const [isPanning, setIsPanning] = useState(false);
   const [panMode, setPanMode] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const [selectedNodeId, setSelectedNodeId] = useState<string>('node-3');
-  const [activeInspectorTab, setActiveInspectorTab] = useState<'telemetry' | 'payload' | 'governance'>('telemetry');
-  const [inspectorExpanded, setInspectorExpanded] = useState(true);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const activeInspectorTabState = useState<'telemetry' | 'payload' | 'governance'>('telemetry');
+  const [activeInspectorTab, setActiveInspectorTab] = activeInspectorTabState;
+  const [inspectorExpanded, setInspectorExpanded] = useState(false);
   const [copiedPayload, setCopiedPayload] = useState(false);
 
   // Modo de Simulação Autônoma ao Vivo (para demonstrações imediatas)
@@ -568,19 +569,7 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
         </div>
       </div>
 
-        {/* Botão flutuante para reabrir inspector quando fechado */}
-        {!inspectorExpanded && (
-          <button
-            onClick={() => setInspectorExpanded(true)}
-            className="absolute top-3 right-3 z-10 px-2.5 py-1.5 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md backdrop-blur-md text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center space-x-1.5"
-            title="Abrir Inspector Lateral"
-          >
-            <Activity className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Inspecionar Nó</span>
-          </button>
-        )}
-
-        {/* DRAWER LATERAL DIREITO DO INSPECTOR (Largura 320px–384px, altura 100%, sem roubar espaço vertical do DAG) */}
+        {/* DRAWER LATERAL DIREITO DO INSPECTOR (Abre exclusivamente ao clicar em um nó do DAG) */}
         {inspectorExpanded && (
           <aside className="w-80 md:w-96 border-l border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-20 shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-200">
             {/* Header do Drawer */}
@@ -601,7 +590,10 @@ export const CortexCanvas: React.FC<CortexCanvasProps> = ({
                 </span>
               </div>
               <button
-                onClick={() => setInspectorExpanded(false)}
+                onClick={() => {
+                  setInspectorExpanded(false);
+                  setSelectedNodeId(null);
+                }}
                 className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
                 title="Fechar Inspector"
               >

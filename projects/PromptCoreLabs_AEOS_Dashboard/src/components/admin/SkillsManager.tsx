@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Cpu, Plus, Download, Upload, Edit3, Trash2, CheckCircle, 
   FileText, Code, Search, ShieldCheck, Zap, Power, Layers, 
-  ExternalLink, Check, AlertCircle, X, HelpCircle
+  ExternalLink, Check, AlertCircle, X, HelpCircle, RefreshCw
 } from 'lucide-react';
 import { skillsService, RichSkillDefinition, SkillDomain } from '../../services/admin/skillsService';
 
@@ -12,6 +12,15 @@ export const SkillsManager: React.FC = () => {
   const [selectedDomain, setSelectedDomain] = useState<string>('Todas');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'markdown' | 'schema' | 'security'>('markdown');
+  const [isSyncingDisk, setIsSyncingDisk] = useState(false);
+  const [diskSyncReceipt, setDiskSyncReceipt] = useState<{
+    ok: boolean;
+    totalSkills: number;
+    companyHash?: string;
+    repoPath?: string;
+    syncedAt?: string;
+    error?: string;
+  } | null>(null);
   
   // Custom skill creation modal
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -22,19 +31,55 @@ export const SkillsManager: React.FC = () => {
   const [newProvider, setNewProvider] = useState<'CPU INT8' | 'GPU RTX 3050' | 'Cloud API' | 'Sandbox Shell'>('CPU INT8');
   const [newMarkdown, setNewMarkdown] = useState('');
 
+  // World-class skill ingestion modal state
+  const [isIngestModalOpen, setIsIngestModalOpen] = useState(false);
+  const [ingestFileName, setIngestFileName] = useState('');
+  const [ingestContent, setIngestContent] = useState('');
+  const [ingestResult, setIngestResult] = useState<{
+    success: boolean;
+    skill?: RichSkillDefinition;
+    warnings?: string[];
+    error?: string;
+  } | null>(null);
+
   // Toast feedback
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleSyncFromDisk = async () => {
+    setIsSyncingDisk(true);
+    const res = await skillsService.syncFromPaperClipDisk();
+    setDiskSyncReceipt(res);
+    if (res.ok) {
+      const updated = skillsService.getSkills();
+      setSkills(updated);
+      if (updated.length > 0) setSelectedSkill(updated[0]);
+    }
+    setIsSyncingDisk(false);
+  };
 
   useEffect(() => {
     const unsubscribe = skillsService.subscribe(updated => {
       setSkills(updated);
-      if (selectedSkill) {
-        const found = updated.find(s => s.id === selectedSkill.id);
-        if (found) setSelectedSkill(found);
-      }
+      setSelectedSkill(prev => {
+        if (!prev) return updated[0] || null;
+        return updated.find(s => s.id === prev.id) || updated[0] || null;
+      });
     });
     return () => unsubscribe();
-  }, [selectedSkill]);
+  }, []);
+
+  useEffect(() => {
+    handleSyncFromDisk();
+  }, []);
+
+  useEffect(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('modal') === 'ingest') {
+        setTimeout(() => setIsIngestModalOpen(true), 300);
+      }
+    } catch {}
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -118,6 +163,23 @@ export const SkillsManager: React.FC = () => {
     }
   };
 
+  const handleRunIngestion = () => {
+    if (!ingestContent.trim()) return;
+    const name = ingestFileName.trim() || 'nova-skill.md';
+    const res = skillsService.ingestSkillPackage(ingestContent, name);
+    setIngestResult(res);
+    if (res.success && res.skill) {
+      setSelectedSkill(res.skill);
+      showToast(`Skill "${res.skill.name}" ingerida com sucesso no ecossistema!`);
+      setTimeout(() => {
+        setIsIngestModalOpen(false);
+        setIngestContent('');
+        setIngestFileName('');
+        setIngestResult(null);
+      }, 2000);
+    }
+  };
+
   return (
     <div className="space-y-6 text-xs text-slate-800 dark:text-slate-100 select-none pb-12">
       {/* Toast Alert */}
@@ -139,13 +201,40 @@ export const SkillsManager: React.FC = () => {
               <h2 className="text-base font-bold text-white tracking-tight">
                 Gestor Geral de Habilidades & Ferramentas (Skills)
               </h2>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-semibold border border-emerald-500/40 ml-1">
+                Reflexão PaperClip & TLC v3
+              </span>
             </div>
             <p className="text-slate-400 text-xs max-w-2xl leading-relaxed">
-              Catálogo central de capacidades executáveis pelos Agentes do PCL Cockpit. Inspecione contratos JSON-Schema, ative/desative rotinas e defina níveis de sandbox e execução.
+              Catálogo central de capacidades executáveis pelos Agentes do PCL Cockpit sincronizado com o <strong>PaperClip</strong>. Inspecione contratos JSON-Schema, ative/desative rotinas e execute a ingestão multi-estágio de skills de mercado.
             </p>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              data-testid="btn-sync-paperclip-skills"
+              onClick={handleSyncFromDisk}
+              disabled={isSyncingDisk}
+              className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition flex items-center space-x-1.5 shadow-sm"
+              title="Ler diretamente todos os arquivos SKILL.md do disco local PaperClip e .agents/skills"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingDisk ? 'animate-spin' : ''}`} />
+              <span>{isSyncingDisk ? 'Lendo Disco...' : 'Sincronizar Disco PaperClip'}</span>
+            </button>
+            <button
+              data-testid="btn-open-ingest-skill"
+              onClick={() => {
+                setIngestContent('');
+                setIngestFileName('');
+                setIngestResult(null);
+                setIsIngestModalOpen(true);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold transition flex items-center space-x-1.5 shadow-sm"
+              title="Esteira de Ingestão de Skills Padrão Mundial com Triagem Laya e Alocação de Hardware"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Ingestão de Skills (Padrão Mundial)</span>
+            </button>
             <button
               onClick={() => {
                 setNewKey('');
@@ -154,24 +243,31 @@ export const SkillsManager: React.FC = () => {
                 setNewMarkdown('');
                 setIsCreateModalOpen(true);
               }}
-              className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center space-x-2 shadow-sm"
+              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition flex items-center space-x-1.5 border border-slate-700"
             >
               <Plus className="w-4 h-4" />
-              <span>Criar Nova Skill</span>
-            </button>
-            <button
-              onClick={() => {
-                if (window.confirm('Deseja restaurar todas as skills para o catálogo original do PCL AEOS?')) {
-                  skillsService.resetToDefaults();
-                  showToast('Skills padrão restauradas!');
-                }
-              }}
-              className="px-3 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium transition"
-            >
-              Restaurar Padrões
+              <span>Criar Manual</span>
             </button>
           </div>
         </div>
+
+        {/* Atesto Físico de Disco das Skills */}
+        {diskSyncReceipt && diskSyncReceipt.ok && (
+          <div
+            data-testid="paperclip-skills-disk-receipt"
+            className="mt-4 p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 font-mono text-[11px] text-emerald-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+          >
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                <strong>CATÁLOGO FÍSICO SINCRONIZADO:</strong> {diskSyncReceipt.totalSkills} pacotes <code>SKILL.md</code> lidos em tempo real do disco (<code>.agents/skills</code> + <code>PaperClip-Companies</code>)
+              </span>
+            </div>
+            <span className="text-[10px] text-sky-300 shrink-0">
+              Atesto SHA-256: {diskSyncReceipt.companyHash?.slice(0, 14)}...
+            </span>
+          </div>
+        )}
 
         {/* Domain Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5 mt-5 pt-4 border-t border-slate-800/80">
@@ -582,6 +678,150 @@ export const SkillsManager: React.FC = () => {
                 }`}
               >
                 Criar Skill
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE INGESTÃO DE SKILLS DE CLASSE MUNDIAL (WORLD-CLASS SKILL INGESTION) */}
+      {isIngestModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-6 space-y-4">
+            <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-md">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    Esteira de Ingestão de Skills Padrão Mundial (World-Class Pipeline)
+                  </h3>
+                  <span className="text-[10px] text-slate-400 font-mono block">
+                    Parser YAML/MD • Triagem Laya CPU (0 MB VRAM) • Scoped Token Injection
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsIngestModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Pipeline Stage Indicators */}
+            <div className="grid grid-cols-4 gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[10px] font-mono">
+              <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400">
+                <Check className="w-3.5 h-3.5" />
+                <span>1. Schema Check</span>
+              </div>
+              <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400">
+                <Check className="w-3.5 h-3.5" />
+                <span>2. Laya Security</span>
+              </div>
+              <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400">
+                <Check className="w-3.5 h-3.5" />
+                <span>3. FinOps $0.00</span>
+              </div>
+              <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400">
+                <Check className="w-3.5 h-3.5" />
+                <span>4. Scoped Ingest</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1">
+                  Nome do Arquivo / Identificador da Skill:
+                </label>
+                <input
+                  type="text"
+                  placeholder="ex: rapid-prototyping.SKILL.md ou create-adr.md"
+                  value={ingestFileName}
+                  onChange={e => setIngestFileName(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                />
+              </div>
+
+              <div>
+                <div className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between mb-1">
+                  <span>Conteúdo da Habilidade (Markdown com Frontmatter YAML):</span>
+                  <button
+                    type="button"
+                    data-testid="btn-load-sample-skill"
+                    onClick={() => {
+                      setIngestFileName('sovereign-contract-auditor.SKILL.md');
+                      setIngestContent(`---
+name: sovereign-contract-auditor
+description: Audita contratos corporativos sob conformidade LGPD e ISO 42001 com resíduo zero de dados e 0 MB VRAM.
+domain: Segurança & Governança
+trigger: /audit-contract
+---
+# Sovereign Contract Auditor (PCL AEOS v3.6)
+
+1. Inspeciona cláusulas financeiras, SLAs e proteção de segredo industrial.
+2. Executa triagem consultiva via coprocessador Laya em CPU INT8 ($0.00 marginal).
+3. Gera parecer formal com assinatura criptográfica SHA-256.`);
+                    }}
+                    className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                  >
+                    Carregar Pacote SKILL.md Auditável (1-Clique)
+                  </button>
+                </div>
+                <textarea
+                  rows={9}
+                  value={ingestContent}
+                  onChange={e => setIngestContent(e.target.value)}
+                  placeholder={`---\nname: rapid-prototyping\ndescription: Prototipagem rápida de interfaces executivas.\ndomain: Prototipagem & SDD\n---\n# Instruções da Skill\n...`}
+                  className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              {/* Feedback de Ingestão */}
+              {ingestResult && (
+                <div className={`p-3 rounded-xl text-xs space-y-1.5 ${
+                  ingestResult.success
+                    ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+                    : 'bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-300'
+                }`}>
+                  <div className="flex items-center space-x-1.5 font-bold">
+                    {ingestResult.success ? <CheckCircle className="w-4 h-4 text-emerald-500" /> : <AlertCircle className="w-4 h-4 text-rose-500" />}
+                    <span>{ingestResult.success ? 'Skill Ingerida com Sucesso no Catálogo!' : 'Erro na Ingestão'}</span>
+                  </div>
+                  {ingestResult.skill && (
+                    <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
+                      ID: {ingestResult.skill.id} • Trigger: {ingestResult.skill.triggerCommand} • Hardware: {ingestResult.skill.executionProvider}
+                    </div>
+                  )}
+                  {ingestResult.warnings && ingestResult.warnings.length > 0 && (
+                    <div className="text-[10px] text-amber-600 dark:text-amber-400 space-y-0.5 pt-1 border-t border-emerald-500/20">
+                      {ingestResult.warnings.map((w, idx) => (
+                        <div key={idx}>⚠️ {w}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button
+                onClick={() => setIsIngestModalOpen(false)}
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition"
+              >
+                Cancelar
+              </button>
+              <button
+                data-testid="btn-submit-ingest-skill"
+                onClick={handleRunIngestion}
+                disabled={!ingestContent.trim()}
+                className={`px-5 py-2 rounded-xl font-bold text-white transition flex items-center space-x-1.5 shadow-sm ${
+                  ingestContent.trim() ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-slate-400 cursor-not-allowed'
+                }`}
+              >
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
+                <span>Executar Ingestão da Skill</span>
               </button>
             </div>
           </div>

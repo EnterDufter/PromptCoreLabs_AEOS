@@ -25,6 +25,18 @@ export interface Translations {
     last30days: string;
     sqliteLocal: string;
     synchronized: string;
+    storageHealthy: string;
+    storageWarning: string;
+    storageCritical: string;
+    renameConversation: string;
+    pinToTop: string;
+    unpinFromTop: string;
+    moveToProject: string;
+    shareLink: string;
+    deleteConversation: string;
+    confirmDelete: string;
+    linkCopied: string;
+    noProjectsAvailable: string;
   };
   settings: {
     title: string;
@@ -150,8 +162,20 @@ export const translations: Record<Language, Translations> = {
       last7days: 'Últimos 7 dias',
       last15days: 'Últimos 15 dias',
       last30days: 'Últimos 30 dias',
-      sqliteLocal: 'PCL SQLite Local',
-      synchronized: 'Sincronizado'
+      sqliteLocal: 'PostgreSQL 17 (:5432)',
+      synchronized: 'Sincronizado',
+      storageHealthy: 'Saudável',
+      storageWarning: 'Alerta',
+      storageCritical: 'Crítico',
+      renameConversation: 'Renomear Conversa',
+      pinToTop: 'Fixar no Topo',
+      unpinFromTop: 'Desafixar do Topo',
+      moveToProject: 'Mover para Projeto',
+      shareLink: 'Compartilhar Link',
+      deleteConversation: 'Excluir Conversa',
+      confirmDelete: 'Tem certeza que deseja excluir a conversa',
+      linkCopied: 'Link seguro da conversa copiado para a área de transferência.',
+      noProjectsAvailable: 'Nenhum projeto criado'
     },
     settings: {
       title: 'Painel Geral de Configurações & Governança',
@@ -275,8 +299,20 @@ export const translations: Record<Language, Translations> = {
       last7days: 'Last 7 days',
       last15days: 'Last 15 days',
       last30days: 'Last 30 days',
-      sqliteLocal: 'PCL SQLite Local',
-      synchronized: 'Synchronized'
+      sqliteLocal: 'PostgreSQL 17 (:5432)',
+      synchronized: 'Synchronized',
+      storageHealthy: 'Healthy',
+      storageWarning: 'Warning',
+      storageCritical: 'Critical',
+      renameConversation: 'Rename Conversation',
+      pinToTop: 'Pin to Top',
+      unpinFromTop: 'Unpin from Top',
+      moveToProject: 'Move to Project',
+      shareLink: 'Share Link',
+      deleteConversation: 'Delete Conversation',
+      confirmDelete: 'Are you sure you want to delete conversation',
+      linkCopied: 'Secure conversation link copied to clipboard.',
+      noProjectsAvailable: 'No projects created'
     },
     settings: {
       title: 'General Settings & Governance Panel',
@@ -400,8 +436,20 @@ export const translations: Record<Language, Translations> = {
       last7days: 'Últimos 7 días',
       last15days: 'Últimos 15 días',
       last30days: 'Últimos 30 días',
-      sqliteLocal: 'PCL SQLite Local',
-      synchronized: 'Sincronizado'
+      sqliteLocal: 'PostgreSQL 17 (:5432)',
+      synchronized: 'Sincronizado',
+      storageHealthy: 'Saludable',
+      storageWarning: 'Alerta',
+      storageCritical: 'Crítico',
+      renameConversation: 'Renombrar Conversación',
+      pinToTop: 'Fijar al Inicio',
+      unpinFromTop: 'Desfijar del Inicio',
+      moveToProject: 'Mover a Proyecto',
+      shareLink: 'Compartir Enlace',
+      deleteConversation: 'Eliminar Conversación',
+      confirmDelete: '¿Está seguro de que desea eliminar la conversación',
+      linkCopied: 'Enlace seguro de la conversación copiado al portapapeles.',
+      noProjectsAvailable: 'No hay proyectos creados'
     },
     settings: {
       title: 'Panel General de Configuraciones y Gobernanza',

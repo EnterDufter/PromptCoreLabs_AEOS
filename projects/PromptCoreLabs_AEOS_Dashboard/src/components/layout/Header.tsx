@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings } from 'lucide-react';
+import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings, HelpCircle, BookOpen } from 'lucide-react';
 import { Language, Theme, UserProfile } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 
@@ -12,6 +12,7 @@ interface HeaderProps {
   onOpenSettings: (tab?: string) => void;
   onToggleStatusPanel?: () => void;
   isStatusPanelOpen?: boolean;
+  onOpenHelpCenter?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -22,7 +23,8 @@ export const Header: React.FC<HeaderProps> = ({
   onThemeToggle,
   onOpenSettings,
   onToggleStatusPanel,
-  isStatusPanelOpen = false
+  isStatusPanelOpen = false,
+  onOpenHelpCenter
 }) => {
   const { t } = useI18n();
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -51,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-2">
             <span className="font-semibold text-sm tracking-tight">PCL Cockpit</span>
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-700 font-semibold">
-              v3.8.0 PROD
+              v3.9.0 PROD
             </span>
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 block -mt-0.5 font-sans">
@@ -65,23 +67,67 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right User & Controls */}
       <div className="flex items-center space-x-2">
-        {/* Botão de Atalho no Header: Telemetria & Status em Tempo Real */}
+        {/* Botão de Atalho no Header: Velocímetro Turbo + Raio ⚡ (Telemetria & Status) */}
         {onToggleStatusPanel && (
-          <button
-            onClick={onToggleStatusPanel}
-            className={`px-2.5 py-1.5 rounded-lg border text-xs font-medium transition flex items-center space-x-1.5 ${
-              isStatusPanelOpen
-                ? 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-400 text-emerald-700 dark:text-emerald-300 shadow-xs'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-700'
-            }`}
-            title="Alternar Painel Lateral de Status & Telemetria"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="hidden sm:inline">{t.header.telemetry}</span>
-          </button>
+          <div className="relative group">
+            <button
+              onClick={onToggleStatusPanel}
+              className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                isStatusPanelOpen
+                  ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-md shadow-emerald-500/25'
+                  : 'bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30'
+              }`}
+              title="Telemetria & Status em Tempo Real"
+              aria-label="Telemetria & Status em Tempo Real"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {/* Arco do medidor / tacômetro */}
+                <path d="M 3.5 13.5 A 7 7 0 1 1 15 13.5" strokeWidth="1.75" />
+                {/* Escala interna discreta */}
+                <path d="M 5.5 12 A 5 5 0 1 1 13 12" strokeWidth="1" opacity={isStatusPanelOpen ? "0.6" : "0.35"} strokeDasharray="1 1.5" />
+                {/* Ponteiro calibrado a 45° na faixa de atividade */}
+                <path d="M 9.5 10.5 L 13.5 6.5" strokeWidth="1.6" />
+                <circle cx="9.5" cy="10.5" r="1.5" fill="currentColor" stroke="none" />
+                {/* Raio elétrico de pulso instantâneo */}
+                <path d="M 14.5 11.5 L 12 15 L 14.5 15 L 13 19 L 18 13.5 L 15.5 13.5 Z" fill="currentColor" stroke="none" />
+              </svg>
+
+              {/* Micro-dot indicador de saúde (visível quando a aba estiver fechada) */}
+              {!isStatusPanelOpen && (
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
+              )}
+            </button>
+
+            {/* Tooltip flutuante discreto */}
+            <div className="absolute -bottom-8 right-0 px-2 py-0.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950 text-[10px] font-medium rounded shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+              {t.header.telemetry || 'Telemetria & Status'}
+            </div>
+          </div>
+        )}
+
+        {/* Botão de Atalho no Header: Central de Ajuda (Help Center) */}
+        {onOpenHelpCenter && (
+          <div className="relative group">
+            <button
+              onClick={onOpenHelpCenter}
+              className="w-9 h-9 rounded-lg border flex items-center justify-center transition-all duration-200 cursor-pointer bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-500/50 hover:bg-sky-50/50 dark:hover:bg-sky-950/30 shadow-sm"
+              title="Central de Ajuda & Guia Operacional"
+              aria-label="Central de Ajuda"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </button>
+            <div className="absolute -bottom-8 right-0 px-2 py-0.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950 text-[10px] font-medium rounded shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+              Central de Ajuda
+            </div>
+          </div>
         )}
 
         {/* Clickable User Avatar & Dropdown */}
@@ -154,6 +200,16 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               <div className="py-1">
+                {onOpenHelpCenter && (
+                  <button
+                    onClick={() => { setShowUserDropdown(false); onOpenHelpCenter(); }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center space-x-2 text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 text-sky-500" />
+                    <span className="font-medium">Central de Ajuda (Help Center)</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => { setShowUserDropdown(false); onOpenSettings(); }}
                   className="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center space-x-2 text-slate-700 dark:text-slate-300"

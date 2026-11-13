@@ -9,9 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@antv/infographic": "^0.2.20",
+    "@orama/orama": "^3.1.18",
+    "@tanstack/react-table": "^9.3.1",
+    "@types/pg": "^8.23.1",
+    "@types/reveal.js": "^5.2.2",
+    "echarts": "^6.1.0",
     "lucide-react": "^0.344.0",
+    "mammoth": "^1.13.0",
+    "markmap-lib": "^0.18.13",
+    "markmap-view": "^0.18.13",
+    "mermaid": "^12.3.0",
+    "pdfjs-dist": "^6.5.438",
+    "pg": "^8.23.1",
+    "pptxgenjs": "^4.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reveal.js": "^6.0.2",
+    "sucrase": "^3.35.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",

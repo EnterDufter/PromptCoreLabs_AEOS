@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, Bot, GitBranch, Plus, Search, ShieldCheck, Zap, 
   Settings, Trash2, Edit3, Power, CheckCircle, AlertTriangle, 
-  Cpu, HardDrive, DollarSign, X, HelpCircle, Layers
+  Cpu, HardDrive, DollarSign, X, HelpCircle, Layers, Upload, FileCode, Check, RefreshCw
 } from 'lucide-react';
 import { squadService, SquadDefinition, AgentDefinition } from '../../services/admin/squadService';
 import { skillsService } from '../../services/admin/skillsService';
@@ -10,6 +10,16 @@ import { skillsService } from '../../services/admin/skillsService';
 export const AgentSquadOrgChart: React.FC = () => {
   const [squads, setSquads] = useState<SquadDefinition[]>(squadService.getSquads());
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSyncingDisk, setIsSyncingDisk] = useState(false);
+  const [diskSyncReceipt, setDiskSyncReceipt] = useState<{
+    ok: boolean;
+    totalSquads: number;
+    totalAgents: number;
+    companyHash?: string;
+    repoPath?: string;
+    syncedAt?: string;
+    error?: string;
+  } | null>(null);
   
   // Modals state
   const [isSquadModalOpen, setIsSquadModalOpen] = useState(false);
@@ -18,6 +28,12 @@ export const AgentSquadOrgChart: React.FC = () => {
   const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
   const [targetSquadId, setTargetSquadId] = useState<string>('');
   const [editingAgent, setEditingAgent] = useState<AgentDefinition | null>(null);
+
+  // Universal Orchestrator Importer Modal state
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importFormat, setImportFormat] = useState<'paperclip' | 'langchain' | 'crewai' | 'autogen'>('paperclip');
+  const [importContent, setImportContent] = useState('');
+  const [importFeedback, setImportFeedback] = useState<string | null>(null);
 
   // Form states for Squad
   const [squadName, setSquadName] = useState('');
@@ -36,11 +52,29 @@ export const AgentSquadOrgChart: React.FC = () => {
 
   const availableSkills = skillsService.getSkills();
 
+  const handleSyncFromDisk = async () => {
+    setIsSyncingDisk(true);
+    const res = await squadService.syncFromPaperClipDisk();
+    setDiskSyncReceipt(res);
+    setIsSyncingDisk(false);
+  };
+
   useEffect(() => {
     const unsubscribe = squadService.subscribe(updatedSquads => {
       setSquads(updatedSquads);
     });
+    // Sincroniza automaticamente do repositório físico PaperClip em disco ao abrir o painel
+    handleSyncFromDisk();
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('modal') === 'import') {
+        setTimeout(() => setIsImportModalOpen(true), 300);
+      }
+    } catch {}
   }, []);
 
   // Stats calculation
@@ -192,6 +226,19 @@ export const AgentSquadOrgChart: React.FC = () => {
     }
   };
 
+  const handleImportOrchestrator = () => {
+    if (!importContent.trim()) return;
+    const res = squadService.importOrchestratorConfig(importFormat, importContent);
+    setImportFeedback(res.message);
+    if (res.success) {
+      setTimeout(() => {
+        setIsImportModalOpen(false);
+        setImportContent('');
+        setImportFeedback(null);
+      }, 1500);
+    }
+  };
+
   return (
     <div className="space-y-6 text-xs text-slate-800 dark:text-slate-100 select-none pb-12">
       {/* Top Banner & Control Bar */}
@@ -205,33 +252,66 @@ export const AgentSquadOrgChart: React.FC = () => {
               <h2 className="text-base font-bold text-white tracking-tight">
                 Organograma Hierárquico de Squads & Agentes
               </h2>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-semibold border border-emerald-500/40 ml-1">
+                🔗 Sincronizado com PaperClip (promptcore-labs v2.0)
+              </span>
             </div>
             <p className="text-slate-400 text-xs max-w-2xl leading-relaxed">
-              Estrutura viva de inteligências autônomas distribuídas. Crie novos squads corporativos, aloque agentes especializados e defina níveis de autonomia e governança.
+              Estrutura viva de inteligências autônomas distribuídas refletindo o repositório <strong>PaperClip</strong>. Importe orquestradores (LangChain, CrewAI, AutoGen) ou cadastre agentes com alocação de hardware e FinOps local ($0.00).
             </p>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              data-testid="btn-sync-paperclip-squads"
+              onClick={handleSyncFromDisk}
+              disabled={isSyncingDisk}
+              className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold transition flex items-center space-x-1.5 shadow-sm"
+              title="Ler diretamente os arquivos AGENTS.md e teams/*.yaml do disco local PaperClip"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingDisk ? 'animate-spin' : ''}`} />
+              <span>{isSyncingDisk ? 'Lendo Disco...' : 'Sincronizar Disco PaperClip'}</span>
+            </button>
+            <button
+              data-testid="btn-open-import-orchestrator"
+              onClick={() => {
+                setImportContent('');
+                setImportFeedback(null);
+                setIsImportModalOpen(true);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition flex items-center space-x-1.5 shadow-sm"
+              title="Importar configurações de orquestradores agênticos (PaperClip, LangChain, CrewAI, AutoGen)"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Importar Orquestrador</span>
+            </button>
             <button
               onClick={handleOpenNewSquadModal}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition flex items-center space-x-2 shadow-sm"
+              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition flex items-center space-x-1.5 shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>Novo Squad</span>
             </button>
-            <button
-              onClick={() => {
-                if (window.confirm('Deseja restaurar os squads e agentes canônicos padrão?')) {
-                  squadService.resetToDefaults();
-                }
-              }}
-              className="px-3 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium transition"
-              title="Restaurar Squads Originais PCL AEOS"
-            >
-              Restaurar Padrões
-            </button>
           </div>
         </div>
+
+        {/* Atesto de Sincronização Física de Disco (Zero Mocks) */}
+        {diskSyncReceipt && diskSyncReceipt.ok && (
+          <div
+            data-testid="paperclip-squads-disk-receipt"
+            className="mt-4 p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 font-mono text-[11px] text-emerald-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+          >
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                <strong>DISCO FÍSICO AUDITADO:</strong> {diskSyncReceipt.totalSquads} Clusters • {diskSyncReceipt.totalAgents} Agentes reais lidos de <code>{diskSyncReceipt.repoPath}</code>
+              </span>
+            </div>
+            <span className="text-[10px] text-sky-300 shrink-0">
+              COMPANY.md SHA-256: {diskSyncReceipt.companyHash?.slice(0, 14)}...
+            </span>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-800/80">
@@ -713,6 +793,141 @@ export const AgentSquadOrgChart: React.FC = () => {
                 }`}
               >
                 Salvar Agente
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE IMPORTAÇÃO UNIVERSAL DE ORQUESTRADORES (PaperClip / LangChain / CrewAI / AutoGen) */}
+      {isImportModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-6 space-y-4">
+            <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center border border-emerald-500/20">
+                  <Upload className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    Importador Universal de Orquestradores Agênticos
+                  </h3>
+                  <span className="text-[10px] text-slate-400 font-mono block">
+                    Compatível com PaperClip (.yaml/.md), LangChain, CrewAI e AutoGen
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsImportModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Seletor de Formato */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block">
+                Formato do Orquestrador de Origem:
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { id: 'paperclip', label: 'PaperClip' },
+                  { id: 'langchain', label: 'LangChain' },
+                  { id: 'crewai', label: 'CrewAI' },
+                  { id: 'autogen', label: 'AutoGen' }
+                ].map(fmt => (
+                  <button
+                    key={fmt.id}
+                    onClick={() => setImportFormat(fmt.id as any)}
+                    className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition ${
+                      importFormat === fmt.id
+                        ? 'bg-emerald-600 text-white border-emerald-500 shadow-xs'
+                        : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                    }`}
+                  >
+                    {fmt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Caixa de Texto do Conteúdo do Arquivo */}
+            <div className="space-y-1.5">
+              <div className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                <span>Cole o conteúdo do arquivo (.yaml, .md ou .json):</span>
+                <button
+                  type="button"
+                  data-testid="btn-load-sample-orchestrator"
+                  onClick={() => {
+                    setImportFormat('crewai');
+                    setImportContent(
+                      JSON.stringify(
+                        [
+                          {
+                            name: 'Auditor LGPD & ISO 42001',
+                            role: 'Validação contínua de resíduo zero de dados e contratos corporativos',
+                            model: 'Ollama qwen2.5-coder:7b-instruct-q4_K_M ($0.00)',
+                            tools: ['pii-redactor-guard', 'tlc-spec-driven']
+                          },
+                          {
+                            name: 'Analista FinOps Soberano',
+                            role: 'Monitoramento de economia marginal $0.00 vs APIs de nuvem',
+                            model: 'FastMCP CPU INT8 (:20140)',
+                            tools: ['ai-pricing', 'cortex']
+                          }
+                        ],
+                        null,
+                        2
+                      )
+                    );
+                  }}
+                  className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                >
+                  Carregar Exemplo Auditável CrewAI (1-Clique)
+                </button>
+              </div>
+              <textarea
+                rows={8}
+                value={importContent}
+                onChange={e => setImportContent(e.target.value)}
+                placeholder={
+                  importFormat === 'paperclip'
+                    ? "Cole o conteúdo de .paperclip.yaml ou COMPANY.md (ex: agents: ceo: tier: TIER-1)..."
+                    : "Cole o JSON ou YAML de configuração de agentes..."
+                }
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              />
+            </div>
+
+            {/* Feedback Message */}
+            {importFeedback && (
+              <div className={`p-2.5 rounded-xl text-xs font-semibold flex items-center space-x-2 ${
+                importFeedback.startsWith('Sucesso')
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30'
+              }`}>
+                <span>{importFeedback}</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button
+                onClick={() => setIsImportModalOpen(false)}
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition"
+              >
+                Cancelar
+              </button>
+              <button
+                data-testid="btn-submit-import-orchestrator"
+                onClick={handleImportOrchestrator}
+                disabled={!importContent.trim()}
+                className={`px-4 py-2 rounded-xl font-bold text-white transition flex items-center space-x-1.5 shadow-sm ${
+                  importContent.trim() ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-slate-400 cursor-not-allowed'
+                }`}
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Processar Ingestão</span>
               </button>
             </div>
           </div>

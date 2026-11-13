@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Artifact } from '../../types';
 import { headlessByosService, ByosSyncResult } from '../../services/storage/headlessByosService';
+import { RichArtifactViewer } from './RichArtifactViewer';
 
 interface PCLArtifactDrawerProps {
   artifact: Artifact | null;
@@ -19,10 +20,10 @@ export const PCLArtifactDrawer: React.FC<PCLArtifactDrawerProps> = ({ artifact, 
   const [byosResult, setByosResult] = useState<ByosSyncResult | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // Redimensionamento horizontal arrastável (380px a 850px) com persistência
+  // Redimensionamento horizontal arrastável (420px a 1020px) com largura padrão ampla (780px)
   const [drawerWidth, setDrawerWidth] = useState<number>(() => {
-    const saved = localStorage.getItem('pcl_drawer_width');
-    return saved ? Math.min(850, Math.max(380, parseInt(saved, 10))) : 580;
+    const saved = localStorage.getItem('pcl_drawer_width_v2');
+    return saved ? Math.min(1020, Math.max(420, parseInt(saved, 10))) : 780;
   });
   const isDraggingRef = useRef(false);
 
@@ -47,7 +48,7 @@ export const PCLArtifactDrawer: React.FC<PCLArtifactDrawerProps> = ({ artifact, 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!isDraggingRef.current) return;
       const newWidth = window.innerWidth - moveEvent.clientX;
-      const clampedWidth = Math.min(850, Math.max(380, newWidth));
+      const clampedWidth = Math.min(1020, Math.max(420, newWidth));
       setDrawerWidth(clampedWidth);
     };
 
@@ -55,7 +56,7 @@ export const PCLArtifactDrawer: React.FC<PCLArtifactDrawerProps> = ({ artifact, 
       isDraggingRef.current = false;
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      localStorage.setItem('pcl_drawer_width', drawerWidth.toString());
+      localStorage.setItem('pcl_drawer_width_v2', drawerWidth.toString());
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
@@ -98,7 +99,7 @@ export const PCLArtifactDrawer: React.FC<PCLArtifactDrawerProps> = ({ artifact, 
   return (
     <div 
       style={{ width: `${drawerWidth}px` }}
-      className="fixed inset-y-0 right-0 w-full max-w-full bg-white dark:bg-slate-950 border-l border-slate-200 dark:border-slate-800/80 shadow-2xl z-50 flex flex-col select-none animate-in slide-in-from-right duration-200 transition-[width] ease-out"
+      className="fixed inset-y-0 right-0 w-full max-w-full bg-white dark:bg-slate-950 border-l border-slate-200 dark:border-slate-800/80 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-200 transition-[width] ease-out"
     >
       {/* Barra de Arraste Esquerda (Draggable Resize Handle) */}
       <div 
@@ -239,18 +240,9 @@ export const PCLArtifactDrawer: React.FC<PCLArtifactDrawerProps> = ({ artifact, 
 
       {/* Conteúdo das Abas */}
       <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs font-sans text-slate-800 dark:text-slate-200 custom-scrollbar">
-        {/* Aba 1: Documento */}
+        {/* Aba 1: Visualizador Multimodal Rico */}
         {activeTab === 'doc' && (
-          <div className="space-y-4">
-            <div className="p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/80 dark:border-slate-800 text-xs">
-              <span className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Resumo Executivo</span>
-              <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{artifact.summary}</p>
-            </div>
-
-            <div className="prose dark:prose-invert max-w-none text-xs font-mono bg-slate-900 text-slate-100 p-4 rounded-xl border border-slate-800 overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-inner">
-              {artifact.content}
-            </div>
-          </div>
+          <RichArtifactViewer artifact={artifact} />
         )}
 
         {/* Aba 2: Cortex DAG Live */}

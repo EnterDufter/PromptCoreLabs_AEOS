@@ -2,12 +2,14 @@
 
 <img src="projects/Living%20Architecture%20PCL%20AEOS/diagrams/assets/PCL_Logo_Transparente.png" width="160" alt="PromptCore Labs Logo" />
 
-# PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.8
-### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor, PCL Cockpit & Living Architecture
+# PromptCoreLabs_AEOS (AI Engineering Operating System) — v3.9
+### Plataforma de Engenharia de Inteligência Artificial Soberana, Multi-Provedor, PCL Cockpit, Central de Artefatos & Living Architecture
 
-[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages_v3.8-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
-[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.8_:3001-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
-[![Companion Extension](https://img.shields.io/badge/Companion_Extension-Manifest_V3-10b981?style=for-the-badge)](projects/pcl-cockpit-extension)
+[![GitHub Pages](https://img.shields.io/badge/Portal_Interativo-GitHub_Pages_v3.9-38bdf8?style=for-the-badge&logo=github)](https://enterdufter.github.io/PromptCoreLabs_AEOS/)
+[![PCL Cockpit](https://img.shields.io/badge/PCL_Cockpit-v3.9_:3001-38bdf8?style=for-the-badge&logo=react)](projects/PromptCoreLabs_AEOS_Dashboard)
+[![Central de Artefatos](https://img.shields.io/badge/Artefatos_Multimodais-PPTX%20%7C%20XLSX%20%7C%20SVG-purple?style=for-the-badge)](knowledge/warm/architecture/ADR-0016.md)
+[![MCP Soberano](https://img.shields.io/badge/Servidor_MCP-stdio_JSON--RPC_2.0-blue?style=for-the-badge)](knowledge/warm/architecture/ADR-0015.md)
+[![Help Center](https://img.shields.io/badge/Help_Center-9_Capítulos_Oficiais-indigo?style=for-the-badge)](knowledge/warm/cockpit/PCL_COCKPIT_HELP_CENTER_MANUAL.md)
 [![FinOps EBITDA Shield](https://img.shields.io/badge/FinOps_ROI-$180k%2Fano_poupados-emerald?style=for-the-badge)](#-simulador-de-roi-soberano-cfo-ebitda-shield-v2)
 [![Benchmark Cego](https://img.shields.io/badge/Benchmark_Cego-4.95_%2F_5.0_(1º_Lugar)-10b981?style=for-the-badge)](#-benchmark-empírico-cego-pcl-cockpit-v38-vs-provedores-globais)
 [![Hardware](https://img.shields.io/badge/Laya_CPU_INT8-0_MB_VRAM-8b5cf6?style=for-the-badge)](#-indicadores-canônicos--medições-de-engenharia-v38)
@@ -16,7 +18,7 @@
 
 </div>
 
-## 💡 O que é o PCL AEOS v3.8?
+## 💡 O que é o PCL AEOS v3.9?
 
 A **PromptCore Labs** desenvolveu o **PCL AEOS** (*AI Engineering Operating System*) para resolver a maior dor da inteligência artificial corporativa moderna: a perda de controle sobre seus dados e a dependência financeira de Big Techs estrangeiras. 
 
@@ -28,7 +30,10 @@ Ele é uma **infraestrutura soberana de inteligência** que une executivos, espe
 > 
 > Enquanto as grandes plataformas cobram faturas recorrentes em dólar por usuário (US$ 60/mês no ChatGPT Enterprise ou US$ 30/mês no Claude Team), operam como "caixas-pretas" imprevisíveis e exigem o envio de dados confidenciais para a nuvem de terceiros:
 > 
-> * **🏆 Liderança Global Comprovada (Nota 4.95 / 5.0):** Em uma rigorosa *Avaliação Técnica Duplo-Cega Imparcial* — onde especialistas auditaram a qualidade das respostas sem saber a marca da IA —, o **PCL Cockpit v3.8** conquistou o **1º lugar absoluto**, superando **Google Gemini** (`4.45`), **OpenAI ChatGPT Enterprise** (`4.30`) e **Microsoft Copilot** (`3.80`).
+> * **🏆 Liderança Global Comprovada (Nota 4.95 / 5.0):** Em uma rigorosa *Avaliação Técnica Duplo-Cega Imparcial* — onde especialistas auditaram a qualidade das respostas sem saber a marca da IA —, o **PCL Cockpit v3.9** conquistou o **1º lugar absoluto**, superando **Google Gemini** (`4.45`), **OpenAI ChatGPT Enterprise** (`4.30`) e **Microsoft Copilot** (`3.80`).
+> * **📦 Central de Artefatos Multimodais (ADR-0016):** Exportação executiva nativa em PowerPoint (`.pptx`), Excel (`.xlsx`), SVG vetorial, aplicações web interativas (HTML5 Sandbox) e Markdown gerados diretamente no navegador sem ferramentas externas pagas.
+> * **🔌 Servidor MCP Soberano Nativo (ADR-0015):** Protocolo aberto Model Context Protocol operando via `stdio` com inventário de skills em tempo real e atesto matemático SHA-256 a custo marginal `$0.00`.
+> * **📖 Central de Ajuda & Guia Operacional (Help Center):** 9 capítulos canônicos integrados in-app no Cockpit (`:3001`), na GitHub Page e no acervo de RAG, cobrindo todas as telas, módulos, 8 abas de configuração, dicionário de parâmetros e matriz de portas locais.
 > * **🛡️ Segredo Corporativo Blindado (Resíduo Zero de Dados / BYOS):** Seus planos estratégicos, balanços e dados de clientes nunca saem do perímetro da sua empresa, nunca são usados para treinar modelos de terceiros e cumprem 100% à LGPD e ISO/IEC 42001.
 > * **💰 FinOps Imbatível (Custo Marginal $0.00 & EBITDA Shield):** Ao operar em modo local soberano, sua organização realiza milhões de tokens analíticos sem pagar faturas extras por pergunta, retendo **US$ 180.000,00 / ~R$ 1.026.000,00 ao ano** para cada 250 colaboradores no balanço da empresa.
 > * **👑 Autoridade Humana Inegociável (TLC-v3 Escalation Ladder):** A IA audita, calcula e sugere; a aprovação de risco crítico passa pelo *Trivial Gate HitL* em 2 estágios (escalação N2 para diretoria aos 60s e descarte seguro aos 120s com 0 memory leak).
@@ -37,11 +42,11 @@ Ele é uma **infraestrutura soberana de inteligência** que une executivos, espe
 
 > [!NOTE]
 > **🛠️ Visão de Engenharia & Invariantes Físicos (Para Arquitetos e Desenvolvedores):**  
-> Harness agêntico desacoplado regido pela norma **`PCL-AEOS-NORM-01`** (`AGENTS.md`) e metodologia **TLC Spec-Driven v3**, articulando: (1) **Memória Dual** — *Temporal em Runtime* (`Sliding Window Multi-Turn` + PostgreSQL 17 `PGVector 768D` em `memory.*`) e *Governança Física RAG* (`knowledge/warm/`, `cold/`, `learnings/`); (2) **Coprocessador Laya System One (`:20140`)** operando em **100% CPU (`0 MB VRAM`, `~18–25ms`)** para *Intention Gating* e detecção de contradições em CPU INT8; (3) **OmniRoute Gateway (`:20130`)** com failover determinístico multi-provedor (14.81ms) e trava física *Hard Lock*; e (4) **Extensão Manifest V3** com encapsulamento por **Shadow DOM** (`mode: 'open'`) e *Inline Action Dock* in-situ.
+> Harness agêntico desacoplado regido pela norma **`PCL-AEOS-NORM-01`** (`AGENTS.md`) e metodologia **TLC Spec-Driven v3**, articulando: (1) **Memória Dual & Persistência Isolada** — *Temporal em Runtime* (`cockpit.*` no PostgreSQL 17 + DRP Cloudflare R2 com barra semântica tricolor) e *Governança Física RAG* (`knowledge/warm/`, `cold/`, `learnings/`); (2) **Coprocessador Laya System One (`:20140`)** operando em **100% CPU (`0 MB VRAM`, `~18–25ms`)** para *Intention Gating* e detecção de contradições em CPU INT8; (3) **Servidor MCP Soberano stdio** (`scripts/pcl-sovereign-mcp-server.mjs`) expondo inventário de workspace com hash SHA-256; (4) **OmniRoute Gateway (`:20130`)** com failover determinístico multi-provedor (14.81ms) e trava física *Hard Lock*; e (5) **Extensão Manifest V3** com encapsulamento por **Shadow DOM** (`mode: 'open'`) e *Inline Action Dock* in-situ.
 
-> 🌐 **Explore o Portal Interativo de Arquitetura Viva (GitHub Pages — Edição v3.8):**  
-> Com seletor cognitivo em 1 clique (**⚡ Dual Completa** | **👔 Executiva** | **🛠️ Engenharia**), diagramas interativos em tela cheia do **PCL Cortex** e leitura assistida em modais UTF-8 puros:  
-> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)** · 📖 **[Especificação Mestra Cockpit v3.8](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.8.md)**
+> 🌐 **Explore o Portal Interativo de Arquitetura Viva (GitHub Pages — Edição v3.9):**  
+> Com seletor cognitivo em 1 clique (**⚡ Dual Completa** | **👔 Executiva** | **🛠️ Engenharia**), diagramas interativos em tela cheia do **PCL Cortex**, Central de Ajuda com 9 capítulos e leitura assistida em modais UTF-8 puros:  
+> 👉 **[https://enterdufter.github.io/PromptCoreLabs_AEOS/](https://enterdufter.github.io/PromptCoreLabs_AEOS/)** · 📖 **[Especificação Mestra Cockpit v3.9](knowledge/warm/cockpit/PCL_COCKPIT_SPEC_V3.9.md)** · 📚 **[Manual Help Center v3.9](knowledge/warm/cockpit/PCL_COCKPIT_HELP_CENTER_MANUAL.md)**
 
 ---
 

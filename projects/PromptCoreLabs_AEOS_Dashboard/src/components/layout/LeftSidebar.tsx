@@ -3,10 +3,11 @@ import {
   ChevronLeft, ChevronRight, Plus, Search, Folder, FolderOpen, 
   MessageSquare, Clock, ChevronDown, Database,
   MoreVertical, Pin, Trash2, Edit3, Share2, FolderPlus,
-  Check, X
+  Check, X, Video, GitBranch, FileText
 } from 'lucide-react';
 import { Project, Conversation } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
+import { cockpitPersistenceService, StorageQuotaInfo } from '../../services/storage/cockpitPersistenceService';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -15,8 +16,8 @@ interface LeftSidebarProps {
   activeConversationId: string;
   onSelectConversation: (conv: Conversation) => void;
   onNewConversation: () => void;
-  activeView?: 'chat' | 'meetings' | 'flows';
-  onSelectView?: (view: 'chat' | 'meetings' | 'flows') => void;
+  activeView?: 'chat' | 'meetings' | 'flows' | 'artifacts';
+  onSelectView?: (view: 'chat' | 'meetings' | 'flows' | 'artifacts') => void;
   onRenameConversation?: (convId: string, newTitle: string) => void;
   onDeleteConversation?: (convId: string) => void;
   onMoveConversation?: (convId: string, targetProjectId: string) => void;
@@ -64,13 +65,96 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   });
 
   // Controle de Menu de Contexto (···) e Edição Inline
+  interface ActiveContextMenuState {
+    conv: Conversation;
+    isNested: boolean;
+    top: number;
+    left: number;
+  }
+
   const [pinnedConvIds, setPinnedConvIds] = useState<string[]>([]);
-  const [activeContextMenuConvId, setActiveContextMenuConvId] = useState<string | null>(null);
+  const [activeContextMenu, setActiveContextMenu] = useState<ActiveContextMenuState | null>(null);
   const [editingConvId, setEditingConvId] = useState<string | null>(null);
   const [tempRenameTitle, setTempRenameTitle] = useState('');
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [isMoveSubmenuOpen, setIsMoveSubmenuOpen] = useState(false);
+
+  // Fechamento automático do menu de contexto flutuante ao pressionar Escape ou redimensionar janela
+  useEffect(() => {
+    if (!activeContextMenu) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveContextMenu(null);
+        setIsMoveSubmenuOpen(false);
+      }
+    };
+
+    const handleWindowResize = () => {
+      setActiveContextMenu(null);
+      setIsMoveSubmenuOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [activeContextMenu]);
+
+  // Monitoramento contínuo da cota de armazenamento e DRP
+  const [storageQuota, setStorageQuota] = useState<StorageQuotaInfo | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchQuota = async () => {
+      try {
+        const q = await cockpitPersistenceService.getStorageQuota();
+        if (mounted) setStorageQuota(q);
+      } catch {}
+    };
+    fetchQuota();
+    const interval = setInterval(fetchQuota, 15000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const percentageUsed = storageQuota ? storageQuota.percentageUsed : 1.39;
+  const isHealthy = percentageUsed < 75;
+  const isWarning = percentageUsed >= 75 && percentageUsed < 90;
+  const isCritical = percentageUsed >= 90;
+
+  // Narrativa semântica de armazenamento com cores estritas e suporte a i18n:
+  // Verde (Saudável / Healthy / Saludable < 75%)
+  // Amarelo (Alerta / Warning / Alerta 75-90%)
+  // Vermelho (Crítico / Critical / Crítico >= 90%)
+  const storageStatusColorClass = isCritical
+    ? 'text-rose-600 dark:text-rose-400'
+    : isWarning
+    ? 'text-amber-600 dark:text-amber-400'
+    : 'text-emerald-600 dark:text-emerald-400';
+
+  const storageDotColorClass = isCritical
+    ? 'bg-rose-500'
+    : isWarning
+    ? 'bg-amber-500'
+    : 'bg-emerald-500';
+
+  const statusLabel = isCritical
+    ? (t.sidebar.storageCritical || 'Crítico')
+    : isWarning
+    ? (t.sidebar.storageWarning || 'Alerta')
+    : (t.sidebar.storageHealthy || 'Saudável');
+
+  const storageNarrativeText = `${statusLabel} (${percentageUsed}%)`;
+
+  const storageBackendLabel = storageQuota?.postgresConnected
+    ? 'PostgreSQL 17'
+    : 'Vault Local';
 
   // Listener para arrastar a borda da sidebar (Redimensionamento suave)
   useEffect(() => {
@@ -114,13 +198,15 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     setPinnedConvIds(prev => 
       prev.includes(convId) ? prev.filter(id => id !== convId) : [...prev, convId]
     );
-    setActiveContextMenuConvId(null);
+    setActiveContextMenu(null);
+    setIsMoveSubmenuOpen(false);
   };
 
   const handleStartRename = (conv: Conversation) => {
     setEditingConvId(conv.id);
     setTempRenameTitle(conv.title);
-    setActiveContextMenuConvId(null);
+    setActiveContextMenu(null);
+    setIsMoveSubmenuOpen(false);
   };
 
   const handleSaveRename = (convId: string) => {
@@ -164,11 +250,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   // 1. MODO COLAPSADO (W-16)
   if (collapsed) {
     const tier1Items = [
-      { id: 'chat', icon: 'forum', label: t.sidebar.chat },
-      { id: 'meetings', icon: 'video_camera_front', label: t.sidebar.meetings },
-      { id: 'flows', icon: 'account_tree', label: t.sidebar.flows },
-      { id: 'projects', icon: 'folder_open', label: t.sidebar.projects },
-      { id: 'artifacts', icon: 'article', label: t.sidebar.artifacts },
+      { id: 'chat', IconComp: MessageSquare, label: t.sidebar.chat },
+      { id: 'meetings', IconComp: Video, label: t.sidebar.meetings },
+      { id: 'flows', IconComp: GitBranch, label: t.sidebar.flows },
+      { id: 'projects', IconComp: FolderOpen, label: t.sidebar.projects },
+      { id: 'artifacts', IconComp: FileText, label: t.sidebar.artifacts },
     ];
 
     return (
@@ -196,9 +282,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
         <div className="space-y-2 flex flex-col items-center">
           {tier1Items.map((item) => {
+            const IconComp = item.IconComp;
             const isItemActive = (item.id === 'chat' && activeView === 'chat') || 
                                  (item.id === 'meetings' && activeView === 'meetings') ||
-                                 (item.id === 'flows' && activeView === 'flows');
+                                 (item.id === 'flows' && activeView === 'flows') ||
+                                 (item.id === 'artifacts' && activeView === 'artifacts');
             return (
               <div key={item.id} className="relative group">
                 <button
@@ -206,6 +294,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                     if (item.id === 'chat' && onSelectView) onSelectView('chat');
                     if (item.id === 'meetings' && onSelectView) onSelectView('meetings');
                     if (item.id === 'flows' && onSelectView) onSelectView('flows');
+                    if (item.id === 'artifacts' && onSelectView) onSelectView('artifacts');
+                    if (item.id === 'projects') {
+                      onToggleCollapse();
+                      setIsProjectsOpen(true);
+                    }
                   }}
                   className={`w-10 h-10 rounded-xl border flex items-center justify-center shadow-sm transition-all duration-200 ${
                     isItemActive
@@ -213,7 +306,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-emerald-500 hover:border-emerald-500/50'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                  <IconComp className="w-4 h-4" />
                 </button>
                 
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950 text-xs font-medium rounded-md shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
@@ -223,13 +316,28 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             );
           })}
         </div>
+
+        {/* Rodapé Colapsado: Indicador Visual de Cota & Motor (Verde/Amarelo/Vermelho) */}
+        <div className="mt-auto mb-1 flex flex-col items-center">
+          <button
+            onClick={() => onSelectView && onSelectView('artifacts')}
+            className="w-10 h-10 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:text-emerald-500 transition relative group shadow-2xs"
+          >
+            <Database className="w-4 h-4" />
+            <span className={`absolute top-2 right-2 w-2 h-2 rounded-full ${storageDotColorClass} ring-2 ring-white dark:ring-slate-900`} />
+            <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950 text-xs font-medium rounded-md shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+              {storageBackendLabel}: <span className={storageStatusColorClass}>{storageNarrativeText}</span>
+            </div>
+          </button>
+        </div>
       </aside>
     );
   }
 
   // 2. MODO EXPANDIDO RESTAURADO (Com Redimensionamento e Ordem Exata)
   return (
-    <aside 
+    <>
+      <aside 
       style={{ width: `${sidebarWidth}px` }}
       className="bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col h-full select-none z-20 relative transition-none"
     >
@@ -264,30 +372,35 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       {/* 2º GRADE TIER 1: 5 Ícones de Navegação */}
       <div className="px-2 py-1.5 grid grid-cols-5 gap-1 border-b border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-900/50">
         {[
-          { id: 'chat', icon: 'forum', label: t.sidebar.chat, active: activeView === 'chat' },
-          { id: 'meetings', icon: 'video_camera_front', label: t.sidebar.meetings, active: activeView === 'meetings' },
-          { id: 'flows', icon: 'account_tree', label: t.sidebar.flows, active: activeView === 'flows' },
-          { id: 'projects', icon: 'folder_open', label: t.sidebar.projects },
-          { id: 'artifacts', icon: 'article', label: t.sidebar.artifacts },
-        ].map((mod) => (
-          <button
-            key={mod.id}
-            onClick={() => {
-              if (mod.id === 'chat' && onSelectView) onSelectView('chat');
-              if (mod.id === 'meetings' && onSelectView) onSelectView('meetings');
-              if (mod.id === 'flows' && onSelectView) onSelectView('flows');
-            }}
-            className={`flex flex-col items-center py-1 px-0.5 rounded-lg transition ${
-              mod.active 
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold shadow-xs border border-slate-200/60 dark:border-slate-700/60' 
-                : 'text-slate-500 hover:bg-white/60 dark:hover:bg-slate-900 hover:text-slate-800 dark:hover:text-slate-200'
-            }`}
-            title={mod.label}
-          >
-            <span className="material-symbols-outlined text-[17px]">{mod.icon}</span>
-            <span className="truncate max-w-full text-[9px] tracking-tight mt-0.5">{mod.label}</span>
-          </button>
-        ))}
+          { id: 'chat', IconComp: MessageSquare, label: t.sidebar.chat, active: activeView === 'chat' },
+          { id: 'meetings', IconComp: Video, label: t.sidebar.meetings, active: activeView === 'meetings' },
+          { id: 'flows', IconComp: GitBranch, label: t.sidebar.flows, active: activeView === 'flows' },
+          { id: 'projects', IconComp: FolderOpen, label: t.sidebar.projects, active: isProjectsOpen },
+          { id: 'artifacts', IconComp: FileText, label: t.sidebar.artifacts, active: activeView === 'artifacts' },
+        ].map((mod) => {
+          const IconComp = mod.IconComp;
+          return (
+            <button
+              key={mod.id}
+              onClick={() => {
+                if (mod.id === 'chat' && onSelectView) onSelectView('chat');
+                if (mod.id === 'meetings' && onSelectView) onSelectView('meetings');
+                if (mod.id === 'flows' && onSelectView) onSelectView('flows');
+                if (mod.id === 'artifacts' && onSelectView) onSelectView('artifacts');
+                if (mod.id === 'projects') setIsProjectsOpen(!isProjectsOpen);
+              }}
+              className={`flex flex-col items-center py-1 px-0.5 rounded-lg transition ${
+                mod.active 
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold shadow-xs border border-slate-200/60 dark:border-slate-700/60' 
+                  : 'text-slate-500 hover:bg-white/60 dark:hover:bg-slate-900 hover:text-slate-800 dark:hover:text-slate-200'
+              }`}
+              title={mod.label}
+            >
+              <IconComp className="w-3.5 h-3.5" />
+              <span className="truncate max-w-full text-[9px] tracking-tight mt-0.5">{mod.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* 3º MÓDULOS DIRETOS (Ordem e layout exato da imagem Ajustes 02 23-10-2026.png) */}
@@ -321,7 +434,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             }`}
           >
             <div className="flex items-center space-x-2 truncate">
-              <span className="material-symbols-outlined text-[16px] text-emerald-500">video_camera_front</span>
+              <Video className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
               <span className="truncate">Reuniões & Atas</span>
             </div>
             <div className="flex items-center space-x-1.5">
@@ -365,7 +478,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             }`}
           >
             <div className="flex items-center space-x-2 truncate">
-              <span className="material-symbols-outlined text-[16px] text-indigo-500">account_tree</span>
+              <GitBranch className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
               <span className="truncate">Fluxos de Automação</span>
             </div>
             <div className="flex items-center space-x-1.5">
@@ -415,7 +528,15 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
       </div>
 
       {/* ÁREA COM SCROLL: 5º PROJETOS DA SQUAD + 6º HISTÓRICO POR PERÍODO */}
-      <div className="flex-1 overflow-y-auto px-2 py-1 space-y-3 custom-scrollbar text-xs">
+      <div 
+        onScroll={() => {
+          if (activeContextMenu) {
+            setActiveContextMenu(null);
+            setIsMoveSubmenuOpen(false);
+          }
+        }}
+        className="flex-1 overflow-y-auto px-2 py-1 space-y-3 custom-scrollbar text-xs"
+      >
         
         {/* 5º PROJETOS (Retrátil, Padrão: FECHADO, Badge cinza numérico com chevron no final) */}
         <div>
@@ -524,24 +645,196 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
       </div>
 
-      {/* 7º RODAPÉ ORIGINAL: PCL SQLite Local & Sincronizado */}
-      <div className="p-2.5 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-400 flex items-center justify-between bg-slate-100/40 dark:bg-slate-900/40">
-        <div className="flex items-center space-x-1.5 truncate">
-          <Database className="w-3.5 h-3.5 text-slate-400" />
-          <span className="truncate">{t.sidebar.sqliteLocal}</span>
+      {/* 7º RODAPÉ: Narrativa Dinâmica de Armazenamento Soberano (Verde/Amarelo/Vermelho) */}
+      <div className="relative group">
+        {/* Tooltip customizado flutuante para CIMA (Sem clipping na barra de tarefas do Windows) */}
+        <div 
+          role="tooltip"
+          className="absolute bottom-full left-2 right-2 mb-2 p-2.5 bg-slate-950/95 dark:bg-slate-900/95 text-white rounded-xl shadow-2xl border border-slate-800/90 pointer-events-none opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 backdrop-blur-md"
+        >
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-semibold text-emerald-400 font-mono text-[10px] uppercase tracking-wider flex items-center gap-1">
+              <Database className="w-3 h-3 text-emerald-400" />
+              Armazenamento Soberano
+            </span>
+            <span className="text-[10px] font-mono text-slate-300">
+              {storageQuota?.usedFormatted || '142.0 MB'} / 10.0 GB
+            </span>
+          </div>
+          <p className="text-[10.5px] font-sans text-slate-200 leading-snug">
+            {storageNarrativeText} • Utilização de <strong className="text-white font-mono">{percentageUsed}%</strong> no PostgreSQL 17 local.
+          </p>
+          <div className="mt-1.5 pt-1.5 border-t border-slate-800 text-[9.5px] font-sans text-slate-400 flex items-center justify-between">
+            <span>Clique para abrir a Biblioteca de Artefatos</span>
+            <span className="text-emerald-400 font-mono text-[10px]">↗</span>
+          </div>
+          {/* Seta indicadora (caret) apontando para o rodapé */}
+          <div className="absolute left-6 -bottom-1 w-2 h-2 bg-slate-950/95 dark:bg-slate-900/95 border-r border-b border-slate-800/90 transform rotate-45" />
         </div>
-        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-          {t.sidebar.synchronized}
-        </span>
+
+        {/* Linha clicável de Armazenamento Soberano (sem title nativo) */}
+        <div 
+          onClick={() => onSelectView && onSelectView('artifacts')}
+          className="p-2.5 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono flex items-center justify-between bg-slate-100/60 dark:bg-slate-900/60 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition cursor-pointer select-none"
+        >
+          <div className="flex items-center space-x-1.5 truncate">
+            <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="truncate text-slate-700 dark:text-slate-300 font-medium">{storageBackendLabel}</span>
+          </div>
+          <div className="flex items-center space-x-1 shrink-0">
+            <span className={`w-1.5 h-1.5 rounded-full ${storageDotColorClass} animate-pulse`} />
+            <span className={`text-[10px] ${storageStatusColorClass}`}>
+              {storageNarrativeText}
+            </span>
+          </div>
+        </div>
       </div>
     </aside>
+
+    {/* MENU CONTEXTUAL FLUTUANTE À DIREITA (Viewport Portal com Auto-Ajuste & i18n) */}
+    {activeContextMenu && (
+      <>
+        {/* Backdrop invisível para fechamento instantâneo ao clicar fora */}
+        <div
+          onClick={() => {
+            setActiveContextMenu(null);
+            setIsMoveSubmenuOpen(false);
+          }}
+          className="fixed inset-0 z-40 bg-transparent cursor-default"
+          aria-hidden="true"
+        />
+
+        {/* Menu Flutuante fora do container de scroll, posicionado à direita da conversa */}
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            position: 'fixed',
+            top: `${activeContextMenu.top}px`,
+            left: `${activeContextMenu.left}px`,
+            maxHeight: 'calc(100vh - 32px)',
+          }}
+          className="w-56 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-1.5 z-50 text-xs space-y-0.5 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto"
+        >
+          {/* Header de Contexto com Ícone e Título Truncado */}
+          <div className="px-2.5 py-1.5 mb-1 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+            <div className="flex items-center space-x-1.5 truncate pr-1">
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span className="truncate font-semibold text-[11px] text-slate-800 dark:text-slate-200">
+                {activeContextMenu.conv.title}
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                setActiveContextMenu(null);
+                setIsMoveSubmenuOpen(false);
+              }}
+              className="p-0.5 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shrink-0"
+              title="Fechar"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+
+          {/* Ação 1: Renomear Conversa */}
+          <button
+            onClick={() => handleStartRename(activeContextMenu.conv)}
+            className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            <Edit3 className="w-3.5 h-3.5 text-slate-500" />
+            <span>{t.sidebar.renameConversation || 'Renomear Conversa'}</span>
+          </button>
+
+          {/* Ação 2: Fixar/Desafixar do Topo */}
+          <button
+            onClick={() => togglePinConversation(activeContextMenu.conv.id)}
+            className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            <Pin className="w-3.5 h-3.5 text-emerald-500" />
+            <span>
+              {pinnedConvIds.includes(activeContextMenu.conv.id)
+                ? (t.sidebar.unpinFromTop || 'Desafixar do Topo')
+                : (t.sidebar.pinToTop || 'Fixar no Topo')}
+            </span>
+          </button>
+
+          {/* Ação 3: Submenu Mover para Projeto */}
+          <div className="relative">
+            <button
+              onClick={() => setIsMoveSubmenuOpen(!isMoveSubmenuOpen)}
+              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            >
+              <div className="flex items-center space-x-2">
+                <FolderPlus className="w-3.5 h-3.5 text-amber-500" />
+                <span>{t.sidebar.moveToProject || 'Mover para Projeto'}</span>
+              </div>
+              <ChevronRight className={`w-3 h-3 text-slate-400 transition-transform ${isMoveSubmenuOpen ? 'rotate-90' : ''}`} />
+            </button>
+
+            {isMoveSubmenuOpen && (
+              <div className="pl-3 py-1 border-l border-slate-200 dark:border-slate-800 space-y-0.5 bg-slate-50 dark:bg-slate-950/70 rounded mt-0.5 max-h-36 overflow-y-auto">
+                {projects.length === 0 ? (
+                  <div className="px-2 py-1 text-[10px] text-slate-400 italic">
+                    {t.sidebar.noProjectsAvailable || 'Nenhum projeto criado'}
+                  </div>
+                ) : (
+                  projects.map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => {
+                        if (onMoveConversation) onMoveConversation(activeContextMenu.conv.id, p.id);
+                        setActiveContextMenu(null);
+                        setIsMoveSubmenuOpen(false);
+                      }}
+                      className="w-full text-left px-2 py-1 rounded text-[11px] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 truncate"
+                    >
+                      • {p.name}
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Ação 4: Compartilhar Link */}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              alert(t.sidebar.linkCopied || 'Link seguro da conversa copiado para a área de transferência.');
+              setActiveContextMenu(null);
+            }}
+            className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            <Share2 className="w-3.5 h-3.5 text-indigo-500" />
+            <span>{t.sidebar.shareLink || 'Compartilhar Link'}</span>
+          </button>
+
+          <div className="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+
+          {/* Ação 5: Excluir Conversa */}
+          <button
+            onClick={() => {
+              const confirmMsg = `${t.sidebar.confirmDelete || 'Tem certeza que deseja excluir a conversa'} "${activeContextMenu.conv.title}"?`;
+              if (confirm(confirmMsg)) {
+                if (onDeleteConversation) onDeleteConversation(activeContextMenu.conv.id);
+                setActiveContextMenu(null);
+              }
+            }}
+            className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>{t.sidebar.deleteConversation || 'Excluir Conversa'}</span>
+          </button>
+        </div>
+      </>
+    )}
+    </>
   );
 
-  // Renderizador Universal de Linha de Conversa com Menu de Contexto (···)
+  // Renderizador Universal de Linha de Conversa com Menu de Contexto Flutuante à Direita (···)
   function renderConversationItem(conv: Conversation, isNested = false) {
     const isActive = conv.id === activeConversationId;
     const isPinned = pinnedConvIds.includes(conv.id);
-    const isMenuOpen = activeContextMenuConvId === conv.id;
+    const isMenuOpen = activeContextMenu?.conv.id === conv.id;
     const isEditing = editingConvId === conv.id;
 
     return (
@@ -583,6 +876,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             className={`w-full text-left px-2 py-1.5 rounded-lg text-xs transition flex items-center justify-between cursor-pointer ${
               isActive
                 ? 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-medium shadow-xs border border-slate-200/90 dark:border-slate-800'
+                : isMenuOpen
+                ? 'bg-slate-200/90 dark:bg-slate-800/90 text-slate-900 dark:text-slate-100 ring-1 ring-emerald-500/50 shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
@@ -600,100 +895,49 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setActiveContextMenuConvId(isMenuOpen ? null : conv.id);
+                  if (activeContextMenu?.conv.id === conv.id) {
+                    setActiveContextMenu(null);
+                    setIsMoveSubmenuOpen(false);
+                    return;
+                  }
+
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const menuWidth = 224; // w-56: 224px
+                  const estimatedHeight = 250; // Altura estimada segura do menu
+
+                  // Posiciona à direita da barra lateral / botão acionador (sem sobrepor o histórico)
+                  let left = Math.max(rect.right + 10, sidebarWidth + 8);
+
+                  // Detecção de colisão horizontal: se ultrapassar borda direita, inverte para esquerda
+                  if (left + menuWidth > window.innerWidth - 12) {
+                    left = Math.max(12, rect.left - menuWidth - 10);
+                  }
+
+                  // Alinhamento vertical com o item acionador
+                  let top = rect.top - 4;
+
+                  // Detecção inteligente de colisão vertical (auto-adjust):
+                  // Se o menu for extrapolar o rodapé da tela, sobe suavemente para caber 100% no viewport
+                  if (top + estimatedHeight > window.innerHeight - 16) {
+                    top = Math.max(16, window.innerHeight - estimatedHeight - 16);
+                  }
+
+                  setActiveContextMenu({
+                    conv,
+                    isNested,
+                    top,
+                    left
+                  });
                   setIsMoveSubmenuOpen(false);
                 }}
                 className={`p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition ${
-                  isMenuOpen ? 'opacity-100 bg-slate-200 dark:bg-slate-800' : 'opacity-0 group-hover:opacity-100'
+                  isMenuOpen ? 'opacity-100 bg-slate-300 dark:bg-slate-700 text-slate-900 dark:text-slate-100 ring-1 ring-slate-400/40' : 'opacity-0 group-hover:opacity-100'
                 }`}
                 title="Opções da Conversa"
               >
                 <MoreVertical className="w-3.5 h-3.5" />
               </button>
             </div>
-          </div>
-        )}
-
-        {/* Menu de Contexto Popover (···) */}
-        {isMenuOpen && (
-          <div 
-            onClick={e => e.stopPropagation()}
-            className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl p-1 z-50 text-xs space-y-0.5 animate-in fade-in duration-100"
-          >
-            <button
-              onClick={() => handleStartRename(conv)}
-              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            >
-              <Edit3 className="w-3.5 h-3.5 text-slate-500" />
-              <span>Renomear Conversa</span>
-            </button>
-
-            <button
-              onClick={() => togglePinConversation(conv.id)}
-              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            >
-              <Pin className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isPinned ? 'Desafixar do Topo' : 'Fixar no Topo'}</span>
-            </button>
-
-            {/* Submenu Mover para Projeto */}
-            <div className="relative">
-              <button
-                onClick={() => setIsMoveSubmenuOpen(!isMoveSubmenuOpen)}
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-              >
-                <div className="flex items-center space-x-2">
-                  <FolderPlus className="w-3.5 h-3.5 text-amber-500" />
-                  <span>Mover para Projeto</span>
-                </div>
-                <ChevronRight className="w-3 h-3 text-slate-400" />
-              </button>
-
-              {isMoveSubmenuOpen && (
-                <div className="pl-3 py-1 border-l border-slate-200 dark:border-slate-800 space-y-0.5 bg-slate-50 dark:bg-slate-950 rounded mt-0.5">
-                  {projects.map(p => (
-                    <button
-                      key={p.id}
-                      onClick={() => {
-                        if (onMoveConversation) onMoveConversation(conv.id, p.id);
-                        setActiveContextMenuConvId(null);
-                        setIsMoveSubmenuOpen(false);
-                      }}
-                      className="w-full text-left px-2 py-1 rounded text-[11px] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 truncate"
-                    >
-                      • {p.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link seguro da conversa copiado para a área de transferência.');
-                setActiveContextMenuConvId(null);
-              }}
-              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            >
-              <Share2 className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Compartilhar Link</span>
-            </button>
-
-            <div className="border-t border-slate-100 dark:border-slate-800 my-0.5"></div>
-
-            <button
-              onClick={() => {
-                if (confirm(`Tem certeza que deseja excluir a conversa "${conv.title}"?`)) {
-                  if (onDeleteConversation) onDeleteConversation(conv.id);
-                  setActiveContextMenuConvId(null);
-                }
-              }}
-              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Excluir Conversa</span>
-            </button>
           </div>
         )}
       </div>

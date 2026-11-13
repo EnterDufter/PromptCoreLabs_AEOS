@@ -30,3 +30,9 @@ scratch/
 # Machine Learning Models (Downloaded via scripts/download_model.py)
 *.onnx
 
+# Local runtime data / Vault
+data/
+
+# Large media / Benchmark reference videos (preserved locally)
+*.mp4
+

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Copy, Check, Terminal } from 'lucide-react';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
+import { MermaidDiagramBlock } from './renderers/MermaidDiagramBlock';
+import { LiveHtmlSandboxCard } from './renderers/LiveHtmlSandboxCard';
 
 interface MarkdownRendererProps {
   content: string;
   className?: string;
+  inverted?: boolean;
 }
 
-export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className = '' }) => {
+export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className = '', inverted = false }) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleCopyCode = (code: string, index: number) => {
@@ -31,12 +34,6 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
   };
 
   const renderInlineTokens = (text: string) => {
-    // Regex que identifica tokens inline:
-    // 1. Código inline: `código`
-    // 2. Negrito: **texto** ou __texto__
-    // 3. Itálico: *texto* ou _texto_
-    // 4. Menções @: @SAP, @Salesforce, @HubSpot, @Gmail, etc.
-    // 5. Tags/Docs #: #Auditoria, etc. (apenas # único seguido de letra)
     const tokenRegex = /(`[^`]+`|\*\*[^*]+\*\*|__[^_]+__|\*[^*]+\*|_[^_]+_|@[A-Za-z0-9_-]+|(?<!#)#[A-Za-z][A-Za-z0-9_-]*)/g;
     const parts = text.split(tokenRegex);
 
@@ -48,7 +45,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         return (
           <code
             key={idx}
-            className="px-1.5 py-0.5 mx-0.5 rounded font-mono text-[12px] bg-slate-100 dark:bg-slate-800 text-pink-600 dark:text-pink-400 border border-slate-200 dark:border-slate-700/80 font-medium"
+            className={inverted
+              ? 'px-1.5 py-0.5 mx-0.5 rounded font-mono text-[12px] bg-slate-800/90 text-cyan-300 border border-slate-700 font-medium'
+              : 'px-1.5 py-0.5 mx-0.5 rounded font-mono text-[12px] bg-slate-100 dark:bg-slate-800 text-pink-600 dark:text-pink-400 border border-slate-200 dark:border-slate-700/80 font-medium'
+            }
           >
             {part.slice(1, -1)}
           </code>
@@ -58,7 +58,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
       // Negrito
       if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('__') && part.endsWith('__'))) {
         return (
-          <strong key={idx} className="font-bold text-slate-900 dark:text-white">
+          <strong key={idx} className={inverted ? 'font-bold text-white' : 'font-bold text-slate-900 dark:text-white'}>
             {part.slice(2, -2)}
           </strong>
         );
@@ -67,7 +67,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
       // Itálico
       if ((part.startsWith('*') && part.endsWith('*')) || (part.startsWith('_') && part.endsWith('_'))) {
         return (
-          <em key={idx} className="italic text-slate-800 dark:text-slate-200">
+          <em key={idx} className={inverted ? 'italic text-slate-200' : 'italic text-slate-800 dark:text-slate-200'}>
             {part.slice(1, -1)}
           </em>
         );
@@ -81,7 +81,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
           return (
             <span
               key={idx}
-              className="inline-flex items-center space-x-1 px-1.5 py-0.5 mx-0.5 rounded-md bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700/80 text-[12px] font-semibold text-slate-800 dark:text-slate-100 shadow-xs align-baseline"
+              className={inverted
+                ? 'inline-flex items-center space-x-1 px-1.5 py-0.5 mx-0.5 rounded-md bg-slate-800 border border-slate-700 text-[12px] font-semibold text-white shadow-xs align-baseline'
+                : 'inline-flex items-center space-x-1 px-1.5 py-0.5 mx-0.5 rounded-md bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700/80 text-[12px] font-semibold text-slate-800 dark:text-slate-100 shadow-xs align-baseline'
+              }
             >
               <span className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0">{logo}</span>
               <span>{part.slice(1)}</span>
@@ -89,7 +92,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
           );
         }
         return (
-          <span key={idx} className="font-semibold text-sky-600 dark:text-sky-400">
+          <span key={idx} className={inverted ? 'font-semibold text-sky-400' : 'font-semibold text-sky-600 dark:text-sky-400'}>
             {part}
           </span>
         );
@@ -100,7 +103,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         return (
           <span
             key={idx}
-            className="inline-flex items-center px-1.5 py-0.5 mx-0.5 rounded font-mono text-[11px] bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-medium"
+            className={inverted
+              ? 'inline-flex items-center px-1.5 py-0.5 mx-0.5 rounded font-mono text-[11px] bg-indigo-950/80 text-indigo-300 border border-indigo-700 font-medium'
+              : 'inline-flex items-center px-1.5 py-0.5 mx-0.5 rounded font-mono text-[11px] bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-medium'
+            }
           >
             {part}
           </span>
@@ -133,6 +139,28 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         i++; // skip closing ```
         const fullCode = codeLines.join('\n');
         const currBlockIndex = blockKey++;
+
+        // 1A. Renderização Ao Vivo de Diagramas Mermaid
+        if (lang === 'mermaid') {
+          elements.push(
+            <MermaidDiagramBlock
+              key={`mermaid-${currBlockIndex}`}
+              code={fullCode}
+            />
+          );
+          continue;
+        }
+
+        // 1B. Execução Ao Vivo de Aplicações HTML5 Sandbox
+        if (lang === 'html' || lang === 'htm') {
+          elements.push(
+            <LiveHtmlSandboxCard
+              key={`live-html-${currBlockIndex}`}
+              code={fullCode}
+            />
+          );
+          continue;
+        }
 
         elements.push(
           <div
@@ -196,22 +224,22 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
           );
 
           elements.push(
-            <div key={`table-${blockKey++}`} className="my-3 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+            <div key={`table-${blockKey++}`} className={`my-3 overflow-x-auto rounded-xl border shadow-xs ${inverted ? 'border-slate-700' : 'border-slate-200 dark:border-slate-800'}`}>
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700/80">
+                  <tr className={inverted ? 'bg-slate-800/90 border-b border-slate-700' : 'bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700/80'}>
                     {headerCols.map((col, idx) => (
-                      <th key={idx} className="px-3 py-2 font-semibold text-slate-800 dark:text-slate-100">
+                      <th key={idx} className={`px-3 py-2 font-semibold ${inverted ? 'text-slate-100' : 'text-slate-800 dark:text-slate-100'}`}>
                         {renderInlineFormatted(col)}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 bg-white dark:bg-slate-900/50">
+                <tbody className={inverted ? 'divide-y divide-slate-800 bg-slate-900/60' : 'divide-y divide-slate-100 dark:divide-slate-800/60 bg-white dark:bg-slate-900/50'}>
                   {bodyRows.map((row, rIdx) => (
-                    <tr key={rIdx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <tr key={rIdx} className={inverted ? 'hover:bg-slate-800/50 transition' : 'hover:bg-slate-50 dark:hover:bg-slate-800/40 transition'}>
                       {row.map((cell, cIdx) => (
-                        <td key={cIdx} className="px-3 py-2 text-slate-700 dark:text-slate-200">
+                        <td key={cIdx} className={`px-3 py-2 ${inverted ? 'text-slate-200' : 'text-slate-700 dark:text-slate-200'}`}>
                           {renderInlineFormatted(cell)}
                         </td>
                       ))}
@@ -228,7 +256,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
       // 3. Separadores Horizontais (--- ou ***)
       if (/^(\*{3,}|-{3,}|_{3,})$/.test(line.trim())) {
         elements.push(
-          <hr key={`hr-${blockKey++}`} className="my-3 border-slate-200 dark:border-slate-800" />
+          <hr key={`hr-${blockKey++}`} className={inverted ? 'my-3 border-slate-700' : 'my-3 border-slate-200 dark:border-slate-800'} />
         );
         i++;
         continue;
@@ -241,25 +269,25 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         const headingText = headingMatch[2];
         if (level === 1) {
           elements.push(
-            <h2 key={`h1-${blockKey++}`} className="text-base font-bold text-slate-900 dark:text-white mt-4 mb-2 pb-1 border-b border-slate-200 dark:border-slate-800">
+            <h2 key={`h1-${blockKey++}`} className={`text-lg font-bold mt-2 mb-2.5 pb-1.5 border-b ${inverted ? 'text-white border-slate-700/80' : 'text-slate-900 dark:text-white border-slate-200 dark:border-slate-800'}`}>
               {renderInlineFormatted(headingText)}
             </h2>
           );
         } else if (level === 2) {
           elements.push(
-            <h3 key={`h2-${blockKey++}`} className="text-sm font-bold text-slate-900 dark:text-white mt-3.5 mb-1.5 pb-1 border-b border-slate-100 dark:border-slate-800">
+            <h3 key={`h2-${blockKey++}`} className={`text-sm font-bold mt-3 mb-1.5 pb-1 border-b ${inverted ? 'text-sky-300 border-slate-800' : 'text-slate-900 dark:text-white border-slate-100 dark:border-slate-800'}`}>
               {renderInlineFormatted(headingText)}
             </h3>
           );
         } else if (level === 3) {
           elements.push(
-            <h4 key={`h3-${blockKey++}`} className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100 mt-3 mb-1">
+            <h4 key={`h3-${blockKey++}`} className={`text-xs font-bold uppercase tracking-wider mt-3 mb-1 ${inverted ? 'text-emerald-300' : 'text-slate-800 dark:text-slate-100'}`}>
               {renderInlineFormatted(headingText)}
             </h4>
           );
         } else {
           elements.push(
-            <h5 key={`h4-${blockKey++}`} className="text-xs font-semibold text-slate-900 dark:text-slate-100 mt-2.5 mb-1">
+            <h5 key={`h4-${blockKey++}`} className={`text-xs font-semibold mt-2.5 mb-1 ${inverted ? 'text-slate-100' : 'text-slate-900 dark:text-slate-100'}`}>
               {renderInlineFormatted(headingText)}
             </h5>
           );
@@ -273,8 +301,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         const bulletMatch = line.match(/^(\s*[-*•])\s+(.*)/);
         if (bulletMatch) {
           elements.push(
-            <div key={`li-${blockKey++}`} className="flex items-start space-x-2 my-1 text-slate-700 dark:text-slate-200 pl-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 mt-2 flex-shrink-0" />
+            <div key={`li-${blockKey++}`} className={`flex items-start space-x-2.5 my-1.5 pl-1 ${inverted ? 'text-slate-100' : 'text-slate-700 dark:text-slate-200'}`}>
+              <span className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${inverted ? 'bg-emerald-400' : 'bg-slate-400 dark:bg-slate-500'}`} />
               <div className="flex-1 leading-relaxed">{renderInlineFormatted(bulletMatch[2])}</div>
             </div>
           );
@@ -288,8 +316,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
         const numMatch = line.match(/^(\s*(\d+)\.)\s+(.*)/);
         if (numMatch) {
           elements.push(
-            <div key={`num-${blockKey++}`} className="flex items-start space-x-2 my-1 text-slate-700 dark:text-slate-200 pl-1">
-              <span className="font-mono text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-0.5 flex-shrink-0 min-w-[16px]">
+            <div key={`num-${blockKey++}`} className={`flex items-start space-x-2.5 my-1.5 pl-1 ${inverted ? 'text-slate-100' : 'text-slate-700 dark:text-slate-200'}`}>
+              <span className={`font-mono text-[11px] font-bold mt-0.5 flex-shrink-0 min-w-[18px] ${inverted ? 'text-amber-300' : 'text-slate-400 dark:text-slate-500'}`}>
                 {numMatch[2]}.
               </span>
               <div className="flex-1 leading-relaxed">{renderInlineFormatted(numMatch[3])}</div>
@@ -309,7 +337,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
 
       // 7. Parágrafos comuns
       elements.push(
-        <p key={`p-${blockKey++}`} className="leading-relaxed my-1 text-slate-700 dark:text-slate-200">
+        <p key={`p-${blockKey++}`} className={`leading-relaxed my-1 ${inverted ? 'text-slate-200' : 'text-slate-700 dark:text-slate-200'}`}>
           {renderInlineFormatted(line)}
         </p>
       );
@@ -319,5 +347,5 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
     return elements;
   };
 
-  return <div className={`markdown-body text-[13px] ${className}`}>{renderBlocks()}</div>;
+  return <div className={`markdown-body text-[13px] select-text cursor-text ${className}`}>{renderBlocks()}</div>;
 };

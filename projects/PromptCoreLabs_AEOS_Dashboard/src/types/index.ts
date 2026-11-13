@@ -89,13 +89,41 @@ export interface StorageMetadata {
 export interface Artifact {
   id: string;
   title: string;
-  type: 'plan' | 'code' | 'diagram' | 'doc' | 'sheet' | 'slide';
+  type: 'plan' | 'code' | 'diagram' | 'doc' | 'sheet' | 'slide' | 'image' | 'table' | 'audio' | 'video' | 'app' | 'meeting_capture' | 'infographic';
   summary: string;
   content: string;
+  mediaUrl?: string;
+  metadata?: Record<string, any>;
   source?: StorageProvider;
   storage?: StorageMetadata;
   updatedAt: string;
+  formatExt?: string;
+  vaultBlobSha256?: string;
+  isFavorite?: boolean;
+  tags?: string[];
+  projectId?: string;
+  projectName?: string;
+  conversationId?: string;
+  conversationTitle?: string;
+  sizeBytes?: number;
+  r2SyncedAt?: string;
+  previewSvg?: string;
 }
+
+export interface StudyAttachment {
+  id: string;
+  filename: string;
+  sizeBytes: number;
+  mimeType: string;
+  pageCount?: number;
+  extractedText?: string;
+  vaultBlobSha256?: string;
+  uploadedAt: string;
+  indexedOramaId?: string;
+}
+
+export type TargetArtifactFormat = 'auto' | 'diagram' | 'infographic' | 'app' | 'slide' | 'sheet' | 'doc';
+export type MainViewMode = 'chat' | 'meetings' | 'flows' | 'artifacts';
 
 export interface Agent {
   id: string;

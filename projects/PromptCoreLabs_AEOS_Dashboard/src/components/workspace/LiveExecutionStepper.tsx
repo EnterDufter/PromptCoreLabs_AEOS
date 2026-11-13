@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   CheckCircle2, Loader2, Circle, Clock, ChevronDown, 
   ChevronUp, ShieldCheck, Database, Globe, Cpu, Sparkles 
@@ -27,7 +27,20 @@ export const LiveExecutionStepper: React.FC<LiveExecutionStepperProps> = ({
   isProcessing,
   confidenceScore
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  // Aberto enquanto estiver processando; retrai automaticamente ao concluir a resposta
+  const [isExpanded, setIsExpanded] = useState<boolean>(isProcessing);
+  const prevProcessingRef = useRef<boolean>(isProcessing);
+
+  useEffect(() => {
+    if (prevProcessingRef.current && !isProcessing) {
+      // Finalizou o processamento: auto-retrai
+      setIsExpanded(false);
+    } else if (!prevProcessingRef.current && isProcessing) {
+      // Iniciou novo processamento: expande para feedback ao vivo
+      setIsExpanded(true);
+    }
+    prevProcessingRef.current = isProcessing;
+  }, [isProcessing]);
 
   const completedCount = steps.filter(s => s.status === 'completed').length;
   const progressPercent = Math.round((completedCount / steps.length) * 100);

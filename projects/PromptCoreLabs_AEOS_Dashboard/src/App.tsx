@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Language, Theme, UserProfile, Project, Conversation, Agent, ServiceStatus, Artifact } from './types';
+import { Language, Theme, UserProfile, Project, Conversation, Agent, ServiceStatus, Artifact, TargetArtifactFormat, StudyAttachment, MainViewMode } from './types';
 import { Header } from './components/layout/Header';
 import { LeftSidebar } from './components/layout/LeftSidebar';
 import { RightSidebarStatus } from './components/layout/RightSidebarStatus';
@@ -9,10 +9,14 @@ import { PCLArtifactDrawer } from './components/workspace/PCLArtifactDrawer';
 import { SettingsModal } from './components/admin/SettingsModal';
 import { MeetingsIntelligenceView } from './components/workspace/MeetingsIntelligenceView';
 import { FlowsAutomationCanvas } from './components/workspace/FlowsAutomationCanvas';
+import { ArtifactsLibraryView } from './components/workspace/ArtifactsLibraryView';
+import { HelpCenterModal } from './components/help/HelpCenterModal';
 import { omniRouteService } from './services/llm/omniRouteService';
 import { layaCoprocessorService } from './services/laya/layaCoprocessorService';
 import { webSearchService } from './services/search/webSearchService';
 import { intelligentGroundingService } from './services/grounding/intelligentGroundingService';
+import { CANONICAL_DEMO_ARTIFACTS, generateArtifactsFromInteraction } from './services/artifacts/artifactGeneratorService';
+import { cockpitPersistenceService } from './services/storage/cockpitPersistenceService';
 import { ChatMessage } from './types';
 import { useI18n } from './i18n/I18nContext';
 
@@ -23,9 +27,54 @@ export const App: React.FC = () => {
   const [rightCollapsed, setRightCollapsed] = useState(true);
   const [activeArtifact, setActiveArtifact] = useState<Artifact | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<string>('security');
-  const [activeMainView, setActiveMainView] = useState<'chat' | 'meetings' | 'flows'>('chat');
+  const [settingsTab, setSettingsTab] = useState<string>('integrations');
+  const [helpCenterOpen, setHelpCenterOpen] = useState(false);
+  const [activeMainView, setActiveMainView] = useState<MainViewMode>('chat');
   const [workspaceViewMode, setWorkspaceViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
+
+  // Suporte a Deep-Linking e Automação de Evidências via URL Search Params
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlArtifact = params.get('artifact');
+      if (urlArtifact) {
+        const found = initialArtifacts.find(a => a.id === urlArtifact);
+        if (found) setActiveArtifact(found);
+      }
+      const urlSettings = params.get('settings');
+      if (urlSettings) {
+        setSettingsTab(urlSettings);
+        setSettingsOpen(true);
+      }
+      const urlHelp = params.get('help');
+      if (urlHelp === 'open' || urlHelp === 'true') {
+        setHelpCenterOpen(true);
+      }
+      const urlView = params.get('view');
+      if (urlView === 'artifacts' || urlView === 'meetings' || urlView === 'flows' || urlView === 'chat') {
+        setActiveMainView(urlView as MainViewMode);
+      }
+      const urlSidebar = params.get('sidebar');
+      if (urlSidebar === 'open' || urlSidebar === 'expanded' || urlSidebar === 'retracted') {
+        setRightCollapsed(false);
+      } else if (urlSidebar === 'closed') {
+        setRightCollapsed(true);
+      }
+      const urlSelect = params.get('selectText');
+      if (urlSelect) {
+        setTimeout(() => {
+          const el = document.querySelector('.cursor-text p') || document.querySelector('.cursor-text');
+          if (el) {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const sel = window.getSelection();
+            sel?.removeAllRanges();
+            sel?.addRange(range);
+          }
+        }, 600);
+      }
+    } catch {}
+  }, []);
 
   // Refração Dinâmica de Luz controlada pelo cursor do mouse (Design System Liquid Glass)
   useEffect(() => {
@@ -72,24 +121,78 @@ export const App: React.FC = () => {
 
   const initialArtifacts: Artifact[] = [
     {
-      id: 'art-1',
-      title: 'Especificação Mestra de UI/UX PCL AEOS v3',
-      type: 'doc',
-      summary: 'Diretrizes de design hyper-clean minimalista, 3 colunas e conformidade ISO.',
-      content: `# Especificação Mestra PCL AEOS v3\n\n## 1. Diretrizes Visuais\n- Estética Hyper-Clean Minimalista (ChatGPT, Linear, Apple, Vercel).\n- Fundo branco limpo (#FFFFFF) em modo claro e slate-900 em modo escuro.\n- Layout Primordial em 3 Colunas com Sidebars Retráteis.\n\n## 2. Conformidade & Segurança\n- Limite estrito de no máximo 2 dispositivos simultâneos por usuário.\n- Trilha de auditoria imutável PostgreSQL SHA-256 (ISO 27001 / ISO 42001).\n- Transcrição de voz local via Whisper WASM.`,
-      updatedAt: new Date().toISOString()
+      id: 'art-diag-cortex',
+      title: 'Topologia Soberana Cortex v7 (Stage Gates TLC v3)',
+      type: 'diagram',
+      formatExt: '.svg',
+      summary: 'Diagrama Mermaid de alta definição com arquitetura em 3 camadas e zero vazamento de dados.',
+      content: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" height="100%">
+  <rect width="100%" height="100%" fill="#0a0f1d" rx="12"/>
+  <rect x="30" y="30" width="740" height="320" rx="10" fill="#0f172a" stroke="#1e3a5f" stroke-width="1.5"/>
+  <text x="60" y="70" fill="#38bdf8" font-family="sans-serif" font-size="16" font-weight="bold">Pipeline Soberano PCL AEOS v3.9</text>
+  <text x="60" y="95" fill="#94a3b8" font-family="monospace" font-size="10.5">Padronização Cortex v7 • Anti-Clipping WCAG AAA • SHA-256 Auditável</text>
+  <rect x="60" y="130" width="160" height="85" rx="8" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="75" y="165" fill="#f8fafc" font-size="12" font-weight="600">Laya System One</text>
+  <text x="75" y="190" fill="#34d399" font-size="10" font-family="monospace">CPU INT8 :20140</text>
+  <path d="M 220 172 L 290 172" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="290" y="130" width="180" height="85" rx="8" fill="#1e293b" stroke="#818cf8"/>
+  <text x="305" y="165" fill="#f8fafc" font-size="12" font-weight="600">OmniRoute Master</text>
+  <text x="305" y="190" fill="#a78bfa" font-size="10" font-family="monospace">SLA Balanceado</text>
+  <path d="M 470 172 L 540 172" stroke="#818cf8" stroke-width="2"/>
+  <rect x="540" y="130" width="200" height="85" rx="8" fill="#1e293b" stroke="#34d399"/>
+  <text x="555" y="165" fill="#f8fafc" font-size="12" font-weight="600">Cockpit Vault &amp; R2</text>
+  <text x="555" y="190" fill="#6ee7b7" font-size="10" font-family="monospace">PostgreSQL 17 + R2</text>
+</svg>`,
+      vaultBlobSha256: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
+      updatedAt: new Date(Date.now() - 3600000).toISOString(),
+      tags: ['mermaid', 'cortex-v7', 'svg'],
+      sizeBytes: 19800,
+      isFavorite: true
     },
     {
-      id: 'art-2',
-      title: 'Arquitetura Cortex Engine & Stage Gates TLC v3',
-      type: 'plan',
-      summary: 'Pipeline de execução multimodal com verificação de viés e sanitização PII.',
-      content: `# Arquitetura Cortex Engine\n\n1. Ingestão Multimodal\n2. Sanitizador PII Guard LGPD\n3. Omniroute Ollama Local ($0.00) vs Cloud\n4. Validação Stage Gates TLC v3\n5. Registro SHA-256 no PostgreSQL`,
-      updatedAt: new Date().toISOString()
+      id: 'art-slide-results',
+      title: 'Apresentação Executiva: Resultados e FinOps Soberano',
+      type: 'slide',
+      formatExt: '.pptx',
+      summary: 'Apresentação executiva 16:9 destacando vitória de 4.95/5.0 em avaliação cega e custo marginal zero.',
+      content: `# PCL Cockpit v3.9.0 PROD\n\nCognitive Engineering Platform\n\n---\n\n## Soberania & FinOps\n\n- Custo marginal $0.00 com motores locais\n- Laya Coprocessor em CPU INT8 (0 MB VRAM)\n- Segredo Corporativo Blindado (BYOS)\n\n---\n\n## Avaliação Duplo-Cega\n\n- PCL Cockpit: 4.95 / 5.0\n- Gemini: 4.45 / 5.0\n- ChatGPT: 4.30 / 5.0\n- Microsoft Copilot: 3.80 / 5.0`,
+      vaultBlobSha256: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+      updatedAt: new Date(Date.now() - 7200000).toISOString(),
+      tags: ['reveal-js', 'pptx', '16-9'],
+      sizeBytes: 44200,
+      isFavorite: false
+    },
+    {
+      id: 'art-sheet-engines',
+      title: 'Matriz Comparativa de Motores e Benchmarks',
+      type: 'sheet',
+      formatExt: '.xlsx',
+      summary: 'Planilha analítica com métricas de hardware, latências e conformidade ISO 27001/42001.',
+      content: `| Motor / Componente | Provedor / Hardware | VRAM | Latência | Custo/Token | Blindagem |\n|---|---|---|---|---|---|\n| Laya System One | Host CPU INT8 :20140 | 0 MB | 22ms | $0.00 | Local Soberano |\n| Qwen 2.5 Coder 7B | Ollama Local :11434 | 4.2 GB | ~800ms | $0.00 | Local Soberano |\n| Gemini 3.6 Flash | Google AI Studio | 0 MB | ~350ms | $0.0003 | PII Sanitizado |\n| Claude 3.5 Sonnet | Anthropic Frontier | 0 MB | ~1.2s | $0.0030 | PII Sanitizado |`,
+      vaultBlobSha256: '4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a',
+      updatedAt: new Date(Date.now() - 14400000).toISOString(),
+      tags: ['planilha', 'xlsx', 'tanstack-table'],
+      sizeBytes: 21500,
+      isFavorite: true
+    },
+    {
+      id: 'art-app-sim',
+      title: 'Simulador FinOps de Economia Anual',
+      type: 'app',
+      formatExt: '.html',
+      summary: 'Simulador interativo em sandbox executando localmente sem dependências externas.',
+      content: `<!DOCTYPE html><html><body><h1>Simulador FinOps</h1></body></html>`,
+      vaultBlobSha256: 'ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d',
+      updatedAt: new Date(Date.now() - 86400000).toISOString(),
+      tags: ['html5', 'sandbox', 'interativo'],
+      sizeBytes: 31200,
+      isFavorite: false
     }
   ];
 
-  const [projects, setProjects] = useState<Project[]>([
+  const STORAGE_KEY_WORKSPACES = 'pcl_aeos_workspace_state_v40';
+
+  const defaultProjects: Project[] = [
     {
       id: 'prj-nextgen',
       name: 'Next Gen Sports',
@@ -212,10 +315,9 @@ export const App: React.FC = () => {
         }
       ]
     }
-  ]);
+  ];
 
-  // Inicialização Limpa (Thread Zero): O Cockpit inicia pronto para uma nova conversa limpa
-  const initialNewConversation: Conversation = {
+  const defaultInitialConversation: Conversation = {
     id: `conv-initial`,
     title: 'Nova Conversa',
     dateGroup: 'Hoje',
@@ -223,21 +325,197 @@ export const App: React.FC = () => {
     messages: []
   };
 
-  const [activeConversation, setActiveConversation] = useState<Conversation>(initialNewConversation);
-  const [openConversations, setOpenConversations] = useState<Conversation[]>([initialNewConversation]);
+  // Higieniza projetos para evitar proliferação de conversas vazias no histórico
+  const sanitizeProjects = (projectsList: Project[]): Project[] => {
+    return projectsList.map(p => ({
+      ...p,
+      conversations: (p.conversations || []).filter(c => c && Array.isArray(c.messages) && c.messages.length > 0)
+    }));
+  };
+
+  // Detector de sessão: Nova Sessão inicia na tela de "Nova Conversa"; saída temporária restaura conversa com mensagens
+  const detectActiveConversationOnLoad = (allConvs: Conversation[]): Conversation => {
+    try {
+      // 1. Verificação de sessão contínua na mesma aba (F5 / reload da página)
+      const sessionActive = sessionStorage.getItem('pcl_cockpit_session_active');
+      const workingConvId = sessionStorage.getItem('pcl_cockpit_working_conv_id');
+      
+      // 2. Verificação de saída temporária (fechamento recente com retorno em menos de 15 minutos)
+      const lastWorkingTimestamp = Number(localStorage.getItem('pcl_cockpit_last_working_timestamp') || 0);
+      const isRecentReturn = lastWorkingTimestamp > 0 && (Date.now() - lastWorkingTimestamp) < 15 * 60 * 1000;
+      const lastWorkingConvId = localStorage.getItem('pcl_cockpit_last_working_conv_id');
+
+      const targetId = (sessionActive === 'true' && workingConvId) 
+        ? workingConvId 
+        : (isRecentReturn && lastWorkingConvId ? lastWorkingConvId : null);
+
+      if (targetId) {
+        const found = allConvs.find(c => c.id === targetId);
+        // Preserva e restaura estritamente se o usuário estiver trabalhando em uma conversa com histórico
+        if (found && Array.isArray(found.messages) && found.messages.length > 0) {
+          return found;
+        }
+      }
+    } catch (e) {
+      console.warn('Erro ao avaliar restauração de sessão:', e);
+    }
+
+    // Ao iniciar uma nova sessão, a página inicial padrão do Cockpit é sempre a tela de "Nova Conversa"
+    return defaultInitialConversation;
+  };
+
+  // Hidratação reativa do estado a partir do localStorage (PCL Cockpit v3.8.0 PROD)
+  const getInitialWorkspaceState = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_WORKSPACES);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+          const sanitizedProjects = sanitizeProjects(parsed.projects);
+          const allConvs: Conversation[] = [];
+          sanitizedProjects.forEach((p: Project) => {
+            if (Array.isArray(p.conversations)) {
+              allConvs.push(...p.conversations);
+            }
+          });
+
+          const active = detectActiveConversationOnLoad(allConvs);
+          const open = [active];
+
+          return {
+            projects: sanitizedProjects,
+            activeConversation: active,
+            openConversations: open
+          };
+        }
+      }
+    } catch (e) {
+      console.warn('Falha na leitura inicial do workspace no localStorage:', e);
+    }
+    return {
+      projects: sanitizeProjects(defaultProjects),
+      activeConversation: defaultInitialConversation,
+      openConversations: [defaultInitialConversation]
+    };
+  };
+
+  const initialWorkspace = getInitialWorkspaceState();
+
+  const [projects, setProjects] = useState<Project[]>(initialWorkspace.projects);
+  const [activeConversation, setActiveConversation] = useState<Conversation>(initialWorkspace.activeConversation);
+  const [openConversations, setOpenConversations] = useState<Conversation[]>(initialWorkspace.openConversations);
+
+  // Hidratação assíncrona adicional a partir do backend PostgreSQL / Vault
+  useEffect(() => {
+    cockpitPersistenceService.loadInitialState({
+      projects: initialWorkspace.projects,
+      activeConversationId: initialWorkspace.activeConversation.id,
+      openConversationIds: initialWorkspace.openConversations.map(c => c.id),
+      updatedAt: new Date().toISOString()
+    }).then(synced => {
+      if (synced && Array.isArray(synced.projects) && synced.projects.length > 0) {
+        const sanitized = sanitizeProjects(synced.projects);
+        setProjects(sanitized);
+        const allConvs = sanitized.flatMap(p => p.conversations || []);
+        const restored = detectActiveConversationOnLoad(allConvs);
+        if (restored && restored.messages && restored.messages.length > 0) {
+          setActiveConversation(restored);
+          setOpenConversations([restored]);
+        }
+      }
+    }).catch(() => {});
+  }, []);
+
+  // Marcação contínua da sessão e da conversa ativa para restauração em caso de saída temporária
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('pcl_cockpit_session_active', 'true');
+      if (activeConversation.messages && activeConversation.messages.length > 0) {
+        sessionStorage.setItem('pcl_cockpit_working_conv_id', activeConversation.id);
+        localStorage.setItem('pcl_cockpit_last_working_conv_id', activeConversation.id);
+        localStorage.setItem('pcl_cockpit_last_working_timestamp', Date.now().toString());
+      } else {
+        sessionStorage.removeItem('pcl_cockpit_working_conv_id');
+      }
+    } catch {}
+  }, [activeConversation]);
+
+  // Auto-save reativo contínuo no localStorage e no PostgreSQL 17 / Vault
+  useEffect(() => {
+    const payload = {
+      projects,
+      activeConversationId: activeConversation.id,
+      openConversationIds: openConversations.map(c => c.id),
+      updatedAt: new Date().toISOString()
+    };
+    cockpitPersistenceService.queueSave(payload);
+  }, [projects, activeConversation, openConversations]);
+
+  // Helper centralizado para sincronização atômica entre conversa ativa, abas abertas e lista em projetos
+  const syncConversation = (updater: (prev: Conversation) => Conversation) => {
+    setActiveConversation(prev => {
+      const updated = updater(prev);
+      setOpenConversations(openPrev => openPrev.map(c => c.id === updated.id ? updated : c));
+      setProjects(projPrev => {
+        let matched = false;
+        const next = projPrev.map(proj => {
+          const idx = proj.conversations.findIndex(c => c.id === updated.id);
+          if (idx !== -1) {
+            matched = true;
+            const updatedConvs = [...proj.conversations];
+            updatedConvs[idx] = updated;
+            return { ...proj, conversations: updatedConvs };
+          }
+          return proj;
+        });
+
+        // Se a conversa não estava vinculada a nenhum projeto, adiciona ao primeiro
+        if (!matched && next[0]) {
+          next[0] = {
+            ...next[0],
+            conversations: [updated, ...next[0].conversations],
+            conversationsCount: next[0].conversations.length + 1
+          };
+        }
+        return next;
+      });
+      return updated;
+    });
+  };
 
   const handleSelectConversation = (conv: Conversation) => {
-    setActiveConversation(conv);
+    // Busca a versão mais atualizada e contígua da conversa em projects
+    let latestConv = conv;
+    for (const p of projects) {
+      const match = p.conversations.find(c => c.id === conv.id);
+      if (match) {
+        latestConv = match;
+        break;
+      }
+    }
+    setActiveConversation(latestConv);
     setActiveMainView('chat');
+
+    // Registra sessão de trabalho para restauração automática em caso de reload ou saída temporária
+    if (latestConv.messages && latestConv.messages.length > 0) {
+      try {
+        sessionStorage.setItem('pcl_cockpit_session_active', 'true');
+        sessionStorage.setItem('pcl_cockpit_working_conv_id', latestConv.id);
+        localStorage.setItem('pcl_cockpit_last_working_conv_id', latestConv.id);
+        localStorage.setItem('pcl_cockpit_last_working_timestamp', Date.now().toString());
+      } catch {}
+    }
+
     setOpenConversations(prev => {
-      if (prev.some(c => c.id === conv.id)) {
-        return prev;
+      // Remove abas vazias ao focar em uma conversa real do histórico
+      const withoutEmpty = prev.filter(c => c.id === latestConv.id || (c.messages && c.messages.length > 0));
+      if (withoutEmpty.some(c => c.id === latestConv.id)) {
+        return withoutEmpty.map(c => c.id === latestConv.id ? latestConv : c);
       }
-      if (prev.length < 5) {
-        return [...prev, conv];
+      if (withoutEmpty.length < 5) {
+        return [...withoutEmpty, latestConv];
       }
-      // Se já atingiu 5 abas, substitui a última pela nova selecionada
-      return [...prev.slice(0, 4), conv];
+      return [...withoutEmpty.slice(0, 4), latestConv];
     });
   };
 
@@ -253,30 +531,24 @@ export const App: React.FC = () => {
   };
 
   const handleNewConversation = () => {
+    // Se a conversa ativa já for uma nova conversa vazia, apenas foca nela sem criar duplicatas
+    if (activeConversation.messages.length === 0) {
+      setActiveMainView('chat');
+      return;
+    }
+
     const newC: Conversation = {
       id: `conv-${Date.now()}`,
-      title: 'Nova Conversa PCL AEOS',
+      title: 'Nova Conversa',
       dateGroup: 'Hoje',
       updatedAt: new Date().toISOString(),
       messages: []
     };
 
-    setProjects(prevProjects => {
-      const updated = [...prevProjects];
-      if (updated[0]) {
-        updated[0] = {
-          ...updated[0],
-          conversations: [newC, ...updated[0].conversations]
-        };
-      }
-      return updated;
-    });
-
+    // Abre a aba limpa sem poluir o histórico do sidebar até a primeira mensagem ser enviada
     setOpenConversations(prev => {
-      if (prev.length < 5) {
-        return [...prev, newC];
-      }
-      return [...prev.slice(0, 4), newC];
+      const filtered = prev.filter(c => c.messages && c.messages.length > 0);
+      return [newC, ...filtered.slice(0, 4)];
     });
 
     setActiveConversation(newC);
@@ -306,6 +578,9 @@ export const App: React.FC = () => {
         setActiveConversation(remaining[0]);
       } else if (projects[0]?.conversations[0]) {
         setActiveConversation(projects[0].conversations[0]);
+      } else {
+        setActiveConversation(defaultInitialConversation);
+        setOpenConversations([defaultInitialConversation]);
       }
     }
   };
@@ -362,17 +637,32 @@ export const App: React.FC = () => {
     { id: 's-4', name: 'Google Vertex AI Hub', status: 'online', latencyMs: 180, icon: 'Globe' }
   ];
 
-  const handleSendMessage = async (text: string, webSearch?: boolean, profileId: string = 'sintese-executiva') => {
+  const handleSendMessage = async (
+    text: string, 
+    webSearch?: boolean, 
+    profileId: string = 'sintese-executiva',
+    modelId?: string,
+    targetFormat?: TargetArtifactFormat,
+    attachedStudy?: StudyAttachment
+  ) => {
     const userMessageId = `msg-${Date.now()}`;
     const agentReplyId = `msg-reply-${Date.now() + 1}`;
+
+    const displayText = attachedStudy 
+      ? `📎 [Estudo: ${attachedStudy.filename}]\n\n${text}`
+      : text;
 
     const newMessage: ChatMessage = {
       id: userMessageId,
       sender: 'user',
       senderName: userProfile.name,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      text
+      text: displayText
     };
+
+    const promptForLLM = attachedStudy?.extractedText
+      ? `[ESTUDO ANEXADO: ${attachedStudy.filename} (${attachedStudy.pageCount || 1} págs)]\n${attachedStudy.extractedText.slice(0, 8000)}\n\n[SOLICITAÇÃO DO USUÁRIO]:\n${text}`
+      : text;
 
     // Estrutura inicial do Stepper de Execução Cognitiva
     const initialSteps: ChatMessage['steps'] = [
@@ -400,30 +690,14 @@ export const App: React.FC = () => {
       ? (text.slice(0, 28) + (text.length > 28 ? '...' : '')) 
       : activeConversation.title;
 
-    setActiveConversation(prev => ({
+    // Sincronização Atômica Imediata: persiste a mensagem do usuário e o placeholder
+    syncConversation(prev => ({
       ...prev,
       title: dynamicTitle,
       messages: [...prev.messages, newMessage, placeholderReply]
     }));
 
-    if (isFirstMessage) {
-      setOpenConversations(prev => prev.map(c => c.id === activeConversation.id ? { ...c, title: dynamicTitle } : c));
-      setProjects(prev => {
-        const next = [...prev];
-        if (next[0]) {
-          const exists = next[0].conversations.some(c => c.id === activeConversation.id);
-          if (!exists) {
-            next[0] = {
-              ...next[0],
-              conversations: [{ ...activeConversation, title: dynamicTitle }, ...next[0].conversations]
-            };
-          }
-        }
-        return next;
-      });
-    }
-
-    // Cronômetro dinâmico em tempo real atualizado a cada 100ms
+    // Cronômetro dinâmico em tempo real
     const startTime = performance.now();
     const timerInterval = setInterval(() => {
       const elapsed = (performance.now() - startTime) / 1000;
@@ -431,15 +705,15 @@ export const App: React.FC = () => {
         ...prev,
         messages: prev.messages.map(m => m.id === agentReplyId ? { ...m, elapsedSeconds: elapsed } : m)
       }));
-    }, 100);
+    }, 150);
 
     try {
-      // ETAPA 1: Laya Coprocessor System One em CPU
+      // ETAPA 1: Laya Coprocessor System One em CPU (0 MB VRAM)
       const layaStartTime = performance.now();
-      const layaResult = await layaCoprocessorService.classifyIntent(text);
+      const layaResult = await layaCoprocessorService.classifyIntent(promptForLLM);
       const layaDuration = Math.round(performance.now() - layaStartTime);
 
-      setActiveConversation(prev => ({
+      syncConversation(prev => ({
         ...prev,
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId || !m.steps) return m;
@@ -449,7 +723,7 @@ export const App: React.FC = () => {
             ...updatedSteps[1], 
             status: layaResult.needsCanonicalRAG ? 'running' : 'skipped', 
             detail: layaResult.needsCanonicalRAG 
-              ? 'Indexando ADR-0001 a ADR-0006 e catálogo de skills...' 
+              ? 'Indexando especificações canônicas PCL e catálogo de skills...' 
               : 'Dispensada (pergunta geral sem dependência de normas internas).' 
           };
           return { ...m, activeStepIndex: 1, steps: updatedSteps };
@@ -462,13 +736,13 @@ export const App: React.FC = () => {
 
       const groundingStartTime = performance.now();
       const groundingResult = await intelligentGroundingService.performGrounding(
-        text, 
+        promptForLLM, 
         shouldSearchWeb, 
         shouldQueryCanonical
       );
       const groundingDuration = Math.round(performance.now() - groundingStartTime);
 
-      setActiveConversation(prev => ({
+      syncConversation(prev => ({
         ...prev,
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId || !m.steps) return m;
@@ -496,8 +770,7 @@ export const App: React.FC = () => {
         })
       }));
 
-      // ETAPA 4: Inferência com Histórico Multi-Turn Completo
-      // Extrai o histórico conversacional real de todas as mensagens anteriores
+      // ETAPA 4: Inferência com Histórico Multi-Turn Completo (ADR-0007)
       const conversationHistory = activeConversation.messages
         .filter(m => m.id !== newMessage.id && m.id !== agentReplyId && m.text && m.text.trim())
         .map(m => ({
@@ -510,11 +783,12 @@ export const App: React.FC = () => {
         groundingResult.groundedPrompt, 
         undefined, 
         profileId,
-        conversationHistory
+        conversationHistory,
+        modelId
       );
       const omniDuration = Math.round(performance.now() - omniStartTime);
 
-      // ETAPA 5: Finalização e Auditoria
+      // ETAPA 5: Finalização e Auditoria Criptográfica
       clearInterval(timerInterval);
       const totalElapsed = (performance.now() - startTime) / 1000;
 
@@ -525,13 +799,32 @@ export const App: React.FC = () => {
         source: s.sourceType === 'local_canonical' ? 'Repositório Canônico PCL' : 'Web Externa'
       }));
 
-      setActiveConversation(prev => ({
+      const generatedArtifacts = await generateArtifactsFromInteraction(
+        text, 
+        omniResult.text,
+        targetFormat,
+        attachedStudy?.filename
+      );
+
+      // Persistência no PostgreSQL 17 (:5432) e Vault em disco
+      for (const art of generatedArtifacts) {
+        cockpitPersistenceService.persistArtifact(art);
+      }
+
+      syncConversation(prev => ({
         ...prev,
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId || !m.steps) return m;
           const updatedSteps = [...m.steps];
           updatedSteps[3] = { ...updatedSteps[3], status: 'completed', durationMs: omniDuration, detail: `Inferência concluída via ${omniResult.providerUsed} (${omniResult.modelUsed}).` };
-          updatedSteps[4] = { ...updatedSteps[4], status: 'completed', durationMs: 12, detail: `Consistência factual validada (SHA-256: ${omniResult.sha256Hash.slice(0, 12)}...).` };
+          updatedSteps[4] = {
+            ...updatedSteps[4],
+            status: 'completed',
+            durationMs: 12,
+            detail: generatedArtifacts.length > 0
+              ? `Consistência validada + ${generatedArtifacts.length} artefato(s) multimodal(is) gerado(s) (SHA-256: ${omniResult.sha256Hash.slice(0, 10)}...).`
+              : `Consistência factual validada (SHA-256: ${omniResult.sha256Hash.slice(0, 12)}...).`
+          };
 
           return {
             ...m,
@@ -541,14 +834,15 @@ export const App: React.FC = () => {
             steps: updatedSteps,
             elapsedSeconds: totalElapsed,
             confidenceScore: groundingResult.confidenceScore,
-            webReferences: webRefs
+            webReferences: webRefs,
+            artifacts: generatedArtifacts.length > 0 ? generatedArtifacts : m.artifacts
           };
         })
       }));
     } catch (err) {
       clearInterval(timerInterval);
       console.error('Falha na execução do pipeline cognitivo:', err);
-      setActiveConversation(prev => ({
+      syncConversation(prev => ({
         ...prev,
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId) return m;
@@ -559,6 +853,37 @@ export const App: React.FC = () => {
           };
         })
       }));
+    }
+  };
+
+  const handleGenerateArtifactForMessage = async (msg: ChatMessage, format: TargetArtifactFormat) => {
+    try {
+      const msgIndex = activeConversation.messages.findIndex(m => m.id === msg.id);
+      const precedingUserMsg = msgIndex > 0 
+        ? [...activeConversation.messages.slice(0, msgIndex)].reverse().find(m => m.sender === 'user') 
+        : null;
+      const contextPrompt = precedingUserMsg?.text || activeConversation.title || 'Análise Técnica';
+
+      const generated = await generateArtifactsFromInteraction(
+        contextPrompt,
+        msg.text,
+        format
+      );
+      if (generated.length > 0) {
+        for (const art of generated) {
+          cockpitPersistenceService.persistArtifact(art);
+        }
+        syncConversation(prev => ({
+          ...prev,
+          messages: prev.messages.map(m => m.id === msg.id ? {
+            ...m,
+            artifacts: [...(m.artifacts || []), ...generated]
+          } : m)
+        }));
+        setActiveArtifact(generated[0]);
+      }
+    } catch (err) {
+      console.error('Falha ao gerar artefato a partir da mensagem:', err);
     }
   };
 
@@ -609,7 +934,7 @@ export const App: React.FC = () => {
 
   return (
     <div className={`h-screen w-screen flex flex-col overflow-hidden ${theme === 'dark' ? 'dark bg-slate-900 text-slate-100' : 'bg-white text-slate-900'}`}>
-      {/* Header Bar com Botão Telemetria & Status */}
+      {/* Header Bar com Botão Telemetria & Status e Help Center */}
       <Header
         user={userProfile}
         lang={lang}
@@ -622,6 +947,7 @@ export const App: React.FC = () => {
         }}
         onToggleStatusPanel={() => setRightCollapsed(!rightCollapsed)}
         isStatusPanelOpen={!rightCollapsed}
+        onOpenHelpCenter={() => setHelpCenterOpen(true)}
       />
 
       {/* Main 3-Column Layout */}
@@ -642,7 +968,7 @@ export const App: React.FC = () => {
           onCreateProject={handleCreateProject}
         />
 
-        {/* Central Workspace & Composer or Specialized Views (Meetings / Flows) */}
+        {/* Central Workspace & Composer or Specialized Views (Meetings / Flows / Artifacts) */}
         <main className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-slate-900">
           {activeMainView === 'chat' ? (
             <>
@@ -654,6 +980,7 @@ export const App: React.FC = () => {
                 onNewConversation={handleNewConversation}
                 onOpenArtifact={art => setActiveArtifact(art)}
                 onCreateBranch={handleCreateBranch}
+                onGenerateArtifactForMessage={handleGenerateArtifactForMessage}
                 viewMode={workspaceViewMode}
                 onViewModeChange={setWorkspaceViewMode}
                 onPromptCardClick={(prompt) => handleSendMessage(prompt, false)}
@@ -669,8 +996,15 @@ export const App: React.FC = () => {
             </>
           ) : activeMainView === 'meetings' ? (
             <MeetingsIntelligenceView onOpenArtifact={art => setActiveArtifact(art)} />
-          ) : (
+          ) : activeMainView === 'flows' ? (
             <FlowsAutomationCanvas />
+          ) : (
+            <ArtifactsLibraryView
+              projects={projects}
+              onOpenArtifact={art => setActiveArtifact(art)}
+              onSelectConversation={handleSelectConversation}
+              onNewConversation={handleNewConversation}
+            />
           )}
         </main>
 
@@ -710,6 +1044,16 @@ export const App: React.FC = () => {
           onClose={() => setSettingsOpen(false)}
         />
       )}
+
+      {/* Official Help Center & Operator Enablement Modal */}
+      <HelpCenterModal
+        isOpen={helpCenterOpen}
+        onClose={() => setHelpCenterOpen(false)}
+        onOpenSettingsTab={(tab) => {
+          setSettingsTab(tab);
+          setSettingsOpen(true);
+        }}
+      />
     </div>
   );
 };

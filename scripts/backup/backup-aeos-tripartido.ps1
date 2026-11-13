@@ -6,7 +6,7 @@
 [CmdletBinding()]
 param (
     [Parameter(Mandatory=$false)]
-    [ValidateSet('cron', 'event', 'force', 'sync', 'all', 'help')]
+    [ValidateSet('cron', 'event', 'force', 'sync', 'vault', 'all', 'help')]
     [string]$Mode = 'help'
 )
 
@@ -164,6 +164,54 @@ function Backup-MediumTermDocs([bool]$Force = $false) {
 }
 
 # ==============================================================================
+# PIPELINE 2B: COCKPIT VAULT & ARTIFACTS DRP (CLOUDFLARE R2)
+# ==============================================================================
+function Backup-CockpitVault {
+    try {
+        $vaultDir = Join-Path $LocalDocsDir "data\cockpit-vault"
+        Log-Info "Avaliando backup do Cockpit Vault & Artefatos em: $vaultDir..."
+        if (-not (Test-Path $vaultDir)) {
+            Log-Warn "Diretório $vaultDir ainda não criado. Backup do Vault suspenso."
+            return
+        }
+
+        $timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'
+        $zipFile   = Join-Path $TempDir "pcl-cockpit-vault-$timestamp.zip"
+        $encZip    = "$zipFile.enc"
+
+        Log-Info "Compactando acervo de artefatos e catálogo do Vault..."
+        Compress-Archive -Path "$vaultDir\*" -DestinationPath $zipFile -Force -ErrorAction SilentlyContinue
+        if (-not (Test-Path $zipFile)) {
+            Log-Warn "Vault vazio ou sem arquivos para compactar."
+            return
+        }
+
+        $vaultSizeMB = [math]::Round(((Get-Item $zipFile).Length / 1MB), 2)
+        Log-Success "Vault compactado ($vaultSizeMB MB): $zipFile"
+
+        if (Get-Command openssl -ErrorAction SilentlyContinue) {
+            openssl enc -aes-256-cbc -salt -pbkdf2 -iter 100000 -in $zipFile -out $encZip -pass "pass:$EncryptionKey"
+        } else {
+            Copy-Item $zipFile $encZip
+        }
+
+        # Enviar para Cloudflare R2
+        $fileName = Split-Path $encZip -Leaf
+        $r2ObjectPath = "$R2Bucket/cockpit-vault/$fileName"
+        Log-Info "Enviando Vault criptografado para o Cloudflare R2: $r2ObjectPath..."
+        npx wrangler@3.100.0 r2 object put $r2ObjectPath --file=$encZip
+        if ($LASTEXITCODE -eq 0) {
+            Log-Success "Cockpit Vault enviado com SUCESSO para o Cloudflare R2: /cockpit-vault/$fileName"
+        } else {
+            Log-Warn "Falha no envio R2 do Vault. Cópia mantida localmente em $zipFile."
+        }
+    }
+    catch {
+        Log-Error "Falha no pipeline de Cockpit Vault: $_"
+    }
+}
+
+# ==============================================================================
 # PIPELINE 3: SINCRONIZAÇÃO ATIVA DE BORDA (HOT SYNC CLOUDFLARE D1 / VECTORIZE)
 # ==============================================================================
 function Sync-EdgeServices {
@@ -178,18 +226,20 @@ function Sync-EdgeServices {
 # --- EXECUÇÃO DE ACORDO COM O PARÂMETRO ---
 try {
     switch ($Mode.ToLower()) {
-        'cron'  { Backup-LongTermDB }
+        'cron'  { Backup-LongTermDB; Backup-CockpitVault }
         'event' { Backup-MediumTermDocs -Force:$false }
         'force' { Backup-MediumTermDocs -Force:$true }
+        'vault' { Backup-CockpitVault }
         'sync'  { Sync-EdgeServices }
         'all'   {
             Backup-LongTermDB
+            Backup-CockpitVault
             Backup-MediumTermDocs -Force:$false
             Sync-EdgeServices
             Log-Success "Todos os pipelines executados com sucesso!"
         }
         default {
-            Write-Host "Uso: .\backup-aeos-tripartido.ps1 -Mode [cron|event|force|sync|all]" -ForegroundColor Cyan
+            Write-Host "Uso: .\backup-aeos-tripartido.ps1 -Mode [cron|event|force|vault|sync|all]" -ForegroundColor Cyan
         }
     }
 }

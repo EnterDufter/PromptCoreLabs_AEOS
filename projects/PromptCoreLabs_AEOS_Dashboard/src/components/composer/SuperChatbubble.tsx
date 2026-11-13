@@ -3,7 +3,9 @@ import { createPortal } from 'react-dom';
 import { 
   Send, Cpu, ChevronDown, ShieldCheck, Zap, Database, 
   FileText, Check, ChevronRight, User, Sparkles, Globe,
-  Brain, Terminal, Lock, Sliders, ExternalLink
+  Brain, Terminal, Lock, Sliders, ExternalLink, Presentation,
+  Table as TableIcon, Layers, Image as ImageIcon, Volume2, Video as VideoIcon,
+  X, Paperclip
 } from 'lucide-react';
 import { ContextPopover } from './ContextPopover';
 import { VoiceRecorderButton } from './VoiceRecorderButton';
@@ -12,9 +14,17 @@ import { piiGuardService } from '../../services/security/piiGuardService';
 import { OMNIROUTE_MODELS, ModelOption } from '../../services/llm/omniRouteService';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
 import { useI18n } from '../../i18n/I18nContext';
+import { TargetArtifactFormat, StudyAttachment } from '../../types';
 
 interface SuperChatbubbleProps {
-  onSendMessage: (text: string, webSearch?: boolean, profileId?: string) => void;
+  onSendMessage: (
+    text: string, 
+    webSearch?: boolean, 
+    profileId?: string, 
+    modelId?: string,
+    targetFormat?: TargetArtifactFormat,
+    attachedStudy?: StudyAttachment
+  ) => void;
   usedTokens?: number;
   maxTokens?: number;
 }
@@ -180,8 +190,23 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   const [selectedSpecificModel, setSelectedSpecificModel] = useState<AIModelDetails | null>(null);
   const [consoleTab, setConsoleTab] = useState<'profiles' | 'models'>('profiles');
   const [showModelMenu, setShowModelMenu] = useState(false);
+  const [showArtifactMenu, setShowArtifactMenu] = useState(false);
   const [piiStatus, setPiiStatus] = useState<string | null>(null);
   const [webSearchEnabled, setWebSearchEnabled] = useState(false);
+  const [selectedTargetFormat, setSelectedTargetFormat] = useState<TargetArtifactFormat | null>(null);
+  const [attachedStudy, setAttachedStudy] = useState<StudyAttachment | null>(null);
+
+  const getTargetFormatLabel = (fmt: TargetArtifactFormat) => {
+    switch (fmt) {
+      case 'slide': return 'Apresentação 16:9 (.pptx)';
+      case 'sheet': return 'Planilha Analítica (.xlsx)';
+      case 'diagram': return 'Diagrama Mermaid (.svg)';
+      case 'infographic': return 'Infográfico & KPIs (.svg)';
+      case 'app': return 'Simulador Interativo (.html)';
+      case 'doc': return 'Documento Executivo (.md)';
+      default: return 'Artefato Dinâmico';
+    }
+  };
 
   // Mention system state (@ or #)
   const [mentionType, setMentionType] = useState<'app_or_user' | 'doc' | null>(null);
@@ -314,12 +339,22 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   };
 
   const handleSend = () => {
-    if (!text.trim()) return;
+    if (!text.trim() && !attachedStudy) return;
     const sanitized = piiGuardService.sanitizePrompt(text).sanitizedText;
-    onSendMessage(sanitized, webSearchEnabled, selectedProfile.id);
+    const targetModelId = selectedSpecificModel?.id || selectedProfile.defaultModelId;
+    onSendMessage(
+      sanitized, 
+      webSearchEnabled, 
+      selectedProfile.id, 
+      targetModelId,
+      selectedTargetFormat || undefined,
+      attachedStudy || undefined
+    );
     setText('');
     setPiiStatus(null);
     setMentionType(null);
+    setSelectedTargetFormat(null);
+    setAttachedStudy(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -480,6 +515,44 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
           </div>
         )}
 
+        {/* Dynamic Study Attachment & Target Format Badges */}
+        {(attachedStudy || selectedTargetFormat) && (
+          <div className="flex flex-wrap items-center gap-1.5 pb-1">
+            {attachedStudy && (
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/70 border border-sky-300 dark:border-sky-800 text-[11px] text-sky-800 dark:text-sky-200 animate-in fade-in duration-100">
+                <Paperclip className="w-3.5 h-3.5 text-sky-600" />
+                <span className="font-semibold truncate max-w-[200px]">Estudo: {attachedStudy.filename}</span>
+                {attachedStudy.pageCount && attachedStudy.pageCount > 1 && (
+                  <span className="font-mono text-[10px] text-sky-500">({attachedStudy.pageCount} págs)</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setAttachedStudy(null)}
+                  className="p-0.5 hover:bg-sky-200 dark:hover:bg-sky-800 rounded text-sky-600 transition"
+                  title="Remover estudo anexado"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+
+            {selectedTargetFormat && (
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 text-[11px] text-emerald-800 dark:text-emerald-200 animate-in fade-in duration-100">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="font-semibold">Formato: {getTargetFormatLabel(selectedTargetFormat)}</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTargetFormat(null)}
+                  className="p-0.5 hover:bg-emerald-200 dark:hover:bg-emerald-800 rounded text-emerald-600 transition"
+                  title="Remover formato alvo"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Text Area */}
         <textarea
           ref={textareaRef}
@@ -495,7 +568,10 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
         <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80">
           {/* Left Controls: Popover [+], Voice Recorder & Web Search Toggle */}
           <div className="flex items-center space-x-1.5">
-            <ContextPopover onSelectOption={opt => setText(prev => `${prev}\n[Contexto: ${opt}]`)} />
+            <ContextPopover 
+              onSelectOption={opt => setText(prev => `${prev}\n[Contexto: ${opt}]`)}
+              onStudyAttached={study => setAttachedStudy(study)}
+            />
             <VoiceRecorderButton onTranscriptionComplete={txt => setText(prev => `${prev} ${txt}`.trim())} />
 
             {/* Web Search Toggle Button */}
@@ -514,6 +590,73 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
                 {webSearchEnabled ? 'Web Ativa' : 'Web'}
               </span>
             </button>
+
+            {/* Studio Multimodal de Artefatos (1-Clique) */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowArtifactMenu(!showArtifactMenu)}
+                className={`px-2 py-1 rounded-lg border transition flex items-center space-x-1.5 text-xs ${
+                  showArtifactMenu || selectedTargetFormat
+                    ? 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-400 text-emerald-700 dark:text-emerald-300 font-semibold shadow-xs'
+                    : 'bg-transparent border-transparent text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
+                }`}
+                title="Escolher Formato Alvo para Geração de Artefato (Preserva seu prompt!)"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="text-[11px]">
+                  {selectedTargetFormat ? getTargetFormatLabel(selectedTargetFormat).split(' ')[0] : 'Artefatos'}
+                </span>
+              </button>
+
+              {showArtifactMenu && (
+                <div className="absolute left-0 bottom-10 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 z-50 text-xs animate-in fade-in duration-100">
+                  <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1 flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      Geração de Artefatos Alvo
+                    </span>
+                    <span className="text-[9px] font-mono text-emerald-500">6 Formatos Reais</span>
+                  </div>
+                  {[
+                    { icon: Presentation, color: 'text-amber-500', label: 'Apresentação de Slides 16:9 (.pptx)', format: 'slide' as TargetArtifactFormat, detail: 'Reveal.js editável em PowerPoint' },
+                    { icon: TableIcon, color: 'text-emerald-500', label: 'Planilha Analítica (.xlsx)', format: 'sheet' as TargetArtifactFormat, detail: 'Grade ordenável com exportação Excel' },
+                    { icon: Layers, color: 'text-indigo-500', label: 'Diagrama Cortex v7 (.svg)', format: 'diagram' as TargetArtifactFormat, detail: 'Mermaid com zoom e exportação vetorial' },
+                    { icon: ImageIcon, color: 'text-sky-500', label: 'Infográfico & KPIs (.svg)', format: 'infographic' as TargetArtifactFormat, detail: 'Gráficos e infográficos de alta resolução' },
+                    { icon: Sparkles, color: 'text-pink-500', label: 'Simulador / App Sandbox (.html)', format: 'app' as TargetArtifactFormat, detail: 'Aplicação HTML5 funcional no iframe' },
+                    { icon: FileText, color: 'text-slate-500', label: 'Documento Executivo (.md)', format: 'doc' as TargetArtifactFormat, detail: 'Relatório estruturado com SHA-256' }
+                  ].map((item, idx) => {
+                    const IconC = item.icon;
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setSelectedTargetFormat(item.format);
+                          setShowArtifactMenu(false);
+                          setTimeout(() => textareaRef.current?.focus(), 40);
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition group"
+                      >
+                        <div className="flex items-center space-x-2 min-w-0 pr-2">
+                          <IconC className={`w-3.5 h-3.5 ${item.color} flex-shrink-0`} />
+                          <div className="min-w-0">
+                            <span className="font-medium text-slate-700 dark:text-slate-200 truncate block group-hover:text-emerald-500">
+                              {item.label}
+                            </span>
+                            <span className="text-[9.5px] text-slate-400 truncate block">
+                              {item.detail}
+                            </span>
+                          </div>
+                        </div>
+                        {selectedTargetFormat === item.format && (
+                          <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Right Controls: Token Aqua Orb, Reasoning Selector & Send Button */}
