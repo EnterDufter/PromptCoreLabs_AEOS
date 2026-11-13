@@ -751,7 +751,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-slate-950 overflow-hidden select-none relative">
       {/* 1. Barra Superior de Abas de Fluxos (Até 5 Abas) */}
-      <div className="h-10 px-3 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs z-30">
+      <div className="h-10 px-3 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs z-10">
         <div className="flex items-center space-x-1 overflow-x-auto custom-scrollbar max-w-[80%]">
           {openFlows.map(flow => {
             const isActive = flow.id === activeFlowId;
@@ -796,8 +796,15 @@ export const FlowsAutomationCanvas: React.FC = () => {
           )}
         </div>
 
-        {/* Indicador de Squad / Organização */}
+        {/* Indicador de Squad / Preview Simulado */}
         <div className="flex items-center space-x-2 text-[11px] font-mono text-slate-400">
+          <span
+            data-testid="flows-simulated-badge"
+            className="px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 font-semibold text-[10px]"
+            title="Canvas DAG interativo com execução simulada localmente (worker real na Fase 3/4)"
+          >
+            Modo Simulado / Preview (Fase 3/4)
+          </span>
           <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>Squad: <strong className="text-slate-700 dark:text-slate-300 font-semibold">{activeFlow.squad}</strong></span>
         </div>
@@ -1270,7 +1277,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
 
         {/* 4. Slide-Over Flutuante com Overlay (Drawer que não espreme o Canvas) */}
         {selectedNode && (
-          <aside className="inspector-panel absolute right-0 top-0 bottom-0 w-[420px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-l border-slate-200 dark:border-slate-800 flex flex-col h-full shadow-2xl z-40 animate-in slide-in-from-right duration-200">
+          <aside className="inspector-panel absolute right-0 top-0 bottom-0 w-[420px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-l border-slate-200 dark:border-slate-800 flex flex-col h-full shadow-2xl z-20 animate-in slide-in-from-right duration-200">
             {/* Inspector Header */}
             <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
               <div className="flex items-center space-x-2.5 truncate">

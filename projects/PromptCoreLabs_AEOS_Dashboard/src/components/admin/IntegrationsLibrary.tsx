@@ -133,9 +133,9 @@ const DEFAULT_MCP_SERVERS: MCPServerDefinition[] = [
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-github'],
     enabled: true,
-    status: 'CONNECTED',
+    status: 'DISCONNECTED',
     isLocalSovereign: false,
-    description: 'Integração bilateral com repositórios GitHub para criação de PRs, inspeção de commits e issues.',
+    description: 'Integração bilateral com repositórios GitHub (requer GITHUB_PERSONAL_ACCESS_TOKEN configurado no .env).',
     toolsCount: 8,
     tools: [
       { name: 'create_or_update_file', description: 'Cria ou edita arquivos no repositório remoto via git API' },
@@ -356,11 +356,21 @@ export const IntegrationsLibrary: React.FC = () => {
     }
   });
 
-  // Modal de Configuração de Credencial
+  // Modal de Configuração de Credencial (Metadados não-sensíveis em localStorage; segredos permanecem apenas na memória da sessão)
   const [activeConfigConnector, setActiveConfigConnector] = useState<CorporateConnector | null>(null);
   const [tempCredentials, setTempCredentials] = useState<Record<string, string>>({});
+  const [sessionConnectorSecrets, setSessionConnectorSecrets] = useState<Record<string, Record<string, string>>>({});
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isRunningFullDiagnostic, setIsRunningFullDiagnostic] = useState(false);
+  const [fullDiagnosticReport, setFullDiagnosticReport] = useState<{
+    ok: boolean;
+    timestamp: string;
+    durationMs: number;
+    summary: { passed: number; warned: number; failed: number; total: number };
+    checks: Array<{ id: string; category: string; name: string; status: 'PASS' | 'WARN' | 'FAIL'; latencyMs: number; detail: string; actionHint?: string }>;
+    sha256Receipt: string;
+  } | null>(null);
 
   useEffect(() => {
     const unsubscribe = daemonHealthService.subscribe(newSnapshot => {
@@ -414,14 +424,22 @@ export const IntegrationsLibrary: React.FC = () => {
         data.calledToolName = callToolName;
       }
       setLiveHandshake(data);
-      if (data.ok && Array.isArray(data.tools) && data.tools.length > 0) {
+      if (data.ok && Array.isArray(data.tools)) {
         const updatedServer: MCPServerDefinition = {
           ...server,
+          status: 'CONNECTED',
           toolsCount: data.tools.length,
           tools: data.tools
         };
-        setInspectingServer(updatedServer);
-        setMcpServers(prev => prev.map(s => (s.id === server.id ? updatedServer : s)));
+        setInspectingServer(prev => (prev?.id === server.id ? updatedServer : prev));
+        saveMcpServers(mcpServers.map(s => (s.id === server.id ? updatedServer : s)));
+      } else {
+        const failedServer: MCPServerDefinition = {
+          ...server,
+          status: 'DISCONNECTED'
+        };
+        setInspectingServer(prev => (prev?.id === server.id ? failedServer : prev));
+        saveMcpServers(mcpServers.map(s => (s.id === server.id ? failedServer : s)));
       }
     } catch (e: any) {
       setLiveHandshake({
@@ -538,18 +556,14 @@ export const IntegrationsLibrary: React.FC = () => {
       name: newMcpName.trim(),
       transport: newMcpTransport,
       command: newMcpTransport === 'stdio' ? newMcpCommand.trim() : undefined,
-      args: newMcpTransport === 'stdio' ? newMcpArgs.trim().split(/\s+/) : undefined,
+      args: newMcpTransport === 'stdio' ? newMcpArgs.trim().split(/\s+/).filter(Boolean) : undefined,
       url: newMcpTransport === 'sse' ? newMcpUrl.trim() : undefined,
       enabled: true,
-      status: 'CONNECTED',
+      status: 'DISCONNECTED',
       isLocalSovereign: newMcpIsSovereign,
-      description: newMcpDesc.trim() || 'Servidor MCP cadastrado pelo usuário.',
-      toolsCount: 3,
-      tools: [
-        { name: 'execute_command', description: 'Executa comandos ou queries específicas' },
-        { name: 'fetch_resource', description: 'Obtém dados ou esquemas do servidor MCP' },
-        { name: 'list_capabilities', description: 'Retorna recursos disponíveis' }
-      ]
+      description: newMcpDesc.trim() || 'Servidor MCP cadastrado pelo usuário (aguardando inspeção JSON-RPC).',
+      toolsCount: 0,
+      tools: []
     };
     const updated = [...mcpServers, newServer];
     saveMcpServers(updated);
@@ -576,14 +590,11 @@ export const IntegrationsLibrary: React.FC = () => {
       command: cmd,
       args,
       enabled: true,
-      status: 'CONNECTED',
+      status: 'DISCONNECTED',
       isLocalSovereign: item.isLocalSovereign,
       description: item.description,
-      toolsCount: 4,
-      tools: [
-        { name: 'query_data', description: 'Consulta dados no repositório' },
-        { name: 'sync_schema', description: 'Sincroniza estrutura' }
-      ]
+      toolsCount: 0,
+      tools: []
     };
     saveMcpServers([...mcpServers, newServer]);
   };
@@ -604,13 +615,11 @@ export const IntegrationsLibrary: React.FC = () => {
           url: val.url,
           env: val.env,
           enabled: true,
-          status: 'CONNECTED',
+          status: 'DISCONNECTED',
           isLocalSovereign: !val.url,
-          description: `Importado de mcpServers.json (${key})`,
-          toolsCount: 5,
-          tools: [
-            { name: `${key}_default_action`, description: `Ação padrão do servidor ${key}` }
-          ]
+          description: `Importado de mcpServers.json (${key}) — aguardando handshake JSON-RPC`,
+          toolsCount: 0,
+          tools: []
         });
       });
 
@@ -658,14 +667,42 @@ export const IntegrationsLibrary: React.FC = () => {
 
   const handleOpenConfigModal = (connector: CorporateConnector) => {
     setActiveConfigConnector(connector);
-    setTempCredentials(configuredConnectors[connector.id] || {});
+    const storedMeta = configuredConnectors[connector.id] || {};
+    const memSecrets = sessionConnectorSecrets[connector.id] || {};
+    const merged: Record<string, string> = {};
+    for (const f of connector.requiredFields) {
+      merged[f.key] = f.isSecret ? (memSecrets[f.key] || '') : (storedMeta[f.key] || '');
+    }
+    setTempCredentials(merged);
   };
 
   const handleSaveCredentials = () => {
     if (!activeConfigConnector) return;
+    const secretValues: Record<string, string> = {};
+    const safeMetadata: Record<string, string> = {
+      configuredAt: new Date().toISOString(),
+      storagePolicy: 'masked-no-plaintext-secret'
+    };
+
+    for (const f of activeConfigConnector.requiredFields) {
+      const rawVal = (tempCredentials[f.key] || '').trim();
+      if (!rawVal) continue;
+      if (f.isSecret) {
+        secretValues[f.key] = rawVal;
+        safeMetadata[`${f.key}_masked`] = rawVal.length > 4 ? `••••${rawVal.slice(-4)}` : '••••';
+      } else {
+        safeMetadata[f.key] = rawVal;
+      }
+    }
+
+    setSessionConnectorSecrets(prev => ({
+      ...prev,
+      [activeConfigConnector.id]: secretValues
+    }));
+
     const updated = {
       ...configuredConnectors,
-      [activeConfigConnector.id]: tempCredentials
+      [activeConfigConnector.id]: safeMetadata
     };
     setConfiguredConnectors(updated);
     try {
@@ -680,10 +717,42 @@ export const IntegrationsLibrary: React.FC = () => {
     const updated = { ...configuredConnectors };
     delete updated[connectorId];
     setConfiguredConnectors(updated);
+    setSessionConnectorSecrets(prev => {
+      const copy = { ...prev };
+      delete copy[connectorId];
+      return copy;
+    });
     try {
       localStorage.setItem('pcl_configured_connectors', JSON.stringify(updated));
     } catch {
       // Ignora erro
+    }
+  };
+
+  const handleRunFullDiagnostics = async () => {
+    setIsRunningFullDiagnostic(true);
+    try {
+      const res = await fetch('/api/aeos/diagnostics/run-all', { signal: AbortSignal.timeout(12000) });
+      const data = await res.json();
+      setFullDiagnosticReport(data);
+    } catch (e: any) {
+      setFullDiagnosticReport({
+        ok: false,
+        timestamp: new Date().toISOString(),
+        durationMs: 0,
+        summary: { passed: 0, warned: 0, failed: 1, total: 1 },
+        checks: [{
+          id: 'diagnostics-endpoint',
+          category: 'INFRA',
+          name: 'Endpoint de Autodiagnóstico',
+          status: 'FAIL',
+          latencyMs: 0,
+          detail: `Falha ao consultar /api/aeos/diagnostics/run-all: ${e?.message || 'erro desconhecido'}`
+        }],
+        sha256Receipt: 'error-offline'
+      });
+    } finally {
+      setIsRunningFullDiagnostic(false);
     }
   };
 
@@ -716,6 +785,87 @@ export const IntegrationsLibrary: React.FC = () => {
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
           <span>Resíduo Zero de Dados</span>
         </div>
+      </div>
+
+      {/* AUTODIAGNÓSTICO VIVO DO ECOSSISTEMA (END-TO-END PROBE) */}
+      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <div className="flex items-center space-x-2">
+              <Terminal className="w-4 h-4 text-sky-500" />
+              <h3 className="font-bold text-xs text-slate-900 dark:text-slate-100">
+                Autodiagnóstico Completo de Portas, MCPs, Cofre & Persistência
+              </h3>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Executa handshakes JSON-RPC reais em stdio, checa variáveis .env obrigatórias e valida portas locais sem simulação.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-testid="run-all-diagnostics-btn"
+            onClick={handleRunFullDiagnostics}
+            disabled={isRunningFullDiagnostic}
+            className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:opacity-60 text-white font-bold text-xs flex items-center space-x-2 shadow-sm transition shrink-0"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRunningFullDiagnostic ? 'animate-spin' : ''}`} />
+            <span>{isRunningFullDiagnostic ? 'Executando Probes...' : 'Executar Autodiagnóstico Completo'}</span>
+          </button>
+        </div>
+
+        {fullDiagnosticReport && (
+          <div data-testid="diagnostics-report" className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+              <div className="flex items-center space-x-2">
+                <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
+                  PASS: {fullDiagnosticReport.summary.passed}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">
+                  WARN: {fullDiagnosticReport.summary.warned}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-bold">
+                  FAIL: {fullDiagnosticReport.summary.failed}
+                </span>
+              </div>
+              <span className="text-slate-400">
+                Duração: {fullDiagnosticReport.durationMs}ms • SHA-256: {fullDiagnosticReport.sha256Receipt.slice(0, 14)}…
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {fullDiagnosticReport.checks.map(chk => (
+                <div
+                  key={chk.id}
+                  data-testid={`diagnostic-item-${chk.id}`}
+                  className={`p-3 rounded-xl border text-[11px] space-y-1 ${
+                    chk.status === 'PASS'
+                      ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60'
+                      : chk.status === 'WARN'
+                        ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/60'
+                        : 'bg-rose-50/50 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800/60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 truncate">{chk.name}</span>
+                    <span className={`px-1.5 py-0.5 rounded font-mono text-[9px] font-bold ${
+                      chk.status === 'PASS'
+                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                        : chk.status === 'WARN'
+                          ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                          : 'bg-rose-500/20 text-rose-700 dark:text-rose-300'
+                    }`}>
+                      {chk.status} • {chk.latencyMs}ms
+                    </span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-300 leading-snug">{chk.detail}</p>
+                  {chk.actionHint && (
+                    <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400">➔ {chk.actionHint}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* SEÇÃO 1: SERVIDORES MCP SOBERANOS LOCAIS (100% REAIS & EM RUNTIME) */}
@@ -978,7 +1128,16 @@ export const IntegrationsLibrary: React.FC = () => {
                     <div>
                       <h4 className="font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center space-x-1.5">
                         <span>{server.name}</span>
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span
+                          className={`w-2 h-2 rounded-full ${
+                            server.status === 'CONNECTED'
+                              ? 'bg-emerald-500 animate-pulse'
+                              : server.status === 'ERROR'
+                                ? 'bg-rose-500'
+                                : 'bg-amber-400'
+                          }`}
+                          title={`Status: ${server.status}`}
+                        />
                       </h4>
                       <span className="text-[10px] font-mono text-slate-400 block">
                         Transporte: {server.transport.toUpperCase()} {server.isLocalSovereign && '• Soberano Local ($0.00)'}
@@ -986,8 +1145,16 @@ export const IntegrationsLibrary: React.FC = () => {
                     </div>
                   </div>
 
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-300 font-mono text-[10px] font-bold border border-emerald-200 dark:border-emerald-800">
-                    {server.toolsCount} Ferramentas
+                  <span
+                    className={`px-2 py-0.5 rounded-full font-mono text-[10px] font-bold border ${
+                      server.status === 'CONNECTED'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                        : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                    }`}
+                  >
+                    {server.status === 'CONNECTED'
+                      ? `${server.toolsCount} Ferramentas`
+                      : 'Aguardando Handshake'}
                   </span>
                 </div>
 
@@ -1622,7 +1789,7 @@ export const IntegrationsLibrary: React.FC = () => {
             <div className="p-3 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-[11px] text-emerald-800 dark:text-emerald-300 flex items-start space-x-2">
               <Lock className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
               <p>
-                As chaves de API e tokens inseridos são salvos exclusivamente no armazenamento seguro do seu navegador, sem serem enviados para nuvens ou servidores externos.
+                Identificadores públicos e domínios são salvos localmente sem exposição de tokens: segredos (API Keys/Secrets) permanecem apenas na memória volátil da sessão e nunca são gravados em texto claro no localStorage.
               </p>
             </div>
 

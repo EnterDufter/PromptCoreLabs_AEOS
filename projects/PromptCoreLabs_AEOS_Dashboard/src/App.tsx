@@ -11,12 +11,15 @@ import { MeetingsIntelligenceView } from './components/workspace/MeetingsIntelli
 import { FlowsAutomationCanvas } from './components/workspace/FlowsAutomationCanvas';
 import { ArtifactsLibraryView } from './components/workspace/ArtifactsLibraryView';
 import { HelpCenterModal } from './components/help/HelpCenterModal';
+import { LoginScreen } from './components/auth/LoginScreen';
+import { authService, AuthUser, initialUserProfile } from './services/auth/authService';
 import { omniRouteService } from './services/llm/omniRouteService';
 import { layaCoprocessorService } from './services/laya/layaCoprocessorService';
 import { webSearchService } from './services/search/webSearchService';
 import { intelligentGroundingService } from './services/grounding/intelligentGroundingService';
 import { CANONICAL_DEMO_ARTIFACTS, generateArtifactsFromInteraction } from './services/artifacts/artifactGeneratorService';
 import { cockpitPersistenceService } from './services/storage/cockpitPersistenceService';
+import { calibrateConversationChronology, getConversationDateGroup } from './utils/dateGrouping';
 import { ChatMessage } from './types';
 import { useI18n } from './i18n/I18nContext';
 
@@ -31,6 +34,15 @@ export const App: React.FC = () => {
   const [helpCenterOpen, setHelpCenterOpen] = useState(false);
   const [activeMainView, setActiveMainView] = useState<MainViewMode>('chat');
   const [workspaceViewMode, setWorkspaceViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
+  const [rightPanelMode, setRightPanelMode] = useState<'telemetry' | 'governance'>('telemetry');
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => authService.getCurrentUser());
+
+  useEffect(() => {
+    const unsubscribe = authService.subscribe((user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Suporte a Deep-Linking e Automação de Evidências via URL Search Params
   useEffect(() => {
@@ -53,6 +65,10 @@ export const App: React.FC = () => {
       const urlView = params.get('view');
       if (urlView === 'artifacts' || urlView === 'meetings' || urlView === 'flows' || urlView === 'chat') {
         setActiveMainView(urlView as MainViewMode);
+      }
+      const urlPanelMode = params.get('panelMode');
+      if (urlPanelMode === 'governance' || urlPanelMode === 'telemetry') {
+        setRightPanelMode(urlPanelMode);
       }
       const urlSidebar = params.get('sidebar');
       if (urlSidebar === 'open' || urlSidebar === 'expanded' || urlSidebar === 'retracted') {
@@ -104,20 +120,7 @@ export const App: React.FC = () => {
     }
   }, [theme, lang]);
 
-  const userProfile: UserProfile = {
-    id: 'USR-001',
-    name: 'Eduardo Antigravity',
-    email: 'eduardo@promptcorelabs.com',
-    avatar: 'EA',
-    role: 'System Admin',
-    squad: 'Next Gen Sports',
-    activeSessions: 2,
-    maxSessions: 2,
-    twoFactorEnabled: true,
-    ssoConnected: true,
-    dailyTokenLimit: 500000,
-    allowedTimeWindow: '24/7'
-  };
+  const userProfile: UserProfile = currentUser || initialUserProfile;
 
   const initialArtifacts: Artifact[] = [
     {
@@ -257,7 +260,7 @@ export const App: React.FC = () => {
               sender: 'agent',
               senderName: 'Cortex Enterprise Engine',
               timestamp: '04:26',
-              text: 'Consultei os registros financeiros no @SAP e cruzei com o cadastro de contatos do @Salesforce. Encontrei 3 faturas vencidas com atraso superior a 15 dias:\n\n• **Acme Engenharia Corp** (FAT-2026-9812): R$ 48.500,00 (18 dias de atraso) — Contato: Carlos Silva (CFO)\n• **Beta Logística S.A.** (FAT-2026-9740): R$ 32.100,00 (22 dias de atraso) — Contato: Fernando Rocha (Diretor)\n• **Delta Tech Inovações** (FAT-2026-9655): R$ 19.800,00 (16 dias de atraso) — Contato: Roberta Mendes (Financeiro)\n\nVocê pode inspecionar e disparar o fluxo de cobrança automática passo a passo na aba **Fluxos de Automação**.'
+              text: 'Consultei os registros financeiros no @SAP e cruzei com o cadastro de contatos do @Salesforce. Encontrei 3 faturas vencidas com atraso superior a 15 dias:\n\n• **Acme Engenharia Corp** (FAT-2026-9812): R$ 48.500,00 (18 dias de atraso) — Contato: Carlos Silva (CFO)\n• **Beta Logística S.A.** (FAT-2026-9740): R$ 32.100,00 (22 dias de atraso) — Contato: Henrique Rocha (Diretor)\n• **Delta Tech Inovações** (FAT-2026-9655): R$ 19.800,00 (16 dias de atraso) — Contato: Roberta Mendes (Financeiro)\n\nVocê pode inspecionar e disparar o fluxo de cobrança automática passo a passo na aba **Fluxos de Automação**.'
             }
           ]
         },
@@ -295,23 +298,81 @@ export const App: React.FC = () => {
           id: 'conv-3',
           title: 'Design System & Renderização 3D de Ambientes',
           dateGroup: 'Ontem',
-          updatedAt: new Date().toISOString(),
-          messages: []
+          updatedAt: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
+          messages: [
+            {
+              id: 'm-301',
+              sender: 'user',
+              senderName: 'Eduardo Antigravity',
+              createdAt: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
+              timestamp: 'Ontem, 16:30',
+              text: 'Como podemos exportar o novo Design System Light Mode v3.9 com paleta institucional e contraste WCAG AAA?'
+            },
+            {
+              id: 'm-302',
+              sender: 'agent',
+              senderName: 'Cortex Enterprise Engine',
+              createdAt: new Date(Date.now() - 26 * 3600 * 1000 + 60000).toISOString(),
+              timestamp: 'Ontem, 16:31',
+              text: 'O Design System Light Mode v3.9 foi consolidado em Tailwind CSS com fundo `#ffffff`, superfícies `#f8fafc`, bordas suaves `#e2e8f0` e acentos esmeralda `#10b981`. Todas as diretrizes atendem a conformidade visual sem reflexos opacos.'
+            }
+          ]
         }
       ]
     },
     {
       id: 'prj-defesa',
       name: 'Defesa B2B',
-      conversationsCount: 1,
-      activeAgentsCount: 1,
+      conversationsCount: 2,
+      activeAgentsCount: 2,
       conversations: [
         {
           id: 'conv-4',
           title: 'Auditoria de Vulnerabilidades & SAIF Google',
           dateGroup: 'Últimos 7 dias',
-          updatedAt: new Date().toISOString(),
-          messages: []
+          updatedAt: new Date(Date.now() - 4 * 24 * 3600 * 1000).toISOString(),
+          messages: [
+            {
+              id: 'm-401',
+              sender: 'user',
+              senderName: 'Eduardo Antigravity',
+              createdAt: new Date(Date.now() - 4 * 24 * 3600 * 1000).toISOString(),
+              timestamp: '09/11, 11:20',
+              text: 'Execute uma varredura completa de conformidade com o framework SAIF do Google e as normas ISO 27001 / ISO 42001.'
+            },
+            {
+              id: 'm-402',
+              sender: 'agent',
+              senderName: 'Paperclip Auditor',
+              createdAt: new Date(Date.now() - 4 * 24 * 3600 * 1000 + 120000).toISOString(),
+              timestamp: '09/11, 11:22',
+              text: 'Varredura de segurança concluída com 100% de conformidade. Zero vazamento de chaves ou dados sensíveis (PII Guard ativo) e trilha de auditoria SHA-256 registrada no schema cockpit.*.'
+            }
+          ]
+        },
+        {
+          id: 'conv-5',
+          title: 'Modelagem de FinOps Soberano & Custo Marginal $0.00',
+          dateGroup: 'Últimos 15 dias',
+          updatedAt: new Date(Date.now() - 11 * 24 * 3600 * 1000).toISOString(),
+          messages: [
+            {
+              id: 'm-501',
+              sender: 'user',
+              senderName: 'Eduardo Antigravity',
+              createdAt: new Date(Date.now() - 11 * 24 * 3600 * 1000).toISOString(),
+              timestamp: '02/11, 09:15',
+              text: 'Apresente o demonstrativo de economia anual gerada pela inferência soberana em CPU com Laya System One.'
+            },
+            {
+              id: 'm-502',
+              sender: 'agent',
+              senderName: 'Cortex Enterprise Engine',
+              createdAt: new Date(Date.now() - 11 * 24 * 3600 * 1000 + 180000).toISOString(),
+              timestamp: '02/11, 09:18',
+              text: 'Com base no volume projetado de 2,5M tokens/mês, a economia anual estimada atinge 84% em relação a provedores centralizados de nuvem, mantendo latência determinística < 35ms em CPU local.'
+            }
+          ]
         }
       ]
     }
@@ -371,7 +432,7 @@ export const App: React.FC = () => {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed.projects) && parsed.projects.length > 0) {
-          const sanitizedProjects = sanitizeProjects(parsed.projects);
+          const sanitizedProjects = calibrateConversationChronology(sanitizeProjects(parsed.projects));
           const allConvs: Conversation[] = [];
           sanitizedProjects.forEach((p: Project) => {
             if (Array.isArray(p.conversations)) {
@@ -393,7 +454,7 @@ export const App: React.FC = () => {
       console.warn('Falha na leitura inicial do workspace no localStorage:', e);
     }
     return {
-      projects: sanitizeProjects(defaultProjects),
+      projects: calibrateConversationChronology(sanitizeProjects(defaultProjects)),
       activeConversation: defaultInitialConversation,
       openConversations: [defaultInitialConversation]
     };
@@ -414,7 +475,7 @@ export const App: React.FC = () => {
       updatedAt: new Date().toISOString()
     }).then(synced => {
       if (synced && Array.isArray(synced.projects) && synced.projects.length > 0) {
-        const sanitized = sanitizeProjects(synced.projects);
+        const sanitized = calibrateConversationChronology(sanitizeProjects(synced.projects));
         setProjects(sanitized);
         const allConvs = sanitized.flatMap(p => p.conversations || []);
         const restored = detectActiveConversationOnLoad(allConvs);
@@ -652,11 +713,13 @@ export const App: React.FC = () => {
       ? `📎 [Estudo: ${attachedStudy.filename}]\n\n${text}`
       : text;
 
+    const now = new Date();
     const newMessage: ChatMessage = {
       id: userMessageId,
       sender: 'user',
       senderName: userProfile.name,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      createdAt: now.toISOString(),
+      timestamp: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       text: displayText
     };
 
@@ -677,6 +740,7 @@ export const App: React.FC = () => {
       id: agentReplyId,
       sender: 'agent',
       senderName: 'Cortex Enterprise Engine',
+      createdAt: new Date().toISOString(),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       text: '',
       isProcessing: true,
@@ -694,6 +758,8 @@ export const App: React.FC = () => {
     syncConversation(prev => ({
       ...prev,
       title: dynamicTitle,
+      dateGroup: 'Hoje',
+      updatedAt: new Date().toISOString(),
       messages: [...prev.messages, newMessage, placeholderReply]
     }));
 
@@ -813,6 +879,8 @@ export const App: React.FC = () => {
 
       syncConversation(prev => ({
         ...prev,
+        updatedAt: new Date().toISOString(),
+        dateGroup: 'Hoje',
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId || !m.steps) return m;
           const updatedSteps = [...m.steps];
@@ -844,6 +912,8 @@ export const App: React.FC = () => {
       console.error('Falha na execução do pipeline cognitivo:', err);
       syncConversation(prev => ({
         ...prev,
+        updatedAt: new Date().toISOString(),
+        dateGroup: 'Hoje',
         messages: prev.messages.map(m => {
           if (m.id !== agentReplyId) return m;
           return {
@@ -932,6 +1002,10 @@ export const App: React.FC = () => {
     }
   };
 
+  if (!currentUser) {
+    return <LoginScreen onLoginSuccess={(u) => setCurrentUser(u)} />;
+  }
+
   return (
     <div className={`h-screen w-screen flex flex-col overflow-hidden ${theme === 'dark' ? 'dark bg-slate-900 text-slate-100' : 'bg-white text-slate-900'}`}>
       {/* Header Bar com Botão Telemetria & Status e Help Center */}
@@ -948,6 +1022,9 @@ export const App: React.FC = () => {
         onToggleStatusPanel={() => setRightCollapsed(!rightCollapsed)}
         isStatusPanelOpen={!rightCollapsed}
         onOpenHelpCenter={() => setHelpCenterOpen(true)}
+        rightPanelMode={rightPanelMode}
+        onRightPanelModeChange={setRightPanelMode}
+        onLogout={() => authService.logout()}
       />
 
       {/* Main 3-Column Layout */}
@@ -1023,6 +1100,12 @@ export const App: React.FC = () => {
           activeStepIndex={
             activeConversation.messages.find(m => m.isProcessing)?.activeStepIndex ?? 4
           }
+          mode={rightPanelMode}
+          onModeChange={setRightPanelMode}
+          onOpenSettings={(tab) => {
+            if (tab) setSettingsTab(tab);
+            setSettingsOpen(true);
+          }}
         />
       </div>
 
@@ -1041,14 +1124,28 @@ export const App: React.FC = () => {
           onLanguageChange={setLang}
           theme={theme}
           onThemeToggle={handleToggleTheme}
-          onClose={() => setSettingsOpen(false)}
+          onClose={() => {
+            setSettingsOpen(false);
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('settings');
+              window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+            } catch {}
+          }}
         />
       )}
 
       {/* Official Help Center & Operator Enablement Modal */}
       <HelpCenterModal
         isOpen={helpCenterOpen}
-        onClose={() => setHelpCenterOpen(false)}
+        onClose={() => {
+          setHelpCenterOpen(false);
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('help');
+            window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+          } catch {}
+        }}
         onOpenSettingsTab={(tab) => {
           setSettingsTab(tab);
           setSettingsOpen(true);

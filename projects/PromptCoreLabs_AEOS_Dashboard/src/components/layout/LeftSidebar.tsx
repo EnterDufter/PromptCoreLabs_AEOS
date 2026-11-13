@@ -8,6 +8,7 @@ import {
 import { Project, Conversation } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 import { cockpitPersistenceService, StorageQuotaInfo } from '../../services/storage/cockpitPersistenceService';
+import { getConversationDateGroup } from '../../utils/dateGrouping';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -55,11 +56,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     'prj-nextgen': true
   });
 
-  // Períodos do histórico abertos (Apenas "Hoje" aberto por padrão)
+  // Períodos do histórico abertos (Hoje e Ontem abertos por padrão para visibilidade imediata)
   const [openPeriods, setOpenPeriods] = useState<Record<string, boolean>>({
     'Hoje': true,
-    'Ontem': false,
-    'Últimos 7 dias': false,
+    'Ontem': true,
+    'Últimos 7 dias': true,
     'Últimos 15 dias': false,
     'Últimos 30 dias': false
   });
@@ -190,8 +191,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     setOpenProjectFolders(prev => ({ ...prev, [projectId]: !prev[projectId] }));
   };
 
-  const togglePeriod = (period: string) => {
-    setOpenPeriods(prev => ({ ...prev, [period]: !prev[period] }));
+  const togglePeriod = (periodKey: string) => {
+    setOpenPeriods(prev => ({ ...prev, [periodKey]: !prev[periodKey] }));
   };
 
   const togglePinConversation = (convId: string) => {
@@ -238,13 +239,13 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     c.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Agrupamento por períodos exatos da imagem original
+  // Agrupamento dinâmico e auditável por períodos de calendário
   const periodsConfig = [
-    { label: t.sidebar.today, items: filteredConversations.filter(c => c.dateGroup === 'Hoje') },
-    { label: t.sidebar.yesterday, items: filteredConversations.filter(c => c.dateGroup === 'Ontem') },
-    { label: t.sidebar.last7days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 7 dias') },
-    { label: t.sidebar.last15days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 15 dias') },
-    { label: t.sidebar.last30days, items: filteredConversations.filter(c => c.dateGroup === 'Últimos 30 dias') },
+    { key: 'Hoje', label: t.sidebar.today, items: filteredConversations.filter(c => getConversationDateGroup(c) === 'Hoje') },
+    { key: 'Ontem', label: t.sidebar.yesterday, items: filteredConversations.filter(c => getConversationDateGroup(c) === 'Ontem') },
+    { key: 'Últimos 7 dias', label: t.sidebar.last7days, items: filteredConversations.filter(c => getConversationDateGroup(c) === 'Últimos 7 dias') },
+    { key: 'Últimos 15 dias', label: t.sidebar.last15days, items: filteredConversations.filter(c => getConversationDateGroup(c) === 'Últimos 15 dias') },
+    { key: 'Últimos 30 dias', label: t.sidebar.last30days, items: filteredConversations.filter(c => getConversationDateGroup(c) === 'Últimos 30 dias') },
   ];
 
   // 1. MODO COLAPSADO (W-16)
@@ -610,12 +611,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
           <div className="space-y-1">
             {periodsConfig.map(period => {
-              const isOpen = openPeriods[period.label] ?? false;
+              const isOpen = openPeriods[period.key] ?? openPeriods[period.label] ?? false;
               return (
-                <div key={period.label} className="rounded-md overflow-hidden">
+                <div key={period.key} className="rounded-md overflow-hidden">
                   {/* Cabeçalho do Período */}
                   <button
-                    onClick={() => togglePeriod(period.label)}
+                    onClick={() => togglePeriod(period.key)}
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-slate-200/50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 transition text-xs font-medium"
                   >
                     <div className="flex items-center space-x-1.5 truncate">
@@ -658,7 +659,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               Armazenamento Soberano
             </span>
             <span className="text-[10px] font-mono text-slate-300">
-              {storageQuota?.usedFormatted || '142.0 MB'} / 10.0 GB
+              {storageQuota?.usedFormatted || '0.0 MB'} / 10.0 GB
             </span>
           </div>
           <p className="text-[10.5px] font-sans text-slate-200 leading-snug">

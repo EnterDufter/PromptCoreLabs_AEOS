@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, Moon, Sun, Check, Sparkles, Bell, Volume2, ShieldCheck } from 'lucide-react';
+import { Globe, Moon, Sun, Check, Sparkles, ShieldCheck } from 'lucide-react';
 import { Language, Theme } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 

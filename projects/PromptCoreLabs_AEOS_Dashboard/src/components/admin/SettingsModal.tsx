@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, Lock, Server, DollarSign, Users, Cpu, Shield, Sparkles, 
-  Globe, Check, Save, RotateCcw, ShieldCheck 
+  Globe, Check, ShieldCheck 
 } from 'lucide-react';
 import { UserProfile, Language, Theme } from '../../types';
 import { UserManagementSecurity } from './UserManagementSecurity';
@@ -35,12 +35,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const { lang: contextLang, setLang, t } = useI18n();
   const [activeTab, setActiveTab] = useState(defaultTab);
-  
-  // Rascunho temporário de configurações para permitir Cancelar ou Salvar
   const [selectedLang, setSelectedLang] = useState<Language>(initialLang || contextLang);
   const [selectedTheme, setSelectedTheme] = useState<Theme>(initialTheme);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showSavedToast, setShowSavedToast] = useState(false);
+  const [autoSaveTick, setAutoSaveTick] = useState(0);
+
+  useEffect(() => {
+    setSelectedLang(initialLang || contextLang);
+  }, [initialLang, contextLang]);
+
+  useEffect(() => {
+    setSelectedTheme(initialTheme);
+  }, [initialTheme]);
 
   const tabs = [
     { id: 'general', label: t.settings.general, icon: Globe },
@@ -53,35 +58,29 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     { id: 'nocode', label: t.settings.nocode, icon: Sparkles }
   ];
 
-  const handleSave = () => {
-    setIsSaving(true);
-    
-    // Aplica idioma se alterado
-    if (selectedLang) {
-      setLang(selectedLang);
-      if (onLanguageChange) onLanguageChange(selectedLang);
-    }
-
-    // Aplica tema se alterado
-    if (selectedTheme !== initialTheme && onThemeToggle) {
-      onThemeToggle();
-    }
-
-    setTimeout(() => {
-      setIsSaving(false);
-      setShowSavedToast(true);
-      setTimeout(() => {
-        setShowSavedToast(false);
-        onClose();
-      }, 700);
-    }, 300);
+  const triggerAutoSaveToast = () => {
+    setAutoSaveTick(Date.now());
   };
 
-  const handleCancel = () => {
-    // Reverte e fecha imediatamente
-    setSelectedLang(initialLang || contextLang);
-    setSelectedTheme(initialTheme);
-    onClose();
+  useEffect(() => {
+    if (!autoSaveTick) return;
+    const timer = setTimeout(() => setAutoSaveTick(0), 2200);
+    return () => clearTimeout(timer);
+  }, [autoSaveTick]);
+
+  const handleImmediateLangChange = (nextLang: Language) => {
+    setSelectedLang(nextLang);
+    setLang(nextLang);
+    if (onLanguageChange) onLanguageChange(nextLang);
+    triggerAutoSaveToast();
+  };
+
+  const handleImmediateThemeChange = (nextTheme: Theme) => {
+    setSelectedTheme(nextTheme);
+    if (nextTheme !== initialTheme && onThemeToggle) {
+      onThemeToggle();
+    }
+    triggerAutoSaveToast();
   };
 
   return (
@@ -110,8 +109,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Botão X para Fechar e Regressar à Tela Principal */}
         <div className="flex items-center space-x-3">
+          {autoSaveTick > 0 && (
+            <span
+              data-testid="settings-autosave-toast"
+              className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 dark:text-emerald-300 text-[11px] font-semibold flex items-center space-x-1"
+            >
+              <Check className="w-3 h-3 stroke-[3]" />
+              <span>Salvo automaticamente</span>
+            </span>
+          )}
           <button
-            onClick={handleCancel}
+            onClick={onClose}
             className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white text-xs font-semibold transition flex items-center space-x-1.5 group shadow-xs"
             title="Fechar e retornar à tela principal (Esc)"
           >
@@ -150,9 +158,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {activeTab === 'general' && (
           <GeneralPreferencesSettings
             currentLang={selectedLang}
-            onSelectLang={setSelectedLang}
+            onSelectLang={handleImmediateLangChange}
             currentTheme={selectedTheme}
-            onSelectTheme={setSelectedTheme}
+            onSelectTheme={handleImmediateThemeChange}
           />
         )}
         {activeTab === 'security' && <UserManagementSecurity user={user} />}
@@ -164,47 +172,24 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {activeTab === 'nocode' && <NoCodeAgentBuilder />}
       </main>
 
-      {/* Barra Inferior Fixa com Botões de Ação: Cancelar e Salvar */}
+      {/* Barra Inferior Fixa: Modo Auto-Save Transparente */}
       <footer className="h-16 px-6 md:px-12 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md flex items-center justify-between flex-shrink-0 z-20">
         <div className="flex items-center space-x-2 text-[11px] text-slate-500 dark:text-slate-400">
           <ShieldCheck className="w-4 h-4 text-emerald-500" />
           <span className="hidden sm:inline">
-            {t.settings.enclaveActive}
+            {t.settings.enclaveActive} • Auto-Save em tempo real ativo
           </span>
+          <span className="sm:hidden">Auto-Save ativo</span>
         </div>
 
         <div className="flex items-center space-x-3">
-          {/* Botão Cancelar */}
           <button
-            onClick={handleCancel}
-            disabled={isSaving}
-            className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-xs transition shadow-xs disabled:opacity-50"
+            onClick={onClose}
+            data-testid="settings-close-footer"
+            className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 active:scale-[0.98] text-white font-bold text-xs shadow-md flex items-center space-x-2 transition"
           >
-            {t.settings.cancel}
-          </button>
-
-          {/* Botão Salvar Alterações */}
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-bold text-xs shadow-md shadow-emerald-600/25 flex items-center space-x-2 transition disabled:opacity-50"
-          >
-            {isSaving ? (
-              <>
-                <RotateCcw className="w-3.5 h-3.5 animate-spin" />
-                <span>Gravando...</span>
-              </>
-            ) : showSavedToast ? (
-              <>
-                <Check className="w-3.5 h-3.5 stroke-[3]" />
-                <span>Salvo!</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-3.5 h-3.5" />
-                <span>{t.settings.save}</span>
-              </>
-            )}
+            <Check className="w-3.5 h-3.5" />
+            <span>{t.settings.close}</span>
           </button>
         </div>
       </footer>

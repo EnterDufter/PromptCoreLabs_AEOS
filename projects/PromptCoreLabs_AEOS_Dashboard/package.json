@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:unit": "vitest run tests/unit",
+    "test:api": "vitest run tests/integration",
+    "test:mcp": "node scripts/verify-mcps.mjs",
+    "test:e2e": "playwright test",
+    "test:repo-gate": "node scripts/verify-repo-gate.mjs",
+    "verify:all": "npm run test:unit && npm run test:api && npm run test:mcp && npm run test:e2e && npm run test:repo-gate && npm run build"
   },
   "dependencies": {
     "@antv/infographic": "^0.2.20",
@@ -30,14 +36,19 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.18",
+    "jsdom": "^24.1.3",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vitest": "^2.1.8"
   }
 }

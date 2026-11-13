@@ -1,6 +1,7 @@
 import { defineConfig, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import net from 'node:net';
+import os from 'node:os';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -19,27 +20,60 @@ const VAULT_DIR = path.join(WORKSPACE_ROOT, 'data', 'cockpit-vault');
 const VAULT_BLOBS_DIR = path.join(VAULT_DIR, 'blobs');
 const VAULT_CATALOG_FILE = path.join(VAULT_DIR, 'catalog.json');
 
+/**
+ * Carrega variáveis de ambiente do .env na raiz do monorepo sem sobrescrever variáveis já injetadas no processo.
+ */
+function loadWorkspaceEnv(): void {
+  const envPath = path.join(WORKSPACE_ROOT, '.env');
+  if (!fs.existsSync(envPath)) return;
+  try {
+    const raw = fs.readFileSync(envPath, 'utf8');
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx <= 0) continue;
+      const key = trimmed.slice(0, eqIdx).trim();
+      let val = trimmed.slice(eqIdx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (key && process.env[key] === undefined) {
+        process.env[key] = val;
+      }
+    }
+  } catch {
+    // Falha graciosa caso .env esteja ilegível
+  }
+}
+
+loadWorkspaceEnv();
+
+const pgPortNumber = parseInt(process.env.PG_PORT || process.env.POSTGRES_PORT || '5432', 10);
+
 const pgPool = new Pool({
   host: process.env.PG_HOST || '127.0.0.1',
-  port: parseInt(process.env.PG_PORT || '5432', 10),
-  user: process.env.PG_USER || 'paperclip',
-  password: process.env.PG_PASSWORD || 'paperclip',
-  database: process.env.PG_DATABASE || 'paperclip',
+  port: pgPortNumber,
+  user: process.env.PG_USER || process.env.POSTGRES_USER || 'paperclip',
+  password: process.env.PG_PASSWORD || process.env.POSTGRES_PASSWORD || 'paperclip',
+  database: process.env.PG_DATABASE || process.env.POSTGRES_DB || 'paperclip',
   connectionTimeoutMillis: 1200,
 });
 
 /**
- * Descriptografa a credencial oficial do cofre AES-256-GCM do OmniRoute (pc-gemini-cloud)
- * garantindo funcionamento contínuo mesmo quando o container Docker (:20130) estiver desligado.
+ * Resolve a chave do gateway OmniRoute/Gemini exclusivamente via variáveis de ambiente
+ * ou payload cifrado AES-256-GCM fornecido fora do código-fonte (.env).
  */
 function getOmniRouteVaultKey(): string {
-  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
-  if (process.env.GOOGLE_API_KEY) return process.env.GOOGLE_API_KEY;
+  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY.trim();
+  if (process.env.GOOGLE_API_KEY) return process.env.GOOGLE_API_KEY.trim();
+  const enc = process.env.OMNIROUTE_ENCRYPTED_KEY;
+  const storageSecret = process.env.STORAGE_ENCRYPTION_KEY;
+  if (!enc || !storageSecret || !enc.startsWith('enc:v1:')) return '';
   try {
-    const enc = 'enc:v1:61471bfe64e759f9d4fe49801e523852:62c3c5413ae23627cda3907155044b4504dda8488e7849df318dca3336eacca1627e3f08fd50f495880557b769610fd93c8c5af506:1d697f32b2671677f68c5fd5f1bb4f74';
-    const storageSecret = process.env.STORAGE_ENCRYPTION_KEY || '0f42bb4cb2c52f8c846aaa49b8ad26e8738223df39317aaf631f1f4293a37821';
     const derivedKey = crypto.scryptSync(storageSecret, 'omniroute-field-encryption-v1', 32);
     const [ivHex, encryptedHex, authTagHex] = enc.slice(7).split(':');
+    if (!ivHex || !encryptedHex || !authTagHex) return '';
     const decipher = crypto.createDecipheriv('aes-256-gcm', derivedKey, Buffer.from(ivHex, 'hex'));
     decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
     return Buffer.concat([decipher.update(Buffer.from(encryptedHex, 'hex')), decipher.final()]).toString('utf8');
@@ -547,8 +581,11 @@ async function readCockpitStateFromStorage(): Promise<any> {
                   json_build_object(
                     'id', m.id,
                     'sender', m.sender,
-                    'senderName', CASE WHEN m.sender = 'user' THEN 'Eduardo' ELSE 'Cortex System' END,
+                    'senderName', COALESCE(NULLIF(m.metadata->>'senderName', ''), CASE WHEN m.sender = 'user' THEN 'Operador' ELSE 'Cortex System' END),
+                    'createdAt', m.created_at,
                     'timestamp', to_char(m.created_at, 'HH24:MI'),
+                    'model', m.model,
+                    'attachments', COALESCE(m.metadata->'attachments', '[]'::jsonb),
                     'text', m.text,
                     'artifacts', (
                       SELECT COALESCE(json_agg(
@@ -635,18 +672,35 @@ async function writeCockpitStateToStorage(payload: any): Promise<boolean> {
         `, [proj.id, proj.name]);
 
         for (const conv of (proj.conversations || [])) {
+          const convUpdatedAt = conv.updatedAt && !Number.isNaN(Date.parse(conv.updatedAt))
+            ? new Date(conv.updatedAt).toISOString()
+            : new Date().toISOString();
           await client.query(`
             INSERT INTO cockpit.conversations (id, project_id, title, date_group, updated_at)
-            VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
-            ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, date_group = EXCLUDED.date_group, updated_at = CURRENT_TIMESTAMP;
-          `, [conv.id, proj.id, conv.title, conv.dateGroup || 'Hoje']);
+            VALUES ($1, $2, $3, $4, $5::timestamptz)
+            ON CONFLICT (id) DO UPDATE SET
+              title = EXCLUDED.title,
+              date_group = EXCLUDED.date_group,
+              updated_at = EXCLUDED.updated_at;
+          `, [conv.id, proj.id, conv.title, conv.dateGroup || 'Hoje', convUpdatedAt]);
 
           for (const msg of (conv.messages || [])) {
+            const msgCreatedAt = msg.createdAt && !Number.isNaN(Date.parse(msg.createdAt))
+              ? new Date(msg.createdAt).toISOString()
+              : convUpdatedAt;
+            const msgMetadata = JSON.stringify({
+              senderName: msg.senderName || (msg.sender === 'user' ? 'Operador' : 'Cortex System'),
+              attachments: Array.isArray(msg.attachments) ? msg.attachments : []
+            });
             await client.query(`
-              INSERT INTO cockpit.messages (id, conversation_id, sender, text)
-              VALUES ($1, $2, $3, $4)
-              ON CONFLICT (id) DO UPDATE SET text = EXCLUDED.text;
-            `, [msg.id, conv.id, msg.sender, msg.text]);
+              INSERT INTO cockpit.messages (id, conversation_id, sender, text, model, metadata, created_at)
+              VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7::timestamptz)
+              ON CONFLICT (id) DO UPDATE SET
+                text = EXCLUDED.text,
+                model = COALESCE(EXCLUDED.model, cockpit.messages.model),
+                metadata = EXCLUDED.metadata,
+                created_at = COALESCE(EXCLUDED.created_at, cockpit.messages.created_at);
+            `, [msg.id, conv.id, msg.sender, msg.text, msg.model || null, msgMetadata, msgCreatedAt]);
 
             for (const art of (msg.artifacts || [])) {
               await client.query(`
@@ -676,7 +730,7 @@ async function writeCockpitStateToStorage(payload: any): Promise<boolean> {
   }
 }
 
-function getVaultStats() {
+async function getVaultStats() {
   ensureVaultDirs();
   let totalBytes = 0;
   let fileCount = 0;
@@ -692,17 +746,26 @@ function getVaultStats() {
     }
   } catch {}
 
+  const postgresConnected = await checkTcpPort('127.0.0.1', pgPortNumber, 250);
+  const r2Configured = Boolean(
+    process.env.CLOUDFLARE_R2_BUCKET &&
+    process.env.CLOUDFLARE_R2_ACCESS_KEY_ID &&
+    process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY
+  );
   const free10Gb = 10 * 1024 * 1024 * 1024;
-  const used = Math.max(totalBytes, 142 * 1024 * 1024);
   return {
-    usedBytes: used,
+    usedBytes: totalBytes,
     totalQuotaBytes: free10Gb,
-    usedFormatted: `${(used / (1024 * 1024)).toFixed(1)} MB`,
-    percentageUsed: Number(((used / free10Gb) * 100).toFixed(2)),
+    usedFormatted: totalBytes >= 1024 * 1024
+      ? `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`
+      : `${(totalBytes / 1024).toFixed(1)} KB`,
+    percentageUsed: Number(((totalBytes / free10Gb) * 100).toFixed(4)),
     fileCount,
-    r2Status: 'ONLINE',
-    lastR2Snapshot: 'AES-256 Sincronizado',
-    postgresConnected: true
+    r2Status: r2Configured ? 'ONLINE' : 'LOCAL_MIRROR',
+    lastR2Snapshot: r2Configured
+      ? 'Cloudflare R2 Sincronizado'
+      : (postgresConnected ? 'PostgreSQL 17 + Vault Local' : 'Vault em Disco Local'),
+    postgresConnected
   };
 }
 
@@ -743,7 +806,7 @@ function pclAeosBackendPlugin(): Plugin {
 
       if (url.startsWith('/api/aeos/cockpit/storage-quota') && req.method === 'GET') {
         try {
-          const stats = getVaultStats();
+          const stats = await getVaultStats();
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify(stats));
         } catch (err: any) {
@@ -977,6 +1040,195 @@ function pclAeosBackendPlugin(): Plugin {
         const sha256Receipt = crypto.createHash('sha256').update(JSON.stringify(report)).digest('hex');
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ ...report, sha256Receipt }));
+        return;
+      }
+
+      // 0D. Autodiagnóstico Real Unificado de Portas, MCPs, Cofre e Persistência
+      if (url.startsWith('/api/aeos/diagnostics/run-all') && req.method === 'GET') {
+        const startedAt = Date.now();
+        const nowIso = new Date().toISOString();
+
+        const [
+          omniTcp,
+          ollamaTcp,
+          layaTcp,
+          pgTcp,
+          paperclipTcp,
+          sovereignMcp,
+          layaMcp
+        ] = await Promise.all([
+          measureTcpPort('127.0.0.1', 20130, 350),
+          measureTcpPort('127.0.0.1', 11434, 350),
+          measureTcpPort('127.0.0.1', 20140, 350),
+          measureTcpPort('127.0.0.1', pgPortNumber, 350),
+          measureTcpPort('127.0.0.1', 3100, 350),
+          inspectMcpServerLive(
+            process.execPath,
+            [path.join(__dirname, 'scripts', 'pcl-sovereign-mcp-server.mjs')],
+            5000,
+            'pcl_host_telemetry',
+            {}
+          ),
+          fs.existsSync(path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py'))
+            ? inspectMcpServerLive(
+                'python',
+                [path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py')],
+                5000,
+                'laya_health',
+                {}
+              )
+            : Promise.resolve({ ok: false, liveHandshake: false, latencyMs: 0, error: 'Script mcp_server.py ausente em services/pcl-laya/src' })
+        ]);
+
+        let ollamaModels: string[] = [];
+        if (ollamaTcp.open) {
+          try {
+            const tagsRes = await fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(800) });
+            if (tagsRes.ok) {
+              const tagsJson: any = await tagsRes.json();
+              ollamaModels = (tagsJson.models || []).map((m: any) => m.name);
+            }
+          } catch {}
+        }
+
+        let pgQueryOk = false;
+        if (pgTcp.open) {
+          try {
+            await pgPool.query('SELECT 1');
+            pgQueryOk = true;
+          } catch {}
+        }
+
+        const vaultHealthy = Boolean(vaultApiKey && vaultApiKey.length > 15);
+        const layaModelExists =
+          fs.existsSync(path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'models', 'nli-minilm', 'model.onnx')) ||
+          fs.existsSync(path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'models', 'model.onnx'));
+        const githubTokenPresent = Boolean(process.env.GITHUB_PERSONAL_ACCESS_TOKEN || process.env.GITHUB_TOKEN);
+        const braveKeyPresent = Boolean(process.env.BRAVE_API_KEY);
+        const paperclipRepoPresent = fs.existsSync(PAPERCLIP_REPO_PATH);
+        ensureVaultDirs();
+
+        const checks = [
+          {
+            id: 'mcp-pcl-sovereign',
+            category: 'MCP_STDIO',
+            name: 'PCL Sovereign Gateway MCP (stdio)',
+            status: sovereignMcp.ok ? 'PASS' : 'FAIL',
+            latencyMs: sovereignMcp.latencyMs || 0,
+            detail: sovereignMcp.ok
+              ? `Handshake JSON-RPC OK • ${(sovereignMcp as any).tools?.length || 0} tools ativas`
+              : (sovereignMcp as any).error || 'Falha no handshake stdio',
+            actionHint: sovereignMcp.ok ? '' : 'Verifique Node.js e scripts/pcl-sovereign-mcp-server.mjs'
+          },
+          {
+            id: 'mcp-pcl-laya',
+            category: 'MCP_STDIO',
+            name: 'Laya System One MCP (CPU INT8)',
+            status: layaMcp.ok ? 'PASS' : 'WARN',
+            latencyMs: layaMcp.latencyMs || 0,
+            detail: layaMcp.ok
+              ? `FastMCP JSON-RPC OK • ONNX ${layaModelExists ? 'model.onnx presente' : 'heurístico CPU'}`
+              : `${(layaMcp as any).error || 'Handshake stdio indisponível'} (model.onnx: ${layaModelExists ? 'sim' : 'não'})`,
+            actionHint: layaMcp.ok ? '' : 'Instale dependências Python do services/pcl-laya (mcp, onnxruntime) e verifique model.onnx'
+          },
+          {
+            id: 'mcp-github',
+            category: 'MCP_EXTERNAL',
+            name: 'GitHub Enterprise MCP',
+            status: githubTokenPresent ? 'PASS' : 'WARN',
+            latencyMs: 1,
+            detail: githubTokenPresent
+              ? 'Token GITHUB_PERSONAL_ACCESS_TOKEN detectado no ambiente'
+              : 'GITHUB_PERSONAL_ACCESS_TOKEN ausente no .env — servidor MCP não autenticado',
+            actionHint: githubTokenPresent ? '' : 'Defina GITHUB_PERSONAL_ACCESS_TOKEN no .env ou realize git push CLI autenticado'
+          },
+          {
+            id: 'mcp-brave-search',
+            category: 'MCP_EXTERNAL',
+            name: 'Brave Search MCP',
+            status: braveKeyPresent ? 'PASS' : 'WARN',
+            latencyMs: 1,
+            detail: braveKeyPresent
+              ? 'BRAVE_API_KEY detectada no ambiente'
+              : 'BRAVE_API_KEY ausente no .env — busca Web usa DuckDuckGo/arXiv via backend Node',
+            actionHint: braveKeyPresent ? '' : 'Opcional: defina BRAVE_API_KEY no .env para buscas avançadas via Brave MCP'
+          },
+          {
+            id: 'svc-omniroute',
+            category: 'INFRA',
+            name: 'OmniRoute Gateway (:20130) & Cofre Env',
+            status: omniTcp.open || vaultHealthy ? 'PASS' : 'WARN',
+            latencyMs: omniTcp.connectMs,
+            detail: omniTcp.open
+              ? `Container :20130 ONLINE • Cofre chave env: ${vaultHealthy ? 'OK' : 'ausente'}`
+              : vaultHealthy
+                ? 'Container :20130 offline • Failover direto via GEMINI_API_KEY / cofre env disponível'
+                : 'Container :20130 offline e GEMINI_API_KEY ausente no ambiente/.env',
+            actionHint: omniTcp.open || vaultHealthy ? '' : 'Suba o container OmniRoute (:20130) ou configure GEMINI_API_KEY no .env'
+          },
+          {
+            id: 'svc-ollama',
+            category: 'INFRA',
+            name: 'Ollama Local GPU (:11434)',
+            status: ollamaTcp.open ? 'PASS' : 'WARN',
+            latencyMs: ollamaTcp.connectMs,
+            detail: ollamaTcp.open
+              ? `ONLINE • ${ollamaModels.length} modelo(s): ${ollamaModels.slice(0, 3).join(', ') || 'sem modelos carregados'}`
+              : 'Daemon :11434 offline no host local',
+            actionHint: ollamaTcp.open ? '' : 'Execute "ollama serve" para inferência local soberana ($0.00)'
+          },
+          {
+            id: 'svc-laya',
+            category: 'INFRA',
+            name: 'Laya HTTP Daemon (:20140)',
+            status: layaTcp.open ? 'PASS' : 'WARN',
+            latencyMs: layaTcp.connectMs,
+            detail: layaTcp.open
+              ? 'Daemon HTTP :20140 ONLINE (0 MB VRAM)'
+              : 'Porta HTTP :20140 offline (verifique serviço Docker/Python ou use FastMCP stdio)',
+            actionHint: layaTcp.open ? '' : 'Inicie o daemon Laya na porta :20140 para triagem System 1 via HTTP'
+          },
+          {
+            id: 'svc-postgres',
+            category: 'STORAGE',
+            name: `PostgreSQL 17 + PGVector (:${pgPortNumber})`,
+            status: pgQueryOk ? 'PASS' : (pgTcp.open ? 'WARN' : 'WARN'),
+            latencyMs: pgTcp.connectMs,
+            detail: pgQueryOk
+              ? 'Conexão SQL verificada (SELECT 1 OK) • Persistência relacional ativa'
+              : pgTcp.open
+                ? 'Porta aberta, mas falha na query SQL (verifique credenciais POSTGRES_* no .env)'
+                : 'PostgreSQL offline • Persistência usando Espelho Vault em disco (data/cockpit-vault)',
+            actionHint: pgQueryOk ? '' : 'Inicie PostgreSQL 17 (:5432) e valide variáveis POSTGRES_* no .env'
+          },
+          {
+            id: 'svc-paperclip',
+            category: 'STORAGE',
+            name: 'PaperClip Orchestrator (:3100 & Squads Repo)',
+            status: paperclipTcp.open && paperclipRepoPresent ? 'PASS' : (paperclipRepoPresent ? 'WARN' : 'FAIL'),
+            latencyMs: paperclipTcp.connectMs,
+            detail: `Diretório squads: ${paperclipRepoPresent ? 'presente' : 'ausente'} • Daemon :3100: ${paperclipTcp.open ? 'ONLINE' : 'offline'}`,
+            actionHint: paperclipRepoPresent ? (paperclipTcp.open ? '' : 'Execute "npx paperclipai run" para daemon :3100 ao vivo') : 'Verifique submódulo PaperClip-Companies/promptcore-labs'
+          }
+        ];
+
+        const summary = {
+          passed: checks.filter(c => c.status === 'PASS').length,
+          warned: checks.filter(c => c.status === 'WARN').length,
+          failed: checks.filter(c => c.status === 'FAIL').length,
+          total: checks.length
+        };
+
+        const payload = {
+          ok: summary.failed === 0,
+          timestamp: nowIso,
+          durationMs: Math.max(1, Date.now() - startedAt),
+          summary,
+          checks
+        };
+        const sha256Receipt = crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex');
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ...payload, sha256Receipt }));
         return;
       }
 
@@ -1328,7 +1580,7 @@ function pclAeosBackendPlugin(): Plugin {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
-  cacheDir: 'node_modules/.vite-aeos',
+  cacheDir: process.env.VITE_CACHE_DIR || path.join(os.tmpdir(), 'pcl-cockpit-vite-cache'),
   plugins: [react(), pclAeosBackendPlugin()],
   build: {
     chunkSizeWarningLimit: 1200,

@@ -671,10 +671,19 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
                 Gravações diarizadas por WhisperX em nível de palavra (*word karaoke*), matriz de decisões e geração de atas executivas.
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono text-[10px] font-semibold flex items-center space-x-1">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>WhisperX Local Enclave</span>
-            </span>
+            <div className="flex items-center space-x-2">
+              <span
+                data-testid="meetings-simulated-badge"
+                className="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 font-mono text-[10px] font-semibold"
+                title="Player, WhisperX ao vivo e indexação entre atas ainda estão em preview conceitual (Fase 4)"
+              >
+                Modo Simulado / Preview (Fase 4)
+              </span>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono text-[10px] font-semibold flex items-center space-x-1">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>WhisperX Local Enclave</span>
+              </span>
+            </div>
           </div>
 
           {/* Cross-Meeting RAG Search Bar */}
@@ -856,8 +865,8 @@ ${selectedMeeting.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadli
           <div className="p-4 rounded-2xl bg-slate-950 text-white border border-slate-800 shadow-xl space-y-3">
             <div className="flex items-center justify-between text-xs text-slate-300 font-mono">
               <span className="flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Diarização WhisperX Alinhada em Nível de Palavra</span>
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>Diarização WhisperX (Preview Simulado — Fase 4)</span>
               </span>
               <span>{formatTime(currentTime)} / {formatTime(selectedMeeting.segments?.[selectedMeeting.segments.length - 1]?.endTime || 40)}</span>
             </div>

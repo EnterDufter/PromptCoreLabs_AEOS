@@ -47,6 +47,7 @@ export interface ChatMessage {
   senderName: string;
   senderAvatar?: string;
   timestamp: string;
+  createdAt?: string;
   text: string;
   artifacts?: Artifact[];
   actionProposal?: ActionPreviewData;

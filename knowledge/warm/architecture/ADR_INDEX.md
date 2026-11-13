@@ -1,17 +1,17 @@
 ---
 title: "Índice Canônico de Decisões de Arquitetura (ADRs)"
 system_scope: "PCL AEOS Kernel"
-kernel_version: "v3.9.0"
+kernel_version: "v4.0.0"
 type: "Architecture_Spec"
 status: "Approved"
-rag_tags: [adr, architecture, decisions, index, normative_hierarchy, v3.9]
+rag_tags: [adr, architecture, decisions, index, normative_hierarchy, v4.0]
 created_at: "2026-10-29"
-last_updated: "2026-11-10"
+last_updated: "2026-11-13"
 author: "PromptCore Labs Architecture & Cognitive Systems"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
 
-# 📚 Índice Canônico de Decisões de Arquitetura (ADRs 0001–0016)
+# 📚 Índice Canônico de Decisões de Arquitetura (ADRs 0001–0017)
 
 > [!IMPORTANT]
 > **👔 Visão Executiva & Valor de Negócio:** Toda decisão estrutural do ecossistema **PromptCoreLabs_AEOS** é formalizada como um *Architecture Decision Record (ADR)* auditável. Esse catálogo unificado garante previsibilidade de custos (`$0.00` em operação soberana), soberania sobre dados corporativos e rastreabilidade normativa perante auditorias ISO/IEC 27001 e ISO/IEC 42001.
@@ -69,4 +69,12 @@ normative_ref: "PCL-AEOS-NORM-01"
 | **`ADR-0014`** | Persistência Isolada do Cockpit no PostgreSQL 17 (`cockpit.*`), Vault Criptográfico e DRP Cloudflare R2 | Accepted | `knowledge/warm/architecture/ADR-0014.md` — Schema isolado relacional, tolerância a desastres e monitoramento semântico de cota (<75%, 75-90%, ≥90%). |
 | **`ADR-0015`** | Servidor MCP Soberano Nativo (Model Context Protocol stdio) e Descoberta Dinâmica de Skills | Accepted | `knowledge/warm/architecture/ADR-0015.md` — Protocolo JSON-RPC 2.0 stdio (MCP 2024-11-05), inventário com SHA-256 e interoperabilidade segura com Antigravity/Cursor. |
 | **`ADR-0016`** | Central de Artefatos Multimodais com Exportação Nativa Quíntupla e Ingestão de Estudos RAG | Accepted | `knowledge/warm/architecture/ADR-0016.md` — Biblioteca de Artefatos v3.9, exportadores reais (.pptx, .xlsx, .svg, .html, .md), sandbox segura e indexação Orama de PDFs. |
+
+---
+
+## Trilha 6: Reconstrução Estratégica, Arquitetura de Produto & Governança Enterprise (`ADR-0017`)
+
+| ADR ID | Título Oficial | Status | Arquivo Canônico & Foco Tecnológico |
+| :--- | :--- | :---: | :--- |
+| **`ADR-0017`** | Reconstrução Estratégica, Arquitetura de Produto & Governança do PCL Cockpit v4.0 Enterprise | Accepted | `knowledge/warm/architecture/ADR-0017.md` — Auditoria sem concessões, regra das 4 camadas, MVD (*Minimum Visible Distribution*), Modo Claro v3.9, eliminação de mocks e roteamento de visão (Telemetria vs. Governança). |
 

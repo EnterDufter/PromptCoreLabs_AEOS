@@ -150,22 +150,24 @@ class CockpitPersistenceService {
       }
     } catch {}
 
-    // Estimativa segura baseada em cache local
-    let roughBytes = 142 * 1024 * 1024; // 142 MB default
+    // Estimativa honesta baseada exclusivamente no cache local (Backend inacessível)
+    let roughBytes = 0;
     try {
       const raw = localStorage.getItem(STORAGE_KEY_WORKSPACES) || '';
-      roughBytes = Math.max(roughBytes, raw.length * 2);
+      roughBytes = raw.length * 2;
     } catch {}
 
     const total10Gb = 10 * 1024 * 1024 * 1024;
     return {
       usedBytes: roughBytes,
       totalQuotaBytes: total10Gb,
-      usedFormatted: `${(roughBytes / (1024 * 1024)).toFixed(1)} MB`,
-      percentageUsed: Number(((roughBytes / total10Gb) * 100).toFixed(2)),
-      r2Status: 'ONLINE',
-      lastR2Snapshot: 'AES-256 Sincronizado',
-      postgresConnected: true
+      usedFormatted: roughBytes >= 1024 * 1024
+        ? `${(roughBytes / (1024 * 1024)).toFixed(2)} MB`
+        : `${(roughBytes / 1024).toFixed(1)} KB`,
+      percentageUsed: Number(((roughBytes / total10Gb) * 100).toFixed(4)),
+      r2Status: 'LOCAL_MIRROR',
+      lastR2Snapshot: 'Backend Offline • Cache Local Navegador',
+      postgresConnected: false
     };
   }
 }

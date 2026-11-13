@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings, HelpCircle, BookOpen } from 'lucide-react';
+import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings, HelpCircle, BookOpen, Activity } from 'lucide-react';
 import { Language, Theme, UserProfile } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 
@@ -13,6 +13,9 @@ interface HeaderProps {
   onToggleStatusPanel?: () => void;
   isStatusPanelOpen?: boolean;
   onOpenHelpCenter?: () => void;
+  rightPanelMode?: 'telemetry' | 'governance';
+  onRightPanelModeChange?: (mode: 'telemetry' | 'governance') => void;
+  onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,13 +27,16 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSettings,
   onToggleStatusPanel,
   isStatusPanelOpen = false,
-  onOpenHelpCenter
+  onOpenHelpCenter,
+  rightPanelMode = 'telemetry',
+  onRightPanelModeChange,
+  onLogout
 }) => {
   const { t } = useI18n();
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   return (
-    <header className="h-14 glass-panel border-b border-slate-200/60 dark:border-slate-800/80 px-4 flex items-center justify-between text-slate-800 dark:text-slate-100 select-none z-30 transition-colors">
+    <header className="h-14 glass-panel border-b border-slate-200/60 dark:border-slate-800/80 px-4 flex items-center justify-between text-slate-800 dark:text-slate-100 select-none relative z-50 transition-colors">
       {/* Brand / Logo */}
       <div className="flex items-center space-x-3">
         <div className="relative flex items-center justify-center">
@@ -131,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Clickable User Avatar & Dropdown */}
-        <div className="relative">
+        <div className="relative z-50">
           <button
             onClick={() => setShowUserDropdown(!showUserDropdown)}
             className="flex items-center space-x-2 focus:outline-none group p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -146,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* User Popover Menu */}
           {showUserDropdown && (
-            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-xl py-2 z-50 text-xs">
+            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl py-2 z-[60] text-xs animate-in fade-in zoom-in-95 duration-100">
               <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-800">
                 <p className="font-semibold text-slate-800 dark:text-slate-100">{user.name}</p>
                 <p className="text-slate-500 text-[11px] truncate">{user.email}</p>
@@ -157,6 +163,52 @@ export const Header: React.FC<HeaderProps> = ({
                   <span className="text-[10px] text-slate-400 font-mono">Squad: {user.squad}</span>
                 </div>
               </div>
+
+              {/* Alternador Canônico da Coluna Lateral: Telemetria vs. Governança */}
+              {onRightPanelModeChange && (
+                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                      Coluna Lateral
+                    </span>
+                    <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                      {rightPanelMode === 'telemetry' ? 'Telemetria' : 'Governança'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-1 p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onRightPanelModeChange('telemetry');
+                        if (!isStatusPanelOpen && onToggleStatusPanel) onToggleStatusPanel();
+                      }}
+                      className={`py-1 px-1.5 rounded-md text-[11px] font-semibold flex items-center justify-center space-x-1 transition cursor-pointer ${
+                        rightPanelMode === 'telemetry'
+                          ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs border border-slate-200/60 dark:border-slate-700'
+                          : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                    >
+                      <Activity className="w-3 h-3 text-emerald-500" />
+                      <span>Telemetria</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onRightPanelModeChange('governance');
+                        if (!isStatusPanelOpen && onToggleStatusPanel) onToggleStatusPanel();
+                      }}
+                      className={`py-1 px-1.5 rounded-md text-[11px] font-semibold flex items-center justify-center space-x-1 transition cursor-pointer ${
+                        rightPanelMode === 'governance'
+                          ? 'bg-white dark:bg-slate-900 text-sky-600 dark:text-sky-400 shadow-xs border border-slate-200/60 dark:border-slate-700'
+                          : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                    >
+                      <Shield className="w-3 h-3 text-sky-500" />
+                      <span>Governança</span>
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Idioma integrado no Dropdown do Usuário (Redireciona para o Painel Geral de Configurações) */}
               <button
@@ -245,8 +297,11 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div className="border-t border-slate-100 dark:border-slate-800 pt-1 mt-1">
                 <button
-                  onClick={() => setShowUserDropdown(false)}
-                  className="w-full text-left px-4 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 dark:text-rose-400 flex items-center space-x-2 font-medium"
+                  onClick={() => {
+                    setShowUserDropdown(false);
+                    if (onLogout) onLogout();
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 dark:text-rose-400 flex items-center space-x-2 font-medium cursor-pointer transition"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Encerrar Sessão Segura</span>

@@ -65,7 +65,7 @@ class BudgetControlService {
     { id: 'u-2', name: 'Mariana Couto', email: 'mariana.couto@promptcorelabs.com', departmentId: 'tech', spendUSD: 35.10, limitUSD: 78.00 },
     { id: 'u-3', name: 'Diego Rocha', email: 'diego.rocha@promptcorelabs.com', departmentId: 'tech', spendUSD: 70.20, limitUSD: 90.00 },
     { id: 'u-4', name: 'Fernanda Lima', email: 'fernanda.lima@promptcorelabs.com', departmentId: 'tech', spendUSD: 13.90, limitUSD: 42.00 },
-    { id: 'u-5', name: 'Otávio Brandão', email: 'otavio.brandao@promptcorelabs.com', departmentId: 'tech', spendUSD: 336.00, limitUSD: 600.00 },
+    { id: 'u-5', name: 'Gustavo Silveira', email: 'gustavo.silveira@promptcorelabs.com', departmentId: 'tech', spendUSD: 336.00, limitUSD: 600.00 },
     { id: 'u-6', name: 'Paula Siqueira', email: 'paula.siqueira@promptcorelabs.com', departmentId: 'tech', spendUSD: 63.90, limitUSD: 90.00 },
     { id: 'u-7', name: 'Renato Vasconcelos', email: 'renato.vasconcelos@promptcorelabs.com', departmentId: 'tech', spendUSD: 96.00, limitUSD: 240.00 },
     { id: 'u-8', name: 'Sofia Mendonça', email: 'sofia.mendonca@promptcorelabs.com', departmentId: 'tech', spendUSD: 204.00, limitUSD: 240.00 }

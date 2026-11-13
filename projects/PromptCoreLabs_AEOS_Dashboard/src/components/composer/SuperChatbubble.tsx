@@ -274,6 +274,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
 
   const MENTIONS_CATALOG: MentionOption[] = [
     // Conectores de Aplicativos Corporativos com logos oficiais
+    { id: 'gdrive', label: 'Google Drive', category: 'app', logoId: 'gdrive', tag: '@GoogleDrive', detail: 'Repositório & Pastas em Nuvem' },
     { id: 'bigquery', label: 'Google BigQuery', category: 'app', logoId: 'bigquery', tag: '@BigQuery', detail: 'Data Warehouse & SQL' },
     { id: 'sap', label: 'SAP Enterprise', category: 'app', logoId: 'sap', tag: '@SAP', detail: 'ERP & Finanças' },
     { id: 'sheets', label: 'Google Sheets', category: 'app', logoId: 'sheets', tag: '@GoogleSheets', detail: 'Planilhas & Dados' },
@@ -289,6 +290,9 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
     { id: 'mariana', label: 'Mariana Souza', category: 'user', icon: 'MS', tag: '@Mariana Souza', detail: 'Squad Lead de Operações' },
     { id: 'diego', label: 'Diego Rocha', category: 'user', icon: 'DR', tag: '@Diego Rocha', detail: 'DevOps, SRE & Cloud' },
     // Acervo & Documentos Canônicos (#)
+    { id: 'doc-geral', label: 'documentos', category: 'doc', icon: 'doc', tag: '#documentos', detail: 'Acervo Corporativo & Documentação PCL' },
+    { id: 'doc-contratos', label: 'contratos', category: 'doc', icon: 'doc', tag: '#contratos', detail: 'Minutas Contratuais, NDAs e Propostas' },
+    { id: 'doc-financeiro', label: 'financeiro', category: 'doc', icon: 'doc', tag: '#financeiro', detail: 'Relatórios Fiscais, DRE e Orçamentos' },
     { id: 'doc-audit', label: 'AuditoriaContas2026', category: 'doc', icon: 'doc', tag: '#AuditoriaContas2026', detail: 'Relatório Fiscal e Faturas' },
     { id: 'doc-spec', label: 'EspecificacaoMestra_v3', category: 'doc', icon: 'doc', tag: '#EspecificacaoMestra_v3', detail: 'Norma de Engenharia PCL AEOS' },
     { id: 'doc-contract', label: 'MinutaContratoAlpha', category: 'doc', icon: 'doc', tag: '#MinutaContratoAlpha', detail: 'Minuta Comercial Blindada' }

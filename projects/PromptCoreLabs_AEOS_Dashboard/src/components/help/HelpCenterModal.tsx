@@ -9,7 +9,7 @@
  * - Dicionário de parâmetros, opções e impactos operacionais
  * - Fluxos de trabalho recomendados e boas práticas
  * - Exemplos práticos e casos de uso passo a passo
- * - Troubleshooting, matriz de portas locais (:3001, :11434, :8000, :20140, :5432) e FAQs
+ * - Troubleshooting, matriz de portas locais (:3001, :11434, :20130, :20140, :5432, :3100) e FAQs
  * - Integração viva com a Living Architecture do ecossistema PCL
  */
 
@@ -40,6 +40,29 @@ type HelpCategory =
   | 'troubleshooting' 
   | 'living_arch';
 
+interface HelpTopicIndexItem {
+  id: string;
+  category: HelpCategory;
+  categoryLabel: string;
+  title: string;
+  summary: string;
+  keywords: string[];
+}
+
+const HELP_SEARCH_INDEX: HelpTopicIndexItem[] = [
+  { id: 't-triad', category: 'overview', categoryLabel: '1. Visão Geral', title: 'Tríade Institucional e Invariantes Hardware', summary: 'PromptCore Labs, PCL AEOS, PCL Cockpit (:3001), 0 MB VRAM no Laya CPU INT8 e custo marginal $0.00.', keywords: ['triade', 'vram', 'laya', '0.00', 'soberano', 'invariante'] },
+  { id: 't-byos', category: 'overview', categoryLabel: '1. Visão Geral', title: 'Segredo Corporativo Blindado (BYOS / LGPD)', summary: 'Dados, relatórios e anexos permanecem no perímetro local com sanitização PII Guard e hash SHA-256.', keywords: ['byos', 'lgpd', 'pii', 'seguranca', 'privacidade', 'sha-256', 'criptografia'] },
+  { id: 't-nav', category: 'navigation', categoryLabel: '2. Guia de Telas', title: 'Navegação em 3 Colunas, Sidebar Temporal e Dual-Plex', summary: 'Barra esquerda com agrupamento Hoje/Ontem/Últimos 7 dias, Chat Dual-Plex e Coluna Direita de Telemetria/Governança.', keywords: ['sidebar', 'historico', 'ontem', 'hoje', 'dual-plex', 'telemetria', 'governanca'] },
+  { id: 't-mod-chat', category: 'modules', categoryLabel: '3. Módulos', title: 'Chat Stream, Estudos Orama e Geração de Artefatos', summary: 'Indexação vetorial/léxica no navegador com Orama, geração de slides PPTX, planilhas XLSX e diagramas Mermaid/SVG.', keywords: ['chat', 'orama', 'rag', 'pptx', 'xlsx', 'mermaid', 'slides', 'artefatos'] },
+  { id: 't-mod-sim', category: 'modules', categoryLabel: '3. Módulos', title: 'Reuniões (WhisperX) e Fluxos de Automação (Preview)', summary: 'Módulos interativos em preview conceitual (Fase 3/4) com inspeção de atas, transcrições diarizadas e canvas DAG.', keywords: ['reunioes', 'meetings', 'whisperx', 'fluxos', 'automacao', 'dag', 'simulado'] },
+  { id: 't-settings-gen', category: 'settings', categoryLabel: '4. Configurações', title: 'Preferências Gerais & Auto-Save (Idioma PT/EN/ES e Tema)', summary: 'Alterações de idioma (PT/EN/ES) e tema (Light/Dark) são aplicadas e salvas automaticamente em tempo real.', keywords: ['general', 'idioma', 'tema', 'dark', 'light', 'auto-save', 'tts', 'preferencias'] },
+  { id: 't-settings-mcp', category: 'settings', categoryLabel: '4. Configurações', title: 'Biblioteca de Integrações, Autodiagnóstico e Hub MCP', summary: 'Inspeção JSON-RPC stdio ao vivo (pcl-sovereign e pcl-laya), autodiagnóstico de portas e conectores sem segredos em localStorage.', keywords: ['integrations', 'mcp', 'json-rpc', 'stdio', 'autodiagnostico', 'github', 'conectores', 'omniroute', '20130'] },
+  { id: 't-settings-rbac', category: 'settings', categoryLabel: '4. Configurações', title: 'Segurança RBAC, PaperClip Squads, Skills e Compliance ISO', summary: 'Controle de acessos 2FA, árvores PaperClip, verificação SHA-256 de skills e livro-razão ISO 27001/42001.', keywords: ['rbac', '2fa', 'sessoes', 'paperclip', 'squads', 'skills', 'audit', 'iso', 'costs', 'finops'] },
+  { id: 't-params', category: 'parameters', categoryLabel: '5. Parâmetros', title: 'Roteamento, Perfis Cognitivos e PII Guard', summary: 'Perfis Rápido/Raciocínio Profundo/Soberano Local e regras de anonimização CPF/CNPJ/Cartões antes de provedores cloud.', keywords: ['parametros', 'roteamento', 'pii', 'cpf', 'cnpj', 'modelo', 'qwen', 'gemini'] },
+  { id: 't-ports', category: 'troubleshooting', categoryLabel: '8. Portas & Troubleshooting', title: 'Matriz Oficial de Portas Locais (:3001, :11434, :20130, :20140, :5432, :3100)', summary: 'Cockpit :3001, Ollama GPU :11434, OmniRoute Gateway :20130, Laya CPU :20140, PostgreSQL 17 :5432 e PaperClip :3100.', keywords: ['porta', '3001', '11434', '20130', '20140', '5432', '3100', 'postgres', 'ollama', 'omniroute', 'paperclip', 'laya'] },
+  { id: 't-living', category: 'living_arch', categoryLabel: '9. Living Architecture', title: 'ADRs Normativos e Portal Cortex / GitHub Pages', summary: 'Registro vivo de decisões arquiteturais (ADR-0001 a ADR-0017) e sincronização com a documentação corporativa.', keywords: ['adr', 'living architecture', 'cortex', 'github pages', 'mermaid'] }
+];
+
 export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
   isOpen,
   onClose,
@@ -50,6 +73,17 @@ export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredTopics = useMemo(() => {
+    if (!normalizedQuery) return [];
+    return HELP_SEARCH_INDEX.filter(item =>
+      item.title.toLowerCase().includes(normalizedQuery) ||
+      item.summary.toLowerCase().includes(normalizedQuery) ||
+      item.categoryLabel.toLowerCase().includes(normalizedQuery) ||
+      item.keywords.some(k => k.toLowerCase().includes(normalizedQuery))
+    );
+  }, [normalizedQuery]);
 
   if (!isOpen) return null;
 
@@ -175,6 +209,66 @@ export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
 
           {/* Main Content Area */}
           <div className="flex-1 p-6 overflow-y-auto space-y-6 text-sm">
+            {/* RESULTADOS DA BUSCA AO VIVO */}
+            {normalizedQuery.length > 0 && (
+              <div
+                data-testid="help-search-results"
+                className="p-4 rounded-2xl border border-sky-200 dark:border-sky-800/70 bg-sky-50/60 dark:bg-sky-950/20 space-y-3"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Search className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                    <span className="font-bold text-xs text-slate-900 dark:text-slate-100">
+                      Resultados para "{searchQuery.trim()}" ({filteredTopics.length})
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 hover:underline"
+                  >
+                    Limpar busca
+                  </button>
+                </div>
+
+                {filteredTopics.length === 0 ? (
+                  <p
+                    data-testid="help-search-empty"
+                    className="text-xs text-slate-500 dark:text-slate-400"
+                  >
+                    Nenhum tópico correspondente encontrado para "{searchQuery.trim()}". Tente buscar por portas (:20130, :11434), Laya, MCP, LGPD ou PaperClip.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    {filteredTopics.map(topic => (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        data-testid={`help-search-hit-${topic.id}`}
+                        onClick={() => {
+                          setActiveCategory(topic.category);
+                          setSearchQuery('');
+                        }}
+                        className="text-left p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition space-y-1 shadow-xs"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-mono uppercase text-sky-600 dark:text-sky-400 font-bold">
+                            {topic.categoryLabel}
+                          </span>
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        </div>
+                        <div className="font-semibold text-xs text-slate-900 dark:text-slate-100">
+                          {topic.title}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">
+                          {topic.summary}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* CAPÍTULO 1: VISÃO GERAL */}
             {activeCategory === 'overview' && (
               <div className="space-y-6">
@@ -236,7 +330,7 @@ export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
                     <li className="flex items-start space-x-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span>
-                        <strong>Custo Marginal Zero ($0.00):</strong> Funcionamento offline pleno com motores locais (:11434 Ollama, :8000 OmniRoute, :20140 Laya, :5432 PostgreSQL 17).
+                        <strong>Custo Marginal Zero ($0.00):</strong> Funcionamento offline pleno com motores locais (:11434 Ollama, :20130 OmniRoute, :20140 Laya, :5432 PostgreSQL 17).
                       </span>
                     </li>
                     <li className="flex items-start space-x-2">
@@ -380,7 +474,7 @@ export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
                   {[
                     { id: 'general', title: '1. Preferências Gerais (general)', desc: 'Idioma da interface (PT/EN/ES), tema visual (Dark/Light), densidade e síntese de voz (TTS) com sanitização de pontuações.', icon: Settings },
                     { id: 'security', title: '2. Segurança & Controle de Acesso (security)', desc: 'Perfis de usuários RBAC (Admin, Engenheiro, Operador, Auditor), controle de sessões ativas e criptografia AES-256-GCM.', icon: Shield },
-                    { id: 'integrations', title: '3. Biblioteca de Integrações (integrations)', desc: 'Configuração do Servidor MCP Soberano stdio, motores locais (Ollama :11434, OmniRoute :8000, Laya :20140), PostgreSQL 17, Cloudflare R2 DRP e webhooks empresariais.', icon: Server },
+                    { id: 'integrations', title: '3. Biblioteca de Integrações (integrations)', desc: 'Configuração do Servidor MCP Soberano stdio, motores locais (Ollama :11434, OmniRoute :20130, Laya :20140), PostgreSQL 17, Cloudflare R2 DRP e webhooks empresariais.', icon: Server },
                     { id: 'costs', title: '4. FinOps & Gestão de Custos (costs)', desc: 'Calculadora Soberana de ROI, controle de limites orçamentários (EBITDA Shield) e gráficos de consumo de tokens por modelo.', icon: DollarSign },
                     { id: 'squads', title: '5. Esquadrões de Agentes (squads)', desc: 'Organograma hierárquico das equipes agênticas, matriz de atribuição RACI e políticas de escalação HitL em 2 estágios.', icon: Users },
                     { id: 'skills', title: '6. Gestão de Skills (skills)', desc: 'Inventário físico de skills no diretório PaperClip com atesto de integridade SHA-256 e ativação dinâmica por sessão.', icon: Cpu },
@@ -574,7 +668,7 @@ export const HelpCenterModal: React.FC<HelpCenterModalProps> = ({
                   {[
                     { port: ':3001', service: 'PCL Cockpit Frontend', cmd: 'npm run dev', fix: 'Execute o script Iniciar_PCL_Cockpit.bat na raiz do projeto.' },
                     { port: ':11434', service: 'Ollama Engine (GPU)', cmd: 'ollama serve', fix: 'Verifique se o processo Ollama está rodando e se o modelo qwen2.5-coder está instalado.' },
-                    { port: ':8000', service: 'OmniRoute Gateway', cmd: 'python -m omniroute', fix: 'Confirme os mapeamentos de modelo no arquivo config/omniroute/config.yaml.' },
+                    { port: ':20130', service: 'OmniRoute Gateway', cmd: 'docker start omniroute', fix: 'Confirme o container OmniRoute (:20130) ou configure GEMINI_API_KEY no .env para failover direto via :3001.' },
                     { port: ':20140', service: 'Laya System One (CPU)', cmd: 'python -m laya.service', fix: 'Inicie o coprocessador Laya garantindo alocação 100% em CPU host (0 MB VRAM).' },
                     { port: ':5432', service: 'PostgreSQL 17 Local', cmd: 'net start postgresql-x64-17', fix: 'Certifique-se de que o serviço do PostgreSQL e a extensão PGVector estão ativos.' }
                   ].map((item, idx) => (

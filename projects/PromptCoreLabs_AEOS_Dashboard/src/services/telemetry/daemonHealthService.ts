@@ -233,9 +233,9 @@ class DaemonHealthService {
 
     const start = performance.now();
     try {
-      const res = await fetch('/api/omniroute/health', { signal: AbortSignal.timeout(1000) });
+      const res = await fetch('/api/omniroute/api/monitoring/health', { signal: AbortSignal.timeout(1000) });
       const latencyMs = Math.max(1, Math.round(performance.now() - start));
-      metric.isUp = res.ok || res.status === 404; // Se respondeu status HTTP, o processo está ativo
+      metric.isUp = res.ok;
       metric.status = 'online';
       metric.latencyMs = latencyMs;
       metric.details = {

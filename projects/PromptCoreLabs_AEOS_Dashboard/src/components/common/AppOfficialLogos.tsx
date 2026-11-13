@@ -27,6 +27,77 @@ export const BigQueryLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size 
   </svg>
 );
 
+// 1.1 Google Drive Official Logo
+export const GoogleDriveLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 48 48" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M17 6h14l12 21-7 12H22L17 6z" fill="#FFC107" />
+    <path d="M31 6l12 21-7 12-14-24L31 6z" fill="#0066DA" />
+    <path d="M5 39l7-12h28l-7 12H5z" fill="#00AC47" />
+    <path d="M5 39l12-21 7 12-12 21L5 39z" fill="#EA4335" />
+  </svg>
+);
+
+// 1.2 Google Official G Icon (Multicolor)
+export const GoogleOfficialLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 48 48" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+  </svg>
+);
+
+// 1.3 Microsoft Official 4-Colors Logo
+export const MicrosoftOfficialLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 23 23" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path fill="#f35325" d="M1 1h10v10H1z"/>
+    <path fill="#81bc06" d="M12 1h10v10H12z"/>
+    <path fill="#05a6f0" d="M1 12h10v10H1z"/>
+    <path fill="#ffba08" d="M12 12h10v10H12z"/>
+  </svg>
+);
+
+// 1.4 GitHub Official Logo
+export const GitHubOfficialLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+  </svg>
+);
+
+// 1.5 LinkedIn Official Logo
+export const LinkedInOfficialLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    style={size ? { width: size, height: size } : undefined}
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+  </svg>
+);
+
 // 2. SAP Official Logo
 export const SAPLogo: React.FC<LogoProps> = ({ className = 'w-4 h-4', size }) => (
   <svg 
@@ -345,6 +416,21 @@ export const renderOfficialLogo = (appId: string, className = 'w-4 h-4'): React.
     case 'bigquery':
     case 'googlebigquery':
       return <BigQueryLogo className={className} />;
+    case 'google':
+    case 'googleofficial':
+      return <GoogleOfficialLogo className={className} />;
+    case 'microsoft':
+    case 'azure':
+    case 'microsoft365':
+      return <MicrosoftOfficialLogo className={className} />;
+    case 'github':
+      return <GitHubOfficialLogo className={className} />;
+    case 'linkedin':
+      return <LinkedInOfficialLogo className={className} />;
+    case 'gdrive':
+    case 'googledrive':
+    case 'drive':
+      return <GoogleDriveLogo className={className} />;
     case 'sheets':
     case 'googlesheets':
       return <GoogleSheetsLogo className={className} />;

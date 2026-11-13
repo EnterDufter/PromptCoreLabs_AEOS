@@ -13,6 +13,7 @@ import { renderOfficialLogo } from '../common/AppOfficialLogos';
 import { LiveExecutionStepper } from './LiveExecutionStepper';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { sanitizeMarkdownForSpeech } from '../../services/audio/ttsSanitizer';
+import { formatMessageTimestamp, formatFullDateTime } from '../../utils/dateGrouping';
 
 interface DualPlexWorkspaceProps {
   conversation: Conversation;
@@ -321,11 +322,21 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
                       {msg.sender !== 'user' ? (
                         <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1 select-none">
                           <span className="font-semibold">{msg.senderName}</span>
-                          <span>{msg.timestamp}</span>
+                          <span 
+                            title={formatFullDateTime(msg)} 
+                            className="cursor-help hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                          >
+                            {formatMessageTimestamp(msg)}
+                          </span>
                         </div>
                       ) : (
                         <div className="flex items-center justify-end text-[10px] text-slate-400 dark:text-slate-500 mb-0.5 select-none">
-                          <span>{msg.timestamp}</span>
+                          <span 
+                            title={formatFullDateTime(msg)} 
+                            className="cursor-help hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                          >
+                            {formatMessageTimestamp(msg)}
+                          </span>
                         </div>
                       )}
 
