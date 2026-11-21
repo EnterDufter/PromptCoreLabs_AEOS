@@ -57,9 +57,9 @@
 - **Recomendação #1 (Produção):** Tornar a experiência contextual por Ator (cada perfil com tela inicial e CTAs próprios) e incorporar avatares/fotos reais de treino e pista, mantendo `PCL Inside` em ponto único na sidebar.
 
 ### 🛠️ Builder UI (Engenharia de Frontend & UI)
-- **O que funcionou melhor:** Hierarquia visual clara em fundo `#FAFAFB`, interatividade instantânea do fluxo LGPD Art. 14 e simulador de folha de tempos em `Gestão de Ligas`.
-- **O que ficou enxuto/simulado:** Gráficos de telemetria e pilares ainda em barras SVG/HTML estáticas sem tooltips interativos, uploads simulados e barra superior densa abaixo de `1280px`.
-- **Recomendação #1:** Integrar biblioteca leve de visualização (ex.: `Recharts` ou `ECharts`) para o `Digital Twin Driver` e comparativo dos 5 pilares, com upload real e menu compacto de Ator no `TopBar`.
+- **O que funcionou melhor:** Arquitetura reativa em `NgsContext` conectando em tempo real o `ActorSwitcher`, o fluxo LGPD Art. 14 e a normalização `Academy (0–1000 XP) -> Readiness (0–100)` sem reload; paleta SportTech (`#031B33`/`#0D47A1`/`#17B3B3`/`#FAFAFB`) com `Sora + Inter` e Hub 3 colunas + `MobileNav` eliminaram o ruído de dashboard genérico.
+- **O que ficou enxuto/simulado:** `Digital Twin Driver` e `Readiness Score` usam cards/barras estáticas em vez de gráficos interativos de telemetria (curvas de velocidade/delta por setor e radar de 5 pilares); upload de folha de tempos (PDF/CSV) e Mídia-Kit operam por seleção simulada sem drag-and-drop/preview; faltam micro-transições e skeletons.
+- **Recomendação #1 (UI/UX):** Visualização interativa de telemetria e radar do `Readiness Score` (comparativo volta-a-volta no `Digital Twin Driver`) + onboarding guiado em 3 passos separando fluxo de menor com vínculo parental logo na entrada ("Momento Wow" nos primeiros 30s).
 
 ### 🔐 Cipher DevSec (AppSec & DevSecOps)
 - **O que foi bem blindado:** `Privacy by Default (< 18)` sólido, 0 dados biométricos/saúde, 0 segredos hardcoded, 0 `dangerouslySetInnerHTML`/`eval`/`fetch` externo e UTF-8 limpo.
