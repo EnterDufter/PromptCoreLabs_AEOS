@@ -114,13 +114,21 @@ export const TalentNetworkView: React.FC = () => {
                 className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#D9E3EA] bg-white p-4 shadow-sm"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#031B33] font-display text-sm font-bold text-white">
-                    {ath.name
-                      .split(' ')
-                      .slice(0, 2)
-                      .map((p) => p[0])
-                      .join('')}
-                  </div>
+                  {ath.avatarUrl ? (
+                    <img
+                      src={ath.avatarUrl}
+                      alt={ath.name}
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#031B33] font-display text-sm font-bold text-white">
+                      {ath.name
+                        .split(' ')
+                        .slice(0, 2)
+                        .map((p) => p[0])
+                        .join('')}
+                    </div>
+                  )}
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="font-display text-sm font-bold text-[#031B33]">{ath.name}</h2>

@@ -34,10 +34,66 @@ const UPCOMING_EVENTS = [
 ];
 
 const SUGGESTIONS = [
-  { id: 'sug-mariana', name: 'Mariana Silva', role: 'Especialista • Preparadora Física' },
-  { id: 'sug-felipe', name: 'Felipe Rossi', role: 'Atleta • Kart Graduados' },
-  { id: 'sug-powerup', name: 'PowerUp Brasil', role: 'Patrocinador • Hidratação' },
+  {
+    id: 'sug-mariana',
+    name: 'Mariana Silva',
+    role: 'Especialista • Preparadora Física',
+    avatar: '/assets/avatar-mariana.jpg',
+  },
+  {
+    id: 'sug-felipe',
+    name: 'Felipe Rossi',
+    role: 'Atleta • Kart Graduados',
+    avatar: '/assets/avatar-felipe.jpg',
+  },
+  {
+    id: 'sug-powerup',
+    name: 'PowerUp Brasil',
+    role: 'Patrocinador • Hidratação',
+    badge: 'PU',
+  },
 ];
+
+const ReadinessGaugeSvg: React.FC<{ score: number }> = ({ score }) => {
+  const clamped = Math.max(0, Math.min(100, score));
+  const radius = 44;
+  const circumference = Math.PI * radius; // semicircle arc
+  const dashOffset = circumference - (clamped / 100) * circumference;
+
+  return (
+    <div className="relative mx-auto flex h-24 w-36 flex-col items-center justify-end">
+      <svg viewBox="0 0 110 62" className="h-20 w-36 overflow-visible">
+        <defs>
+          <linearGradient id="ngsGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#F59E0B" />
+            <stop offset="45%" stopColor="#17B3B3" />
+            <stop offset="100%" stopColor="#0E9F6E" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M 11 54 A 44 44 0 0 1 99 54"
+          fill="none"
+          stroke="#E2E8F0"
+          strokeWidth="10"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 11 54 A 44 44 0 0 1 99 54"
+          fill="none"
+          stroke="url(#ngsGaugeGrad)"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={dashOffset}
+        />
+      </svg>
+      <div className="-mt-9 text-center">
+        <div className="font-display text-2xl font-bold leading-none text-[#031B33]">{clamped}</div>
+        <div className="mt-0.5 text-[11px] font-semibold text-[#0E9F6E]">Muito Bom</div>
+      </div>
+    </div>
+  );
+};
 
 export const HubFeed3Col: React.FC = () => {
   const {
@@ -98,19 +154,35 @@ export const HubFeed3Col: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
-      {/* Left Column: Actor Identity Card */}
+      {/* Left Column: Social Profile Card with Real Cover & Avatar + Semicircular Gauge */}
       <div className="space-y-4 xl:col-span-3">
         <div className="overflow-hidden rounded-2xl border border-[#D9E3EA] bg-white shadow-sm">
-          <div className="h-20 bg-gradient-to-r from-[#031B33] via-[#0D47A1] to-[#17B3B3]" />
-          <div className="px-4 pb-5">
-            <div className="-mt-9 flex items-end justify-between">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-white bg-[#031B33] font-display text-lg font-bold text-white shadow">
-                {activeActor === 'league'
-                  ? 'LP'
-                  : activeActor === 'sponsor'
-                  ? 'PU'
-                  : 'GA'}
-              </div>
+          <div className="relative h-24 w-full overflow-hidden bg-[#031B33]">
+            <img
+              src="/assets/cover-track.jpg"
+              alt="Pista de Kart"
+              className="h-full w-full object-cover opacity-90"
+            />
+          </div>
+
+          <div className="px-4 pb-4">
+            <div className="-mt-10 flex items-end justify-between">
+              {activeActor === 'league' ? (
+                <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-[#031B33] font-display text-xl font-bold text-white shadow">
+                  LP
+                </div>
+              ) : activeActor === 'sponsor' ? (
+                <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-[#031B33] font-display text-xl font-bold text-white shadow">
+                  PU
+                </div>
+              ) : (
+                <img
+                  src="/assets/avatar-gabriel.jpg"
+                  alt={primaryAthlete.name}
+                  className="h-20 w-20 rounded-full border-4 border-white object-cover shadow"
+                />
+              )}
+
               {isMinorPending && (activeActor === 'athlete' || activeActor === 'guardian') ? (
                 <button
                   type="button"
@@ -156,17 +228,20 @@ export const HubFeed3Col: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="mt-3">
-                  <h2 className="font-display text-base font-bold text-[#031B33]">
-                    {primaryAthlete.name}
-                  </h2>
+                <div className="mt-2.5 text-center sm:text-left">
+                  <div className="flex items-center justify-center gap-1.5 sm:justify-start">
+                    <h2 className="font-display text-base font-bold text-[#031B33]">
+                      {primaryAthlete.name}
+                    </h2>
+                    <CheckCircle2 className="h-4 w-4 text-[#0D47A1]" />
+                  </div>
                   <p className="text-xs text-slate-500">
                     Kart • {primaryAthlete.categoryLabel} • {primaryAthlete.city}
                   </p>
                 </div>
 
-                {/* Readiness + Academy */}
-                <div className="mt-4 rounded-xl border border-[#D9E3EA] bg-[#FAFAFB] p-3">
+                {/* Semicircular Colorful Gauge + Academy LMS */}
+                <div className="mt-3 rounded-xl border border-[#D9E3EA] bg-[#FAFAFB] p-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-600">Readiness Score</span>
                     <button
@@ -177,19 +252,10 @@ export const HubFeed3Col: React.FC = () => {
                       Explicar nota
                     </button>
                   </div>
-                  <div className="mt-1 flex items-baseline gap-1.5">
-                    <span className="font-display text-2xl font-bold text-[#031B33]">
-                      {primaryAthlete.readiness.total}
-                    </span>
-                    <span className="text-xs text-slate-500">/100 • Muito Bom</span>
-                  </div>
-                  <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-[#17B3B3] transition-all"
-                      style={{ width: `${primaryAthlete.readiness.total}%` }}
-                    />
-                  </div>
-                  <div className="mt-2.5 flex items-center justify-between border-t border-[#D9E3EA] pt-2 text-[11px]">
+
+                  <ReadinessGaugeSvg score={primaryAthlete.readiness.total} />
+
+                  <div className="mt-2 flex items-center justify-between border-t border-[#D9E3EA] pt-2 text-[11px]">
                     <span className="text-slate-600">Academy LMS</span>
                     <span className="font-semibold text-[#0D47A1]">
                       {primaryAthlete.academy.xpTotal} / 1000 XP
@@ -199,7 +265,9 @@ export const HubFeed3Col: React.FC = () => {
 
                 <div className="mt-3 flex justify-between text-xs text-slate-600">
                   <span>
-                    <strong className="text-[#031B33]">{primaryAthlete.followers.toLocaleString('pt-BR')}</strong>{' '}
+                    <strong className="text-[#031B33]">
+                      {primaryAthlete.followers.toLocaleString('pt-BR')}
+                    </strong>{' '}
                     Seguidores
                   </span>
                   <span>
@@ -209,14 +277,14 @@ export const HubFeed3Col: React.FC = () => {
               </>
             )}
 
-            <div className="mt-4 space-y-1.5 border-t border-[#D9E3EA] pt-3 text-xs">
+            <div className="mt-4 space-y-1 border-t border-[#D9E3EA] pt-3 text-xs">
               <button
                 type="button"
                 onClick={() => setActiveModule('athlete_portal')}
                 className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 font-medium text-[#263238] hover:bg-[#FAFAFB] hover:text-[#0D47A1]"
               >
                 <Award className="h-4 w-4 text-[#17B3B3]" />
-                <span>Meu Perfil Público &amp; Academy</span>
+                <span>Meu Perfil Público</span>
               </button>
               <button
                 type="button"
@@ -243,6 +311,12 @@ export const HubFeed3Col: React.FC = () => {
                 <span>Minhas Ligas</span>
               </button>
             </div>
+
+            {/* Single discreet PromptCore Labs badge */}
+            <div className="mt-4 flex items-center justify-center gap-1.5 border-t border-[#D9E3EA] pt-3 text-[11px] font-medium text-slate-500">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#17B3B3]" />
+              <span>Powered by PromptCore Labs</span>
+            </div>
           </div>
         </div>
       </div>
@@ -253,14 +327,23 @@ export const HubFeed3Col: React.FC = () => {
           onSubmit={handlePublish}
           className="rounded-2xl border border-[#D9E3EA] bg-white p-4 shadow-sm"
         >
-          <div className="mb-2 text-xs font-semibold text-[#031B33]">Criar publicação</div>
-          <textarea
-            rows={2}
-            value={composerText}
-            onChange={(e) => setComposerText(e.target.value)}
-            placeholder="Compartilhe um treino, telemetria, conquista ou bastidor..."
-            className="w-full resize-none rounded-xl border border-[#D9E3EA] bg-[#FAFAFB] p-3 text-sm text-[#263238] placeholder:text-slate-400 focus:border-[#0D47A1] focus:bg-white focus:outline-none"
-          />
+          <div className="flex items-start gap-3">
+            <img
+              src="/assets/avatar-gabriel.jpg"
+              alt="Avatar"
+              className="hidden h-9 w-9 shrink-0 rounded-full object-cover sm:block"
+            />
+            <div className="flex-1">
+              <div className="mb-1.5 text-xs font-semibold text-[#031B33]">Criar publicação</div>
+              <textarea
+                rows={2}
+                value={composerText}
+                onChange={(e) => setComposerText(e.target.value)}
+                placeholder="Compartilhe um treino, telemetria, conquista ou bastidor..."
+                className="w-full resize-none rounded-xl border border-[#D9E3EA] bg-[#FAFAFB] p-3 text-sm text-[#263238] placeholder:text-slate-400 focus:border-[#0D47A1] focus:bg-white focus:outline-none"
+              />
+            </div>
+          </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-1.5">
               {[
@@ -338,7 +421,7 @@ export const HubFeed3Col: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Column: Discovery, Trending & Events (Max 3 clean blocks) */}
+      {/* Right Column: Discovery, Trending & Events */}
       <div className="space-y-4 xl:col-span-3">
         <div className="rounded-2xl border border-[#D9E3EA] bg-white p-4 shadow-sm">
           <h3 className="font-display text-sm font-bold text-[#031B33]">Sugestões para conectar</h3>
@@ -346,10 +429,23 @@ export const HubFeed3Col: React.FC = () => {
             {SUGGESTIONS.map((item) => {
               const connected = connectedIds.includes(item.id);
               return (
-                <div key={item.id} className="flex items-center justify-between gap-2">
-                  <div className="min-w-0">
-                    <div className="truncate text-xs font-semibold text-[#031B33]">{item.name}</div>
-                    <div className="truncate text-[11px] text-slate-500">{item.role}</div>
+                <div key={item.id} className="flex items-center justify-between gap-2.5">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    {item.avatar ? (
+                      <img
+                        src={item.avatar}
+                        alt={item.name}
+                        className="h-9 w-9 shrink-0 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#031B33] font-display text-xs font-bold text-white">
+                        {item.badge}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold text-[#031B33]">{item.name}</div>
+                      <div className="text-[11px] leading-snug text-slate-500">{item.role}</div>
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -401,8 +497,8 @@ export const HubFeed3Col: React.FC = () => {
                   <span className="font-display text-xs font-bold leading-none">{ev.day}</span>
                 </div>
                 <div className="min-w-0">
-                  <div className="truncate text-xs font-semibold text-[#031B33]">{ev.title}</div>
-                  <div className="truncate text-[11px] text-slate-500">{ev.place}</div>
+                  <div className="text-xs font-semibold text-[#031B33]">{ev.title}</div>
+                  <div className="text-[11px] text-slate-500">{ev.place}</div>
                 </div>
               </div>
             ))}

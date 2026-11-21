@@ -68,6 +68,8 @@ export interface AcademyProgress {
 export interface AthleteProfile {
   id: string;
   name: string;
+  avatarUrl?: string;
+  coverUrl?: string;
   age: number;
   city: string;
   categoryLabel: string;
@@ -103,6 +105,7 @@ export interface FeedComment {
   id: string;
   authorName: string;
   authorRole: string;
+  authorAvatarUrl?: string;
   text: string;
   createdAt: string;
 }
@@ -112,6 +115,7 @@ export interface FeedPost {
   authorId: string;
   authorName: string;
   authorRoleLabel: string;
+  authorAvatarUrl?: string;
   isOfficial?: boolean;
   sport: SportModality;
   location?: string;
@@ -121,6 +125,8 @@ export interface FeedPost {
   body: string;
   evidenceTag: string;
   readinessDelta?: string;
+  imageUrl?: string;
+  bannerUrl?: string;
   telemetryHighlight?: {
     metricLabel: string;
     metricValue: string;
@@ -179,6 +185,7 @@ export interface AcademyModule {
 export interface PerformanceSpecialist {
   id: string;
   name: string;
+  avatarUrl?: string;
   specialty:
     | 'Coach Técnico'
     | 'Preparador Físico'

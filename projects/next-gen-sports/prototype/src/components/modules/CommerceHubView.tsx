@@ -72,18 +72,35 @@ export const CommerceHubView: React.FC = () => {
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <h2 className="font-display text-sm font-bold text-[#031B33]">{spec.name}</h2>
-                      {spec.ngsCertified && (
-                        <CheckCircle2 className="h-3.5 w-3.5 text-[#17B3B3]" />
-                      )}
+                  <div className="flex items-center gap-3">
+                    {spec.avatarUrl ? (
+                      <img
+                        src={spec.avatarUrl}
+                        alt={spec.name}
+                        className="h-11 w-11 shrink-0 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#031B33] font-display text-xs font-bold text-white">
+                        {spec.name
+                          .split(' ')
+                          .slice(0, 2)
+                          .map((p) => p[0])
+                          .join('')}
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h2 className="font-display text-sm font-bold text-[#031B33]">{spec.name}</h2>
+                        {spec.ngsCertified && (
+                          <CheckCircle2 className="h-3.5 w-3.5 text-[#17B3B3]" />
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Especialista de Performance • {spec.specialty} • {spec.city}
+                      </p>
                     </div>
-                    <p className="text-xs text-slate-500">
-                      Especialista de Performance • {spec.specialty} • {spec.city}
-                    </p>
                   </div>
-                  <div className="inline-flex items-center gap-1 rounded-full bg-[#FAFAFB] px-2 py-0.5 text-xs font-semibold text-[#031B33]">
+                  <div className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#FAFAFB] px-2 py-0.5 text-xs font-semibold text-[#031B33]">
                     <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                     {spec.rating} ({spec.reviewsCount})
                   </div>

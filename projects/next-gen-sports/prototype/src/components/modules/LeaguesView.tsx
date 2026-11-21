@@ -21,29 +21,42 @@ export const LeaguesView: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-[#031B33]">Gestão de Ligas</h1>
-          <p className="mt-0.5 text-sm text-slate-600">
-            Operação esportiva, homologação de resultados e distribuição White Label.
-          </p>
-        </div>
+      {/* League Visual Banner */}
+      <div className="relative overflow-hidden rounded-2xl border border-[#D9E3EA] bg-[#031B33] text-white shadow-sm">
+        <img
+          src="/assets/banner-etapa-liga.jpg"
+          alt={league.name}
+          className="h-36 w-full object-cover opacity-45 sm:h-44"
+        />
+        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#031B33] via-[#031B33]/60 to-transparent p-5">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <span className="inline-block rounded-full bg-[#17B3B3]/20 px-2.5 py-0.5 text-[10px] font-semibold text-[#17B3B3]">
+                White-Label Ativo • {league.whiteLabelDomain}
+              </span>
+              <h1 className="mt-1 font-display text-2xl font-bold text-white">Gestão de Ligas</h1>
+              <p className="mt-0.5 text-xs text-slate-200 sm:text-sm">
+                Operação esportiva, homologação de resultados e distribuição White Label.
+              </p>
+            </div>
 
-        <div className="flex flex-wrap gap-2">
-          {leagues.map((lg) => (
-            <button
-              key={lg.id}
-              type="button"
-              onClick={() => setSelectedLeagueId(lg.id)}
-              className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
-                lg.id === league.id
-                  ? 'border-[#0D47A1] bg-[#0D47A1] text-white'
-                  : 'border-[#D9E3EA] bg-white text-[#263238] hover:bg-slate-50'
-              }`}
-            >
-              {lg.name}
-            </button>
-          ))}
+            <div className="flex flex-wrap gap-2">
+              {leagues.map((lg) => (
+                <button
+                  key={lg.id}
+                  type="button"
+                  onClick={() => setSelectedLeagueId(lg.id)}
+                  className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+                    lg.id === league.id
+                      ? 'border-[#17B3B3] bg-[#0D47A1] text-white'
+                      : 'border-white/20 bg-white/10 text-white hover:bg-white/20'
+                  }`}
+                >
+                  {lg.name}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

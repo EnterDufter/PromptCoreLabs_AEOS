@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import {
   AcademyModule,
   ActorRole,
@@ -13,6 +13,30 @@ import { INITIAL_ATHLETES } from '../data/mockAthletes';
 import { INITIAL_FEED_POSTS } from '../data/mockFeed';
 import { INITIAL_LEAGUES } from '../data/mockLeagues';
 import { INITIAL_ACADEMY_MODULES } from '../data/mockAcademy';
+
+const SESSION_KEY = 'ngs_demo_state_v2';
+
+interface PersistedDemoState {
+  activeActor: ActorRole;
+  activeModule: NavModule;
+  athletes: AthleteProfile[];
+  feedPosts: FeedPost[];
+  leagues: League[];
+  academyModules: AcademyModule[];
+  scoutingBoardIds: string[];
+  connectedIds: string[];
+  appliedSponsorshipIds: string[];
+}
+
+function loadSessionState(): PersistedDemoState | null {
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as PersistedDemoState;
+  } catch {
+    return null;
+  }
+}
 
 interface ApproveLgpdPayload {
   guardianName: string;
@@ -57,6 +81,7 @@ interface NgsContextValue {
   toggleScoutingBoard: (athleteId: string) => void;
   toggleConnect: (targetId: string, targetName: string) => void;
   applyToSponsorship: (oppId: string, brandName: string) => void;
+  resetDemo: () => void;
 }
 
 const NgsContext = createContext<NgsContextValue | undefined>(undefined);
@@ -70,20 +95,57 @@ function maskCpf(cpf: string): string {
 }
 
 export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeActor, setActiveActorState] = useState<ActorRole>('athlete');
-  const [activeModule, setActiveModule] = useState<NavModule>('hub');
+  const saved = useMemo(() => loadSessionState(), []);
+
+  const [activeActor, setActiveActorState] = useState<ActorRole>(saved?.activeActor ?? 'athlete');
+  const [activeModule, setActiveModule] = useState<NavModule>(saved?.activeModule ?? 'hub');
   const [searchQuery, setSearchQuery] = useState('');
-  const [athletes, setAthletes] = useState<AthleteProfile[]>(INITIAL_ATHLETES);
-  const [feedPosts, setFeedPosts] = useState<FeedPost[]>(INITIAL_FEED_POSTS);
-  const [leagues, setLeagues] = useState<League[]>(INITIAL_LEAGUES);
-  const [academyModules, setAcademyModules] = useState<AcademyModule[]>(INITIAL_ACADEMY_MODULES);
-  const [scoutingBoardIds, setScoutingBoardIds] = useState<string[]>(['ath-marina']);
-  const [connectedIds, setConnectedIds] = useState<string[]>([]);
-  const [appliedSponsorshipIds, setAppliedSponsorshipIds] = useState<string[]>([]);
+  const [athletes, setAthletes] = useState<AthleteProfile[]>(saved?.athletes ?? INITIAL_ATHLETES);
+  const [feedPosts, setFeedPosts] = useState<FeedPost[]>(saved?.feedPosts ?? INITIAL_FEED_POSTS);
+  const [leagues, setLeagues] = useState<League[]>(saved?.leagues ?? INITIAL_LEAGUES);
+  const [academyModules, setAcademyModules] = useState<AcademyModule[]>(
+    saved?.academyModules ?? INITIAL_ACADEMY_MODULES
+  );
+  const [scoutingBoardIds, setScoutingBoardIds] = useState<string[]>(
+    saved?.scoutingBoardIds ?? ['ath-marina']
+  );
+  const [connectedIds, setConnectedIds] = useState<string[]>(saved?.connectedIds ?? []);
+  const [appliedSponsorshipIds, setAppliedSponsorshipIds] = useState<string[]>(
+    saved?.appliedSponsorshipIds ?? []
+  );
   const [lgpdModalOpen, setLgpdModalOpen] = useState(false);
   const [readinessDrawerOpen, setReadinessDrawerOpen] = useState(false);
   const [copyAiPost, setCopyAiPost] = useState<FeedPost | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const payload: PersistedDemoState = {
+        activeActor,
+        activeModule,
+        athletes,
+        feedPosts,
+        leagues,
+        academyModules,
+        scoutingBoardIds,
+        connectedIds,
+        appliedSponsorshipIds,
+      };
+      window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
+    } catch {
+      // Ignore storage quota errors in demo mode
+    }
+  }, [
+    activeActor,
+    activeModule,
+    athletes,
+    feedPosts,
+    leagues,
+    academyModules,
+    scoutingBoardIds,
+    connectedIds,
+    appliedSponsorshipIds,
+  ]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -104,6 +166,28 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const resetDemo = () => {
+    try {
+      window.sessionStorage.removeItem(SESSION_KEY);
+    } catch {
+      // ignore
+    }
+    setActiveActorState('athlete');
+    setActiveModule('hub');
+    setSearchQuery('');
+    setAthletes(INITIAL_ATHLETES);
+    setFeedPosts(INITIAL_FEED_POSTS);
+    setLeagues(INITIAL_LEAGUES);
+    setAcademyModules(INITIAL_ACADEMY_MODULES);
+    setScoutingBoardIds(['ath-marina']);
+    setConnectedIds([]);
+    setAppliedSponsorshipIds([]);
+    setLgpdModalOpen(false);
+    setReadinessDrawerOpen(false);
+    setCopyAiPost(null);
+    showToast('Demo restaurada para o estado inicial (Privacy by Default < 18 ativo).');
+  };
+
   const publishPost = (
     body: string,
     category: FeedCategory,
@@ -113,11 +197,15 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const trimmed = body.trim();
     if (!trimmed) return;
 
-    const actorMeta: Record<ActorRole, { id: string; name: string; role: string; official?: boolean }> = {
+    const actorMeta: Record<
+      ActorRole,
+      { id: string; name: string; role: string; avatar?: string; official?: boolean }
+    > = {
       athlete: {
         id: primaryAthlete.id,
         name: primaryAthlete.name,
         role: `${primaryAthlete.primarySport.split(' ')[0]} • ${primaryAthlete.categoryLabel}`,
+        avatar: '/assets/avatar-gabriel.jpg',
       },
       league: {
         id: 'lg-paulista-kart',
@@ -144,6 +232,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       authorId: meta.id,
       authorName: meta.name,
       authorRoleLabel: meta.role,
+      authorAvatarUrl: meta.avatar,
       isOfficial: meta.official,
       sport,
       location: 'São Paulo, SP',
@@ -178,8 +267,8 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addComment = (postId: string, text: string) => {
     const clean = text.trim();
     if (!clean) return;
-    const authorByActor: Record<ActorRole, { name: string; role: string }> = {
-      athlete: { name: primaryAthlete.name, role: 'Atleta' },
+    const authorByActor: Record<ActorRole, { name: string; role: string; avatar?: string }> = {
+      athlete: { name: primaryAthlete.name, role: 'Atleta', avatar: '/assets/avatar-gabriel.jpg' },
       league: { name: 'Carlos Menezes', role: 'Operador de Liga' },
       sponsor: { name: 'Juliana Prado', role: 'PowerUp Brasil' },
       guardian: { name: 'Renata Almeida', role: 'Responsável Legal' },
@@ -196,6 +285,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   id: `c-${Date.now()}`,
                   authorName: a.name,
                   authorRole: a.role,
+                  authorAvatarUrl: a.avatar,
                   text: clean,
                   createdAt: 'agora',
                 },
@@ -266,6 +356,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       authorId: primaryAthlete.id,
       authorName: primaryAthlete.name,
       authorRoleLabel: 'Kart • Graduados',
+      authorAvatarUrl: '/assets/avatar-gabriel.jpg',
       sport: primaryAthlete.primarySport,
       location: primaryAthlete.city,
       createdAt: 'agora',
@@ -334,6 +425,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       authorId: 'ath-gabriel',
       authorName: 'Gabriel Almeida',
       authorRoleLabel: 'Kart • Graduados',
+      authorAvatarUrl: '/assets/avatar-gabriel.jpg',
       sport: 'Kart / Automobilismo',
       location: 'Interlagos, SP',
       createdAt: 'agora',
@@ -342,6 +434,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       body: 'Nova sessão normalizada pelo Telemetry Hub! Ritmo estável em 0:52.09 com recomendação automática para trilha de Setup na NGS Academy.',
       evidenceTag: 'Proof of Talent • Folha de Tempos',
       readinessDelta: '+1 pt Consistência',
+      imageUrl: '/assets/post-kart-action.jpg',
       telemetryHighlight: {
         metricLabel: 'Melhor Volta',
         metricValue: '0:52.09',
@@ -467,6 +560,7 @@ export const NgsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleScoutingBoard,
         toggleConnect,
         applyToSponsorship,
+        resetDemo,
       }}
     >
       {children}

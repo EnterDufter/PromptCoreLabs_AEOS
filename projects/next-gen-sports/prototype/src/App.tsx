@@ -1,7 +1,6 @@
 import React from 'react';
 import { NgsProvider, useNgs } from './context/NgsContext';
 import { TopBar } from './components/layout/TopBar';
-import { SideNav } from './components/layout/SideNav';
 import { MobileNav } from './components/layout/MobileNav';
 import { HubFeed3Col } from './components/hub/HubFeed3Col';
 import { LeaguesView } from './components/modules/LeaguesView';
@@ -37,10 +36,7 @@ const AppShell: React.FC = () => {
     <div className="min-h-screen bg-[#FAFAFB] pb-20 text-[#263238] lg:pb-8">
       <TopBar />
 
-      <div className="mx-auto flex max-w-[1440px] gap-6 px-4 py-5 lg:px-6">
-        <SideNav />
-        <main className="min-w-0 flex-1">{renderModule()}</main>
-      </div>
+      <main className="mx-auto max-w-[1440px] px-4 py-5 lg:px-6">{renderModule()}</main>
 
       <footer className="mx-auto mt-6 max-w-[1440px] border-t border-[#D9E3EA] px-4 py-4 text-[11px] text-slate-500 lg:px-6">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">

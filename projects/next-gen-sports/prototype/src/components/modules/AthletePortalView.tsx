@@ -33,35 +33,52 @@ export const AthletePortalView: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-[#031B33]">Portal do Atleta</h1>
-          <p className="mt-0.5 text-sm text-slate-600">
-            Modo Piloto • {primaryAthlete.primarySport} ({primaryAthlete.categoryLabel}) •
-            Prontidão esportiva, evolução na Academy e evidências auditáveis.
-          </p>
+      {/* Athlete Portal Cover + Real Avatar */}
+      <div className="overflow-hidden rounded-2xl border border-[#D9E3EA] bg-white shadow-sm">
+        <div className="relative h-28 w-full bg-[#031B33] sm:h-36">
+          <img
+            src="/assets/cover-track.jpg"
+            alt="Pista de Kart"
+            className="h-full w-full object-cover opacity-85"
+          />
         </div>
+        <div className="flex flex-wrap items-end justify-between gap-4 px-5 pb-5">
+          <div className="flex items-end gap-4">
+            <img
+              src="/assets/avatar-gabriel.jpg"
+              alt={primaryAthlete.name}
+              className="-mt-10 h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-md"
+            />
+            <div className="pt-2">
+              <h1 className="font-display text-2xl font-bold text-[#031B33]">Portal do Atleta</h1>
+              <p className="text-xs text-slate-600 sm:text-sm">
+                Modo Piloto • {primaryAthlete.primarySport} ({primaryAthlete.categoryLabel}) •
+                Prontidão esportiva, evolução na Academy e evidências auditáveis.
+              </p>
+            </div>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            if (!isApproved) {
-              openLgpdModal();
-              return;
-            }
-            showToast('Mídia-Kit Auditável exportado com Readiness Score e evidências.');
-          }}
-          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
-            isApproved
-              ? 'bg-[#0D47A1] text-white hover:bg-[#031B33]'
-              : 'border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100'
-          }`}
-        >
-          {isApproved ? <FileCheck2 className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-          <span>
-            {isApproved ? 'Gerar Mídia-Kit Auditável' : 'Mídia-Kit Público Bloqueado (LGPD)'}
-          </span>
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!isApproved) {
+                openLgpdModal();
+                return;
+              }
+              showToast('Mídia-Kit Auditável exportado com Readiness Score e evidências.');
+            }}
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
+              isApproved
+                ? 'bg-[#0D47A1] text-white hover:bg-[#031B33]'
+                : 'border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100'
+            }`}
+          >
+            {isApproved ? <FileCheck2 className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+            <span>
+              {isApproved ? 'Gerar Mídia-Kit Auditável' : 'Mídia-Kit Público Bloqueado (LGPD)'}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Block 1: Readiness Score (0–100) + 5 Pillars */}
