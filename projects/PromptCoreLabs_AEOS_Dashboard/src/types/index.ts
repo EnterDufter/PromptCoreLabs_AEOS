@@ -266,3 +266,33 @@ export interface VaultConnectorEntry {
   rotatedAt: string;
 }
 
+// ============================================================================
+// MARCO M2 & PROAA-17 — MEMÓRIA VETORIAL PGVECTOR, LAYA DEDUP & TOKEN TAX SAVED
+// ============================================================================
+
+export interface TokenTaxSavedMetrics {
+  tenantId: string;
+  decisionsResolvedLocal: number;
+  estimatedTokensSaved: number;
+  baselineTariffPer1MUsd: number;
+  baselineLlmLatencyMs: number;
+  monetarySavingsUsd: number;
+  monetarySavingsBrl: number;
+  timeSavedMs: number;
+  lastDecisionReceiptSha256: string;
+  updatedAt: string;
+}
+
+export interface VectorDocumentChunkRecord {
+  id: string;
+  studyId: string;
+  filename: string;
+  pageNumber: number;
+  chunkIndex: number;
+  text: string;
+  contentSha256: string;
+  dedupAction: 'ACTION_ADD' | 'ACTION_UPDATE' | 'ACTION_KEEP_BOTH' | 'ACTION_DISCARD';
+  similarityScore?: number;
+}
+
+

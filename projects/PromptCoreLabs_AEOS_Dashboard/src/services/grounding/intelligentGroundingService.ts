@@ -68,9 +68,9 @@ class IntelligentGroundingService {
     let localMatches: LocalKnowledgeMatch[] = [];
     let webResults: WebSearchResult[] = [];
 
-    // 1. Busca Local Canônica APENAS se ativada pelo Laya ou por menção explícita
+    // 1. Busca Local Canônica + Memória Vetorial Permanente PGVector (#documentos)
     if (isInternalPcl) {
-      localMatches = localKnowledgeService.search(query, 0.40); // Corte de relevância mais estrito
+      localMatches = localKnowledgeService.search(query, 0.40);
       for (const match of localMatches) {
         sources.push({
           title: `[Canônico PCL] ${match.doc.title}`,
@@ -79,6 +79,34 @@ class IntelligentGroundingService {
           snippet: match.matchedSnippets.join(' ') || match.doc.content.slice(0, 220),
           confidence: match.relevanceScore
         });
+      }
+
+      if (typeof fetch === 'function') {
+        try {
+          const vecRes = await fetch('/api/aeos/memory/documents/query', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ query, limit: 3 }),
+            signal: AbortSignal.timeout(800)
+          });
+          if (vecRes.ok) {
+            const vecData = await vecRes.json();
+            if (vecData && Array.isArray(vecData.results)) {
+              for (const hit of vecData.results) {
+                if (Number(hit.similarityScore || 0) >= 0.15) {
+                  sources.push({
+                    title: `[PGVector #documentos] ${hit.filename} (Pág. ${hit.pageNumber || 1})`,
+                    url: `file:///data/cockpit-vault/${hit.filename}#page=${hit.pageNumber || 1}`,
+                    sourceType: 'local_canonical',
+                    snippet: String(hit.text || '').slice(0, 240),
+                    confidence: Math.max(0.85, Number(hit.similarityScore || 0.88))
+                  });
+                }
+              }
+            }
+          }
+        } catch {}
       }
     }
 

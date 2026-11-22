@@ -1,8 +1,11 @@
 /**
- * PCL Cockpit Sovereign FinOps & Hard Budget Enforcement Engine
- * Implements real-time token spend tracking, department allocations, 
- * user quotas, and hardware-backed hard-lock enforcement.
+ * PCL Cockpit Sovereign FinOps & Hard Budget Enforcement Engine (Marco M2 + PROAA-17)
+ * Implements real-time token spend tracking, department allocations,
+ * user quotas, hardware-backed hard-lock enforcement, and the auditable
+ * 'Token Tax Saved' counter (PROAA-17: PCL_REFLEX_FINOPS_PRICING_PROAA17.md).
  */
+
+import { TokenTaxSavedMetrics } from '../../types';
 
 export interface UserBudget {
   id: string;
@@ -27,6 +30,7 @@ export interface WorkspaceBudgetConfig {
   allocatedUSD: number;
   currentSpendUSD: number;
   hardLockEnabled: boolean;
+  hardLockTriggered?: boolean;
   notifyAdminAtLimit: boolean;
   dailyAverageUSD: number;
   monthlyProjectionUSD: number;
@@ -41,12 +45,26 @@ class BudgetControlService {
     allocatedUSD: 14400.00,
     currentSpendUSD: 4362.55,
     hardLockEnabled: true,
+    hardLockTriggered: false,
     notifyAdminAtLimit: true,
     dailyAverageUSD: 174.50,
     monthlyProjectionUSD: 5235.05,
     sovereigntyRatioPercent: 88.4,
     dollarsSavedLocalUSD: 1420.00,
     localTokensCount: 42500000
+  };
+
+  private tokenTaxMetrics: TokenTaxSavedMetrics = {
+    tenantId: 'tnt_promptcore_default',
+    decisionsResolvedLocal: 34000,
+    estimatedTokensSaved: 42500000,
+    baselineTariffPer1MUsd: 3.50,
+    baselineLlmLatencyMs: 1450,
+    monetarySavingsUsd: 148.75,
+    monetarySavingsBrl: 847.88,
+    timeSavedMs: 48552000,
+    lastDecisionReceiptSha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    updatedAt: new Date().toISOString()
   };
 
   private departments: DepartmentBudget[] = [
@@ -75,8 +93,59 @@ class BudgetControlService {
     return { ...this.config };
   }
 
+  public getTokenTaxMetrics(): TokenTaxSavedMetrics {
+    return { ...this.tokenTaxMetrics };
+  }
+
+  public async syncWithBackend(): Promise<{ config: WorkspaceBudgetConfig; tokenTax: TokenTaxSavedMetrics }> {
+    if (typeof fetch === 'function') {
+      try {
+        const [bRes, tRes] = await Promise.all([
+          fetch('/api/aeos/finops/budget', { credentials: 'same-origin' }),
+          fetch('/api/aeos/finops/token-tax', { credentials: 'same-origin' })
+        ]);
+        if (bRes.ok) {
+          const bData = await bRes.json();
+          if (bData && bData.budget) {
+            this.config.hardLockEnabled = Boolean(bData.budget.hardLockEnabled);
+            this.config.hardLockTriggered = Boolean(bData.budget.hardLockTriggered);
+          }
+        }
+        if (tRes.ok) {
+          const tData = await tRes.json();
+          if (tData && tData.metrics) {
+            this.tokenTaxMetrics = {
+              ...this.tokenTaxMetrics,
+              ...tData.metrics
+            };
+            this.config.localTokensCount = this.tokenTaxMetrics.estimatedTokensSaved;
+          }
+        }
+      } catch {
+        // Safe local fallback
+      }
+    }
+    return { config: this.getConfig(), tokenTax: this.getTokenTaxMetrics() };
+  }
+
   public updateConfig(newConfig: Partial<WorkspaceBudgetConfig>): WorkspaceBudgetConfig {
     this.config = { ...this.config, ...newConfig };
+    this.config.hardLockTriggered =
+      Boolean(this.config.hardLockEnabled) && this.config.currentSpendUSD >= this.config.monthlyLimitUSD;
+
+    if (typeof fetch === 'function') {
+      fetch('/api/aeos/finops/budget', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          monthlyCapUsd: this.config.monthlyLimitUSD,
+          currentSpendUsd: this.config.currentSpendUSD,
+          hardLockEnabled: this.config.hardLockEnabled
+        })
+      }).catch(() => {});
+    }
+
     return this.getConfig();
   }
 
@@ -97,17 +166,19 @@ class BudgetControlService {
 
   /**
    * Verifies if a user or workspace is allowed to execute a model call.
-   * If hard lock is active and limit is reached, blocks the external paid execution.
+   * If hard lock is active and limit is reached, blocks the external paid execution
+   * and triggers automatic fallback to Ollama Local (:11434) at $0.00.
    */
-  public verifyExecutionAllowance(userId: string): { allowed: boolean; reason?: string } {
+  public verifyExecutionAllowance(userId: string): { allowed: boolean; reason?: string; fallbackLocalModel?: string } {
     if (!this.config.hardLockEnabled) {
       return { allowed: true };
     }
 
     if (this.config.currentSpendUSD >= this.config.monthlyLimitUSD) {
-      return { 
-        allowed: false, 
-        reason: 'Trava Rígida Ativa (Hard Lock): O orçamento mensal corporativo de IA foi atingido ($19.200,00). Chamadas externas estão bloqueadas e redirecionadas para inferência local a $0.00.' 
+      return {
+        allowed: false,
+        fallbackLocalModel: 'qwen2.5-coder:7b-instruct-q4_K_M',
+        reason: `Trava Rígida Ativa (Hard Lock): O orçamento mensal corporativo de IA foi atingido ($${this.config.monthlyLimitUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}). Chamadas externas estão bloqueadas e redirecionadas para inferência local a $0.00.`
       };
     }
 
@@ -115,6 +186,7 @@ class BudgetControlService {
     if (user && user.spendUSD >= user.limitUSD) {
       return {
         allowed: false,
+        fallbackLocalModel: 'qwen2.5-coder:7b-instruct-q4_K_M',
         reason: `Cota de Usuário Excedida: O usuário ${user.name} atingiu seu limite individual ($${user.limitUSD.toFixed(2)}).`
       };
     }

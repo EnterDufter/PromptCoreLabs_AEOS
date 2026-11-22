@@ -13,7 +13,15 @@ export const CostsTokenDashboard: React.FC = () => {
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'overview' | 'budget' | 'ledger' | 'roi'>('overview');
   const [config, setConfig] = useState<WorkspaceBudgetConfig>(budgetControlService.getConfig());
+  const [tokenTax, setTokenTax] = useState(budgetControlService.getTokenTaxMetrics());
   const [departments, setDepartments] = useState<DepartmentBudget[]>(budgetControlService.getDepartments());
+
+  React.useEffect(() => {
+    budgetControlService.syncWithBackend().then(({ config: syncedCfg, tokenTax: syncedTax }) => {
+      setConfig(syncedCfg);
+      setTokenTax(syncedTax);
+    }).catch(() => {});
+  }, []);
   const [expandedDept, setExpandedDept] = useState<string | null>('tech');
   const [showEditModal, setShowEditModal] = useState(false);
   const [providerView, setProviderView] = useState<'engines' | 'models'>('engines');
@@ -538,12 +546,16 @@ export const CostsTokenDashboard: React.FC = () => {
           </div>
 
           <div className="p-4 rounded-xl bg-slate-950 text-slate-200 font-mono text-xs border border-slate-800 space-y-2">
-            <span className="text-emerald-400 font-bold block">--- [PCL COCKPIT] TERMO DE CONFORMIDADE FINOPS SOBERANA ---</span>
-            <p>Hash Raiz Merkle do Enclave: <span className="text-indigo-400">0x7f8a9b2c3d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a</span></p>
-            <p>Taxa de Soberania Comprovada: <span className="text-emerald-400">88.4%</span> local ($0.00 faturado)</p>
-            <p>Total de Dólares Poupados no Mês: <span className="text-emerald-400">$1,420.00 USD</span></p>
+            <span className="text-emerald-400 font-bold block">--- [PCL COCKPIT] TERMO DE CONFORMIDADE FINOPS SOBERANA &amp; TOKEN TAX SAVED (PROAA-17) ---</span>
+            <p>Hash Raiz Merkle do Enclave: <span className="text-indigo-400">{tokenTax.lastDecisionReceiptSha256}</span></p>
+            <p>Decisões Resolvidas Localmente (Laya System 1 + Aegis/Reflex): <span className="text-emerald-400">{tokenTax.decisionsResolvedLocal.toLocaleString('en-US')} decisões</span></p>
+            <p>Tokens Poupados Estimados (PROAA-17): <span className="text-emerald-400">{tokenTax.estimatedTokensSaved.toLocaleString('en-US')} tokens</span> (Tarifa Baseline: US$ {tokenTax.baselineTariffPer1MUsd.toFixed(2)}/1M)</p>
+            <p>Economia Monetária Token Tax Saved: <span className="text-emerald-400">${tokenTax.monetarySavingsUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD (R$ {tokenTax.monetarySavingsBrl.toLocaleString('pt-BR', { minimumFractionDigits: 2 })})</span></p>
+            <p>Tempo Poupado Acumulado vs LLM Cloud ({tokenTax.baselineLlmLatencyMs}ms): <span className="text-emerald-400">{Math.round(tokenTax.timeSavedMs / 1000).toLocaleString('en-US')}s ({tokenTax.timeSavedMs.toLocaleString('en-US')} ms)</span></p>
+            <p>Taxa de Soberania Comprovada: <span className="text-emerald-400">{config.sovereigntyRatioPercent}%</span> local ($0.00 faturado)</p>
+            <p>Total de Dólares Poupados no Mês: <span className="text-emerald-400">${config.dollarsSavedLocalUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD</span></p>
             <p>Alocação de VRAM CPU: <span className="text-emerald-400">0 MB</span> (Laya INT8 em CPUExecutionProvider)</p>
-            <p>Status de Hard Lock: <span className="text-emerald-400">HOMOLOGADO & ATIVO</span></p>
+            <p>Status de Hard Lock: <span className="text-emerald-400">{config.hardLockEnabled ? 'HOMOLOGADO & ATIVO' : 'DESATIVADO'}</span></p>
           </div>
         </div>
       )}

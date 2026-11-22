@@ -22,11 +22,59 @@ export interface IngestionResult {
   attachment: StudyAttachment;
   totalCharacters: number;
   chunksCount: number;
+  deduplicationSummary?: {
+    addedCount: number;
+    updatedCount: number;
+    discardedCount: number;
+    storageBackend: string;
+  };
 }
 
 class StudyIngestionService {
   private oramaDbMap: Map<string, any> = new Map();
   private studyChunksMap: Map<string, StudyChunk[]> = new Map();
+  private hydratedFromBackend = false;
+
+  constructor() {
+    this.hydrateFromPermanentVectorStore().catch(() => {});
+  }
+
+  /**
+   * Hidrata os estudos e chunks vetorizados do PostgreSQL 17 (PGVector) / Vault em disco,
+   * garantindo que os #documentos jamais desapareçam após F5 (reload).
+   */
+  public async hydrateFromPermanentVectorStore(): Promise<void> {
+    if (this.hydratedFromBackend || typeof fetch !== 'function') return;
+    try {
+      const res = await fetch('/api/aeos/memory/documents', {
+        method: 'GET',
+        credentials: 'same-origin'
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.ok && Array.isArray(data.chunks)) {
+        this.hydratedFromBackend = true;
+        const grouped = new Map<string, StudyChunk[]>();
+        for (const c of data.chunks) {
+          const sId = String(c.studyId || 'default');
+          if (!grouped.has(sId)) grouped.set(sId, []);
+          grouped.get(sId)!.push({
+            id: String(c.id),
+            pageNumber: Number(c.pageNumber || 1),
+            text: String(c.text || '')
+          });
+        }
+        for (const [sId, chunks] of grouped.entries()) {
+          if (!this.studyChunksMap.has(sId)) {
+            this.studyChunksMap.set(sId, chunks);
+            await this.indexInOrama(sId, chunks);
+          }
+        }
+      }
+    } catch {
+      // Silencioso quando executado em ambiente de teste unitário puro sem servidor HTTP
+    }
+  }
 
   /**
    * Processa um arquivo enviado localmente pelo usuário
@@ -83,10 +131,43 @@ class StudyIngestionService {
       indexedOramaId: id
     };
 
+    let deduplicationSummary: IngestionResult['deduplicationSummary'];
+    if (typeof fetch === 'function') {
+      try {
+        const ingestRes = await fetch('/api/aeos/memory/documents/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            studyId: id,
+            filename,
+            mimeType: attachment.mimeType,
+            sizeBytes: file.size,
+            pageCount,
+            chunks
+          })
+        });
+        if (ingestRes.ok) {
+          const ingestData = await ingestRes.json();
+          if (ingestData && ingestData.ok) {
+            deduplicationSummary = {
+              addedCount: Number(ingestData.addedCount ?? chunks.length),
+              updatedCount: Number(ingestData.updatedCount ?? 0),
+              discardedCount: Number(ingestData.discardedCount ?? 0),
+              storageBackend: String(ingestData.storageBackend || 'postgres_pgvector_384d')
+            };
+          }
+        }
+      } catch {
+        // Continua com índice Orama local caso offline
+      }
+    }
+
     return {
       attachment,
       totalCharacters: fullText.length,
-      chunksCount: chunks.length
+      chunksCount: chunks.length,
+      deduplicationSummary
     };
   }
 
@@ -244,8 +325,29 @@ class StudyIngestionService {
       }
     }
 
-    // Fallback: busca por palavras-chave
+    // Fallback: busca por palavras-chave ou no PGVector permanente (/api/aeos/memory/documents/query)
     const chunks = this.studyChunksMap.get(studyId) || [];
+    if (chunks.length === 0 && typeof fetch === 'function') {
+      try {
+        const vecRes = await fetch('/api/aeos/memory/documents/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ studyId, query, limit })
+        });
+        if (vecRes.ok) {
+          const vecData = await vecRes.json();
+          if (vecData && Array.isArray(vecData.results) && vecData.results.length > 0) {
+            return vecData.results.map((r: any) => ({
+              id: String(r.id),
+              pageNumber: Number(r.pageNumber || 1),
+              text: String(r.text || '')
+            }));
+          }
+        }
+      } catch {}
+    }
+
     const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
     if (keywords.length === 0) return chunks.slice(0, limit);
 

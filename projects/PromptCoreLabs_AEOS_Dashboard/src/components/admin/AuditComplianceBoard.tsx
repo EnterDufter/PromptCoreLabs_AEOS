@@ -17,6 +17,12 @@ export const AuditComplianceBoard: React.FC = () => {
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    ISOAuditService.syncChainFromBackend().then((synced) => {
+      setLogs([...synced]);
+    }).catch(() => {});
+  }, []);
+
   const toolCallsAudit = [
     { id: 'call-101', app: 'sap', appName: 'SAP ERP S/4HANA', action: 'Query Contas a Pagar & Balanço RFC', latency: '45ms', status: 'AUDITADO', hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
     { id: 'call-102', app: 'salesforce', appName: 'Salesforce CRM', action: 'Busca Decisores & Contatos Autorizados', latency: '62ms', status: 'AUDITADO', hash: 'a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0' },
@@ -44,11 +50,12 @@ export const AuditComplianceBoard: React.FC = () => {
   // Re-verify Cryptographic Hash Chain
   const handleVerifyChain = async () => {
     setIsVerifying(true);
-    await new Promise(r => setTimeout(r, 600));
+    await new Promise(r => setTimeout(r, 300));
     const result = await ISOAuditService.verifyChainIntegrity();
+    setLogs([...ISOAuditService.getAuditLogs()]);
     setIsVerifying(false);
     if (result.valid) {
-      showToast(`${t.audit.chainIntact} (${result.checkedCount} registros conferidos via SHA-256).`);
+      showToast(`${t.audit.chainIntact} (${result.checkedCount} registros conferidos via SHA-256${result.headHashSha256 ? ` • Head: ${result.headHashSha256.slice(0, 12)}...` : ''}).`);
     } else {
       showToast(t.audit.tamperDetected);
     }

@@ -5,6 +5,7 @@
 -- ==============================================================================
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS vector;
 CREATE SCHEMA IF NOT EXISTS cockpit;
 
 -- 1. Tabela Multi-Tenant de Organizações (cockpit.tenants)
@@ -148,6 +149,43 @@ CREATE INDEX IF NOT EXISTS idx_cockpit_sessions_user_active ON cockpit.sessions(
 CREATE INDEX IF NOT EXISTS idx_cockpit_finops_tenant_month ON cockpit.finops_budgets(tenant_id, period_month);
 CREATE INDEX IF NOT EXISTS idx_cockpit_audit_chain_tenant_seq ON cockpit.audit_chain_sha256(tenant_id, seq_id DESC);
 CREATE INDEX IF NOT EXISTS idx_cockpit_vault_tenant_key ON cockpit.connector_vault_aes256(tenant_id, connector_key);
+
+-- 9B. Marco M2 — Memória Vetorial Permanente de #documentos (PGVector 384d + Memória Auto-Limpante Laya)
+CREATE TABLE IF NOT EXISTS cockpit.document_vectors (
+    id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    study_id VARCHAR(100) NOT NULL,
+    filename VARCHAR(300) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL DEFAULT 'text/markdown',
+    chunk_index INT NOT NULL DEFAULT 0,
+    page_number INT NOT NULL DEFAULT 1,
+    content_text TEXT NOT NULL,
+    content_sha256 VARCHAR(64) NOT NULL,
+    embedding vector(384),
+    embedding_json JSONB NOT NULL DEFAULT '[]'::jsonb,
+    dedup_action VARCHAR(30) NOT NULL DEFAULT 'ACTION_ADD'
+        CHECK (dedup_action IN ('ACTION_ADD', 'ACTION_UPDATE', 'ACTION_KEEP_BOTH', 'ACTION_DISCARD')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_cockpit_doc_vectors_tenant_study ON cockpit.document_vectors(tenant_id, study_id);
+CREATE INDEX IF NOT EXISTS idx_cockpit_doc_vectors_sha ON cockpit.document_vectors(content_sha256);
+
+-- 9C. PROAA-17 — Contador Auditável 'Token Tax Saved' (PCL Reflex FinOps Pricing)
+CREATE TABLE IF NOT EXISTS cockpit.finops_token_tax_ledger (
+    id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    decisions_resolved_local BIGINT NOT NULL DEFAULT 0,
+    estimated_tokens_saved BIGINT NOT NULL DEFAULT 0,
+    baseline_tariff_per_1m_usd NUMERIC(10, 4) NOT NULL DEFAULT 3.5000,
+    baseline_llm_latency_ms INT NOT NULL DEFAULT 1450,
+    monetary_savings_usd NUMERIC(12, 4) NOT NULL DEFAULT 0.0000,
+    time_saved_ms BIGINT NOT NULL DEFAULT 0,
+    last_decision_receipt_sha256 VARCHAR(64) NOT NULL DEFAULT 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_cockpit_token_tax_tenant UNIQUE (tenant_id)
+);
 
 -- 10. Seed Inicial Idempotente (Tenant Soberano, Operador, Entitlements GrowthOS e Bloco Gênesis)
 INSERT INTO cockpit.tenants (id, slug, name, plan_tier, status, isol_namespace)
