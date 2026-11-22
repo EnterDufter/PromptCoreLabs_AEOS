@@ -43,7 +43,7 @@
       "autoApprove": []
     },
     "pcl-codegraph": {
-      "command": "python",
+      "command": "C:\\PromptCore_Labs\\services\\pcl-codegraph\\.venv\\Scripts\\python.exe",
       "args": [
         "./services/pcl-codegraph/src/mcp_server.py"
       ],

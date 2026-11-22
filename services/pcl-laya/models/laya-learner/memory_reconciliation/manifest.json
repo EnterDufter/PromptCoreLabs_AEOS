@@ -1,0 +1,22 @@
+{
+  "learner_ver": "1.0.0",
+  "domain": "memory_reconciliation",
+  "backbone_model_sha256": "44391a5241a62e0083c1a8899a71e69a092b95aea5ba89e14062925468eceac7",
+  "feature_dim": 771,
+  "classes": [
+    "contradiction",
+    "entailment",
+    "neutral"
+  ],
+  "weights_file": "head_weights.npz",
+  "trained_samples": 30,
+  "conformal": {
+    "calibration_subset": "dev",
+    "alpha": 0.1,
+    "q_hat": 0.9258
+  },
+  "metrics": {
+    "dev_accuracy": 0.9,
+    "holdout_accuracy": 0.7667
+  }
+}

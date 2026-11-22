@@ -260,4 +260,55 @@ describe('Backend Middleware Integration & Anti-Mock Verification', () => {
     expect(data.tools.length).toBeGreaterThanOrEqual(4);
     expect(data.toolCallResult).toBeTruthy();
   });
+
+  it('GET+POST /api/aeos/entitlements retorna e avalia módulos multi-tenant (PCL GrowthOS Trial 14d & locked_upsell)', async () => {
+    const getRes = await invokeMiddleware(server.middlewares, 'GET', '/api/aeos/entitlements');
+    expect(getRes.statusCode).toBe(200);
+    const data = getRes.json();
+
+    expect(data.ok).toBe(true);
+    expect(data.tenant.id).toBe('tnt_promptcore_default');
+    expect(Array.isArray(data.entitlements)).toBe(true);
+    expect(data.entitlements.length).toBeGreaterThanOrEqual(4);
+
+    const growthMod = data.entitlements.find((e: any) => e.moduleKey === 'pcl-growth-os');
+    expect(growthMod).toBeTruthy();
+    expect(growthMod.accessState).toBe('trial_14d');
+    expect(growthMod.pluginManifest.id).toBe('pcl-growth-os');
+
+    const evalAllowed = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/entitlements/evaluate', {
+      tenantId: 'tnt_promptcore_default',
+      moduleKey: 'pcl-growth-os'
+    });
+    expect(evalAllowed.statusCode).toBe(200);
+    expect(evalAllowed.json().allowed).toBe(true);
+
+    const evalLocked = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/entitlements/evaluate', {
+      tenantId: 'tnt_promptcore_default',
+      moduleKey: 'pcl-maquina-receita'
+    });
+    expect(evalLocked.statusCode).toBe(200);
+    expect(evalLocked.json().allowed).toBe(false);
+    expect(evalLocked.json().accessState).toBe('locked_upsell');
+  });
+
+  it('GET+POST /api/aeos/audit/chain e /api/aeos/vault/seal validam cadeia SHA-256 e cofre AES-256-GCM', async () => {
+    const sealRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/vault/seal', {
+      connectorKey: 'test-clickup-oauth',
+      secretValue: 'pk_test_secret_token_2026_aeos'
+    });
+    expect(sealRes.statusCode).toBe(200);
+    const sealData = sealRes.json();
+    expect(sealData.ok).toBe(true);
+    expect(sealData.cipherAlgorithm).toBe('AES-256-GCM');
+    expect(sealData.keyFingerprintSha256).toMatch(/^[a-f0-9]{64}$/);
+
+    const chainRes = await invokeMiddleware(server.middlewares, 'GET', '/api/aeos/audit/chain');
+    expect(chainRes.statusCode).toBe(200);
+    const chainData = chainRes.json();
+    expect(chainData.ok).toBe(true);
+    expect(chainData.chainIntegrityValid).toBe(true);
+    expect(chainData.totalRecords).toBeGreaterThanOrEqual(2);
+    expect(chainData.headHashSha256).toMatch(/^[a-f0-9]{64}$/);
+  });
 });

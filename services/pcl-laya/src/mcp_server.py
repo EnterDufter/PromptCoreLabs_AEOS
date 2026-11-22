@@ -1,14 +1,13 @@
 """
-PCL AEOS - Servidor MCP do Coprocessador LAYA (System One Classifier)
+PCL AEOS - Servidor MCP do Coprocessador LAYA (System One Classifier v2.0 — PROAA-14)
 Permite que o Antigravity IDE e agentes usem o Laya como ferramenta nativa via MCP (Model Context Protocol).
-Motor Neural Canônico: cross-encoder/nli-MiniLM-2-L6-H768 (ONNX INT8 / AVX2)
+Motor Neural Canônico: cross-encoder/nli-MiniLM-2-L6-H768 (ONNX INT8 / AVX2 | 0 MB VRAM)
 """
 
 import sys
 import os
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
-# Garante importação do classifier mesmo quando executado de outro CWD
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
@@ -16,10 +15,13 @@ if current_dir not in sys.path:
 from classifier import LayaClassifierEngine
 from mcp.server.fastmcp import FastMCP
 
-# Inicializa o servidor FastMCP
 mcp = FastMCP(
     name="PCL-LAYA-System-One",
-    instructions="Coprocessador não-autoregressivo de alta velocidade (~20-35ms) para decisões tipadas em CPU, inferência neural NLI (cross-encoder/nli-MiniLM-2-L6-H768), detecção de contradições, staleness de memória e consistência factual."
+    instructions=(
+        "Coprocessador não-autoregressivo System One v2.0 (PROAA-14, ~1-35ms, 0 MB VRAM) com predict_batch vetorizado, "
+        "SemanticLRUCache (<1ms), laya.Learner (771d + Conformal Prediction), detecção de contradições, "
+        "match_intent, deduplicate_memory, verify_policy e lightning_council."
+    )
 )
 
 engine = LayaClassifierEngine()
@@ -27,7 +29,7 @@ engine = LayaClassifierEngine()
 
 @mcp.tool()
 def laya_health() -> Dict[str, Any]:
-    """Retorna o status operacional detalhado ('healthy' vs 'degraded'), modo do motor, commit SHA e telemetria do Laya."""
+    """Retorna o status operacional detalhado ('healthy' vs 'degraded'), telemetria de cache LRU, learner 771d e 0 MB VRAM."""
     health_data = engine.get_health_status()
     health_data["mcp_server"] = "PCL-LAYA-System-One"
     return health_data
@@ -36,15 +38,8 @@ def laya_health() -> Dict[str, Any]:
 @mcp.tool()
 def laya_evaluate_nli(premise: str, hypothesis: str) -> Dict[str, Any]:
     """
-    Executa inferência neural direta de NLI (Natural Language Inference) usando o modelo cross-encoder/nli-MiniLM-2-L6-H768.
-    Retorna as probabilidades normalizadas de:
-    - contradiction (contradição / anulação)
-    - entailment (consonância / implicação lógica)
-    - neutral (independência / neutralidade)
-
-    Args:
-        premise: O fato, premissa ou documento canônico de verdade.
-        hypothesis: A afirmação ou claim a ser validada contra a premissa.
+    Executa inferência neural direta de NLI (Natural Language Inference) usando cross-encoder/nli-MiniLM-2-L6-H768.
+    Retorna probabilidades de contradiction, entailment e neutral, além do conjunto preditivo Conformal.
     """
     return engine.evaluate_nli(premise=premise, hypothesis=hypothesis)
 
@@ -52,18 +47,7 @@ def laya_evaluate_nli(premise: str, hypothesis: str) -> Dict[str, Any]:
 @mcp.tool()
 def laya_evaluate_binary(state: str, query: str, threshold: float = 0.60, allow_abstain: bool = False) -> Dict[str, Any]:
     """
-    Executa avaliação binária ultra-rápida em CPU (~20-35ms) com validação neural ou guardrails.
-    Pode ser usado para verificar:
-    - Se um texto responde ou é relevante para uma pergunta (Answerability)
-    - Se há contradições ou termos obsoletos (Staleness / Contradiction)
-    - Se contém injeção de prompt ou comandos suspeitos (Security Guardrail)
-    - Classificação binária geral baseada no NLI Engine.
-
-    Args:
-        state: O texto, contexto ou documento a ser analisado.
-        query: A pergunta ou critério de teste (ex: 'O claim é confiável?', 'Contém contradição?').
-        threshold: Limiar de probabilidade para confirmação da classe alvo (padrão 0.60).
-        allow_abstain: Se True, retorna 'uncertain' em casos de baixa separação de margem.
+    Executa avaliação binária ultra-rápida em CPU (~1-25ms) com validação neural, cache LRU (<1ms) e suporte a abstenção conformal.
     """
     return engine.evaluate_binary(state=state, query=query, threshold=threshold, allow_abstain=allow_abstain)
 
@@ -71,13 +55,7 @@ def laya_evaluate_binary(state: str, query: str, threshold: float = 0.60, allow_
 @mcp.tool()
 def laya_check_contradiction(state: str, query: str, threshold: float = 0.60) -> Dict[str, Any]:
     """
-    Especialização para detectar contradições semânticas diretas e discrepâncias
-    entre o estado atual (documento/código) e uma afirmação ou especificação canônica.
-
-    Args:
-        state: Texto da fonte ou documento em análise (Premissa).
-        query: Afirmação ou termo a verificar contra o texto (Hipótese).
-        threshold: Limiar de probabilidade para confirmação de conflito (padrão 0.60).
+    Especialização para detectar contradições semânticas diretas e discrepâncias entre o estado atual e uma especificação canônica.
     """
     test_query = f"contradiz: {query}"
     return engine.evaluate_binary(state=state, query=test_query, threshold=threshold)
@@ -86,16 +64,7 @@ def laya_check_contradiction(state: str, query: str, threshold: float = 0.60) ->
 @mcp.tool()
 def laya_evaluate_choice(state: str, query: str, options: List[str]) -> Dict[str, Any]:
     """
-    Seleciona deterministicamente ou semanticamente a melhor alternativa entre uma lista discreta de opções.
-    Casos de uso suportados nativamente pelo motor:
-    - Roteamento de modelos e complexidade (ex: ['local_fast', 'deep_reasoning'])
-    - Gating e autorização de ferramentas/ações (ex: ['allow', 'confirm', 'deny'])
-    - Ranqueamento semântico de opções baseado em NLI entailment.
-
-    Args:
-        state: Contexto textual de entrada.
-        query: Critério ou pergunta de seleção (ex: 'Qual a rota de modelo adequada?', 'Qual a categoria?').
-        options: Lista de opções possíveis para desempate/seleção.
+    Seleciona deterministicamente ou semanticamente a melhor alternativa entre uma lista discreta de opções em lote único.
     """
     return engine.evaluate_choice(state=state, query=query, options=options)
 
@@ -104,12 +73,6 @@ def laya_evaluate_choice(state: str, query: str, options: List[str]) -> Dict[str
 def laya_evaluate_score(state: str, query: str, min_val: float = 0.0, max_val: float = 1.0) -> Dict[str, Any]:
     """
     Calcula uma pontuação calibrada normalizada dentro de um intervalo numérico usando probabilidades neurais de NLI.
-
-    Args:
-        state: O texto ou documento sob análise.
-        query: A consulta ou dimensão sendo mensurada.
-        min_val: Valor mínimo da escala (padrão 0.0).
-        max_val: Valor máximo da escala (padrão 1.0).
     """
     return engine.evaluate_score(state=state, query=query, min_val=min_val, max_val=max_val)
 
@@ -117,19 +80,60 @@ def laya_evaluate_score(state: str, query: str, min_val: float = 0.0, max_val: f
 @mcp.tool()
 def laya_evaluate_batch(state: str, questions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Executa um lote de avaliações mistas (binary, nli, choice, score) em uma única passada de alta velocidade.
-
-    Args:
-        state: O contexto compartilhado para a bateria de testes.
-        questions: Lista de dicionários com estrutura:
-                   [{"id": "q1", "type": "binary", "query": "..."},
-                    {"id": "q2", "type": "nli", "query": "..."},
-                    {"id": "q3", "type": "choice", "query": "...", "options": [...]},
-                    {"id": "q4", "type": "score", "query": "...", "min_val": 0.0, "max_val": 1.0}]
+    Executa um lote de avaliações mistas (binary, nli, choice, score) em alta velocidade.
     """
     return engine.evaluate_batch(state=state, questions=questions)
 
 
+# ============================================================================
+# 4 NOVAS PRIMITIVAS MCP — PROAA-14 (Seção 4.2)
+# ============================================================================
+
+@mcp.tool()
+def laya_match_intent(state: str, intents: List[str], threshold: float = 0.65) -> Dict[str, Any]:
+    """
+    [PROAA-14] Avalia múltiplas intenções candidatas em 1 único predict_batch() em CPU (0 MB VRAM).
+    Retorna matched_intent, confidence, scores_by_intent e abstain se abaixo do limiar.
+    """
+    return engine.match_intent(state=state, intents=intents, threshold=threshold)
+
+
+@mcp.tool()
+def laya_deduplicate_memory(
+    candidate: str,
+    existing_memories: List[str],
+    entailment_threshold: float = 0.88,
+    contradiction_threshold: float = 0.70
+) -> Dict[str, Any]:
+    """
+    [PROAA-14] Compara uma memória candidata contra Top-K memórias existentes em 1 único predict_batch().
+    Retorna action: 'insert' | 'merge_duplicate' | 'supersede_contradiction' | 'uncertain', target_index e nli_probs.
+    """
+    return engine.deduplicate_memory(
+        candidate=candidate,
+        existing_memories=existing_memories,
+        entailment_threshold=entailment_threshold,
+        contradiction_threshold=contradiction_threshold
+    )
+
+
+@mcp.tool()
+def laya_verify_policy(state: str, policy_rules: List[str], threshold: float = 0.65) -> Dict[str, Any]:
+    """
+    [PROAA-14] Verifica conformidade de um estado/ação contra uma lista de regras normativas em 1 único predict_batch().
+    Retorna compliant (bool), violated_rules e decision ('allow' | 'confirm' | 'deny').
+    """
+    return engine.verify_policy(state=state, policy_rules=policy_rules, threshold=threshold)
+
+
+@mcp.tool()
+def laya_lightning_council(state: str, checks: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    [PROAA-14] Conselho Relâmpago: executa 5+ micro-avaliações heterogêneas (noul, verify_policy, match_intent, score)
+    coalescendo todos os pares NLI em 1 único predict_batch() vetorizado e retorna circuit_breaker.skip_llm.
+    """
+    return engine.lightning_council(state=state, checks=checks)
+
+
 if __name__ == "__main__":
-    # Inicia o servidor MCP via stdio
     mcp.run()

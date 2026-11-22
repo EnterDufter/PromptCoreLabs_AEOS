@@ -184,3 +184,85 @@ export interface AuditLogEntry {
   status: 'Approved' | 'Audited' | 'Flagged';
   complianceStandard: 'ISO 27001' | 'ISO 42001' | 'EU AI Act' | 'LGPD';
 }
+
+// ============================================================================
+// MARCO M0 (MIGRAÇÃO SQL 003) — TIPOS MULTI-TENANT, ENTITLEMENTS & VAULT
+// ============================================================================
+
+export type PlanTier = 'trial_14d' | 'sovereign_core' | 'growth_os_pro' | 'enterprise_appliance';
+
+export type EntitlementAccessState = 'enabled' | 'trial_14d' | 'locked_upsell' | 'expired' | 'revoked';
+
+export interface TenantProfile {
+  id: string;
+  slug: string;
+  name: string;
+  planTier: PlanTier;
+  status: 'ACTIVE' | 'TRIAL' | 'SUSPENDED' | 'CANCELLED';
+  isolNamespace: string;
+  trialStartsAt?: string;
+  trialEndsAt?: string;
+}
+
+export interface PluginManifestSpec {
+  id: string;
+  version: string;
+  vendor: string;
+  tier: PlanTier;
+  trial_days?: number;
+  upsell_cta?: string;
+  capabilities: string[];
+  manifest_sha256: string;
+}
+
+export interface ModuleEntitlement {
+  id: string;
+  tenantId: string;
+  moduleKey: string;
+  moduleName: string;
+  accessState: EntitlementAccessState;
+  trialStartedAt?: string | null;
+  trialExpiresAt?: string | null;
+  trialDaysRemaining?: number | null;
+  quotaLimitUnits: number;
+  quotaUsedUnits: number;
+  pluginManifest: PluginManifestSpec;
+}
+
+export interface FinOpsBudgetStatus {
+  id: string;
+  tenantId: string;
+  departmentOrSquad: string;
+  monthlyCapUsd: number;
+  currentSpendUsd: number;
+  monthlyCapTokens: number;
+  currentSpendTokens: number;
+  hardLockEnabled: boolean;
+  hardLockTriggered: boolean;
+  fallbackLocalModel: string;
+  periodMonth: string;
+}
+
+export interface AuditChainRecord {
+  seqId: number;
+  eventId: string;
+  tenantId: string;
+  actorUserId: string;
+  eventType: string;
+  resourceTarget: string;
+  payloadJson: Record<string, any>;
+  prevHashSha256: string;
+  recordHashSha256: string;
+  createdAt: string;
+}
+
+export interface VaultConnectorEntry {
+  id: string;
+  tenantId: string;
+  connectorKey: string;
+  cipherAlgorithm: 'AES-256-GCM';
+  keyFingerprintSha256: string;
+  status: 'ACTIVE' | 'EXPIRED' | 'REVOKED';
+  rotatedAt: string;
+}
+

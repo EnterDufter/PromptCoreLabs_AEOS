@@ -21,6 +21,7 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./scripts/database/migrations/001_create_memory_schema.sql:/docker-entrypoint-initdb.d/001_create_memory_schema.sql:ro
       - ./scripts/database/migrations/002_create_cockpit_artifacts_schema.sql:/docker-entrypoint-initdb.d/002_create_cockpit_artifacts_schema.sql:ro
+      - ./scripts/database/migrations/003_create_cockpit_iam_finops_entitlements_schema.sql:/docker-entrypoint-initdb.d/003_create_cockpit_iam_finops_entitlements_schema.sql:ro
     networks:
       - aeos-net
 

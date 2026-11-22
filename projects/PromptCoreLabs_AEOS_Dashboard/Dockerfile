@@ -15,6 +15,7 @@ RUN npm ci
 COPY index.html tsconfig.json vite.config.ts tailwind.config.js postcss.config.js ./
 COPY public ./public
 COPY src ./src
+COPY server ./server
 COPY scripts ./scripts
 
 RUN npm run build
@@ -30,9 +31,10 @@ ENV HOST=0.0.0.0
 ENV VITE_CACHE_DIR=/tmp/pcl-cockpit-vite-cache
 ENV AEOS_WORKSPACE_ROOT=/workspace
 
-# vite.config.ts imports Vite/React plugin at preview startup; keep runtime deps + config
+# vite.config.ts imports Vite/React plugin and server/aeosBackendApp at startup; keep runtime deps + config
 COPY --from=builder /app/package.json /app/vite.config.ts /app/index.html ./
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server ./server
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
