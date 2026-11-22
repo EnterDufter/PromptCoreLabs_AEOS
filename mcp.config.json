@@ -41,6 +41,17 @@
       "env": {},
       "disabled": false,
       "autoApprove": []
+    },
+    "pcl-codegraph": {
+      "command": "python",
+      "args": [
+        "./services/pcl-codegraph/src/mcp_server.py"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }

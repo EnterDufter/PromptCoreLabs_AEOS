@@ -1,0 +1,10 @@
+# ============================================================================
+# PCL AEOS — Adaptador Hexagonal PCL Code Graph Port (services/pcl-codegraph)
+# Conformidade: SPEC-PCL-AEOS-CODEGRAPH-04 | Licença: Apache-2.0
+# Invariantes: 100% CPU (--no-llm) | 0 MB VRAM | $0.00 Local Execution
+# ============================================================================
+mcp>=1.27.0
+fastmcp>=3.0.0
+pydantic>=2.13.0
+fastapi>=0.115.0
+uvicorn>=0.34.0

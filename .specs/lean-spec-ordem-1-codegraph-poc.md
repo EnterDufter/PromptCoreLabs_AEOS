@@ -42,11 +42,11 @@ Executar a **Ordem 1** da sequência harmonizada do PCL AEOS / Cockpit:
 ---
 
 ## 4. Critérios de Aceite (Checklist)
-- [ ] Checkpoint Git do Gate 2 comitado e enviado (`git push origin master`) sem vazamento de `node_modules` ou projetos paralelos.
-- [ ] 4 subgrafos (`cockpit-graph.json`, `laya-graph.json`, `omniroute-graph.json`, `paperclip-graph.json`) gerados deterministicamente em CPU (`0 Tokens`, `0 MB VRAM`).
-- [ ] Mapa visual `graph.html` / `docs/graphify_pilot_dashboard.html` gerado em UTF-8 puro com Top 5 God Nodes e métricas de economia de tokens.
-- [ ] Servidor MCP `pcl-codegraph` testado e respondendo às 5 primitivas do `PCL Code Graph Port`.
-- [ ] Build do PCL Cockpit (`npm run build`) validado com **Exit Code 0**.
+- [x] Checkpoint Git do Gate 2 comitado e enviado (`git push origin master`) sem vazamento de `node_modules` ou projetos paralelos (`commit ca1d718`).
+- [x] 4 subgrafos (`cockpit-graph.json`, `laya-graph.json`, `omniroute-graph.json`, `paperclip-graph.json`) gerados deterministicamente em CPU (`0 Tokens`, `0 MB VRAM`, `13.810 nós` e `31.067 arestas` em `2.383 arquivos`).
+- [x] Mapa visual `graph.html` / `docs/graphify_pilot_dashboard.html` gerado em UTF-8 puro com Top 5 God Nodes e métricas de economia de tokens (`-79.5%` global).
+- [x] Servidor MCP `pcl-codegraph` testado e respondendo às 5 primitivas do `PCL Code Graph Port` (`overall_status: TRUSTED`).
+- [x] Build do PCL Cockpit (`npm run build`) validado com **Exit Code 0** (`3519 modules transformed`).
 
 ---
 

@@ -8,6 +8,15 @@
       "env": {
         "PYTHONIOENCODING": "utf-8"
       }
+    },
+    "pcl-codegraph": {
+      "command": "python",
+      "args": [
+        "C:\\PromptCore_Labs\\services\\pcl-codegraph\\src\\mcp_server.py"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
     }
   }
 }
