@@ -1,0 +1,17 @@
+# ==============================================================================
+# PCL AEOS — Caddy Reverse Proxy (Profile: vps-tls)
+#
+# Local/IP staging: keeps default COCKPIT_DOMAIN=localhost (internal self-signed/HTTP)
+# Production VPS HTTPS: set COCKPIT_DOMAIN=cockpit.yourdomain.com in .env
+# to automatically provision & renew Let's Encrypt TLS certificates.
+# ==============================================================================
+{$COCKPIT_DOMAIN:localhost} {
+	encode gzip zstd
+
+	reverse_proxy cockpit:3001 {
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-Host {host}
+		header_up X-Real-IP {remote_host}
+	}
+}
+

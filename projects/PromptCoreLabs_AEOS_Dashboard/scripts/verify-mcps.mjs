@@ -24,6 +24,16 @@ function loadEnvIfPresent() {
   }
 }
 
+function resolveLayaPythonCommand() {
+  const explicit = process.env.LAYA_PYTHON_BIN?.trim();
+  if (explicit) return explicit;
+  const candidates = [
+    path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', '.venv', 'Scripts', 'python.exe'),
+    path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', '.venv', 'bin', 'python')
+  ];
+  return candidates.find((p) => fs.existsSync(p)) || 'python';
+}
+
 async function runMcpStdioTest({ name, command, args, callTool, callArgs, timeoutMs = 8000 }) {
   const startedAt = Date.now();
   return new Promise((resolve) => {
@@ -149,24 +159,35 @@ async function main() {
   // 2. PCL Laya System One MCP (FastMCP Python)
   const layaScript = path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py');
   const layaModel = path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'models', 'nli-minilm', 'model.onnx');
+  const layaPython = resolveLayaPythonCommand();
   if (!fs.existsSync(layaScript)) {
     console.error(`[FAIL] mcp-pcl-laya script ausente em ${layaScript}`);
     hasHardFailure = true;
   } else {
     const layaRes = await runMcpStdioTest({
       name: 'mcp-pcl-laya',
-      command: 'python',
+      command: layaPython,
       args: [layaScript],
       callTool: 'laya_health',
       callArgs: {}
     });
 
     if (!layaRes.ok) {
-      console.error(`[FAIL] mcp-pcl-laya: ${layaRes.error}`);
+      console.error(`[FAIL] mcp-pcl-laya (${layaPython}): ${layaRes.error}`);
       hasHardFailure = true;
     } else {
       const layaText = layaRes.toolCallResult?.content?.[0]?.text || '{}';
-      console.log(`[PASS] mcp-pcl-laya (${layaRes.latencyMs}ms): ${layaRes.toolsList.length} tools | ONNX asset=${fs.existsSync(layaModel)} | health=${layaText.replace(/\s+/g, ' ').slice(0, 180)}`);
+      let healthJson = null;
+      try {
+        healthJson = JSON.parse(layaText);
+      } catch {}
+      const usesDedicatedVenv = layaPython !== 'python';
+      if (usesDedicatedVenv && (!healthJson || !healthJson.is_ready || healthJson.engine_mode !== 'neural_onnx' || healthJson.vram_allocated_mb !== 0)) {
+        console.error(`[FAIL] mcp-pcl-laya usando ${layaPython} não atingiu modo neural_onnx pronto com 0 MB VRAM: ${layaText}`);
+        hasHardFailure = true;
+      } else {
+        console.log(`[PASS] mcp-pcl-laya (${layaRes.latencyMs}ms | py=${path.basename(layaPython)}): ${layaRes.toolsList.length} tools | ONNX asset=${fs.existsSync(layaModel)} | health=${layaText.replace(/\s+/g, ' ').slice(0, 180)}`);
+      }
     }
   }
 

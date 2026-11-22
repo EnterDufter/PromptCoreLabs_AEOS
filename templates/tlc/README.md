@@ -8,8 +8,11 @@ Prover os templates em branco da metodologia TLC Spec-Driven v3 para uso em qual
 TEMPLATES DISPONÍVEIS
 ==================================================
 
+• lean-spec-template.md
+  Template para a Rota Lean (Triage Gate: Complexidade 1–3). Cobre objetivo, escopo delimitado, arquivos afetados, checklist e plano de verificação rápida em documento único enxuto.
+
 • specify-template.md
-  Template para a etapa SPECIFY. Cobre escopo, requisitos funcionais, não funcionais e critérios de segurança.
+  Template para a etapa SPECIFY da Rota Full SDD (Complexidade 4–5). Cobre escopo, requisitos funcionais, não funcionais e critérios de segurança.
 
 • design-template.md
   Template para a etapa DESIGN. Cobre arquitetura de software, componentes, fluxo de dados e matriz de rastreabilidade.

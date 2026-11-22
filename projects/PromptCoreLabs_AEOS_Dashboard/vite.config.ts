@@ -13,7 +13,9 @@ const { Pool } = pg;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const WORKSPACE_ROOT = path.resolve(__dirname, '../..');
+const WORKSPACE_ROOT = process.env.AEOS_WORKSPACE_ROOT?.trim()
+  ? path.resolve(process.env.AEOS_WORKSPACE_ROOT.trim())
+  : path.resolve(__dirname, '../..');
 const PAPERCLIP_REPO_PATH = path.join(WORKSPACE_ROOT, 'PaperClip-Companies', 'promptcore-labs');
 const AGENTS_SKILLS_PATH = path.join(WORKSPACE_ROOT, '.agents', 'skills');
 const VAULT_DIR = path.join(WORKSPACE_ROOT, 'data', 'cockpit-vault');
@@ -49,10 +51,47 @@ function loadWorkspaceEnv(): void {
 
 loadWorkspaceEnv();
 
+interface ServiceEndpoint {
+  url: string;
+  host: string;
+  port: number;
+  enabled: boolean;
+}
+
+function parseServiceEndpoint(rawUrl: string | undefined, defaultUrl: string): ServiceEndpoint {
+  const trimmed = rawUrl === undefined ? defaultUrl : rawUrl.trim();
+  if (!trimmed) {
+    return { url: '', host: '', port: 0, enabled: false };
+  }
+  const parsed = new URL(trimmed);
+  const defaultPort = parsed.protocol === 'https:' ? 443 : 80;
+  return {
+    url: parsed.origin,
+    host: parsed.hostname,
+    port: parseInt(parsed.port || String(defaultPort), 10),
+    enabled: true
+  };
+}
+
+function resolveLayaPythonCommand(): string {
+  const explicit = process.env.LAYA_PYTHON_BIN?.trim();
+  if (explicit) return explicit;
+  const candidates = [
+    path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', '.venv', 'Scripts', 'python.exe'),
+    path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', '.venv', 'bin', 'python')
+  ];
+  return candidates.find((p) => fs.existsSync(p)) || 'python';
+}
+
+const pgHost = process.env.PG_HOST || '127.0.0.1';
 const pgPortNumber = parseInt(process.env.PG_PORT || process.env.POSTGRES_PORT || '5432', 10);
+const omnirouteEndpoint = parseServiceEndpoint(process.env.OMNIROUTE_URL, 'http://127.0.0.1:20130');
+const ollamaEndpoint = parseServiceEndpoint(process.env.OLLAMA_URL, 'http://127.0.0.1:11434');
+const layaEndpoint = parseServiceEndpoint(process.env.LAYA_URL, 'http://127.0.0.1:20140');
+const paperclipEndpoint = parseServiceEndpoint(process.env.PAPERCLIP_URL, 'http://127.0.0.1:3100');
 
 const pgPool = new Pool({
-  host: process.env.PG_HOST || '127.0.0.1',
+  host: pgHost,
   port: pgPortNumber,
   user: process.env.PG_USER || process.env.POSTGRES_USER || 'paperclip',
   password: process.env.PG_PASSWORD || process.env.POSTGRES_PASSWORD || 'paperclip',
@@ -550,7 +589,7 @@ function ensureVaultDirs() {
 
 async function ensureCockpitPostgresSchema(): Promise<boolean> {
   try {
-    const isUp = await checkTcpPort('127.0.0.1', 5432, 350);
+    const isUp = await checkTcpPort(pgHost, pgPortNumber, 350);
     if (!isUp) return false;
     const migrationPath = path.join(WORKSPACE_ROOT, 'scripts', 'database', 'migrations', '002_create_cockpit_artifacts_schema.sql');
     if (fs.existsSync(migrationPath)) {
@@ -746,7 +785,7 @@ async function getVaultStats() {
     }
   } catch {}
 
-  const postgresConnected = await checkTcpPort('127.0.0.1', pgPortNumber, 250);
+  const postgresConnected = await checkTcpPort(pgHost, pgPortNumber, 250);
   const r2Configured = Boolean(
     process.env.CLOUDFLARE_R2_BUCKET &&
     process.env.CLOUDFLARE_R2_ACCESS_KEY_ID &&
@@ -930,7 +969,7 @@ function pclAeosBackendPlugin(): Plugin {
             cmd = process.execPath;
             args = [path.join(__dirname, 'scripts', 'pcl-sovereign-mcp-server.mjs')];
           } else if (body.serverId === 'mcp-pcl-laya' || args.some(a => a.includes('mcp_server.py'))) {
-            cmd = 'python';
+            cmd = resolveLayaPythonCommand();
             args = [path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py')];
           }
 
@@ -960,7 +999,9 @@ function pclAeosBackendPlugin(): Plugin {
         let report: Record<string, any> = { service, timestamp: nowIso };
 
         if (service === 'svc-omniroute') {
-          const tcp = await measureTcpPort('127.0.0.1', 20130, 350);
+          const tcp = omnirouteEndpoint.enabled
+            ? await measureTcpPort(omnirouteEndpoint.host, omnirouteEndpoint.port, 350)
+            : { open: false, connectMs: 0 };
           const vaultHealthy = Boolean(vaultApiKey && vaultApiKey.length > 15);
           const keyHash12 = vaultHealthy
             ? crypto.createHash('sha256').update(vaultApiKey).digest('hex').slice(0, 12)
@@ -971,39 +1012,43 @@ function pclAeosBackendPlugin(): Plugin {
           report = {
             ok: tcp.open || vaultHealthy,
             service,
-            targetPort: '127.0.0.1:20130',
+            targetPort: omnirouteEndpoint.enabled ? `${omnirouteEndpoint.host}:${omnirouteEndpoint.port}` : 'disabled',
             dockerContainerUp: tcp.open,
             latencyMs: tcp.connectMs,
             activeMode: tcp.open
-              ? 'Container Docker OmniRoute (:20130) ONLINE'
-              : 'Container :20130 Offline ➔ Failover Nativo Middleware (:3001/api/aeos/infer) ATIVO',
+              ? `Gateway OmniRoute (${omnirouteEndpoint.host}:${omnirouteEndpoint.port}) ONLINE`
+              : `Gateway :${omnirouteEndpoint.port || 20130} Offline ➔ Failover Nativo Middleware (:3001/api/aeos/infer) ATIVO`,
             aes256GcmVaultVerified: vaultHealthy,
             keyFingerprint: vaultKeyFingerprint,
             timestamp: nowIso
           };
         } else if (service === 'svc-laya') {
-          const tcp = await measureTcpPort('127.0.0.1', 20140, 350);
+          const tcp = layaEndpoint.enabled
+            ? await measureTcpPort(layaEndpoint.host, layaEndpoint.port, 350)
+            : { open: false, connectMs: 0 };
           const mcpScriptPath = path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py');
           const mcpAvailable = fs.existsSync(mcpScriptPath);
           report = {
             ok: tcp.open || mcpAvailable,
             service,
-            targetPort: '127.0.0.1:20140',
+            targetPort: layaEndpoint.enabled ? `${layaEndpoint.host}:${layaEndpoint.port}` : 'stdio-only',
             httpDaemonUp: tcp.open,
             stdioFastMcpReady: mcpAvailable,
             latencyMs: tcp.connectMs,
             vramAllocatedMb: 0,
             activeMode: tcp.open
-              ? 'Daemon HTTP Laya (:20140) ONLINE • CPU INT8 (0 MB VRAM)'
-              : 'Porta :20140 Offline ➔ FastMCP stdio Local (mcp_server.py) DISPONÍVEL • 0 MB VRAM',
+              ? `Daemon HTTP Laya (${layaEndpoint.host}:${layaEndpoint.port}) ONLINE • CPU INT8 (0 MB VRAM)`
+              : `Porta :${layaEndpoint.port || 20140} Offline ➔ FastMCP stdio Local (mcp_server.py) DISPONÍVEL • 0 MB VRAM`,
             timestamp: nowIso
           };
         } else if (service === 'svc-ollama') {
-          const tcp = await measureTcpPort('127.0.0.1', 11434, 350);
+          const tcp = ollamaEndpoint.enabled
+            ? await measureTcpPort(ollamaEndpoint.host, ollamaEndpoint.port, 350)
+            : { open: false, connectMs: 0 };
           let modelsLoaded: string[] = [];
-          if (tcp.open) {
+          if (tcp.open && ollamaEndpoint.enabled) {
             try {
-              const r = await fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(800) });
+              const r = await fetch(`${ollamaEndpoint.url}/api/tags`, { signal: AbortSignal.timeout(800) });
               if (r.ok) {
                 const j: any = await r.json();
                 modelsLoaded = (j.models || []).map((m: any) => m.name);
@@ -1013,26 +1058,28 @@ function pclAeosBackendPlugin(): Plugin {
           report = {
             ok: tcp.open,
             service,
-            targetPort: '127.0.0.1:11434',
+            targetPort: ollamaEndpoint.enabled ? `${ollamaEndpoint.host}:${ollamaEndpoint.port}` : 'disabled',
             ollamaDaemonUp: tcp.open,
             modelsLoaded,
             latencyMs: tcp.connectMs,
-            activeMode: tcp.open
-              ? `Ollama Host (:11434) ONLINE • ${modelsLoaded.length} modelo(s) na GPU ($0.00)`
-              : 'Daemon Ollama (:11434) Offline no momento (inicie com: ollama serve)',
+            activeMode: !ollamaEndpoint.enabled
+              ? 'OLLAMA_URL vazio — Operando via OmniRoute / Cloud APIs na VPS sem GPU'
+              : tcp.open
+                ? `Ollama (${ollamaEndpoint.host}:${ollamaEndpoint.port}) ONLINE • ${modelsLoaded.length} modelo(s) na GPU ($0.00)`
+                : `Daemon Ollama (${ollamaEndpoint.host}:${ollamaEndpoint.port}) Offline no momento`,
             timestamp: nowIso
           };
         } else {
-          const tcp = await measureTcpPort('127.0.0.1', 5432, 350);
+          const tcp = await measureTcpPort(pgHost, pgPortNumber, 350);
           report = {
             ok: tcp.open,
             service,
-            targetPort: '127.0.0.1:5432',
+            targetPort: `${pgHost}:${pgPortNumber}`,
             postgresUp: tcp.open,
             latencyMs: tcp.connectMs,
             activeMode: tcp.open
-              ? 'PostgreSQL 17 + PGVector (:5432) ONLINE • Trilha SHA-256 Ativa'
-              : 'Container PostgreSQL (:5432) Offline ➔ Persistência Local SQLite/Storage Ativa',
+              ? `PostgreSQL 17 + PGVector (${pgHost}:${pgPortNumber}) ONLINE • Trilha SHA-256 Ativa`
+              : `PostgreSQL (${pgHost}:${pgPortNumber}) Offline ➔ Persistência Local Vault em Disco Ativa`,
             timestamp: nowIso
           };
         }
@@ -1048,6 +1095,9 @@ function pclAeosBackendPlugin(): Plugin {
         const startedAt = Date.now();
         const nowIso = new Date().toISOString();
 
+        const probeEndpoint = (ep: ServiceEndpoint) =>
+          ep.enabled ? measureTcpPort(ep.host, ep.port, 350) : Promise.resolve({ open: false, connectMs: 0 });
+
         const [
           omniTcp,
           ollamaTcp,
@@ -1057,11 +1107,11 @@ function pclAeosBackendPlugin(): Plugin {
           sovereignMcp,
           layaMcp
         ] = await Promise.all([
-          measureTcpPort('127.0.0.1', 20130, 350),
-          measureTcpPort('127.0.0.1', 11434, 350),
-          measureTcpPort('127.0.0.1', 20140, 350),
-          measureTcpPort('127.0.0.1', pgPortNumber, 350),
-          measureTcpPort('127.0.0.1', 3100, 350),
+          probeEndpoint(omnirouteEndpoint),
+          probeEndpoint(ollamaEndpoint),
+          probeEndpoint(layaEndpoint),
+          measureTcpPort(pgHost, pgPortNumber, 350),
+          probeEndpoint(paperclipEndpoint),
           inspectMcpServerLive(
             process.execPath,
             [path.join(__dirname, 'scripts', 'pcl-sovereign-mcp-server.mjs')],
@@ -1071,19 +1121,34 @@ function pclAeosBackendPlugin(): Plugin {
           ),
           fs.existsSync(path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py'))
             ? inspectMcpServerLive(
-                'python',
+                resolveLayaPythonCommand(),
                 [path.join(WORKSPACE_ROOT, 'services', 'pcl-laya', 'src', 'mcp_server.py')],
-                5000,
+                8500,
                 'laya_health',
                 {}
               )
             : Promise.resolve({ ok: false, liveHandshake: false, latencyMs: 0, error: 'Script mcp_server.py ausente em services/pcl-laya/src' })
         ]);
 
-        let ollamaModels: string[] = [];
-        if (ollamaTcp.open) {
+        let layaHealthMeta: { engineMode?: string; isReady?: boolean; vramMb?: number } = {};
+        if (layaMcp.ok) {
           try {
-            const tagsRes = await fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(800) });
+            const rawHealthText = (layaMcp as any).toolCallResult?.content?.[0]?.text || '';
+            if (rawHealthText) {
+              const parsedHealth = JSON.parse(rawHealthText);
+              layaHealthMeta = {
+                engineMode: parsedHealth.engine_mode,
+                isReady: parsedHealth.is_ready,
+                vramMb: parsedHealth.vram_allocated_mb
+              };
+            }
+          } catch {}
+        }
+
+        let ollamaModels: string[] = [];
+        if (ollamaTcp.open && ollamaEndpoint.enabled) {
+          try {
+            const tagsRes = await fetch(`${ollamaEndpoint.url}/api/tags`, { signal: AbortSignal.timeout(800) });
             if (tagsRes.ok) {
               const tagsJson: any = await tagsRes.json();
               ollamaModels = (tagsJson.models || []).map((m: any) => m.name);
@@ -1127,9 +1192,9 @@ function pclAeosBackendPlugin(): Plugin {
             status: layaMcp.ok ? 'PASS' : 'WARN',
             latencyMs: layaMcp.latencyMs || 0,
             detail: layaMcp.ok
-              ? `FastMCP JSON-RPC OK • ONNX ${layaModelExists ? 'model.onnx presente' : 'heurístico CPU'}`
+              ? `FastMCP JSON-RPC OK • ${layaHealthMeta.engineMode === 'neural_onnx' && layaHealthMeta.isReady ? `ONNX INT8 ativo (${layaHealthMeta.vramMb ?? 0} MB VRAM)` : (layaModelExists ? 'model.onnx presente (modo fallback)' : 'heurístico CPU')}`
               : `${(layaMcp as any).error || 'Handshake stdio indisponível'} (model.onnx: ${layaModelExists ? 'sim' : 'não'})`,
-            actionHint: layaMcp.ok ? '' : 'Instale dependências Python do services/pcl-laya (mcp, onnxruntime) e verifique model.onnx'
+            actionHint: layaMcp.ok ? '' : 'Instale dependências Python do services/pcl-laya (mcp<2, onnxruntime) e verifique model.onnx'
           },
           {
             id: 'mcp-github',
@@ -1234,12 +1299,14 @@ function pclAeosBackendPlugin(): Plugin {
 
       // 1. Endpoint de Status Rápido de Infraestrutura
       if (url.startsWith('/api/aeos/status') && req.method === 'GET') {
+        const checkOpt = (ep: ServiceEndpoint) =>
+          ep.enabled ? checkTcpPort(ep.host, ep.port, 250) : Promise.resolve(false);
         const [omnirouteUp, ollamaUp, layaUp, postgresUp, paperclipUp] = await Promise.all([
-          checkTcpPort('127.0.0.1', 20130, 250),
-          checkTcpPort('127.0.0.1', 11434, 250),
-          checkTcpPort('127.0.0.1', 20140, 250),
-          checkTcpPort('127.0.0.1', 5432, 250),
-          checkTcpPort('127.0.0.1', 3100, 250)
+          checkOpt(omnirouteEndpoint),
+          checkOpt(ollamaEndpoint),
+          checkOpt(layaEndpoint),
+          checkTcpPort(pgHost, pgPortNumber, 250),
+          checkOpt(paperclipEndpoint)
         ]);
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ omnirouteUp, ollamaUp, layaUp, postgresUp, paperclipUp }));
@@ -1331,8 +1398,10 @@ function pclAeosBackendPlugin(): Plugin {
           const activeApiKey = (customApiKey && customApiKey.trim().length > 15) ? customApiKey.trim() : vaultApiKey;
           const rawHistory: Array<{ role: 'user' | 'assistant' | 'system'; content: string }> = Array.isArray(messages) ? messages : [];
 
-          // ROTA 1: Container OmniRoute Local (:20130) como Hub Central Multiprovedor
-          const omniPortOpen = await checkTcpPort('127.0.0.1', 20130, 250);
+          // ROTA 1: Gateway OmniRoute (:20130) como Hub Central Multiprovedor
+          const omniPortOpen = omnirouteEndpoint.enabled
+            ? await checkTcpPort(omnirouteEndpoint.host, omnirouteEndpoint.port, 250)
+            : false;
           if (omniPortOpen) {
             try {
               const targetModel = modelId || (profileId === 'soberano-local' ? 'qwen2.5-coder:7b-instruct-q4_K_M' : 'gemini-3.6-flash');
@@ -1342,7 +1411,7 @@ function pclAeosBackendPlugin(): Plugin {
                 { role: 'user', content: prompt }
               ];
 
-              const omniRes = await fetch('http://127.0.0.1:20130/v1/chat/completions', {
+              const omniRes = await fetch(`${omnirouteEndpoint.url}/v1/chat/completions`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -1376,17 +1445,19 @@ function pclAeosBackendPlugin(): Plugin {
             }
           }
 
-          // ROTA 2: Modo Soberano Local ou Modelo Qwen -> Ollama Local Nativo (:11434 GPU RTX)
+          // ROTA 2: Modo Soberano Local ou Modelo Qwen -> Ollama Local/Tailscale (:11434 GPU RTX)
           if (profileId === 'soberano-local' || modelId === 'qwen-2-5-coder-7b') {
-            const ollamaPortOpen = await checkTcpPort('127.0.0.1', 11434, 300);
-            if (ollamaPortOpen) {
+            const ollamaPortOpen = ollamaEndpoint.enabled
+              ? await checkTcpPort(ollamaEndpoint.host, ollamaEndpoint.port, 300)
+              : false;
+            if (ollamaPortOpen && ollamaEndpoint.enabled) {
               const ollamaMessages = [
                 { role: 'system', content: sysMsg },
                 ...rawHistory.slice(-8).map(m => ({ role: m.role, content: m.content })),
                 { role: 'user', content: prompt }
               ];
 
-              const ollamaRes = await fetch('http://127.0.0.1:11434/api/chat', {
+              const ollamaRes = await fetch(`${ollamaEndpoint.url}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1506,16 +1577,18 @@ function pclAeosBackendPlugin(): Plugin {
             }
           }
 
-          // Fallback de Segurança: Ollama Local caso nuvem falhe
-          const ollamaFallbackOpen = await checkTcpPort('127.0.0.1', 11434, 300);
-          if (ollamaFallbackOpen) {
+          // Fallback de Segurança: Ollama Local/Tailscale caso nuvem falhe
+          const ollamaFallbackOpen = ollamaEndpoint.enabled
+            ? await checkTcpPort(ollamaEndpoint.host, ollamaEndpoint.port, 300)
+            : false;
+          if (ollamaFallbackOpen && ollamaEndpoint.enabled) {
             const ollamaMessages = [
               { role: 'system', content: sysMsg },
               ...rawHistory.slice(-6).map(m => ({ role: m.role, content: m.content })),
               { role: 'user', content: prompt }
             ];
 
-            const ollamaRes = await fetch('http://127.0.0.1:11434/api/chat', {
+            const ollamaRes = await fetch(`${ollamaEndpoint.url}/api/chat`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -1577,6 +1650,26 @@ function pclAeosBackendPlugin(): Plugin {
   };
 }
 
+const cockpitPort = parseInt(process.env.COCKPIT_PORT || '3001', 10);
+
+const apiProxyConfig = {
+  '/api/omniroute': {
+    target: omnirouteEndpoint.enabled ? omnirouteEndpoint.url : 'http://127.0.0.1:20130',
+    changeOrigin: true,
+    rewrite: (p: string) => p.replace(/^\/api\/omniroute/, '')
+  },
+  '/api/ollama': {
+    target: ollamaEndpoint.enabled ? ollamaEndpoint.url : 'http://127.0.0.1:11434',
+    changeOrigin: true,
+    rewrite: (p: string) => p.replace(/^\/api\/ollama/, '')
+  },
+  '/api/laya': {
+    target: layaEndpoint.enabled ? layaEndpoint.url : 'http://127.0.0.1:20140',
+    changeOrigin: true,
+    rewrite: (p: string) => p.replace(/^\/api\/laya/, '')
+  }
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
@@ -1597,24 +1690,13 @@ export default defineConfig({
     }
   },
   server: {
-    port: 3001,
+    port: cockpitPort,
     host: true,
-    proxy: {
-      '/api/omniroute': {
-        target: 'http://127.0.0.1:20130',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/omniroute/, '')
-      },
-      '/api/ollama': {
-        target: 'http://127.0.0.1:11434',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/ollama/, '')
-      },
-      '/api/laya': {
-        target: 'http://127.0.0.1:20140',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/laya/, '')
-      }
-    }
+    proxy: apiProxyConfig
+  },
+  preview: {
+    port: cockpitPort,
+    host: true,
+    proxy: apiProxyConfig
   }
 });

@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudo Arquitetural — Aplicação do Graphify no Harness do PCL AEOS</title>
+  <style>
+    /* Reset & Variáveis Base (Padrão Canônico PCL Cockpit Modo Claro v3.9 + Palcos Mira Dark) */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --slate-950: #020617;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --purple: #6d28d9;
+      --purple-bg: #ede9fe;
+      --border-color: #cbd5e1;
+      --mira-cyan: #00e5ff;
+      --mira-green: #34d399;
+      --mira-amber: #fbbf24;
+      --mira-rose: #fb7185;
+      --mira-violet: #c084fc;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--slate-900);
+      background-color: #f8fafc;
+      line-height: 1.55;
+      font-size: 13.5px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 24px auto;
+      background: #ffffff;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+    }
+
+    /* Barra de Ação Superior (Oculta na Impressão) */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--slate-900);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+    }
+
+    .action-bar .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-bar .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #38bdf8;
+      color: var(--slate-900);
+    }
+    .btn-primary:hover {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Cabeçalho do Documento */
+    .doc-header {
+      border-bottom: 2px solid var(--slate-200);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--slate-900);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: var(--slate-50);
+      padding: 12px 16px;
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      margin-top: 14px;
+      font-size: 11.5px;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: var(--slate-600);
+      text-transform: uppercase;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+
+    /* Callouts & Citacao WhatsApp */
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 18px 0;
+      font-size: 13px;
+      color: #14532d;
+    }
+    .callout strong {
+      color: #15803d;
+    }
+
+    .whatsapp-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0284c7;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0 22px 0;
+      font-size: 12.5px;
+    }
+    .whatsapp-header {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .whatsapp-line {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--slate-700);
+      padding: 2px 0;
+    }
+    .whatsapp-line span.time {
+      color: #64748b;
+    }
+    .whatsapp-line strong {
+      color: var(--slate-900);
+    }
+
+    /* Títulos de Seção */
+    h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--slate-900);
+      border-bottom: 1.5px solid var(--slate-200);
+      padding-bottom: 6px;
+      margin: 28px 0 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin: 18px 0 8px 0;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: var(--slate-700);
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 24px;
+      color: var(--slate-700);
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 12px;
+      background: var(--slate-100);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+
+    /* Tabelas Executivas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px 0;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      border: 1px solid var(--slate-200);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--slate-100);
+      color: var(--slate-900);
+      font-weight: 700;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--slate-50);
+    }
+
+    /* Badges */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tag-success { background: var(--success-bg); color: var(--success); }
+    .tag-warning { background: var(--warning-bg); color: var(--warning); }
+    .tag-danger { background: var(--danger-bg); color: var(--danger); }
+    .tag-primary { background: var(--primary-light); color: var(--primary-dark); }
+    .tag-purple { background: var(--purple-bg); color: var(--purple); }
+
+    /* Cartões de Resposta Direta e Marcos */
+    .milestone-card {
+      border: 1px solid var(--slate-200);
+      border-left: 4px solid var(--primary);
+      background: #ffffff;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+    .milestone-card.m0 { border-left-color: #0284c7; }
+    .milestone-card.m1 { border-left-color: #059669; }
+    .milestone-card.m2 { border-left-color: #7c3aed; }
+    .milestone-card.m3 { border-left-color: #d97706; }
+    .milestone-card.m4 { border-left-color: #e11d48; }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    .milestone-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-900);
+    }
+
+    .milestone-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--slate-100);
+      color: var(--slate-700);
+      white-space: nowrap;
+    }
+
+    .validation-box {
+      background: #f8fafc;
+      border: 1px dashed var(--slate-200);
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .validation-box strong {
+      color: var(--primary-dark);
+    }
+
+    /* PALCOS DE METÁFORA ANIMADA (PADRÃO SANDECO MIRA ANIMATOR) */
+    .mira-stage-card {
+      margin: 18px 0 24px 0;
+      padding: 16px 18px;
+      background: linear-gradient(145deg, #090d16 0%, #0f172a 100%);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      color: #f8fafc;
+      box-shadow: 0 8px 24px rgba(2, 6, 23, 0.25);
+    }
+
+    .mira-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mira-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .mira-ledger {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .mira-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .mira-subtitle {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+
+    .mira-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: rgba(2, 6, 23, 0.55);
+      border-radius: 8px;
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+
+    .mira-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #94a3b8;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mira-replay-btn {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mira-replay-btn:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    /* Animações CSS em Loop Perpétuo (Regra de Ouro do Mira: Nada é Estático) */
+    @keyframes miraPulse {
+      0%, 100% { opacity: 0.45; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
+    @keyframes miraFlowDash {
+      to { stroke-dashoffset: -48; }
+    }
+
+    @keyframes miraScanBeam {
+      0% { transform: translateX(0px); opacity: 0.2; }
+      45% { opacity: 0.95; }
+      80% { transform: translateX(340px); opacity: 0.2; }
+      100% { transform: translateX(0px); opacity: 0.2; }
+    }
+
+    @keyframes miraPlugCycle {
+      0%, 15% { transform: translateX(0px); }
+      35%, 65% { transform: translateX(28px); }
+      85%, 100% { transform: translateX(0px); }
+    }
+
+    @keyframes miraTokenBurn {
+      0% { width: 15px; }
+      70%, 85% { width: 310px; }
+      100% { width: 15px; }
+    }
+
+    @keyframes miraTokenSurgical {
+      0% { width: 15px; }
+      40%, 85% { width: 72px; }
+      100% { width: 15px; }
+    }
+
+    @keyframes miraOrbTravel {
+      0% { offset-distance: 0%; opacity: 0; }
+      10% { opacity: 1; }
+      80% { offset-distance: 100%; opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0; }
+    }
+
+    .anim-dash {
+      stroke-dasharray: 8 6;
+      animation: miraFlowDash 1.8s linear infinite;
+    }
+
+    .anim-pulse {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: miraPulse 3.2s ease-in-out infinite;
+    }
+
+    .anim-scan {
+      animation: miraScanBeam 7s ease-in-out infinite;
+    }
+
+    .anim-plug {
+      animation: miraPlugCycle 8s ease-in-out infinite;
+    }
+
+    .anim-token-high {
+      animation: miraTokenBurn 9s ease-in-out infinite;
+    }
+
+    .anim-token-low {
+      animation: miraTokenSurgical 9s ease-in-out infinite;
+    }
+
+    .paused * {
+      animation-play-state: paused !important;
+    }
+
+    /* Grid de Prós e Contras */
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 14px 0 20px 0;
+    }
+
+    .pro-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-top: 4px solid #16a34a;
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .con-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-top: 4px solid #d97706;
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .pro-card h3 { color: #166534; margin-top: 0; }
+    .con-card h3 { color: #92400e; margin-top: 0; }
+
+    /* Seção de Decisões */
+    .decision-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .decision-box strong {
+      color: #1e40af;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Quebras de Página para Impressão */
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Rodapé Documental */
+    .doc-footer {
+      border-top: 1px solid var(--slate-200);
+      padding-top: 14px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--slate-600);
+      font-size: 11px;
+    }
+
+    /* ESTILOS ESPECÍFICOS PARA IMPRESSÃO (A4 Racional) */
+    @media print {
+      body {
+        background: #ffffff !important;
+        font-size: 10.5pt !important;
+        color: #000000 !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .mira-stage-card {
+        background: #0f172a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      table {
+        font-size: 9pt !important;
+      }
+
+      th, td {
+        padding: 6px 8px !important;
+      }
+
+      th {
+        background: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .tag, .doc-badge, .milestone-card, .callout, .decision-box, .pro-card, .con-card, .whatsapp-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page-break {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      .avoid-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm 14mm 12mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Barra de Controle Interativa (Oculta na Impressão) -->
+    <div class="action-bar no-print">
+      <div class="brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+          <circle cx="6" cy="6" r="3"/>
+          <circle cx="18" cy="6" r="3"/>
+          <circle cx="12" cy="18" r="3"/>
+          <line x1="8.5" y1="7.5" x2="10.5" y2="15.5"/>
+          <line x1="15.5" y1="7.5" x2="13.5" y2="15.5"/>
+          <line x1="9" y1="6" x2="15" y2="6"/>
+        </svg>
+        <span>PROMPTCORE LABS &bull; PCL AEOS ARCHITECTURE &bull; MIRA METAPHOR ENGINE</span>
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="toggleAllAnimations()" id="btn-toggle-anim">
+          Pausar / Retomar Animações
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Imprimir / Salvar em PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Cabeçalho do Documento -->
+    <div class="doc-header">
+      <div class="doc-badge">Parecer Arquitetural &amp; Diretriz de Engenharia (SPEC-PCL-AEOS-CODEGRAPH-04)</div>
+      <h1>Estudo de Aplicação do Graphify no Harness do PCL AEOS</h1>
+      <p style="color: var(--slate-600); font-size: 13px; margin-top: 4px;">
+        Análise executiva e técnica sobre indexação de código por Grafos AST (Tree-sitter), economia de tokens (&gt;70%), arquitetura agnóstica <em>Ports &amp; Adapters</em>, integração MCP com o Coprocessador Laya e escalabilidade em Docker / VPS Multi-Tenant.
+      </p>
+
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Sistema / Escopo</strong>
+          PromptCore Labs &bull; PCL AEOS Harness
+        </div>
+        <div class="meta-item">
+          <strong>Referência Normativa</strong>
+          PCL-AEOS-NORM-01 / SPEC-CODEGRAPH-04
+        </div>
+        <div class="meta-item">
+          <strong>Data do Estudo</strong>
+          22 de Novembro de 2026
+        </div>
+        <div class="meta-item">
+          <strong>Instrução no Repositório</strong>
+          <span class="tag tag-success">Registrada no Harness</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Origem da Demanda: Provocação Técnica do Marcelo Moraes -->
+    <div class="whatsapp-box avoid-break">
+      <div class="whatsapp-header">
+        <span>Origem da Demanda &bull; Recomendação de Tech Lead (Marcelo Moraes)</span>
+        <span>21/11/2026 &bull; 13:14 – 13:22</span>
+      </div>
+      <div class="whatsapp-line"><span class="time">[13:14]</span> <strong>Marcelo Moraes:</strong> E o graphify? Vc já rodou o graphify no seu projeto?</div>
+      <div class="whatsapp-line"><span class="time">[13:16]</span> <strong>Marcelo Moraes:</strong> Pq ele gera o grafo do fonte, e consome menos tokens na IA na leitura de código.</div>
+      <div class="whatsapp-line"><span class="time">[13:21]</span> <strong>Marcelo Moraes:</strong> Cara, tem que incluir o graphify no seu fluxo. Porque quando tem código, é a melhor forma de trabalhar economizando token. Ele vai pesquisar sobre código usando grafos.</div>
+      <div class="whatsapp-line"><span class="time">[13:22]</span> <strong>Marcelo Moraes:</strong> <strong>Redução de mais de 70% de uso de tokens.</strong></div>
+    </div>
+
+    <div class="callout avoid-break">
+      <strong>Resumo Executivo (Em 30 Segundos):</strong> O seu amigo Marcelo Moraes está <strong>100% coberto de razão</strong>. Quando uma IA precisa dar manutenção em código sem um grafo estrutural, ela gasta até <strong>75% dos seus tokens apenas abrindo arquivos às cegas</strong> para descobrir quem chama quem. O <strong>Graphify</strong> é uma ferramenta gratuita e de código aberto (licença <strong>Apache-2.0</strong>) que usa um scanner local ultrarrápido em CPU (<em>Tree-sitter AST</em>) para montar a "planta baixa" de todas as funções e arquivos com <strong>custo zero de tokens e 0 MB de VRAM</strong>. E a melhor forma de incluí-lo no PCL AEOS <strong>não é fazendo um Fork fixo</strong>, mas plugando-o como um <strong>Servidor MCP Agnóstico</strong> ao lado do nosso <strong>Laya System One</strong>, encapsulado em Docker quando escalarmos para VPS.
+    </div>
+
+    <!-- SEÇÃO 1: O QUE É O GRAPHIFY E A METÁFORA MIRA 1 -->
+    <div class="avoid-break">
+      <h2>1. O Que o Graphify Faz de Verdade? (Explicado com Metáfora Visual Mira)</h2>
+      <p>
+        Seguindo a <strong>Regra Zero do Sandeco Mira Animator</strong> (<em>"Metáfora Primeiro, Animação Depois — nunca explique um sistema abstrato sem uma analogia física do cotidiano que mostre a causa, o mecanismo e a falha"</em>), descartamos o clichê óbvio de "mapa/GPS" e aplicamos a metáfora da <strong>Manutenção Elétrica e Hidráulica de um Edifício de 20 Andares</strong>:
+      </p>
+      <ul>
+        <li><strong>Sem Graphify (Quebrar Paredes às Cegas):</strong> Você chama um eletricista (o Agente de IA) para consertar um disjuntor que está desarmando no PCL Cockpit. Como ele não tem a planta elétrica do prédio, ele sai quebrando o gesso de 35 salas diferentes (lendo 35 arquivos inteiros com <code>grep</code> e <code>read_file</code>), gastando <strong>45.000 tokens</strong> só para descobrir por onde o fio passa.</li>
+        <li><strong>Com Graphify (Scanner de Tubulação + Planta Baixa Cirúrgica):</strong> Antes do eletricista entrar, um aparelho de ultrassom determinístico (o parser <strong>Tree-sitter AST</strong> do Graphify rodando em CPU, sem gastar 1 centavo de IA) escaneia o prédio em 2 segundos e desenha a planta exata (<code>graph.json</code>), marcando inclusive as caixas de força centrais (os chamados <em>God Nodes</em>). O eletricista olha a planta, vê que o fio da Sala 402 vai direto para a Caixa 3B e abre apenas um quadrado de 10cm no ponto exato — gastando <strong>1.800 tokens (redução real de 70% a 85%)</strong>.</li>
+      </ul>
+
+      <!-- PALCO MIRA 1: QUEBRAR PAREDES VS PLANTA CIRÚRGICA -->
+      <div class="mira-stage-card" id="mira-stage-1">
+        <div class="mira-header">
+          <span class="mira-badge">🎬 Palco Mira Animator 01 &bull; Metáfora da Planta Predial</span>
+          <span class="mira-ledger">domínio: construção civil | verbo: rastrear conduite | assinatura: varredura vs. demolição | loop: 9s</span>
+        </div>
+        <div class="mira-title">Força Bruta (Quebrando 30 Paredes) vs. Grafo AST (Cirurgia no Ponto Exato)</div>
+        <div class="mira-subtitle">Observe o comparativo de consumo de tokens na barra inferior de cada andar enquanto o agente procura a origem de uma função no código.</div>
+
+        <svg class="mira-svg" viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- Divisória Central -->
+          <line x1="440" y1="15" x2="440" y2="245" stroke="#334155" stroke-width="2" stroke-dasharray="4 4"/>
+
+          <!-- LADO ESQUERDO: SEM GRAPHIFY -->
+          <g transform="translate(20, 15)">
+            <rect width="400" height="230" rx="8" fill="#0f172a" stroke="#7f1d1d" stroke-width="1.5"/>
+            <text x="16" y="24" fill="#fb7185" font-size="12" font-weight="bold">❌ SEM GRAPHIFY: Leitura Bruta de Arquivos (Grep Cego)</text>
+            <text x="16" y="41" fill="#94a3b8" font-size="10">O agente abre dezenas de arquivos inteiros procurando onde a função é chamada</text>
+
+            <!-- Grade de Salas/Arquivos Quebrados -->
+            <g transform="translate(16, 55)">
+              <rect x="0" y="0" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="41" y="16" fill="#fecdd3" font-size="9" text-anchor="middle">App.tsx</text>
+              <text x="41" y="28" fill="#fb7185" font-size="8" text-anchor="middle">4.200 tokens</text>
+
+              <rect x="94" y="0" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="135" y="16" fill="#fecdd3" font-size="9" text-anchor="middle">vite.config.ts</text>
+              <text x="135" y="28" fill="#fb7185" font-size="8" text-anchor="middle">6.800 tokens</text>
+
+              <rect x="188" y="0" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="229" y="16" fill="#fecdd3" font-size="9" text-anchor="middle">Sidebar.tsx</text>
+              <text x="229" y="28" fill="#fb7185" font-size="8" text-anchor="middle">3.100 tokens</text>
+
+              <rect x="282" y="0" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="323" y="16" fill="#fecdd3" font-size="9" text-anchor="middle">FinOps.tsx</text>
+              <text x="323" y="28" fill="#fb7185" font-size="8" text-anchor="middle">5.400 tokens</text>
+
+              <rect x="0" y="46" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="41" y="62" fill="#fecdd3" font-size="9" text-anchor="middle">Audit.tsx</text>
+              <text x="41" y="74" fill="#fb7185" font-size="8" text-anchor="middle">3.900 tokens</text>
+
+              <rect x="94" y="46" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="135" y="62" fill="#fecdd3" font-size="9" text-anchor="middle">omniRoute.ts</text>
+              <text x="135" y="74" fill="#fb7185" font-size="8" text-anchor="middle">7.100 tokens</text>
+
+              <rect x="188" y="46" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="229" y="62" fill="#fecdd3" font-size="9" text-anchor="middle">Drawer.tsx</text>
+              <text x="229" y="74" fill="#fb7185" font-size="8" text-anchor="middle">4.500 tokens</text>
+
+              <rect x="282" y="46" width="82" height="36" rx="4" fill="#450a0a" stroke="#f43f5e" stroke-width="1.2" class="anim-pulse"/>
+              <text x="323" y="62" fill="#fecdd3" font-size="9" text-anchor="middle">types.ts</text>
+              <text x="323" y="74" fill="#fb7185" font-size="8" text-anchor="middle">3.800 tokens</text>
+            </g>
+
+            <!-- Medidor de Custo / Tokens Queimados -->
+            <text x="16" y="166" fill="#fecdd3" font-size="10.5" font-weight="bold">🔥 Orçamento da Janela Queimado em Orientação: ~38.800 Tokens (100%)</text>
+            <rect x="16" y="175" width="348" height="14" rx="7" fill="#1e293b"/>
+            <rect x="16" y="175" width="310" height="14" rx="7" fill="#f43f5e" class="anim-token-high"/>
+            <text x="16" y="210" fill="#94a3b8" font-size="10">Consequência: Latência alta (18s–35s), fadiga de contexto e esgotamento rápido de cota.</text>
+          </g>
+
+          <!-- LADO DIREITO: COM GRAPHIFY + LAYA -->
+          <g transform="translate(460, 15)">
+            <rect width="400" height="230" rx="8" fill="#0f172a" stroke="#065f46" stroke-width="1.5"/>
+            <text x="16" y="24" fill="#34d399" font-size="12" font-weight="bold">✅ COM GRAPHIFY (Tree-sitter AST + MCP Subgraph)</text>
+            <text x="16" y="41" fill="#94a3b8" font-size="10">Indexação local CPU (0 tokens) + Navegação cirúrgica apenas nos nós conectados</text>
+
+            <!-- Planta de Nós Conectados -->
+            <g transform="translate(16, 52)">
+              <!-- Paredes Intactas ao Fundo -->
+              <rect x="0" y="0" width="368" height="90" rx="6" fill="#020617" stroke="#1e293b"/>
+
+              <!-- Feixe de Scanner Tree-sitter -->
+              <rect x="8" y="4" width="4" height="82" fill="#38bdf8" class="anim-scan"/>
+
+              <!-- Arestas do Grafo Animadas -->
+              <line x1="75" y1="45" x2="170" y2="45" stroke="#38bdf8" stroke-width="2.5" class="anim-dash"/>
+              <line x1="210" y1="45" x2="295" y2="25" stroke="#34d399" stroke-width="2.5" class="anim-dash"/>
+              <line x1="210" y1="45" x2="295" y2="65" stroke="#34d399" stroke-width="2.5" class="anim-dash"/>
+
+              <!-- Nó 1: Chamador -->
+              <rect x="14" y="27" width="68" height="36" rx="5" fill="#0c2340" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="48" y="43" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">ChatArea</text>
+              <text x="48" y="55" fill="#38bdf8" font-size="7.5" text-anchor="middle">Linha 118</text>
+
+              <!-- Nó 2: GOD NODE Central -->
+              <circle cx="190" cy="45" r="26" fill="#064e3b" stroke="#34d399" stroke-width="2" class="anim-pulse"/>
+              <text x="190" y="42" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">GOD NODE</text>
+              <text x="190" y="53" fill="#6ee7b7" font-size="7.5" text-anchor="middle">Grounding</text>
+
+              <!-- Nó 3 e 4: Destinos -->
+              <rect x="285" y="8" width="72" height="30" rx="5" fill="#0c2340" stroke="#34d399" stroke-width="1.5"/>
+              <text x="321" y="22" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">Laya :20140</text>
+              <text x="321" y="32" fill="#6ee7b7" font-size="7" text-anchor="middle">Choice Gate</text>
+
+              <rect x="285" y="50" width="72" height="30" rx="5" fill="#0c2340" stroke="#34d399" stroke-width="1.5"/>
+              <text x="321" y="64" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">OmniRoute</text>
+              <text x="321" y="74" fill="#6ee7b7" font-size="7" text-anchor="middle">SSE Stream</text>
+            </g>
+
+            <!-- Medidor de Custo / Tokens Economizados -->
+            <text x="16" y="166" fill="#6ee7b7" font-size="10.5" font-weight="bold">⚡ Orçamento Utilizado com Subgrafo: ~1.450 Tokens (&gt;75% de Economia!)</text>
+            <rect x="16" y="175" width="348" height="14" rx="7" fill="#1e293b"/>
+            <rect x="16" y="175" width="72" height="14" rx="7" fill="#10b981" class="anim-token-low"/>
+            <text x="16" y="210" fill="#94a3b8" font-size="10">Resultado: Resposta 3x mais rápida, contexto limpo e raio de impacto mapeado antes de editar.</text>
+          </g>
+        </svg>
+
+        <div class="mira-footer">
+          <span><strong>Contrafactual Mira (Portão 4):</strong> Se uma parede/arquivo for reformada sem atualizar a planta, o agente fura o cano errado — por isso acoplamos o <em>Git Post-Commit Hook</em> do PCL AEOS!</span>
+          <button class="mira-replay-btn no-print" onclick="restartStage('mira-stage-1')">↻ Reiniciar Ciclo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: CUSTO, ASSINATURA E LICENCIAMENTO -->
+    <div class="avoid-break">
+      <h2>2. Tem Custo ou Assinatura? (Radiografia Financeira &amp; FinOps)</h2>
+      <p>
+        Uma dúvida fundamental para proteger o nosso <strong>Invariante de Custo Zero (<code>$0.00</code> no Modo Soberano Local — Seção 2 do <code>AGENTS.md</code>)</strong> é entender como o Graphify é comercializado e onde existe cobrança:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 24%;">Camada do Graphify</th>
+            <th style="width: 18%;">Custo / Licença</th>
+            <th style="width: 28%;">Como Funciona Tecnicamente</th>
+            <th style="width: 30%;">Veredito Canônico no PCL AEOS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Motor Core AST &amp; MCP Server Local</strong><br/>(<code>graphifyy[mcp]</code>)</td>
+            <td><span class="tag tag-success">100% Gratuito ($0.00)</span><br/>Licença <strong>Apache-2.0</strong></td>
+            <td>Usa <strong>Tree-sitter</strong> localmente na CPU para transformar código-fonte (TypeScript, Python, SQL, JS, Go, Rust) em grafo estrutural (<code>graph.json</code> e <code>graph.html</code>). <strong>Gasta 0 tokens de LLM e 0 MB de VRAM.</strong></td>
+            <td><strong>APROVADO PARA ADOÇÃO:</strong> Mesma licença permissiva do nosso <code>pcl-laya</code>. Permite uso comercial irrestrito e empacotamento em Docker.</td>
+          </tr>
+          <tr>
+            <td><strong>2. Passada Semântica Multimodal</strong><br/>(Docs, PDFs e Imagens)</td>
+            <td><span class="tag tag-warning">Consome Tokens da Sua IA</span><br/>(BYOK / Assistente)</td>
+            <td>Para extrair grafos de PDFs ou imagens não estruturadas, o Graphify pede ao LLM da sua IDE (Claude/Gemini) para ler os arquivos e criar nós semânticos.</td>
+            <td><strong>DESNECESSÁRIO / OPCIONAL EM LOCAL:</strong> Para documentos, ADRs e PDFs, o PCL AEOS já possui o <strong>PCL Temporal Graph-RAG no PostgreSQL 17 (<code>memory.*</code>)</strong> e o Orama a custo zero!</td>
+          </tr>
+          <tr>
+            <td><strong>3. Graphify Cloud</strong><br/>(SaaS Hospedado pelo Fabricante)</td>
+            <td><span class="tag tag-danger">Assinatura Paga em US$</span><br/>(Trial de 14 dias)</td>
+            <td>Serviço gerenciado na nuvem da Graphify Labs para sincronizar grafos de equipes inteiras nos servidores externos deles.</td>
+            <td><strong>DESCARTADO (Regra HIP-001):</strong> Viola o princípio de <strong>Resíduo Zero de Dados (BYOS)</strong> e cria fatura recorrente em dólar. Nunca enviaremos o código da PromptCore Labs para a nuvem deles.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- SEÇÃO 3: FORK INTRÍNSICO VS SOLUÇÃO AGNÓSTICA (METÁFORA MIRA 2) -->
+    <div class="avoid-break">
+      <h2>3. Fork Intrínsico vs. Solução Agnóstica: Qual o Caminho Certo?</h2>
+      <p>
+        Você perguntou: <em>"Deveríamos criar um Fork dele e torná-lo intrínsico ao PCL AEOS, ou tratá-lo como solução agnóstica, nos permitindo substituí-lo por outra solução similar no futuro?"</em>
+      </p>
+      <p>
+        <strong>Resposta Direta:</strong> Devemos tratá-lo <strong>100% como Solução Agnóstica via Arquitetura Hexagonal (<em>Ports &amp; Adapters</em>)</strong>, mantendo uma cópia de versão travada (<em>Vendor-Pinned Adapter</em>) por segurança, mas <strong>jamais</strong> fundindo-o de modo intrínsico ao Kernel do PCL AEOS.
+      </p>
+
+      <!-- PALCO MIRA 2: TOMADA UNIVERSAL VS FIO SOLDADO NA PAREDE -->
+      <div class="mira-stage-card" id="mira-stage-2">
+        <div class="mira-header">
+          <span class="mira-badge">🎬 Palco Mira Animator 02 &bull; Metáfora da Tomada Universal</span>
+          <span class="mira-ledger">domínio: instalações domésticas | verbo: plugar/desacoplar | assinatura: acoplamento modular | loop: 8s</span>
+        </div>
+        <div class="mira-title">Fio Soldado Dentro da Parede (Fork Intrínsico) vs. Tomada Industrial de 3 Pinos (Porta Hexagonal)</div>
+        <div class="mira-subtitle">Se você soldar o fio do aparelho na fiação da casa, terá que quebrar a parede quando surgir um motor melhor. Com a Tomada Padrão do PCL AEOS, basta trocar o plugue.</div>
+
+        <svg class="mira-svg" viewBox="0 0 880 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- Bloco Esquerdo: Fork Intrínsico (Fio Soldado) -->
+          <g transform="translate(20, 15)">
+            <rect width="390" height="190" rx="8" fill="#0f172a" stroke="#7f1d1d" stroke-width="1.5"/>
+            <text x="16" y="24" fill="#fb7185" font-size="11.5" font-weight="bold">❌ CAMINHO REJEITADO: Fork Intrínsico (Soldado no Kernel)</text>
+            
+            <!-- Parede do Kernel Trincada -->
+            <rect x="20" y="45" width="130" height="110" rx="6" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+            <text x="85" y="85" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">KERNEL PCL AEOS</text>
+            <text x="85" y="102" fill="#fda4af" font-size="8.5" text-anchor="middle">(Parede Quebrada)</text>
+            <path d="M 120 55 L 135 80 L 118 105 L 145 135" stroke="#f43f5e" stroke-width="2" fill="none"/>
+
+            <!-- Emenda Soldada Rígida -->
+            <line x1="150" y1="100" x2="225" y2="100" stroke="#fbbf24" stroke-width="5"/>
+            <circle cx="187" cy="100" r="10" fill="#ef4444" class="anim-pulse"/>
+            <text x="187" y="125" fill="#fca5a5" font-size="8.5" text-anchor="middle">Solda Direta Fixa</text>
+
+            <!-- Aparelho Forkado -->
+            <rect x="225" y="55" width="145" height="90" rx="6" fill="#450a0a" stroke="#f43f5e"/>
+            <text x="297" y="88" fill="#fecdd3" font-size="10" font-weight="bold" text-anchor="middle">Fork Próprio Graphify</text>
+            <text x="297" y="105" fill="#fda4af" font-size="8.5" text-anchor="middle">Ônus de manter 25+</text>
+            <text x="297" y="118" fill="#fda4af" font-size="8.5" text-anchor="middle">compiladores C/AST</text>
+
+            <text x="16" y="176" fill="#94a3b8" font-size="9.5">Risco: Dívida técnica perpétua e alto custo para trocar de ferramenta no futuro.</text>
+          </g>
+
+          <!-- Bloco Direito: Porta Hexagonal (Tomada Padronizada) -->
+          <g transform="translate(430, 15)">
+            <rect width="430" height="190" rx="8" fill="#0f172a" stroke="#065f46" stroke-width="1.5"/>
+            <text x="16" y="24" fill="#34d399" font-size="11.5" font-weight="bold">✅ PADRÃO PCL AEOS: Porta Hexagonal Agnóstica (Plug &amp; Play)</text>
+
+            <!-- Parede Intacta com Tomada Padrão -->
+            <rect x="18" y="45" width="145" height="110" rx="6" fill="#0c2340" stroke="#38bdf8" stroke-width="2"/>
+            <text x="90" y="75" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">KERNEL PCL AEOS</text>
+            <text x="90" y="92" fill="#38bdf8" font-size="8.5" font-weight="bold" text-anchor="middle">PCL Code Graph Port</text>
+            <text x="90" y="108" fill="#94a3b8" font-size="7.5" text-anchor="middle">&bull; index() &bull; query()</text>
+            <text x="90" y="120" fill="#94a3b8" font-size="7.5" text-anchor="middle">&bull; impact_radius()</text>
+            <!-- Tomada Fêmea na Borda -->
+            <rect x="155" y="82" width="12" height="36" rx="2" fill="#38bdf8"/>
+
+            <!-- Plugue Macho Animado (Graphify Adapter) -->
+            <g class="anim-plug">
+              <rect x="145" y="90" width="16" height="6" fill="#fbbf24"/>
+              <rect x="145" y="104" width="16" height="6" fill="#fbbf24"/>
+              <rect x="161" y="78" width="115" height="44" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
+              <text x="218" y="98" fill="#fff" font-size="9.5" font-weight="bold" text-anchor="middle">Adapter v1: Graphify</text>
+              <text x="218" y="112" fill="#6ee7b7" font-size="8" text-anchor="middle">(Apache-2.0 Pinned)</text>
+            </g>
+
+            <!-- Substitutos Futuros Prontos na Prateleira -->
+            <rect x="305" y="46" width="110" height="48" rx="5" fill="#1e293b" stroke="#64748b" stroke-dasharray="3 3"/>
+            <text x="360" y="66" fill="#cbd5e1" font-size="8.5" font-weight="bold" text-anchor="middle">Adapter Futuro v2</text>
+            <text x="360" y="80" fill="#94a3b8" font-size="7.5" text-anchor="middle">SCIP / Sourcegraph</text>
+
+            <rect x="305" y="104" width="110" height="48" rx="5" fill="#1e293b" stroke="#64748b" stroke-dasharray="3 3"/>
+            <text x="360" y="124" fill="#cbd5e1" font-size="8.5" font-weight="bold" text-anchor="middle">Adapter Futuro v3</text>
+            <text x="360" y="138" fill="#94a3b8" font-size="7.5" text-anchor="middle">Code-Review-Graph</text>
+
+            <text x="16" y="176" fill="#6ee7b7" font-size="9.5">Vantagem: Os 15 agentes do AEOS conversam com a Tomada (Porta), nunca com a marca do motor!</text>
+          </g>
+        </svg>
+
+        <div class="mira-footer">
+          <span><strong>Alinhamento Normativo:</strong> Segue exatamente o mesmo padrão aprovado no <code>SPEC-PCL-AEOS-ORCHESTRATION-03</code> (Paperclip Port) e <code>SPEC-PCL-AEOS-CLASSIFIER-01</code> (Laya Port).</span>
+          <button class="mira-replay-btn no-print" onclick="restartStage('mira-stage-2')">↻ Reiniciar Ciclo</button>
+        </div>
+      </div>
+
+      <p><strong>Por que o modelo de Solução Agnóstica com Versão Fixada (<em>Vendor-Pinned Adapter</em>) é imbatível?</strong></p>
+      <ol>
+        <li><strong>Zero Lock-in Tecnológico:</strong> Os agentes do PCL AEOS e o PCL Cockpit chamam as ferramentas universais do nosso contrato (<code>codegraph_query</code>, <code>codegraph_impact_radius</code>, <code>codegraph_god_nodes</code>). Hoje quem responde por trás dessa porta é o Graphify. Se daqui a 6 meses surgir um motor em Rust 10x mais rápido, trocamos apenas o adaptador interno em 1 tarde.</li>
+        <li><strong>Livra a PromptCore Labs de Dar Manutenção em Gramáticas C/C++:</strong> O Graphify se apoia no ecossistema <em>Tree-sitter</em>, que atualiza dezenas de compiladores conforme o TypeScript, o Python e o React evoluem. Mantendo-o como pacote desacoplado, recebemos essas atualizações gratuitamente da comunidade open-source.</li>
+        <li><strong>Segurança de Supply-Chain (O que aproveitamos da ideia de Fork):</strong> Em vez de puxar atualizações cegas da internet a cada build, fazemos o <strong>Pinning de Versão e Hash SHA-256</strong> da release homologada do <code>graphifyy</code> dentro do nosso repositório/container. Assim temos 100% da segurança de um código auditado sem o peso de manter um fork divergente.</li>
+      </ol>
+    </div>
+
+    <!-- SEÇÃO 4: COMO O GRAPHIFY SE UNE AO LAYA VIA MCP E DOCKER (METÁFORA MIRA 3) -->
+    <div class="avoid-break">
+      <h2>4. Faz Sentido Rodar como MCP Server (Igual ao Laya) e Encapsular em Docker para VPS / Multi-Tenant?</h2>
+      <p>
+        <strong>Sim para ambas as perguntas!</strong> A sua intuição arquitetural está perfeitamente alinhada com o que já construímos para o <strong>Laya System One</strong> (<code>services/pcl-laya</code>) e com o <strong>ADR-0017 (Regra das 4 Camadas)</strong>.
+      </p>
+      <p>
+        Veja como o <strong>Laya (<code>:20140</code>)</strong> e o <strong>Graphify (<code>pcl-codegraph :20150</code>)</strong> atuam como dois irmãos gêmeos que rodam <strong>100% em CPU (`0 MB VRAM`)</strong>:
+      </p>
+      <ul>
+        <li><strong>O Laya é o Porteiro Ultrarrápido (Sistema 1 — 20ms):</strong> Ele recebe a pergunta do usuário e decide em milissegundos: <em>"Isso é bate-papo geral, consulta a contratos/ADRs ou manutenção de código-fonte?"</em></li>
+        <li><strong>O Graphify é o Arquivista da Planta de Engenharia:</strong> Só quando o Laya aponta <code>code_navigation</code> é que o agente aciona o MCP do Graphify para puxar o subgrafo exato das funções antes de acionar o LLM principal (Gemini, Claude ou Qwen Local).</li>
+      </ul>
+
+      <!-- PALCO MIRA 3: ARQUITETURA DUAL-CHANNEL MCP + DOCKER VPS MULTI-TENANT -->
+      <div class="mira-stage-card" id="mira-stage-3">
+        <div class="mira-header">
+          <span class="mira-badge">🎬 Palco Mira Animator 03 &bull; Sinfonia Laya + Graphify &amp; Isolamento Multi-Tenant</span>
+          <span class="mira-ledger">domínio: central de comando &amp; cofres | verbo: triar e isolar | assinatura: roteamento em 3 estágios | loop: 10s</span>
+        </div>
+        <div class="mira-title">Topologia Completa: Do Antigravity IDE Local (stdio) até a Escala em VPS / Cloud Multi-Tenant (Docker :20150)</div>
+        <div class="mira-subtitle">O mesmo adaptador <code>pcl-codegraph</code> atende a IDE local via <code>stdio</code> e os contêineres de produção via HTTP REST com cofres de grafo separados por cliente.</div>
+
+        <svg class="mira-svg" viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg">
+          <!-- COLUNA 1: ENTRADA & TRIAGEM LAYA -->
+          <g transform="translate(15, 18)">
+            <rect width="245" height="214" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+            <rect width="245" height="26" rx="8" fill="#0c2340"/>
+            <text x="122" y="17" fill="#38bdf8" font-size="10.5" font-weight="bold" text-anchor="middle">1. TRIAGEM COGNITIVA (CPU 0 MB VRAM)</text>
+
+            <rect x="15" y="40" width="215" height="44" rx="6" fill="#1e293b" stroke="#60a5fa"/>
+            <text x="122" y="58" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">🖥️ Antigravity IDE / PCL Cockpit :3001</text>
+            <text x="122" y="73" fill="#94a3b8" font-size="8.5" text-anchor="middle">Pergunta ou Tarefa de Engenharia</text>
+
+            <line x1="122" y1="84" x2="122" y2="106" stroke="#38bdf8" stroke-width="2" class="anim-dash"/>
+
+            <rect x="15" y="106" width="215" height="54" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2" class="anim-pulse"/>
+            <text x="122" y="126" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">⚡ Laya System One (:20140 / MCP)</text>
+            <text x="122" y="141" fill="#6ee7b7" font-size="8.5" text-anchor="middle">Intention Gate (~20ms) &bull; É código multi-arquivo?</text>
+            <text x="122" y="153" fill="#a7f3d0" font-size="8" text-anchor="middle">SIM ➔ Roteia para PCL Code Graph Port</text>
+
+            <text x="122" y="185" fill="#94a3b8" font-size="8.5" text-anchor="middle">Evita chamar o grafo em perguntas simples</text>
+            <text x="122" y="198" fill="#94a3b8" font-size="8.5" text-anchor="middle">de chat ou edições triviais de 1 linha</text>
+          </g>
+
+          <line x1="260" y1="125" x2="295" y2="125" stroke="#34d399" stroke-width="3" class="anim-dash"/>
+
+          <!-- COLUNA 2: MOTOR PCL-CODEGRAPH DUAL-CHANNEL -->
+          <g transform="translate(295, 18)">
+            <rect width="275" height="214" rx="8" fill="#0f172a" stroke="#c084fc" stroke-width="1.5"/>
+            <rect width="275" height="26" rx="8" fill="#2e1065"/>
+            <text x="137" y="17" fill="#d8b4fe" font-size="10.5" font-weight="bold" text-anchor="middle">2. SERVIÇO PCL-CODEGRAPH (DUAL MCP)</text>
+
+            <!-- Canal 1: Local stdio -->
+            <rect x="15" y="40" width="245" height="46" rx="6" fill="#1e1b4b" stroke="#a855f7"/>
+            <text x="137" y="58" fill="#fff" font-size="9.5" font-weight="bold" text-anchor="middle">Canal 1: MCP Local (stdio JSON-RPC)</text>
+            <text x="137" y="73" fill="#cbd5e1" font-size="8" text-anchor="middle">Uso direto no Antigravity IDE / Claude Code ($0.00)</text>
+
+            <!-- Canal 2: Docker HTTP -->
+            <rect x="15" y="96" width="245" height="50" rx="6" fill="#1e1b4b" stroke="#c084fc" stroke-width="1.5"/>
+            <text x="137" y="114" fill="#fff" font-size="9.5" font-weight="bold" text-anchor="middle">Canal 2: Container Docker (:20150 HTTP)</text>
+            <text x="137" y="128" fill="#d8b4fe" font-size="8" text-anchor="middle">python:3.11-slim &bull; Non-Root &bull; RAM Limit 512MB</text>
+            <text x="137" y="140" fill="#94a3b8" font-size="7.5" text-anchor="middle">Consumido por Cockpit :3001, OmniRoute :20130 e PaperClip</text>
+
+            <!-- Tree-sitter AST Engine -->
+            <rect x="15" y="156" width="245" height="44" rx="6" fill="#020617" stroke="#38bdf8"/>
+            <text x="137" y="174" fill="#38bdf8" font-size="9.5" font-weight="bold" text-anchor="middle">Tree-sitter AST + Git SHA-256 Hook</text>
+            <text x="137" y="189" fill="#94a3b8" font-size="8" text-anchor="middle">Atualiza apenas arquivos alterados em &lt; 2 segundos</text>
+          </g>
+
+          <line x1="570" y1="125" x2="605" y2="125" stroke="#c084fc" stroke-width="3" class="anim-dash"/>
+
+          <!-- COLUNA 3: ISOLAMENTO VPS & MULTI-TENANT -->
+          <g transform="translate(605, 18)">
+            <rect width="260" height="214" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+            <rect width="260" height="26" rx="8" fill="#451a03"/>
+            <text x="130" y="17" fill="#fde68a" font-size="10.5" font-weight="bold" text-anchor="middle">3. ESCALA VPS &amp; MULTI-TENANT</text>
+
+            <!-- Onda 2: Single Tenant VPS -->
+            <rect x="15" y="40" width="230" height="68" rx="6" fill="#1e293b" stroke="#34d399"/>
+            <text x="130" y="57" fill="#6ee7b7" font-size="9.5" font-weight="bold" text-anchor="middle">Onda 2 (MVP Comercial ADR-0017):</text>
+            <text x="130" y="71" fill="#fff" font-size="8.5" text-anchor="middle">Appliance VPS Dedicada (Single-Tenant)</text>
+            <text x="130" y="85" fill="#94a3b8" font-size="8" text-anchor="middle">1 Container Docker por Cliente.</text>
+            <text x="130" y="97" fill="#94a3b8" font-size="8" text-anchor="middle">Risco Zero de vazamento entre empresas!</text>
+
+            <!-- Onda 3: Multi-Tenant Isolado -->
+            <rect x="15" y="118" width="230" height="82" rx="6" fill="#1e293b" stroke="#fbbf24"/>
+            <text x="130" y="135" fill="#fde68a" font-size="9.5" font-weight="bold" text-anchor="middle">Onda 3 (Escala Enterprise Multi-Tenant):</text>
+            <text x="130" y="150" fill="#fff" font-size="8.5" text-anchor="middle">Particionamento Estrito por Tenant ID</text>
+            <text x="130" y="165" fill="#cbd5e1" font-size="7.5" text-anchor="middle"><code>/graphs/{tenant_id}/{repo_id}/graph.json</code></text>
+            <text x="130" y="179" fill="#94a3b8" font-size="7.5" text-anchor="middle">Grafo carregado sob demanda com cabeçalho</text>
+            <text x="130" y="190" fill="#94a3b8" font-size="7.5" text-anchor="middle">autenticado; zero memória RAM compartilhada.</text>
+          </g>
+        </svg>
+
+        <div class="mira-footer">
+          <span><strong>Blindagem Multi-Tenant:</strong> Por padrão, o Graphify usa <code>NetworkX</code> em memória RAM. Na Onda 3, o nosso wrapper FastAPI isola um namespace por <code>tenant_id</code> para impedir contaminação cruzada.</span>
+          <button class="mira-replay-btn no-print" onclick="restartStage('mira-stage-3')">↻ Reiniciar Ciclo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- SEÇÃO 5: AS 6 MELHORES PRÁTICAS DE ENGENHARIA -->
+    <div class="avoid-break">
+      <h2>5. Quais as Melhores Práticas para Aplicar o Graphify no PCL AEOS?</h2>
+      <p>
+        Para que o Graphify entregue os <strong>&gt;70% de economia de tokens</strong> prometidos pelo Marcelo Moraes sem criar lentidão ou efeitos colaterais no nosso monorepo, devemos seguir <strong>6 Melhores Práticas Canônicas</strong>:
+      </p>
+
+      <div class="milestone-card m0">
+        <div class="milestone-header">
+          <div class="milestone-title">1. Usar 100% Tree-sitter AST (Passada Determinística) para Código e Manter Docs no PGVector</div>
+          <span class="milestone-tag">FinOps $0.00 &bull; 0 MB VRAM</span>
+        </div>
+        <p>O Graphify tem duas passadas: a Passada 1 (código via Tree-sitter em CPU, que custa zero tokens) e a Passada 2 (documentos/PDFs via LLM, que gasta tokens). No PCL AEOS, como já temos o <strong>PCL Temporal Graph-RAG no PostgreSQL 17 (<code>memory.*</code>)</strong> e o motor <strong>Orama</strong> para documentos, usaremos o Graphify <strong>exclusivamente no modo <code>--no-llm / AST deterministic</code> para o código-fonte</strong>. Assim, a indexação custa sempre <strong>R$ 0,00</strong>.</p>
+      </div>
+
+      <div class="milestone-card m1">
+        <div class="milestone-header">
+          <div class="milestone-title">2. Blindagem com <code>.graphifyignore</code> e Subgrafos Federados por Módulo</div>
+          <span class="milestone-tag">Performance &lt; 15ms</span>
+        </div>
+        <p>Se você rodar o Graphify na raiz de um monorepo sem filtro, ele vai tentar indexar as pastas <code>node_modules/</code>, <code>.venv/</code>, <code>dist/</code> e <code>external-references/</code>, gerando mais de 300.000 nós inúteis de bibliotecas de terceiros. A melhor prática é criar um arquivo <code>.graphifyignore</code> rigoroso e dividir o índice em <strong>4 subgrafos leves</strong>: (1) <code>cockpit-graph.json</code>, (2) <code>laya-graph.json</code>, (3) <code>omniroute-graph.json</code> e (4) <code>paperclip-graph.json</code>.</p>
+      </div>
+
+      <div class="milestone-card m2">
+        <div class="milestone-header">
+          <div class="milestone-title">3. Sincronização Automática Pós-Commit com Recibo SHA-256 (Anti-Staleness)</div>
+          <span class="milestone-tag">Zero Planta Velha</span>
+        </div>
+        <p>Um grafo desatualizado é pior do que não ter grafo, pois induz o agente a procurar funções que já mudaram de lugar. Acoplaremos o comando incremental (<code>graphify --update</code>) ao nosso <strong>Deterministic Staleness Verifier (<code>SPEC-PCL-AEOS-MEMORY-03</code>)</strong> via hook do Git: sempre que um arquivo <code>.ts</code> ou <code>.py</code> for salvo/comitado, apenas aquele arquivo é re-escaneado pelo Tree-sitter em menos de 1,5 segundo.</p>
+      </div>
+
+      <div class="milestone-card m3">
+        <div class="milestone-header">
+          <div class="milestone-title">4. Acionamento Seletivo Governado pelo Laya Intention Gate</div>
+          <span class="milestone-tag">Evita Overhead em Tarefa Simples</span>
+        </div>
+        <p>Se você pedir ao agente apenas: <em>"Corrija o erro de digitação neste botão que já está aberto na tela"</em>, consultar o grafo antes seria desperdício de tempo. O <strong>Laya System One</strong> classifica a complexidade da tarefa: o Graphify só é invocado quando a tarefa envolve <strong>múltiplos arquivos, rastreamento de bugs, criação de rotas ou refatoração</strong>.</p>
+      </div>
+
+      <div class="milestone-card m4">
+        <div class="milestone-header">
+          <div class="milestone-title">5. Container Docker Hardened (<code>pcl-codegraph :20150</code>) para VPS e Multi-Tenant</div>
+          <span class="milestone-tag">Segurança Zero Trust</span>
+        </div>
+        <p>Assim como fizemos no <code>Dockerfile</code> do Laya, o serviço <code>pcl-codegraph</code> deve rodar em imagem enxuta <code>python:3.11-slim</code>, usuário desprivilegiado (<code>appuser:10001</code>), limite de memória RAM (<code>512 MB</code>), sonda TCP rápida de <code>250ms</code> (<code>HIP-004</code>) e volumes de armazenamento estritamente segregados por <code>tenant_id</code>.</p>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 6: PRÓS E CONTRAS HONESTOS -->
+    <div class="avoid-break">
+      <h2>6. Balanço Técnico: Prós e Contras (Sem Hype Comercial)</h2>
+      <p>Em conformidade com o rigor analítico do <code>ADR-0017</code>, avaliamos os ganhos reais frente aos riscos operacionais:</p>
+
+      <div class="pros-cons-grid">
+        <div class="pro-card">
+          <h3>✅ PRÓS (Vantagens Comprovadas)</h3>
+          <ul>
+            <li><strong>Redução de 70% a 80% de Tokens em Código:</strong> Em vez de ler 30 arquivos brutos (~40k tokens) para achar dependências, o agente lê o subgrafo (~1,2k tokens) e abre apenas os 2 arquivos exatos.</li>
+            <li><strong>Indexação a Custo $0.00 e 0 MB de VRAM:</strong> O parser Tree-sitter roda 100% na CPU comum em segundos, preservando toda a GPU RTX 3050 para o modelo local do Ollama/LM Studio.</li>
+            <li><strong>Análise de Raio de Impacto (<em>Blast Radius</em>):</strong> Antes de alterar uma API no backend, o agente consulta <code>get_impact_radius</code> e descobre exatamente quais telas do Cockpit seriam afetadas, evitando quebras no <code>npm run build</code>.</li>
+            <li><strong>Descoberta Automática de <em>God Nodes</em>:</strong> Identifica instantaneamente os arquivos mais críticos e acoplados da arquitetura.</li>
+            <li><strong>Visualização Pronta (<code>graph.html</code>):</strong> Gera um mapa visual interativo do código que pode ser aberto diretamente na gaveta de artefatos do PCL Cockpit!</li>
+          </ul>
+        </div>
+
+        <div class="con-card">
+          <h3>⚠️ CONTRAS &amp; RISCOS (e Como Mitigamos)</h3>
+          <ul>
+            <li><strong>Risco de "Planta Desatualizada" (<em>Stale Graph</em>):</strong> Se o código mudar e o grafo não for atualizado, a IA lê referências antigas.<br/><em>➔ Mitigação PCL:</em> Atualização incremental automática via Tree-sitter (&lt;2s) + checagem de hash SHA-256.</li>
+            <li><strong>Ganho Nulo em Edições de 1 Único Arquivo:</strong> Para tarefas pequenas num arquivo já conhecido, consultar o grafo adiciona 1 passo extra sem necessidade.<br/><em>➔ Mitigação PCL:</em> O <strong>Laya Intention Gate</strong> filtra e só aciona o grafo em tarefas multi-arquivo.</li>
+            <li><strong>Poluição se Indexar <code>node_modules</code>:</strong> Sem filtro, o grafo explode em tamanho e consome muita memória RAM.<br/><em>➔ Mitigação PCL:</em> Manifesto <code>.graphifyignore</code> canônico e subgrafos federados por pasta.</li>
+            <li><strong>Falta de Multi-Tenancy Nativo no Pacote Puro:</strong> O Graphify carrega 1 grafo por vez em memória (NetworkX).<br/><em>➔ Mitigação PCL:</em> Appliance VPS dedicada na Onda 2 e isolamento de pasta por <code>tenant_id</code> na Onda 3.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- SEÇÃO 7: COMPARATIVO DE ALTERNATIVAS E ONDE ENCAIXA NO CRONOGRAMA M0-M5 -->
+    <div class="avoid-break">
+      <h2>7. Matriz Comparativa das 3 Alternativas de Implementação</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%;">Alternativa</th>
+            <th style="width: 26%;">Descrição Técnica</th>
+            <th style="width: 26%;">Impacto em VPS / Multi-Tenant</th>
+            <th style="width: 26%;">Recomendação PCL AEOS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Opção A:</strong><br/>Fork Intrínsico no Kernel</td>
+            <td>Clonar o código do Graphify para dentro do núcleo do AEOS e fundir suas estruturas ao orquestrador.</td>
+            <td>Difícil atualização de compiladores Tree-sitter; alto acoplamento e dívida técnica.</td>
+            <td><span class="tag tag-danger">Rejeitada</span><br/>Viola a arquitetura hexagonal e cria dependência permanente.</td>
+          </tr>
+          <tr>
+            <td><strong>Opção B:</strong><br/>Apenas Plugin Solto na IDE</td>
+            <td>Instalar globalmente via <code>pipx install graphifyy</code> apenas na máquina do desenvolvedor.</td>
+            <td>Funciona na IDE local, mas o PCL Cockpit (<code>:3001</code>) e os Squads na VPS não conseguem usar.</td>
+            <td><span class="tag tag-warning">Parcial (Fase 1)</span><br/>Bom apenas para teste rápido inicial na máquina local.</td>
+          </tr>
+          <tr>
+            <td><strong>Opção C (Recomendada):</strong><br/>Porta Hexagonal Agnóstica + Serviço Dual MCP/Docker (<code>pcl-codegraph</code>)</td>
+            <td>Criar o contrato <code>PCL Code Graph Port</code> e encapsular o Graphify (versão fixada Apache-2.0) com saída dupla: <code>stdio</code> (para a IDE) e HTTP <code>:20150</code> (em Docker, irmão do Laya <code>:20140</code>).</td>
+            <td>Pronto para IDE local hoje, pronto para VPS Single-Tenant (Onda 2) e isolável por <code>tenant_id</code> (Onda 3).</td>
+            <td><span class="tag tag-success">Padrão Canônico Eleito</span><br/>Máxima economia de tokens + Zero Lock-in + Soberania Total.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="avoid-break">
+      <h2>8. Como Isso se Encaixa no Nosso Cronograma (Marcos M0 a M5)?</h2>
+      <p>
+        Para não atrasar nem desviar o foco da materialização funcional do PCL Cockpit (definida no documento <em>Cronograma Materialização e Conectores PCL Cockpit</em>), o Graphify entra em <strong>duas fases cirúrgicas</strong>:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 18%;">Fase / Marco</th>
+            <th style="width: 27%;">Onde Atua</th>
+            <th style="width: 30%;">Entrega Prática</th>
+            <th style="width: 25%;">Benefício Imediato</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Imediato (Antes/Durante M0)</strong></td>
+            <td><strong>No Harness do Antigravity IDE</strong> (Canal 1: MCP <code>stdio</code> local)</td>
+            <td>Ativar o Graphify localmente sobre o nosso monorepo para auxiliar <strong>a própria construção dos Marcos M0 a M5</strong>.</td>
+            <td>Economiza &gt;70% dos tokens da nossa própria equipe/IA enquanto programamos o servidor M0, OAuth M1 e Conectores M3!</td>
+          </tr>
+          <tr>
+            <td><strong>Marco M3 / M5 (VPS &amp; Conectores)</strong></td>
+            <td><strong>No Docker Compose &amp; PCL Cockpit</strong> (Canal 2: Container <code>pcl-codegraph :20150</code>)</td>
+            <td>Empacotar o container <code>pcl-codegraph</code> ao lado do <code>pcl-laya</code> e expor o visualizador de grafo de arquitetura no Cockpit.</td>
+            <td>Clientes de tecnologia e engenharia de software ganham auditoria visual de código com custo $0.00 na VPS.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEÇÃO 9: PRÓXIMOS PASSOS E DECISÕES DE LIDERANÇA -->
+    <div class="avoid-break">
+      <h2>9. Instrução Registrada &amp; Decisões para o Seu Aval</h2>
+      <p>
+        Conforme solicitado, a instrução formal de estudo e a especificação da Porta Hexagonal já foram registradas no repositório em:
+        <code>specs/pcl-aeos-evolution/spec-pcl-aeos-code-graph-port.md</code> (<strong>SPEC-PCL-AEOS-CODEGRAPH-04</strong>).
+      </p>
+      <p>Para avançarmos para a Prova de Conceito prática, submeto 3 decisões rápidas à sua aprovação:</p>
+
+      <div class="decision-box">
+        <strong>1. Aprovação da Arquitetura Agnóstica (Porta Hexagonal <code>PCL Code Graph Port</code>)</strong>
+        Confirma a adoção do Graphify como <strong>Adaptador Desacoplado (Apache-2.0 com versão fixada)</strong> em vez de um Fork intrínsico, garantindo liberdade total para trocá-lo por qualquer motor superior no futuro?
+      </div>
+
+      <div class="decision-box">
+        <strong>2. Execução da Prova de Conceito Local (PoC Passo 1) no Harness do Antigravity</strong>
+        Autoriza rodarmos um teste piloto local do Graphify (100% em CPU / Tree-sitter, custo $0.00) indexando a pasta do <strong>PCL Cockpit</strong> e do <strong>Laya</strong> para medirmos na prática a redução de tokens e gerarmos o primeiro mapa visual <code>graph.html</code> do seu código?
+      </div>
+
+      <div class="decision-box">
+        <strong>3. Padrão Gêmeo do Laya (MCP <code>stdio</code> Agora ➔ Container Docker <code>:20150</code> no Marco M3/M5)</strong>
+        Concorda em utilizarmos o Graphify imediatamente via MCP <code>stdio</code> para acelerar e economizar tokens no desenvolvimento dos Marcos M0 a M2, deixando o empacotamento em container Docker (<code>pcl-codegraph :20150</code>) para a onda de Conectores MCP (Marco M3) e subida na VPS (Marco M5)?
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="doc-footer">
+      <div>PromptCore Labs &bull; PCL AEOS Architecture &bull; SPEC-PCL-AEOS-CODEGRAPH-04</div>
+      <div>Estudo Executivo &amp; Metáforas Animadas Mira &bull; Pronto para Impressão A4 / PDF</div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleAllAnimations() {
+      document.body.classList.toggle('paused');
+      const btn = document.getElementById('btn-toggle-anim');
+      if (document.body.classList.contains('paused')) {
+        btn.textContent = '▶ Retomar Animações';
+      } else {
+        btn.textContent = '⏸ Pausar Animações';
+      }
+    }
+
+    function restartStage(stageId) {
+      const el = document.getElementById(stageId);
+      if (!el) return;
+      const animated = el.querySelectorAll('.anim-pulse, .anim-dash, .anim-scan, .anim-plug, .anim-token-high, .anim-token-low');
+      animated.forEach(node => {
+        node.style.animation = 'none';
+        void node.offsetHeight; /* trigger reflow */
+        node.style.animation = '';
+      });
+    }
+  </script>
+</body>
+</html>

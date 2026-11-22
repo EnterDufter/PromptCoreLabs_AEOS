@@ -1,0 +1,90 @@
+# ============================================================================
+# PCL AEOS — Manifesto Canônico de Exclusão para Grafo de Código (.graphifyignore)
+# Conformidade: SPEC-PCL-AEOS-CODEGRAPH-04 (Tree-sitter AST / Zero Token Bloat)
+# ============================================================================
+
+# Dependências e Pacotes de Terceiros
+node_modules/
+.pnpm/
+.pnpm-store/
+bower_components/
+vendor/
+
+# Ambientes Virtuais Python e Caches de Bytecode
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Artefatos de Build, Bundles e Transpilação
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vite/
+.vite-aeos/
+.wrangler/
+ui-dist/
+coverage/
+*.min.js
+*.min.css
+*.bundle.js
+*.map
+*.tsbuildinfo
+
+# Controle de Versão, Caches Locais e Dados de Runtime
+.git/
+.svn/
+.hg/
+data/
+db-data/
+omniroute-data/
+paperclip-storage/
+backups/
+logs/
+scratch/
+graphify-out/
+.tmp.driveupload/
+
+# Referências Externas, Legado e Ferramentas Binárias
+external-references/
+legacy/
+tools/
+projects/crialli/
+projects/maquina-de-receita-pcl/
+projects/esteira-diaria-conteudo/
+
+# Modelos Neurais, Mídias, Binários e Locks
+*.onnx
+*.bin
+*.pt
+*.safetensors
+*.mp4
+*.mp3
+*.wav
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.pdf
+*.zip
+*.tar.gz
+*.dump
+*.enc
+*.lock
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronograma de Projeto — Materialização Funcional do PCL Cockpit & Conectores</title>
+  <style>
+    /* Reset & Variáveis Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --border-color: #cbd5e1;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--slate-900);
+      background-color: #f8fafc;
+      line-height: 1.5;
+      font-size: 13.5px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 24px auto;
+      background: #ffffff;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+    }
+
+    /* Barra de Ação Superior (não impressa) */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--slate-900);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+    }
+
+    .action-bar .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-bar .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #38bdf8;
+      color: var(--slate-900);
+    }
+    .btn-primary:hover {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #475569;
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Cabeçalho do Documento */
+    .doc-header {
+      border-bottom: 2px solid var(--slate-200);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--slate-900);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: var(--slate-50);
+      padding: 12px 16px;
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      margin-top: 14px;
+      font-size: 11.5px;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: var(--slate-600);
+      text-transform: uppercase;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+
+    /* Callout / Nota de Entrada */
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+      font-size: 13px;
+      color: #14532d;
+    }
+    .callout strong {
+      color: #15803d;
+    }
+
+    /* Títulos de Seção */
+    h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--slate-900);
+      border-bottom: 1.5px solid var(--slate-200);
+      padding-bottom: 6px;
+      margin: 28px 0 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin: 18px 0 8px 0;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: var(--slate-700);
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 24px;
+      color: var(--slate-700);
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Tabelas Executivas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px 0;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      border: 1px solid var(--slate-200);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--slate-100);
+      color: var(--slate-900);
+      font-weight: 700;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--slate-50);
+    }
+
+    /* Badges de Status na Tabela */
+    .tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tag-success { background: var(--success-bg); color: var(--success); }
+    .tag-warning { background: var(--warning-bg); color: var(--warning); }
+    .tag-danger { background: var(--danger-bg); color: var(--danger); }
+    .tag-primary { background: var(--primary-light); color: var(--primary-dark); }
+
+    /* Bloco de Marco */
+    .milestone-card {
+      border: 1px solid var(--slate-200);
+      border-left: 4px solid var(--primary);
+      background: #ffffff;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
+    .milestone-card.m0 { border-left-color: #0284c7; }
+    .milestone-card.m1 { border-left-color: #2563eb; }
+    .milestone-card.m2 { border-left-color: #059669; }
+    .milestone-card.m3 { border-left-color: #7c3aed; }
+    .milestone-card.m4 { border-left-color: #d97706; }
+    .milestone-card.m5 { border-left-color: #475569; }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .milestone-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-900);
+    }
+
+    .milestone-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--slate-100);
+      color: var(--slate-700);
+    }
+
+    .validation-box {
+      background: #f8fafc;
+      border: 1px dashed var(--slate-200);
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .validation-box strong {
+      color: var(--primary-dark);
+    }
+
+    /* Diagrama SVG do Pipeline */
+    .diagram-container {
+      margin: 16px 0 24px 0;
+      padding: 14px;
+      background: #0f172a;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    .diagram-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .diagram-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Regras de Quebra de Página para Impressão */
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Seção de Decisões */
+    .decision-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .decision-box strong {
+      color: #1e40af;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Rodapé Documental */
+    .doc-footer {
+      border-top: 1px solid var(--slate-200);
+      padding-top: 14px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--slate-600);
+      font-size: 11px;
+    }
+
+    /* ESTILOS ESPECÍFICOS PARA IMPRESSÃO (A4 Racional) */
+    @media print {
+      body {
+        background: #ffffff !important;
+        font-size: 11pt !important;
+        color: #000000 !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .diagram-container {
+        background: #1e293b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      table {
+        font-size: 9.5pt !important;
+      }
+
+      th, td {
+        padding: 6px 8px !important;
+      }
+
+      th {
+        background: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .tag, .doc-badge, .milestone-card, .callout, .decision-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page-break {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      .avoid-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 15mm 12mm 15mm 12mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Barra de Controle Interativa (Oculta na Impressão) -->
+    <div class="action-bar no-print">
+      <div class="brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="9" y1="21" x2="9" y2="9"/>
+        </svg>
+        <span>PROMPTCORE LABS &bull; PCL AEOS COCKPIT</span>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Imprimir / Salvar em PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Cabeçalho do Documento -->
+    <div class="doc-header">
+      <div class="doc-badge">Documento Executivo de Engenharia &amp; Governança</div>
+      <h1>Cronograma de Projeto: Materialização Funcional &amp; Conectores Externos Validados</h1>
+      <p style="color: var(--slate-600); font-size: 13px; margin-top: 4px;">
+        Plano de transição do PCL Cockpit da camada de vitrine visual para execução 100% real com segurança corporativa.
+      </p>
+
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Sistema / Escopo</strong>
+          PromptCore Labs &bull; PCL AEOS
+        </div>
+        <div class="meta-item">
+          <strong>Referência Normativa</strong>
+          PCL-AEOS-NORM-01 / ADR-0017
+        </div>
+        <div class="meta-item">
+          <strong>Data de Emissão</strong>
+          15 de Novembro de 2026
+        </div>
+        <div class="meta-item">
+          <strong>Status do Cronograma</strong>
+          <span class="tag tag-primary">Proposto para Aprovação</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nota Introdutória -->
+    <div class="callout">
+      <strong>Guia de Leitura Executiva:</strong> Este documento traduz em linguagem direta tudo o que hoje ainda opera em modo de demonstração visual no <code>localhost:3001</code> e organiza uma sequência lógica por ondas (<strong>Marcos M0 a M5</strong>) para transformar cada tela e cada conector externo (Google, Microsoft, ClickUp, LinkedIn, GitHub, HubSpot, Atlassian e RD Station) em funcionalidades reais, auditadas e criptografadas.
+    </div>
+
+    <!-- SEÇÃO 1: O MAPA DA VERDADE HOJE -->
+    <div class="avoid-break">
+      <h2>1. O Mapa da Verdade Hoje (Onde Estamos Antes de Começar)</h2>
+      <p>Para clareza total sobre o estado do sistema, o PCL Cockpit encontra-se estruturado em 3 grupos funcionais:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 28%;">O que já funciona de verdade <span class="tag tag-success" style="float: right;">100% Real</span></th>
+            <th style="width: 32%;">O que está parcial (meio a meio) <span class="tag tag-warning" style="float: right;">Parcial</span></th>
+            <th style="width: 40%;">O que ainda é vitrine visual <span class="tag tag-danger" style="float: right;">Pendente</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              &bull; Interface Light/Dark e 3 Idiomas (PT/EN/ES)<br/>
+              &bull; Chat com failover Cloud (Gemini) e Local (Ollama :11434)<br/>
+              &bull; Leitura de PDF/DOCX/XLSX no navegador (@orama/orama)<br/>
+              &bull; Galeria e download real de .pptx, .xlsx, .svg, .html, .md<br/>
+              &bull; Diagnóstico ao vivo + MCP PCL Sovereign<br/>
+              &bull; MCP Laya Neural em CPU (0 MB VRAM / INT8)<br/>
+              &bull; Leitura física de PaperClip-Companies (Squads/Skills)<br/>
+              &bull; Pacote Docker + Caddy HTTPS pronto (Gate 2)
+            </td>
+            <td>
+              &bull; <strong>Laya no Chat:</strong> O motor Python roda em CPU, mas a tela do chat usa regras de texto em JS em vez de chamar a API neural do Laya.<br/>
+              &bull; <strong>Histórico &amp; Banco:</strong> Salva projetos, mas a API roda dentro do Vite de desenvolvimento e não em servidor de produção.<br/>
+              &bull; <strong>Squads / Skills / No-Code:</strong> Lêem do disco real, mas modificações feitas pela tela ficam salvas só no navegador.<br/>
+              &bull; <strong>RAG Documental:</strong> Busca na memória da aba aberta (F5 apaga), sem gravar vetores permanentes no PGVector.
+            </td>
+            <td>
+              &bull; <strong>Login &amp; Trava de 2 Dispositivos:</strong> Roda só no navegador sem OAuth2 nem checagem de sessão no banco.<br/>
+              &bull; <strong>Pesquisa Web do Chat:</strong> Responde apenas 2 tópicos fixos de demonstração.<br/>
+              &bull; <strong>Conectores Corporativos:</strong> Google, Microsoft, ClickUp, HubSpot, Jira, RD Station — salvam formulário local sem conectar.<br/>
+              &bull; <strong>Microfone / Voz no Chat:</strong> Retorna frase fixa de teste.<br/>
+              &bull; <strong>FinOps &amp; Hard Lock:</strong> Gastos e travamento de orçamento são simulados na memória.<br/>
+              &bull; <strong>Audit ISO &amp; SHA-256:</strong> Registros e validações fictícios.<br/>
+              &bull; <strong>Cartões de Ação &amp; BYOS:</strong> Botões de envio para a nuvem não transferem arquivos externos.<br/>
+              &bull; <strong>Reuniões &amp; Fluxos:</strong> Transcrições e execuções são apenas visuais.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEÇÃO 2: LINHA DO TEMPO VISUAL (QUEBRA DE PÁGINA RACIONAL) -->
+    <div class="page-break"></div>
+
+    <div class="avoid-break">
+      <h2>2. Linha do Tempo e Sequência Técnica de Execução</h2>
+      <p>
+        <strong>Princípio de Precedência Técnica:</strong> Não é viável integrar suítes corporativas (Google Drive, Microsoft Teams, ClickUp) sem dispor previamente de um <strong>servidor de retaguarda independente</strong> e um <strong>fluxo seguro de Login OAuth2 com Cofre Cifrado</strong> para armazenamento de chaves e permissões.
+      </p>
+
+      <!-- Diagrama SVG Vetorial Embutido (Pronto para Impressão) -->
+      <div class="diagram-container">
+        <div class="diagram-title">Mapa de Encadeamento de Dependências Técnicas (Marcos M0 a M5)</div>
+        <svg class="diagram-svg" viewBox="0 0 880 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Linha Conectora Central -->
+          <line x1="70" y1="95" x2="810" y2="95" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4 4"/>
+
+          <!-- M0 -->
+          <g transform="translate(30, 20)">
+            <rect width="120" height="150" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <rect width="120" height="28" rx="8" fill="#0f172a"/>
+            <text x="60" y="18" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">MARCO M0</text>
+            <text x="60" y="55" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Servidor &amp; SQL</text>
+            <text x="10" y="80" fill="#94a3b8" font-size="9.5">&bull; Checkpoint Git</text>
+            <text x="10" y="98" fill="#94a3b8" font-size="9.5">&bull; Servidor Node</text>
+            <text x="10" y="116" fill="#94a3b8" font-size="9.5">&bull; Banco SQL 003</text>
+            <text x="10" y="134" fill="#94a3b8" font-size="9.5">&bull; Cofre AES-256</text>
+          </g>
+
+          <path d="M 152 95 L 175 95" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+
+          <!-- M1 -->
+          <g transform="translate(178, 20)">
+            <rect width="120" height="150" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+            <rect width="120" height="28" rx="8" fill="#172554"/>
+            <text x="60" y="18" fill="#93c5fd" font-size="11" font-weight="bold" text-anchor="middle">MARCO M1</text>
+            <text x="60" y="55" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Identidade Real</text>
+            <text x="10" y="80" fill="#94a3b8" font-size="9.5">&bull; Senha + Cookie</text>
+            <text x="10" y="98" fill="#94a3b8" font-size="9.5">&bull; OAuth2 PKCE</text>
+            <text x="10" y="116" fill="#94a3b8" font-size="9.5">&bull; Google/M365</text>
+            <text x="10" y="134" fill="#94a3b8" font-size="9.5">&bull; Trava 2 Devices</text>
+          </g>
+
+          <path d="M 300 95 L 323 95" stroke="#38bdf8" stroke-width="3"/>
+
+          <!-- M2 -->
+          <g transform="translate(326, 20)">
+            <rect width="120" height="150" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+            <rect width="120" height="28" rx="8" fill="#064e3b"/>
+            <text x="60" y="18" fill="#6ee7b7" font-size="11" font-weight="bold" text-anchor="middle">MARCO M2</text>
+            <text x="60" y="55" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">IA &amp; Governança</text>
+            <text x="10" y="80" fill="#94a3b8" font-size="9.5">&bull; Laya CPU no Chat</text>
+            <text x="10" y="98" fill="#94a3b8" font-size="9.5">&bull; Busca Web Real</text>
+            <text x="10" y="116" fill="#94a3b8" font-size="9.5">&bull; FinOps Hard Lock</text>
+            <text x="10" y="134" fill="#94a3b8" font-size="9.5">&bull; Audit SHA-256</text>
+          </g>
+
+          <path d="M 448 95 L 471 95" stroke="#38bdf8" stroke-width="3"/>
+
+          <!-- M3 -->
+          <g transform="translate(474, 20)">
+            <rect width="120" height="150" rx="8" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
+            <rect width="120" height="28" rx="8" fill="#2e1065"/>
+            <text x="60" y="18" fill="#d8b4fe" font-size="11" font-weight="bold" text-anchor="middle">MARCO M3</text>
+            <text x="60" y="55" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Conectores MCP</text>
+            <text x="10" y="80" fill="#94a3b8" font-size="9.5">&bull; Streamable HTTP</text>
+            <text x="10" y="98" fill="#94a3b8" font-size="9.5">&bull; Google &amp; M365</text>
+            <text x="10" y="116" fill="#94a3b8" font-size="9.5">&bull; ClickUp &amp; GitHub</text>
+            <text x="10" y="134" fill="#94a3b8" font-size="9.5">&bull; HubSpot &amp; Atlassian</text>
+          </g>
+
+          <path d="M 596 95 L 619 95" stroke="#38bdf8" stroke-width="3"/>
+
+          <!-- M4 -->
+          <g transform="translate(622, 20)">
+            <rect width="120" height="150" rx="8" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+            <rect width="120" height="28" rx="8" fill="#451a03"/>
+            <text x="60" y="18" fill="#fde68a" font-size="11" font-weight="bold" text-anchor="middle">MARCO M4</text>
+            <text x="60" y="55" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Ações &amp; Fluxos</text>
+            <text x="10" y="80" fill="#94a3b8" font-size="9.5">&bull; Voz Microfone</text>
+            <text x="10" y="98" fill="#94a3b8" font-size="9.5">&bull; Reuniões Reais</text>
+            <text x="10" y="116" fill="#94a3b8" font-size="9.5">&bull; Executor DAG</text>
+            <text x="10" y="134" fill="#94a3b8" font-size="9.5">&bull; Despacho de Tasks</text>
+          </g>
+
+          <path d="M 744 95 L 767 95" stroke="#38bdf8" stroke-width="3"/>
+
+          <!-- M5 -->
+          <g transform="translate(770, 20)">
+            <rect width="90" height="150" rx="8" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+            <rect width="90" height="28" rx="8" fill="#334155"/>
+            <text x="45" y="18" fill="#cbd5e1" font-size="10.5" font-weight="bold" text-anchor="middle">MARCO M5</text>
+            <text x="45" y="55" fill="#f8fafc" font-size="10.5" font-weight="bold" text-anchor="middle">Go-Live VPS</text>
+            <text x="8" y="80" fill="#94a3b8" font-size="9">&bull; Caddy HTTPS</text>
+            <text x="8" y="98" fill="#94a3b8" font-size="9">&bull; Visual v4</text>
+            <text x="8" y="116" fill="#94a3b8" font-size="9">&bull; Backup R2</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: DETALHAMENTO DOS MARCOS -->
+    <h2>3. Detalhamento dos Marcos Operacionais</h2>
+
+    <!-- MARCO M0 -->
+    <div class="milestone-card m0 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M0 — Fundação: Servidor Independente e Tabelas de Banco (SQL 003)</div>
+        <span class="milestone-tag">Duração estimada: 2 a 3 dias</span>
+      </div>
+      <p><strong>Cenário Atual:</strong> Todas as rotas de backend (<code>/api/aeos/*</code>) rodam dentro do servidor de desenvolvimento do Vite (<code>vite.config.ts</code>), incapaz de gerenciar sessões longas, autenticações OAuth ou filas de processamento.</p>
+      <p><strong>Entregas:</strong></p>
+      <ul>
+        <li>Subida e sincronização do pacote <strong>Gate 2</strong> no GitHub (Docker, Laya e Caddy prontos).</li>
+        <li>Criação do serviço de backend dedicado em Node (Fastify/Express) na pasta <code>server/</code>, desacoplando a API da interface gráfica sem alterar o visual em <code>:3001</code>.</li>
+        <li>Execução da <strong>Migração SQL 003</strong> no PostgreSQL 17 para criar as tabelas de: usuários, credenciais, sessões, orçamentos FinOps, trilha SHA-256 encadeada e cofre de conectores cifrados (<code>AES-256-GCM</code>).</li>
+      </ul>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> O Cockpit responde normalmente em <code>:3001</code> com as APIs rodando no servidor autônomo; <code>npm run verify:all</code> atinge 100% de sucesso.
+      </div>
+    </div>
+
+    <!-- MARCO M1 -->
+    <div class="milestone-card m1 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M1 — Identidade Real e Trava Física de 2 Dispositivos</div>
+        <span class="milestone-tag">Duração estimada: 3 a 4 dias</span>
+      </div>
+      <p><strong>Cenário Atual:</strong> A tela de login cria dados simulados no <code>localStorage</code>; a aba <em>Segurança &amp; Sessões</em> exibe selos e dispositivos ilustrativos.</p>
+      <p><strong>Entregas:</strong></p>
+      <ul>
+        <li>Autenticação real com senhas protegidas por hash forte (Argon2/Bcrypt) e cookies seguros (<code>HttpOnly</code>).</li>
+        <li>Integração <strong>OAuth 2.0 / 2.1 com PKCE</strong> para login direto com: <strong>Google</strong>, <strong>Microsoft Entra ID</strong>, <strong>GitHub</strong> e <strong>LinkedIn</strong> (OpenID Connect oficial).</li>
+        <li><strong>Bloqueio físico do 3º dispositivo:</strong> Caso o usuário tente acessar por um terceiro navegador, o backend bloqueia o acesso e exibe a tela de revogação de sessões ativas com derrubada em tempo real.</li>
+      </ul>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> Login via Google ou Microsoft entra com nome e foto reais; login em 3 navegadores distintos bloqueia o terceiro imediatamente até revogação.
+      </div>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- MARCO M2 -->
+    <div class="milestone-card m2 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M2 — Inteligência Conectada, FinOps Hard Lock e Auditoria Imutável</div>
+        <span class="milestone-tag">Duração estimada: 4 a 5 dias</span>
+      </div>
+      <p><strong>Cenário Atual:</strong> O Laya no chat usa regras estáticas de JavaScript; a busca web responde apenas dados fixos; FinOps e Auditoria ISO operam com números fictícios.</p>
+      <p><strong>Entregas:</strong></p>
+      <ul>
+        <li><strong>Laya Neural no Chat:</strong> O chat passa a consultar a API física do Laya (porta <code>:20140</code>) em CPU INT8 para classificar intenções e verificar contradições documentais em 25ms.</li>
+        <li><strong>Busca Web Real:</strong> O botão "Web" executa buscas reais via conector configurado (Brave Search / Tavily) com links verdadeiros em pílulas retráteis.</li>
+        <li><strong>Memória Vetorial Permanente (PGVector):</strong> Documentos anexados em <code>#documentos</code> são vetorizados e preservados no banco (não somem ao teclar F5).</li>
+        <li><strong>FinOps Hard Lock Real:</strong> O consumo de tokens é registrado no banco; se o teto de gastos configurado na Aba 4 for atingido, o backend bloqueia chamadas pagas e redireciona automaticamente para o Ollama local (custo $0.00).</li>
+        <li><strong>Auditoria Encadeada SHA-256:</strong> Cada login, alteração de orçamento e consulta é gravada no banco encadeando o hash do registro anterior, permitindo conferência matemática de integridade.</li>
+      </ul>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> Reduzir o teto de gastos no FinOps para $0.01 bloqueia chamadas em nuvem de imediato; conferência na Aba 7 atesta integridade dos registros via SHA-256.
+      </div>
+    </div>
+
+    <!-- MARCO M3: CONECTORES E MCPS (TABELA CRÍTICA) -->
+    <div class="milestone-card m3 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M3 — Protocolo MCP Remoto Seguro &amp; Conectores Externos Consagrados</div>
+        <span class="milestone-tag">Duração estimada: 6 a 8 dias (dividido em M3.1 e M3.2)</span>
+      </div>
+      <p><strong>As 5 Travas de Segurança Obrigatórias para Conectores Externos:</strong></p>
+      <ol style="margin-bottom: 12px;">
+        <li><strong>Apenas Servidores Oficiais ou Código Aberto Auditado:</strong> Foco em servidores homologados pelas próprias empresas mantenedoras.</li>
+        <li><strong>Cofre Criptografado no Servidor (AES-256-GCM):</strong> Chaves de acesso e refresh tokens nunca tocam o navegador nem arquivos públicos.</li>
+        <li><strong>Protocolo MCP Moderno (Streamable HTTP):</strong> Comunicação direta com renovação automática de credenciais via OAuth 2.1 PKCE.</li>
+        <li><strong>Menor Privilégio:</strong> Solicitação estrita dos escopos essenciais de cada ferramenta.</li>
+        <li><strong>Human-in-the-Loop (Trava Humana Obrigatória):</strong> A IA pode consultar e ler dados autorizados, mas qualquer envio externo ou exclusão exige cartão de aprovação do usuário com 1 clique.</li>
+      </ol>
+
+      <p><strong>Catálogo Técnico Homologado para Integração:</strong></p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%;">Ecossistema</th>
+            <th style="width: 33%;">Padrão Técnico Validado</th>
+            <th style="width: 20%;">Autenticação</th>
+            <th style="width: 25%;">Operação Real no Cockpit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Suíte Google</strong></td>
+            <td>Google Remote MCP (Streamable HTTP) + BigQuery MCP Oficial (<code>googleapis.com/mcp</code>)</td>
+            <td>OAuth 2.0 / 2.1 PKCE + IAM Scopes</td>
+            <td>Resumo de e-mails, rascunhos no Gmail, busca e salvamento no Drive (BYOS) e consultas seguras no BigQuery.</td>
+          </tr>
+          <tr>
+            <td><strong>Suíte Microsoft</strong></td>
+            <td>Microsoft Work IQ / Agent 365 Remote MCP + <code>microsoft/EnterpriseMCP</code> + Playwright MCP</td>
+            <td>Microsoft Entra ID + MSAL OAuth PKCE</td>
+            <td>Documentos no OneDrive/SharePoint, e-mails no Outlook, leitura de canais Teams e navegação web controlada.</td>
+          </tr>
+          <tr>
+            <td><strong>ClickUp</strong></td>
+            <td>ClickUp Official Remote MCP (<code>mcp.clickup.com/mcp</code>)</td>
+            <td>OAuth Oficial MCP</td>
+            <td>Criação e leitura de tarefas, listas, espaços e apontamento de pendências extraídas de reuniões.</td>
+          </tr>
+          <tr>
+            <td><strong>LinkedIn</strong> <span class="tag tag-warning">Segurança</span></td>
+            <td><strong>OpenID Connect Oficial</strong> (login) + <strong>API REST Oficial</strong> (app aprovado). <em>Sem scraping arriscado por cookie.</em></td>
+            <td>OAuth 2.0 Oficial</td>
+            <td>Login seguro e publicação autorizada em páginas corporativas pré-aprovadas pelo operador humano.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub</strong></td>
+            <td>GitHub Official MCP Server (<code>github/github-mcp-server</code>)</td>
+            <td>OAuth GitHub / PAT Cifrado</td>
+            <td>Leitura de código, abertura de issues a partir de atas e inspeção de Pull Requests.</td>
+          </tr>
+          <tr>
+            <td><strong>HubSpot</strong></td>
+            <td>HubSpot Official Remote MCP (<code>mcp.hubspot.com</code>)</td>
+            <td>OAuth 2.0 PKCE</td>
+            <td>Consulta e atualização de contatos, empresas, negócios (deals) e tickets de suporte.</td>
+          </tr>
+          <tr>
+            <td><strong>Atlassian (Jira/Conf)</strong></td>
+            <td>Atlassian Official Remote MCP (Teamwork Graph)</td>
+            <td>OAuth 2.1 Oficial</td>
+            <td>Pesquisa em páginas do Confluence e criação/atualização de chamados e sprints no Jira.</td>
+          </tr>
+          <tr>
+            <td><strong>RD Station</strong></td>
+            <td>Adaptador REST Oficial RD Station API v2 no backend PCL</td>
+            <td>OAuth 2.0 / Token Cifrado</td>
+            <td>Captura e sincronização de leads comerciais qualificados pelos agentes de IA.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> Conectar Google Drive, Outlook e ClickUp via OAuth no Cockpit; IA lê dados sob permissão e envia mensagens ou cria tarefas somente após aprovação humana explícita no cartão de ação.
+      </div>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- MARCO M4 -->
+    <div class="milestone-card m4 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M4 — Ações Vivas no Chat, Voz Real, Reuniões e Orquestração DAG</div>
+        <span class="milestone-tag">Duração estimada: 5 a 6 dias</span>
+      </div>
+      <p><strong>Cenário Atual:</strong> Microfone devolve texto fixo; criação de agentes No-Code não persiste no backend; abas de Reuniões e Fluxos funcionam apenas como protótipos de interface.</p>
+      <p><strong>Entregas:</strong></p>
+      <ul>
+        <li><strong>Microfone Real:</strong> Gravação direta de áudio pelo navegador com envio ao backend para transcrição neural real.</li>
+        <li><strong>Ações "@Sistemas" no Chat:</strong> Digitar <code>@Gmail</code>, <code>@ClickUp</code> ou <code>@Teams</code> aciona ferramentas reais; clicar em "Confirmar Envio" despacha o comando efetivamente.</li>
+        <li><strong>Persistência de Agentes e Skills:</strong> Agentes criados no <em>Criador No-Code</em> são gravados no banco e podem ser invocados no chat (ex.: <code>@AnalistaFinanceiro</code>).</li>
+        <li><strong>Reuniões com Despacho Automático:</strong> Upload de áudio/vídeo real ➔ transcrição neural ➔ extração automática de plano de ação ➔ geração e envio de tarefas para o ClickUp ou Jira.</li>
+        <li><strong>Executor de Fluxos Visuais (DAG):</strong> O botão "Executar" dos fluxos encadeia operações reais (Exemplo: <em>Ao detectar novo e-mail no Outlook ➔ Resumir via IA ➔ Criar pendência no ClickUp ➔ Notificar no Teams</em>) com trilha de auditoria para cada nó do grafo.</li>
+      </ul>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> Subir áudio real de reunião e constatar a tarefa criada de verdade dentro do workspace do ClickUp; executar fluxo entre duas ferramentas com log de sucesso no PostgreSQL.
+      </div>
+    </div>
+
+    <!-- MARCO M5 -->
+    <div class="milestone-card m5 avoid-break">
+      <div class="milestone-header">
+        <div class="milestone-title">Marco M5 — Polimento Visual v4 (Opcional) &amp; Go-Live Homologado na VPS</div>
+        <span class="milestone-tag">Duração estimada: 2 a 3 dias</span>
+      </div>
+      <p><strong>Cenário Atual:</strong> Toda a infraestrutura de deploy (Docker Compose, Laya INT8, Caddy com HTTPS automático) já está desenhada e validada no Gate 2.</p>
+      <p><strong>Entregas:</strong></p>
+      <ul>
+        <li>Seleção e integração dos elementos visuais desejados dos protótipos v4 (organização de menus por departamentos, monitor de latência e rótulo de versão).</li>
+        <li>Subida assistida na VPS com certificado SSL/HTTPS emitido automaticamente pelo Caddy.</li>
+        <li>Habilitação de rotina de cópia de segurança automatizada (Backblaze B2 ou Cloudflare R2).</li>
+      </ul>
+      <div class="validation-box">
+        <strong>Critério de Aceite:</strong> Acesso seguro via domínio oficial HTTPS com todas as 5 baterias de teste (<code>verify:all</code>) reportando zero inconformidades.
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4: TABELA RESUMO EXECUTIVA -->
+    <div class="avoid-break">
+      <h2>4. Quadro Resumo dos Marcos &amp; Critérios de Conclusão</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 10%;">Marco</th>
+            <th style="width: 25%;">Objetivo Central</th>
+            <th style="width: 30%;">Módulos / Telas Materializadas</th>
+            <th style="width: 35%;">Critério Objetivo de Homologação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>M0</strong></td>
+            <td>Servidor autônomo &amp; Banco</td>
+            <td>Infraestrutura <code>server/</code> + SQL 003</td>
+            <td>APIs respondem fora do Vite; <code>verify:all</code> passa 100%.</td>
+          </tr>
+          <tr>
+            <td><strong>M1</strong></td>
+            <td>Identidade e Acesso Real</td>
+            <td>Login + Aba <em>Segurança &amp; Sessões</em></td>
+            <td>Login real com Google/M365; bloqueio físico no 3º dispositivo.</td>
+          </tr>
+          <tr>
+            <td><strong>M2</strong></td>
+            <td>IA, FinOps e Auditoria</td>
+            <td>Chat + Laya CPU + FinOps + Audit ISO</td>
+            <td>Hard Lock barra custos reais; conferência SHA-256 válida.</td>
+          </tr>
+          <tr>
+            <td><strong>M3</strong></td>
+            <td>Conectores &amp; MCPs Oficiais</td>
+            <td>Aba <em>Conexões &amp; MCPs</em> (Google, M365, ClickUp, etc.)</td>
+            <td>Leitura e escrita autorizada funcionando nas plataformas externas.</td>
+          </tr>
+          <tr>
+            <td><strong>M4</strong></td>
+            <td>Ações, Voz e Fluxos DAG</td>
+            <td>Microfone + Agentes + Reuniões + Fluxos</td>
+            <td>Áudio gera tarefa real no ClickUp; fluxo executa de ponta a ponta.</td>
+          </tr>
+          <tr>
+            <td><strong>M5</strong></td>
+            <td>Visual v4 &amp; Entrada na VPS</td>
+            <td>Tela Principal + Deploy VPS HTTPS</td>
+            <td>Sistema no ar em ambiente de produção com zero testes pendentes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QUEBRA DE PÁGINA RACIONAL -->
+    <div class="page-break"></div>
+
+    <!-- SEÇÃO 5: DECISÕES DE LIDERANÇA REQUERIDAS -->
+    <div class="avoid-break">
+      <h2>5. Decisões de Liderança Requeridas Antes do Início</h2>
+      <p>Para darmos início ordenado à execução do Marco M0/M1, submeto à sua validação 4 diretrizes:</p>
+
+      <div class="decision-box">
+        <strong>1. Checkpoint Seguro no GitHub (Gate 2)</strong>
+        Deseja realizar o commit e push das alterações validadas do Gate 2 (empacotamento Docker, configuração Caddy e Laya INT8) nos repositórios oficiais antes de iniciarmos as migrações do Marco M0?
+      </div>
+
+      <div class="decision-box">
+        <strong>2. Priorização dos Conectores Externos na Onda M3</strong>
+        Aprova dividirmos o Marco M3 em duas ondas, priorizando na Onda M3.1 a tríade de produtividade central (<strong>Google Workspace + Microsoft 365 + ClickUp + GitHub</strong>), deixando <strong>HubSpot, Atlassian, RD Station e LinkedIn API</strong> para a Onda M3.2?
+      </div>
+
+      <div class="decision-box">
+        <strong>3. Diretriz de Blindagem e Segurança no LinkedIn</strong>
+        Confirma a adoção estrita do <strong>OpenID Connect Oficial</strong> para autenticação e da <strong>API REST Oficial</strong> (descartando qualquer automação por cookie ou navegador não homologada que possa comprometer a integridade de contas corporativas)?
+      </div>
+
+      <div class="decision-box">
+        <strong>4. Estratégia de Identidade Visual (v3.9 vs. v4)</strong>
+        Prefere preservar a interface estável atual enquanto construímos o motor real de retaguarda (M0 a M3), reservando o polimento estético da versão v4 para o Marco M5?
+      </div>
+
+      <div style="margin-top: 24px; padding: 14px 18px; background: var(--slate-100); border-radius: 6px; font-size: 11.5px; color: var(--slate-700);">
+        <strong>Protocolo de Governança PCL-AEOS:</strong> Nenhuma alteração de código ou migração de banco será realizada sem o seu aval formal para as quatro diretrizes acima.
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="doc-footer">
+      <div>PromptCore Labs &bull; PCL AEOS Architecture &bull; PCL Cockpit</div>
+      <div>Documento Gerado para Impressão &bull; Página <span class="page-number"></span></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

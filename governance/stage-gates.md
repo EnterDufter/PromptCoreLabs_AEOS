@@ -191,6 +191,26 @@ O AEOS não depende do TLC.
 O TLC passa a ser uma metodologia suportada pelo AEOS.
 
 =========================================================
+MODELO DUAL-TRACK & TRIAGE GATE (G-00)
+=========================================================
+
+Para garantir agilidade em demandas operacionais sem comprometer a integridade e segurança sistêmica, o Gate G-00 (SPECIFY) atua obrigatoriamente como um Triage Gate classificador de rotas:
+
+1. Matriz de Classificação de Complexidade e Impacto:
+   • Nível 1 (Mínimo): Alteração em 1 arquivo isolado (ajuste visual, typo, log). ➔ Rota Lean
+   • Nível 2 (Baixo): Refatoração interna de utilitário sem alterar contratos públicos. ➔ Rota Lean
+   • Nível 3 (Médio): Adição de métodos/rotas simples sem impacto em banco de dados. ➔ Rota Lean (com confirmação)
+   • Nível 4 (Alto): Alterações em esquemas de dados (pcl-db), contêineres Docker ou APIs públicas. ➔ Rota Full SDD
+   • Nível 5 (Crítico): Mudanças em segurança Zero Trust, autenticação, DRP/backups ou compliance ISO. ➔ Rota Full SDD
+
+2. As Duas Trilhas Oficiais:
+   • Rota Lean (Complexidade 1–3): Instancia um único artefato enxuto (lean-spec-template.md / .specs/lean-spec.md) com escopo delimitado, arquivos afetados, checklist de aceite e plano de verificação rápida. Pula a burocracia intermediária de design/tasks e avança diretamente para a execução supervisionada e aceite formal no G-04.
+   • Rota Full SDD (Complexidade 4–5): Exige a travessia completa de todos os 5 Stage Gates formais (G-00 a G-04) com a suíte de artefatos da metodologia TLC v3 (specify.md, design.md, tasks.md, validate.md + proposta formal de ADR).
+
+3. Regra Inviolável de Escalação (Upgrade Trigger):
+   Se durante a execução na Rota Lean forem descobertos acoplamentos arquiteturais ocultos (banco de dados, persistência, segurança ou quebra de contratos), a Rota Lean é sumariamente interrompida e a demanda é promovida para a Rota Full SDD sob homologação formal do Patrocinador Humano Soberano.
+
+=========================================================
 RELAÇÃO COM PCL CORTEX MICRO-LOOP
 =========================================================
 

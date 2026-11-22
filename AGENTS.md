@@ -4,9 +4,9 @@ system_scope: "PCL AEOS Kernel / Workspace"
 kernel_version: "v3.6.0"
 type: "Rule"
 status: "Approved"
-rag_tags: [agents, governance, rules, cortex, laya, tlc_v3, hardware_invariants, multi_turn_memory, intention_gating, sexy_canvas, institutional_triad, zero_hermetic_jargon, v3.6]
+rag_tags: [agents, governance, rules, cortex, laya, tlc_v3, hardware_invariants, multi_turn_memory, intention_gating, sexy_canvas, institutional_triad, zero_hermetic_jargon, dual_track, zero_ai_slop, google_stitch, v3.6]
 created_at: "2026-10-29"
-last_updated: "2026-11-02"
+last_updated: "2026-11-17"
 author: "PromptCore Labs Architecture"
 normative_ref: "PCL-AEOS-NORM-01"
 ---
@@ -77,6 +77,17 @@ normative_ref: "PCL-AEOS-NORM-01"
 2. **Links Clicáveis:** Todas as referências a arquivos locais devem utilizar links no padrão Markdown com protocolo `file:///`.
 3. **Segredos e Credenciais:** Jamais versionar arquivos `.env` com valores em texto claro; utilizar sempre variáveis de ambiente ou o cofre AES-256-GCM.
 4. **Integridade de Codificação (UTF-8 Puro):** Todos os artefatos `.md`, `.html`, `.json` e `.ts` devem ser gravados estritamente em UTF-8 sem dupla codificação (Zero Mojibake).
+5. **Engenharia de Frontend, UI/Web & Zero "AI Slop":**
+   - **Brand DNA antes de Layout:** É expressamente proibido gerar interfaces com estética genérica de IA ("AI slop", gradientes roxos/azuis clichê sem motivo de marca, cards repetitivos sem hierarquia visual, textos ocos). Todo layout deve nascer ancorado no Brand DNA (paleta intencional, tipografia contrastante Inter/JetBrains Mono, tom de voz e prova social real).
+   - **Valor Percebido nos Primeiros 3 Segundos:** A dobra superior (*above the fold*) deve explicitar claramente o que é, para quem é, qual dor resolve e qual o próximo passo (CTA imediato) com acabamento visual digno de produto premium.
+   - **SEO Técnico & GEO (*Generative Engine Optimization*):** Implementar Answer Nuggets (respostas diretas de 40–80 palavras para motores generativos), dados estruturados Schema.org em JSON-LD (`Organization`, `Product`, `FAQPage`) e performance mobile-first (zero *layout shift* / CLS e acessibilidade WCAG AAA).
+6. **Protocolo Obrigatório para Google Stitch (`StitchMCP` / API / SDK):**
+   - **Disciplina de Pequenos Pulos (*Small Increments*):** O Google Stitch é extremamente poderoso, mas degrada para *AI slop* se receber prompts gigantes ou abertos demais. É expressamente proibido despejar PRDs inteiros em uma única chamada. Entregue artefatos atômicos e bem delimitados (1 tela, 1 seção ou 1 estado por vez).
+   - **Exploração Progressiva Pós-Aprovação Visual:** Após a aprovação da base visual pelo operador humano, solicitar estudos de *predictive heat map*, mapeamento sistemático de *missing states* (empty, loading, error, edge cases), animações e variações.
+   - **Desacoplamento Full-Stack:** O StitchMCP atua na ideação e geração de front-end de alta fidelidade visual, enquanto o backend, contratos de dados e segurança seguem estritamente a engenharia do PCL AEOS / TLC v3.
+7. **Porta de Entrada Dual-Track (Triage Gate no Planejamento):**
+   - Antes de iniciar qualquer tarefa, o agente e a persona Cortex devem classificar a demanda no Gate G-00 entre **Rota Lean** (`lean-spec-template.md` para complexidade 1–3) e **Rota Full SDD** (5 Stage Gates formais G-00 a G-04 com `templates/tlc/` para complexidade 4–5).
+   - **Gatilho de Escalabilidade Obrigatória:** Se durante a Rota Lean surgir dependência crítica oculta de banco de dados (`pcl-db`), autenticação ou segurança Zero Trust, a execução é congelada e promovida imediatamente para a Rota Full SDD.
 
 ---
 
