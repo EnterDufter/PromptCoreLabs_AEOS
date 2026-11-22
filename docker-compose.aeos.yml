@@ -95,6 +95,7 @@ services:
     image: pcl-laya:latest
     container_name: pcl-laya
     restart: always
+    mem_limit: 512m
     ports:
       - "${LAYA_BIND_ADDRESS:-127.0.0.1}:${LAYA_PORT:-20140}:20140"
     environment:
@@ -118,6 +119,7 @@ services:
     image: pcl-laya-gatekeeper:latest
     container_name: pcl-laya-gatekeeper
     restart: always
+    mem_limit: 512m
     ports:
       - "${GATEKEEPER_BIND_ADDRESS:-127.0.0.1}:${GATEKEEPER_PORT:-20160}:20160"
     environment:
@@ -127,6 +129,28 @@ services:
     depends_on:
       laya:
         condition: service_healthy
+    networks:
+      - aeos-net
+
+  pcl-codegraph:
+    build:
+      context: ./services/pcl-codegraph
+      dockerfile: Dockerfile
+    image: pcl-codegraph:latest
+    container_name: pcl-codegraph
+    restart: always
+    mem_limit: 512m
+    ports:
+      - "${CODEGRAPH_BIND_ADDRESS:-127.0.0.1}:${CODEGRAPH_PORT:-20150}:20150"
+    environment:
+      - CODEGRAPH_PORT=20150
+      - ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request, sys; r = urllib.request.urlopen('http://127.0.0.1:20150/ready', timeout=3); sys.exit(0 if r.status == 200 else 1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - aeos-net
 
@@ -155,6 +179,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-paperclip}
       - OMNIROUTE_URL=http://omniroute:20130
       - LAYA_URL=http://pcl-laya:20140
+      - GATEKEEPER_URL=http://pcl-laya-gatekeeper:20160
+      - CODEGRAPH_URL=http://pcl-codegraph:20150
       - PAPERCLIP_URL=http://paperclip:3100
       - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434}
       - APP_PUBLIC_URL=${APP_PUBLIC_URL:-http://localhost:3001}
@@ -162,6 +188,8 @@ services:
       db:
         condition: service_healthy
       laya:
+        condition: service_healthy
+      pcl-codegraph:
         condition: service_healthy
       omniroute:
         condition: service_started

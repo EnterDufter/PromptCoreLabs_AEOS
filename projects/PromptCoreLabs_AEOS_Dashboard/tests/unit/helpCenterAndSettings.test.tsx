@@ -5,6 +5,9 @@ import { I18nProvider } from '../../src/i18n/I18nContext';
 import { HelpCenterModal } from '../../src/components/help/HelpCenterModal';
 import { SettingsModal } from '../../src/components/admin/SettingsModal';
 import { RightSidebarStatus } from '../../src/components/layout/RightSidebarStatus';
+import { Header } from '../../src/components/layout/Header';
+import { SuperChatbubble } from '../../src/components/composer/SuperChatbubble';
+import { GrowthOsDualPlexPanel } from '../../src/components/workspace/GrowthOsDualPlexPanel';
 import { UserProfile } from '../../src/types';
 
 afterEach(() => {
@@ -104,5 +107,41 @@ describe('UI Hygiene: HelpCenter, SettingsModal (Auto-Save) e RightSidebarStatus
     expect(screen.queryByText('Salesforce CRM')).toBeNull();
     expect(screen.queryByText('Jira Enterprise')).toBeNull();
     expect(screen.queryByText('SAP S/4HANA')).toBeNull();
+  });
+
+  it('Casca Visual PCL GrowthOS™ renderiza Pílula Trial 14d, Token Tax Saved, Chips Progressive Disclosure (+/) e 4 Divisões com CLS=0', () => {
+    render(
+      <I18nProvider initialLang="pt">
+        <Header
+          user={MOCK_USER}
+          lang="pt"
+          onLanguageChange={() => {}}
+          theme="light"
+          onThemeToggle={() => {}}
+          onOpenSettings={() => {}}
+        />
+        <SuperChatbubble onSendMessage={() => {}} />
+        <GrowthOsDualPlexPanel />
+      </I18nProvider>
+    );
+
+    const trialPill = screen.getByTestId('growthos-trial-pill');
+    expect(trialPill.textContent).toContain('14d Trial • Todos os Módulos');
+    fireEvent.click(trialPill);
+    expect(trialPill.textContent).toContain('Núcleo Laya + 4 Módulos');
+
+    const tokenTaxPill = screen.getByTestId('header-token-tax-pill');
+    expect(tokenTaxPill.textContent).toContain('Token Tax Saved:');
+
+    const chipsBtn = screen.getByTestId('progressive-disclosure-chips-btn');
+    fireEvent.click(chipsBtn);
+    expect(screen.getByTestId('progressive-disclosure-chips-tray')).toBeInTheDocument();
+
+    expect(screen.getByTestId('growthos-dualplex-panel')).toBeInTheDocument();
+    expect(screen.getByTestId('growth-division-tab-estudio-midia')).toBeInTheDocument();
+    expect(screen.getByTestId('growth-division-tab-atracao-trafego')).toBeInTheDocument();
+    expect(screen.getByTestId('growth-division-tab-conversao-receita')).toBeInTheDocument();
+    expect(screen.getByTestId('growth-division-tab-comando-blindagem')).toBeInTheDocument();
+    expect(screen.getByTestId('telepathic-onboarding-d0-d14')).toBeInTheDocument();
   });
 });

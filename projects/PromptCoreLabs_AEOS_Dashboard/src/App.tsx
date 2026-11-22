@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Language, Theme, UserProfile, Project, Conversation, Agent, ServiceStatus, Artifact, TargetArtifactFormat, StudyAttachment, MainViewMode } from './types';
+import { Language, Theme, UserProfile, Project, Conversation, Agent, ServiceStatus, Artifact, TargetArtifactFormat, StudyAttachment, MainViewMode, GrowthStoreDivisionId } from './types';
 import { Header } from './components/layout/Header';
 import { LeftSidebar } from './components/layout/LeftSidebar';
 import { RightSidebarStatus } from './components/layout/RightSidebarStatus';
@@ -34,6 +34,9 @@ export const App: React.FC = () => {
   const [helpCenterOpen, setHelpCenterOpen] = useState(false);
   const [activeMainView, setActiveMainView] = useState<MainViewMode>('chat');
   const [workspaceViewMode, setWorkspaceViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
+  const [activeGrowthDivisionId, setActiveGrowthDivisionId] = useState<GrowthStoreDivisionId>('estudio-midia');
+  const [rightSplitTab, setRightSplitTab] = useState<'cortex-canvas' | 'growthos-store'>('growthos-store');
+  const [trialPillText, setTrialPillText] = useState<string>('14d Trial • Todos os Módulos');
   const [rightPanelMode, setRightPanelMode] = useState<'telemetry' | 'governance'>('telemetry');
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => authService.getCurrentUser());
 
@@ -1025,6 +1028,12 @@ export const App: React.FC = () => {
         rightPanelMode={rightPanelMode}
         onRightPanelModeChange={setRightPanelMode}
         onLogout={() => authService.logout()}
+        trialPillText={trialPillText}
+        onOpenGrowthStore={() => {
+          setActiveMainView('chat');
+          setWorkspaceViewMode('dual');
+          setRightSplitTab('growthos-store');
+        }}
       />
 
       {/* Main 3-Column Layout */}
@@ -1043,6 +1052,13 @@ export const App: React.FC = () => {
           onDeleteConversation={handleDeleteConversation}
           onMoveConversation={handleMoveConversation}
           onCreateProject={handleCreateProject}
+          activeGrowthDivisionId={activeGrowthDivisionId}
+          onSelectGrowthDivision={(divId) => {
+            setActiveGrowthDivisionId(divId);
+            setActiveMainView('chat');
+            setWorkspaceViewMode('dual');
+            setRightSplitTab('growthos-store');
+          }}
         />
 
         {/* Central Workspace & Composer or Specialized Views (Meetings / Flows / Artifacts) */}
@@ -1061,6 +1077,11 @@ export const App: React.FC = () => {
                 viewMode={workspaceViewMode}
                 onViewModeChange={setWorkspaceViewMode}
                 onPromptCardClick={(prompt) => handleSendMessage(prompt, false)}
+                activeGrowthDivisionId={activeGrowthDivisionId}
+                onSelectGrowthDivision={setActiveGrowthDivisionId}
+                rightSplitTab={rightSplitTab}
+                onRightSplitTabChange={setRightSplitTab}
+                onTrialPillTextChange={setTrialPillText}
               />
 
               {workspaceViewMode !== 'canvas' && (
@@ -1068,6 +1089,11 @@ export const App: React.FC = () => {
                   onSendMessage={handleSendMessage}
                   usedTokens={14200}
                   maxTokens={128000}
+                  onSelectGrowthDivision={(divId) => {
+                    setActiveGrowthDivisionId(divId);
+                    setWorkspaceViewMode('dual');
+                    setRightSplitTab('growthos-store');
+                  }}
                 />
               )}
             </>

@@ -14,7 +14,7 @@ import { piiGuardService } from '../../services/security/piiGuardService';
 import { OMNIROUTE_MODELS, ModelOption } from '../../services/llm/omniRouteService';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
 import { useI18n } from '../../i18n/I18nContext';
-import { TargetArtifactFormat, StudyAttachment } from '../../types';
+import { TargetArtifactFormat, StudyAttachment, GrowthStoreDivisionId } from '../../types';
 
 interface SuperChatbubbleProps {
   onSendMessage: (
@@ -27,6 +27,7 @@ interface SuperChatbubbleProps {
   ) => void;
   usedTokens?: number;
   maxTokens?: number;
+  onSelectGrowthDivision?: (divisionId: GrowthStoreDivisionId) => void;
 }
 
 interface MentionOption {
@@ -182,7 +183,8 @@ export const COGNITIVE_PROFILES: CognitiveProfile[] = [
 export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   onSendMessage,
   usedTokens = 14200,
-  maxTokens = 128000
+  maxTokens = 128000,
+  onSelectGrowthDivision
 }) => {
   const { t } = useI18n();
   const [text, setText] = useState('');
@@ -191,6 +193,7 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
   const [consoleTab, setConsoleTab] = useState<'profiles' | 'models'>('profiles');
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showArtifactMenu, setShowArtifactMenu] = useState(false);
+  const [showProgressiveChips, setShowProgressiveChips] = useState(false);
   const [piiStatus, setPiiStatus] = useState<string | null>(null);
   const [webSearchEnabled, setWebSearchEnabled] = useState(false);
   const [selectedTargetFormat, setSelectedTargetFormat] = useState<TargetArtifactFormat | null>(null);
@@ -561,12 +564,69 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
         <textarea
           ref={textareaRef}
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={e => {
+            const val = e.target.value;
+            setText(val);
+            if (val.startsWith('/')) setShowProgressiveChips(true);
+          }}
           onKeyDown={handleKeyDown}
           placeholder={t.composer.placeholder}
           rows={2}
           className="w-full bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-400 text-xs focus:outline-none resize-none custom-scrollbar"
         />
+
+        {/* Chips Contextuais Multimodais sob Progressive Disclosure (+ / /) */}
+        {showProgressiveChips && (
+          <div
+            data-testid="progressive-disclosure-chips-tray"
+            className="flex flex-wrap items-center gap-1.5 pt-1.5 pb-0.5 border-t border-slate-100 dark:border-slate-800/70 animate-in fade-in duration-150"
+          >
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 px-1.5">
+              Laya™ Inside:
+            </span>
+            {([
+              {
+                id: 'estudio-midia' as GrowthStoreDivisionId,
+                label: '🎨 Estúdio & Mídia (VoxCanvas™)',
+                confidenceDot: 'bg-emerald-500',
+                prompt: '[GrowthOS • Estúdio & Mídia] Compilar Landing Page High-Ticket ancorada no Brand DNA com CLS = 0.'
+              },
+              {
+                id: 'atracao-trafego' as GrowthStoreDivisionId,
+                label: '🚀 Atração & Tráfego (GEO / PulseIQ™)',
+                confidenceDot: 'bg-emerald-500',
+                prompt: '[GrowthOS • Atração & Tráfego] Gerar Answer Nuggets GEO e Schema.org JSON-LD para captura orgânica.'
+              },
+              {
+                id: 'conversao-receita' as GrowthStoreDivisionId,
+                label: '💰 Conversão & Receita (Bowtie / HubSpot)',
+                confidenceDot: 'bg-amber-500',
+                prompt: '[GrowthOS • Conversão & Receita] Executar Raio-X Bowtie sobre o pipeline @HubSpot e @RDStation.'
+              },
+              {
+                id: 'comando-blindagem' as GrowthStoreDivisionId,
+                label: '🛡️ Comando & Blindagem (Aegis / Token Tax)',
+                confidenceDot: 'bg-emerald-500',
+                prompt: '[GrowthOS • Comando & Blindagem] Auditar economia Token Tax Saved e latência p95 do Gatekeeper.'
+              }
+            ]).map(chip => (
+              <button
+                key={chip.id}
+                type="button"
+                data-testid={`multimodal-chip-${chip.id}`}
+                onClick={() => {
+                  setText(chip.prompt);
+                  if (onSelectGrowthDivision) onSelectGrowthDivision(chip.id);
+                  setTimeout(() => textareaRef.current?.focus(), 40);
+                }}
+                className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-medium bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700 hover:border-emerald-500/60 hover:text-emerald-600 dark:hover:text-emerald-300 transition"
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${chip.confidenceDot}`} />
+                <span>{chip.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Bottom Bar: Attachments, Voice, Web Search, Tokens, Reasoning Level & Send */}
         <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80">
@@ -577,6 +637,22 @@ export const SuperChatbubble: React.FC<SuperChatbubbleProps> = ({
               onStudyAttached={study => setAttachedStudy(study)}
             />
             <VoiceRecorderButton onTranscriptionComplete={txt => setText(prev => `${prev} ${txt}`.trim())} />
+
+            {/* Botão + / / (Progressive Disclosure de Chips Multimodais GrowthOS) */}
+            <button
+              type="button"
+              data-testid="progressive-disclosure-chips-btn"
+              onClick={() => setShowProgressiveChips(!showProgressiveChips)}
+              className={`px-2 py-1 rounded-lg border transition flex items-center space-x-1 text-xs ${
+                showProgressiveChips
+                  ? 'bg-indigo-50 dark:bg-indigo-950/80 border-indigo-400 text-indigo-700 dark:text-indigo-300 font-semibold shadow-xs'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'
+              }`}
+              title="Chips Contextuais Multimodais sob Progressive Disclosure (+ /)"
+            >
+              <span className="font-mono font-bold text-[11px]">+/</span>
+              <span className="text-[11px] hidden sm:inline">Growth Chips</span>
+            </button>
 
             {/* Web Search Toggle Button */}
             <button

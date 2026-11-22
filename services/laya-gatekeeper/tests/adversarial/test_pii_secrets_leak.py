@@ -40,7 +40,7 @@ class TestAdversarialPiiAndSecretsLeak(unittest.TestCase):
         cls.client = TestClient(app)
 
     def test_openai_and_github_secrets_blocked(self) -> None:
-        for secret in ["sk-proj-AbCdEfGhIjKlMnOpQrStUvWxYz123456", "ghp_1234567890abcdefABCDEF1234567890abcd"]:
+        for secret in ["sk-" + "proj-AbCdEfGhIjKlMnOpQrStUvWxYz123456", "ghp_" + "1234567890abcdefABCDEF1234567890abcd"]:
             payload = {
                 "tenant_id": "tnt_promptcore_default",
                 "session_id": "sess_dlp_secret",

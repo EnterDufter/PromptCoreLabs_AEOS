@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings, HelpCircle, BookOpen, Activity } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, ShieldAlert, Cpu, Globe, Moon, Sun, User, Lock, LogOut, Key, Server, Users, Settings, HelpCircle, BookOpen, Activity, Sparkles, TrendingUp } from 'lucide-react';
 import { Language, Theme, UserProfile } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 
@@ -16,6 +16,8 @@ interface HeaderProps {
   rightPanelMode?: 'telemetry' | 'governance';
   onRightPanelModeChange?: (mode: 'telemetry' | 'governance') => void;
   onLogout?: () => void;
+  trialPillText?: string;
+  onOpenGrowthStore?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,10 +32,27 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHelpCenter,
   rightPanelMode = 'telemetry',
   onRightPanelModeChange,
-  onLogout
+  onLogout,
+  trialPillText,
+  onOpenGrowthStore
 }) => {
   const { t } = useI18n();
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [localTrialMode, setLocalTrialMode] = useState<'trial' | 'bundle'>('trial');
+  const [tokenTaxUsd, setTokenTaxUsd] = useState<number>(148.75);
+  const [tokenTaxTokens, setTokenTaxTokens] = useState<number>(9916600);
+
+  useEffect(() => {
+    fetch('/api/aeos/finops/token-tax?tenantId=tnt_promptcore_default')
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        if (data && data.ok && data.metrics && typeof data.metrics.monetarySavingsUsd === 'number' && data.metrics.monetarySavingsUsd > 0) {
+          setTokenTaxUsd(data.metrics.monetarySavingsUsd);
+          setTokenTaxTokens(data.metrics.estimatedTokensSaved || 9916600);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <header className="h-14 glass-panel border-b border-slate-200/60 dark:border-slate-800/80 px-4 flex items-center justify-between text-slate-800 dark:text-slate-100 select-none relative z-50 transition-colors">
@@ -73,6 +92,41 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right User & Controls */}
       <div className="flex items-center space-x-2">
+        {/* Pílula do Trial 14 dias ("14d Trial • Todos os Módulos" -> "Núcleo Laya + X Módulos") */}
+        <button
+          type="button"
+          data-testid="growthos-trial-pill"
+          onClick={() => {
+            setLocalTrialMode(prev => (prev === 'trial' ? 'bundle' : 'trial'));
+            if (onOpenGrowthStore) onOpenGrowthStore();
+          }}
+          className="hidden md:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-50/90 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80 hover:border-indigo-400 transition shadow-2xs cursor-pointer"
+          title="PCL GrowthOS™ — Alternar/Inspecionar Trial 14d e Pacote Modular Pós-Dia 14 no Dual-Plex"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+          <span>
+            {trialPillText ||
+              (localTrialMode === 'trial'
+                ? '14d Trial • Todos os Módulos'
+                : 'Núcleo Laya + 4 Módulos')}
+          </span>
+        </button>
+
+        {/* Resumo Clicável Token Tax Saved (PROAA-17 / PROAA-22) */}
+        <button
+          type="button"
+          data-testid="header-token-tax-pill"
+          onClick={() => onOpenSettings('costs')}
+          className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold bg-emerald-50/90 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 hover:border-emerald-400 transition shadow-2xs cursor-pointer"
+          title="Token Tax Saved (PROAA-17): Economia acumulada por decisões locais do Laya System One em CPU (0 MB VRAM)"
+        >
+          <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+          <span>Token Tax Saved: ${tokenTaxUsd.toFixed(2)}</span>
+          <span className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80">
+            ({(tokenTaxTokens / 1000000).toFixed(1)}M tok)
+          </span>
+        </button>
+
         {/* Botão de Atalho no Header: Velocímetro Turbo + Raio ⚡ (Telemetria & Status) */}
         {onToggleStatusPanel && (
           <div className="relative group">

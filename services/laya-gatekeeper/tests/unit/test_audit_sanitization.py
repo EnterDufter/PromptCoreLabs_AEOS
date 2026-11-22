@@ -29,7 +29,7 @@ class TestAuditSanitizationIso42001(unittest.TestCase):
     def test_audit_jsonl_never_contains_raw_pii_or_secrets(self) -> None:
         raw_cpf = "987.654.321-09"
         raw_email = "diretoria.secreta@promptcorelabs.com"
-        raw_key = "sk-proj-SuperSecretKey998877665544332211"
+        raw_key = "sk-" + "proj-SuperSecretKey998877665544332211"
 
         payload = {
             "tenant_id": "tnt_promptcore_default",

@@ -440,4 +440,104 @@ export interface DagWorkflowExecutionReceipt {
   createdAt: string;
 }
 
+// ============================================================================
+// ORDEM 7 — MARCO M5 (CONTAINERS & GO-LIVE) + CASCA VISUAL PCL GROWTHOS™ (PROAA-18/19/22/23)
+// ============================================================================
+
+export type GrowthStoreDivisionId =
+  | 'estudio-midia'
+  | 'atracao-trafego'
+  | 'conversao-receita'
+  | 'comando-blindagem';
+
+export type ConfidenceSurfacingLevel = 'green' | 'amber' | 'red';
+
+export interface GrowthBlockSchemaModule {
+  id: string;
+  divisionId: GrowthStoreDivisionId;
+  title: string;
+  subtitle: string;
+  layaInsideBadge: string;
+  vramMb: 0;
+  confidenceScore: number;
+  confidenceLevel: ConfidenceSurfacingLevel;
+  confidenceLabel: string;
+  microRoiLabel: string;
+  microRoiUsdMonthly: number;
+  microRoiHoursSaved: number;
+  day14RoiRank: number;
+  previewSummary: string;
+  previewKpis: Array<{ label: string; value: string; delta: string }>;
+  selectedForPostTrial: boolean;
+}
+
+export interface GrowthStoreDivisionSpec {
+  id: GrowthStoreDivisionId;
+  order: number;
+  name: string;
+  tagline: string;
+  accentColor: string;
+  modules: GrowthBlockSchemaModule[];
+}
+
+export interface TelepathicOnboardingMilestone {
+  day: 'D0' | 'D3' | 'D7' | 'D14';
+  dayNumber: number;
+  title: string;
+  description: string;
+  deliverable: string;
+  roiHighlight: string;
+  completed: boolean;
+}
+
+export interface GrowthOsStoreState {
+  ok: boolean;
+  tenantId: string;
+  trialMode: 'trial_14d_all_modules' | 'post_trial_custom_bundle';
+  trialDaysRemaining: number;
+  activeCurrentDay: 'D0' | 'D3' | 'D7' | 'D14';
+  selectedModulesCount: number;
+  trialPillText: string;
+  clsScore: 0;
+  divisions: GrowthStoreDivisionSpec[];
+  onboardingMilestones: TelepathicOnboardingMilestone[];
+  day14RoiRanking: Array<{
+    rank: number;
+    moduleId: string;
+    title: string;
+    divisionName: string;
+    roiMultiplier: string;
+    monthlySavingsUsd: number;
+    confidenceScore: number;
+    recommendedKeep: boolean;
+  }>;
+  tokenTaxSummary: TokenTaxSavedMetrics;
+}
+
+export interface GoLiveReadinessReport {
+  ok: boolean;
+  milestone: 'M5_GO_LIVE_READY';
+  dockerComposeValid: boolean;
+  cpuServicesConfigured: Array<{
+    service: string;
+    port: number;
+    vramMb: 0;
+    memLimit: string;
+    nonRootUser: boolean;
+  }>;
+  caddyHttpsConfigured: boolean;
+  r2B2BackupVerified: boolean;
+  lastBackupReceipt: {
+    snapshotId: string;
+    provider: string;
+    bucket: string;
+    manifestSha256: string;
+    filesCount: number;
+    totalBytes: number;
+    createdAt: string;
+  };
+  verifiedAt: string;
+}
+
+
 

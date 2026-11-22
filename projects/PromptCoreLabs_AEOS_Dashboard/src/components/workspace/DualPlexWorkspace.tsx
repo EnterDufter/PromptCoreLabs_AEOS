@@ -5,9 +5,10 @@ import {
   Share2, Volume2, Square, GitBranch, Globe, X, Plus, ChevronDown,
   BookOpen, Zap, ArrowRight, Presentation, Image as ImageIcon, Video as VideoIcon, Table as TableIcon
 } from 'lucide-react';
-import { Conversation, ChatMessage, Artifact, TargetArtifactFormat } from '../../types';
+import { Conversation, ChatMessage, Artifact, TargetArtifactFormat, GrowthStoreDivisionId } from '../../types';
 import { AgentNarrationPanel } from './AgentNarrationPanel';
 import { CortexCanvas } from './CortexCanvas';
+import { GrowthOsDualPlexPanel } from './GrowthOsDualPlexPanel';
 import { ActionPreviewCard } from './ActionPreviewCard';
 import { renderOfficialLogo } from '../common/AppOfficialLogos';
 import { LiveExecutionStepper } from './LiveExecutionStepper';
@@ -27,6 +28,11 @@ interface DualPlexWorkspaceProps {
   viewMode?: 'chat' | 'canvas' | 'dual';
   onViewModeChange?: (mode: 'chat' | 'canvas' | 'dual') => void;
   onPromptCardClick?: (text: string) => void;
+  activeGrowthDivisionId?: GrowthStoreDivisionId;
+  onSelectGrowthDivision?: (divisionId: GrowthStoreDivisionId) => void;
+  rightSplitTab?: 'cortex-canvas' | 'growthos-store';
+  onRightSplitTabChange?: (tab: 'cortex-canvas' | 'growthos-store') => void;
+  onTrialPillTextChange?: (pillText: string) => void;
 }
 
 export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
@@ -40,7 +46,12 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
   onGenerateArtifactForMessage,
   viewMode: controlledViewMode,
   onViewModeChange,
-  onPromptCardClick
+  onPromptCardClick,
+  activeGrowthDivisionId = 'estudio-midia',
+  onSelectGrowthDivision,
+  rightSplitTab = 'growthos-store',
+  onRightSplitTabChange,
+  onTrialPillTextChange
 }) => {
   const [internalViewMode, setInternalViewMode] = useState<'chat' | 'canvas' | 'dual'>('chat');
   const viewMode = controlledViewMode !== undefined ? controlledViewMode : internalViewMode;
@@ -697,14 +708,58 @@ export const DualPlexWorkspace: React.FC<DualPlexWorkspaceProps> = ({
           </div>
         )}
 
-        {/* Right Side / Canvas Mode */}
+        {/* Right Side / Canvas & GrowthOS Dual-Plex Split Mode */}
         {(viewMode === 'canvas' || viewMode === 'dual') && (
-          <div className="flex-1 h-full">
-            <CortexCanvas
-              activeMessage={activeAgentMessage}
-              isProcessing={isProcessingActive}
-              activeStepIndex={activeAgentMessage?.activeStepIndex ?? (isProcessingActive ? 2 : 5)}
-            />
+          <div className="flex-1 h-full flex flex-col overflow-hidden">
+            {/* Switcher Interno do Painel Direito no Dual-Plex: GrowthOS™ Store (D0-D14 & Micro-ROI) vs. Cortex Canvas */}
+            <div className="h-9 px-3 border-b border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/90 flex items-center justify-between text-[11px] select-none">
+              <div className="flex items-center space-x-1">
+                <button
+                  type="button"
+                  data-testid="split-tab-growthos-store"
+                  onClick={() => onRightSplitTabChange?.('growthos-store')}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition flex items-center space-x-1 ${
+                    rightSplitTab === 'growthos-store'
+                      ? 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 shadow-2xs border border-slate-200/80 dark:border-slate-700'
+                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <Sparkles className="w-3 h-3 text-emerald-500" />
+                  <span>PCL GrowthOS™ Store & ROI (D0–D14)</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="split-tab-cortex-canvas"
+                  onClick={() => onRightSplitTabChange?.('cortex-canvas')}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition flex items-center space-x-1 ${
+                    rightSplitTab === 'cortex-canvas'
+                      ? 'bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 shadow-2xs border border-slate-200/80 dark:border-slate-700'
+                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                >
+                  <Cpu className="w-3 h-3 text-indigo-500" />
+                  <span>Cortex DAG Canvas</span>
+                </button>
+              </div>
+              <span className="text-[9.5px] font-mono text-slate-400">CLS = 0 • Laya™ Inside</span>
+            </div>
+
+            <div className="flex-1 overflow-hidden">
+              {rightSplitTab === 'growthos-store' ? (
+                <GrowthOsDualPlexPanel
+                  activeDivisionId={activeGrowthDivisionId}
+                  onSelectDivision={onSelectGrowthDivision}
+                  onTrialPillTextChange={(pillText) => onTrialPillTextChange?.(pillText)}
+                  onExecuteModulePrompt={(prompt) => onPromptCardClick?.(prompt)}
+                />
+              ) : (
+                <CortexCanvas
+                  activeMessage={activeAgentMessage}
+                  isProcessing={isProcessingActive}
+                  activeStepIndex={activeAgentMessage?.activeStepIndex ?? (isProcessingActive ? 2 : 5)}
+                />
+              )}
+            </div>
           </div>
         )}
       </div>

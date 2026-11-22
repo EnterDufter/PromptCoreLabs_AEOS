@@ -3,9 +3,9 @@ import {
   ChevronLeft, ChevronRight, Plus, Search, Folder, FolderOpen, 
   MessageSquare, Clock, ChevronDown, Database,
   MoreVertical, Pin, Trash2, Edit3, Share2, FolderPlus,
-  Check, X, Video, GitBranch, FileText
+  Check, X, Video, GitBranch, FileText, Sparkles, Cpu
 } from 'lucide-react';
-import { Project, Conversation } from '../../types';
+import { Project, Conversation, GrowthStoreDivisionId } from '../../types';
 import { useI18n } from '../../i18n/I18nContext';
 import { cockpitPersistenceService, StorageQuotaInfo } from '../../services/storage/cockpitPersistenceService';
 import { getConversationDateGroup } from '../../utils/dateGrouping';
@@ -23,6 +23,8 @@ interface LeftSidebarProps {
   onDeleteConversation?: (convId: string) => void;
   onMoveConversation?: (convId: string, targetProjectId: string) => void;
   onCreateProject?: (projectName: string) => void;
+  activeGrowthDivisionId?: GrowthStoreDivisionId;
+  onSelectGrowthDivision?: (divisionId: GrowthStoreDivisionId) => void;
 }
 
 export const LeftSidebar: React.FC<LeftSidebarProps> = ({
@@ -37,7 +39,9 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   onRenameConversation,
   onDeleteConversation,
   onMoveConversation,
-  onCreateProject
+  onCreateProject,
+  activeGrowthDivisionId,
+  onSelectGrowthDivision
 }) => {
   const { t } = useI18n();
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,6 +53,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   // Controle dos Módulos Retráteis (Estado Padrão: FECHADO conforme aprovado)
   const [isMeetingsOpen, setIsMeetingsOpen] = useState(false);
   const [isFlowsOpen, setIsFlowsOpen] = useState(false);
+  const [isGrowthStoreOpen, setIsGrowthStoreOpen] = useState(true);
   const [isProjectsOpen, setIsProjectsOpen] = useState(false);
 
   // Pastas de projetos abertas internamente
@@ -509,6 +514,62 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   <span className="text-[9px] font-mono text-slate-400">{flw.ver}</span>
                 </button>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* PCL GrowthOS™ Store — 4 Divisões Autônomas Supervisionadas (PROAA-18 / BlockSchema CLS=0) */}
+        <div className="rounded-lg overflow-hidden">
+          <button
+            type="button"
+            data-testid="sidebar-growth-store-toggle"
+            onClick={() => setIsGrowthStoreOpen(!isGrowthStoreOpen)}
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition text-slate-700 dark:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-900/50"
+          >
+            <div className="flex items-center space-x-2 truncate">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+              <span className="truncate font-semibold">Growth Store (4 Divisões)</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <span className="text-[9px] font-mono bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 px-1.5 py-0.2 rounded font-bold">
+                Laya™
+              </span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isGrowthStoreOpen ? '' : '-rotate-90'}`} />
+            </div>
+          </button>
+
+          {isGrowthStoreOpen && (
+            <div
+              data-testid="sidebar-growth-divisions-list"
+              className="ml-3 pl-2 border-l border-slate-200 dark:border-slate-800 space-y-0.5 mt-0.5 py-0.5 bg-slate-50/50 dark:bg-slate-950/40 rounded"
+            >
+              {([
+                { id: 'estudio-midia' as GrowthStoreDivisionId, label: '1. Estúdio & Mídia', badge: '96%', color: 'text-emerald-600' },
+                { id: 'atracao-trafego' as GrowthStoreDivisionId, label: '2. Atração & Tráfego', badge: '92%', color: 'text-emerald-600' },
+                { id: 'conversao-receita' as GrowthStoreDivisionId, label: '3. Conversão & Receita', badge: '94%', color: 'text-emerald-600' },
+                { id: 'comando-blindagem' as GrowthStoreDivisionId, label: '4. Comando & Blindagem', badge: '99%', color: 'text-emerald-600' }
+              ]).map((div) => {
+                const isDivActive = activeGrowthDivisionId === div.id;
+                return (
+                  <button
+                    key={div.id}
+                    type="button"
+                    data-testid={`sidebar-growth-div-${div.id}`}
+                    onClick={() => {
+                      if (onSelectView) onSelectView('chat');
+                      if (onSelectGrowthDivision) onSelectGrowthDivision(div.id);
+                    }}
+                    className={`w-full text-left px-2 py-1 rounded text-[11px] transition flex items-center justify-between ${
+                      isDivActive
+                        ? 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-semibold shadow-2xs border border-slate-200/80 dark:border-slate-800'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-white dark:hover:bg-slate-900'
+                    }`}
+                  >
+                    <span className="truncate pr-1.5">{div.label}</span>
+                    <span className={`text-[9px] font-mono font-bold ${div.color}`}>{div.badge}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
