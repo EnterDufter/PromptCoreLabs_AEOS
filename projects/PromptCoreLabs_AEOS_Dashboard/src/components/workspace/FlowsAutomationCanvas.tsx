@@ -616,7 +616,7 @@ export const FlowsAutomationCanvas: React.FC = () => {
     }
   };
 
-  // Execução Sequencial do Grafo DAG
+  // Execução Sequencial do Grafo DAG com Persistência Real e Trilha Merkle SHA-256 (Marco M4)
   const handleRunFlow = () => {
     setIsRunning(true);
     setFlowExecutionCompleted(false);
@@ -626,6 +626,20 @@ export const FlowsAutomationCanvas: React.FC = () => {
       ...n,
       status: i === 0 ? 'running' : 'idle'
     })));
+
+    if (typeof fetch === 'function' && activeFlow) {
+      fetch('/api/aeos/flows/dag/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          flowId: activeFlow.id,
+          flowName: activeFlow.name,
+          version: activeFlow.currentVersion,
+          nodes
+        })
+      }).catch(() => {});
+    }
 
     const interval = setInterval(() => {
       if (currentIndex < nodes.length) {

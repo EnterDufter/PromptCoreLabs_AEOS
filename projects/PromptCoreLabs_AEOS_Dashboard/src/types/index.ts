@@ -383,4 +383,61 @@ export interface SsrfValidationResult {
   reason?: string;
 }
 
+// ============================================================================
+// MARCO M3.2 & MARCO M4 — CONECTORES COMERCIAIS/ENGENHARIA, VOXCANVAS, REUNIÕES & DAG
+// ============================================================================
+
+export type OfficialConnectorIdM32 = 'hubspot' | 'atlassian-jira-confluence' | 'rd-station' | 'linkedin';
+
+export interface OfficialConnectorM32 {
+  id: OfficialConnectorIdM32;
+  name: string;
+  provider: string;
+  wave: 'M3.2';
+  transport: 'streamable-http' | 'rest-official-v2' | 'oidc-rest-official';
+  endpointUrl: string;
+  oauth21PkceSupported: boolean;
+  hitlEnforcedForWrites: boolean;
+  compliancePolicy: string;
+  vaultStatus: 'SEALED_AES256GCM' | 'READY_TO_SEAL';
+  keyFingerprintSha256?: string | null;
+  readOnlyTools: string[];
+  hitlRequiredTools: string[];
+}
+
+export interface VoxCanvasTranscriptionReceipt {
+  ok: boolean;
+  engine: string;
+  text: string;
+  durationSeconds: number;
+  confidence: number;
+  vramUsedMb: 0;
+  sha256Receipt: string;
+  tokenTaxSaved?: TokenTaxSavedMetrics;
+}
+
+export interface DagWorkflowExecutionReceipt {
+  ok: boolean;
+  runId: string;
+  tenantId: string;
+  flowId: string;
+  flowName: string;
+  version: string;
+  status: 'COMPLETED' | 'FAILED';
+  totalNodes: number;
+  totalDurationMs: number;
+  merkleRootSha256: string;
+  executedNodes: Array<{
+    nodeId: string;
+    name: string;
+    appId: string;
+    type: string;
+    status: 'success' | 'failed';
+    durationMs: number;
+    nodeHashSha256: string;
+    outputPayload: Record<string, any>;
+  }>;
+  createdAt: string;
+}
+
 

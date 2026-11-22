@@ -411,6 +411,24 @@ export const MeetingsIntelligenceView: React.FC<MeetingsIntelligenceViewProps> =
       });
     }
 
+    // Marco M4: Despacho real via Gate HITL para Jira / ClickUp / Salesforce com recibo SHA-256 no PostgreSQL
+    if (typeof fetch === 'function') {
+      fetch('/api/aeos/meetings/dispatch-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          meetingId,
+          actionItemId: item.id,
+          targetConnector: target === 'jira' ? 'atlassian-jira-confluence' : target,
+          task: item.task,
+          assignee: item.assignee,
+          deadline: item.deadline,
+          hitlConfirmed: true
+        })
+      }).catch(() => {});
+    }
+
     setDispatchSuccessToast({
       target: target === 'jira' ? 'Jira Enterprise' : 'Salesforce CRM',
       task: item.task,

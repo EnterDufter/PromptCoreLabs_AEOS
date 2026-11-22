@@ -234,6 +234,103 @@ BEGIN
 END
 $$;
 
+-- 9E. Marco M4 — Persistência Real de Agentes & Skills No-Code, Reuniões (WhisperX) e Executor DAG SHA-256
+CREATE TABLE IF NOT EXISTS cockpit.custom_agents (
+    id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    squad_id VARCHAR(100) NOT NULL DEFAULT 'sq-estrategia-gov',
+    name VARCHAR(255) NOT NULL,
+    role TEXT NOT NULL,
+    model VARCHAR(120) NOT NULL DEFAULT 'Ollama qwen2.5-coder:7b-instruct-q4_K_M',
+    status VARCHAR(30) NOT NULL DEFAULT 'active',
+    autonomy_level VARCHAR(60) NOT NULL DEFAULT 'Assistido (TLC v3)',
+    is_local_sovereign BOOLEAN NOT NULL DEFAULT TRUE,
+    system_prompt TEXT,
+    assigned_skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    monthly_budget_cap_usd NUMERIC(12, 4) NOT NULL DEFAULT 0.0000,
+    sha256_attestation VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cockpit.custom_skills (
+    id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    skill_key VARCHAR(120) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    domain VARCHAR(100) NOT NULL DEFAULT 'Arquitetura & Engenharia',
+    description TEXT NOT NULL,
+    source_path TEXT,
+    execution_provider VARCHAR(60) NOT NULL DEFAULT 'CPU INT8',
+    trigger_command VARCHAR(100) NOT NULL,
+    input_schema_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+    output_schema_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+    markdown_content TEXT NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    sha256_attestation VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cockpit.meetings_intelligence (
+    id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    folder VARCHAR(60) NOT NULL DEFAULT 'C-Level',
+    title VARCHAR(300) NOT NULL,
+    platform VARCHAR(100) NOT NULL DEFAULT 'PCL VoxCanvas Enclave',
+    meet_code VARCHAR(100) NOT NULL,
+    duration_seconds INT NOT NULL DEFAULT 600,
+    author VARCHAR(200) NOT NULL DEFAULT 'Eduardo Machado',
+    summary TEXT NOT NULL,
+    decisions JSONB NOT NULL DEFAULT '[]'::jsonb,
+    action_items JSONB NOT NULL DEFAULT '[]'::jsonb,
+    segments JSONB NOT NULL DEFAULT '[]'::jsonb,
+    audio_sha256 VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cockpit.dag_workflow_runs (
+    run_id VARCHAR(100) PRIMARY KEY,
+    tenant_id VARCHAR(100) NOT NULL DEFAULT 'tnt_promptcore_default' REFERENCES cockpit.tenants(id) ON DELETE CASCADE,
+    flow_id VARCHAR(100) NOT NULL,
+    flow_name VARCHAR(255) NOT NULL,
+    version VARCHAR(50) NOT NULL DEFAULT 'v1.0 PROD',
+    status VARCHAR(30) NOT NULL DEFAULT 'COMPLETED',
+    total_nodes INT NOT NULL DEFAULT 0,
+    executed_nodes JSONB NOT NULL DEFAULT '[]'::jsonb,
+    total_duration_ms INT NOT NULL DEFAULT 0,
+    merkle_root_sha256 VARCHAR(64) NOT NULL,
+    audit_event_id VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE cockpit.custom_agents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.custom_skills ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.meetings_intelligence ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.dag_workflow_runs ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'custom_agents' AND policyname = 'rls_tenant_isolation_custom_agents') THEN
+        CREATE POLICY rls_tenant_isolation_custom_agents ON cockpit.custom_agents
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'custom_skills' AND policyname = 'rls_tenant_isolation_custom_skills') THEN
+        CREATE POLICY rls_tenant_isolation_custom_skills ON cockpit.custom_skills
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'meetings_intelligence' AND policyname = 'rls_tenant_isolation_meetings') THEN
+        CREATE POLICY rls_tenant_isolation_meetings ON cockpit.meetings_intelligence
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'dag_workflow_runs' AND policyname = 'rls_tenant_isolation_dag_runs') THEN
+        CREATE POLICY rls_tenant_isolation_dag_runs ON cockpit.dag_workflow_runs
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+END
+$$;
+
 -- 10. Seed Inicial Idempotente (Tenant Soberano, Operador, Entitlements GrowthOS e Bloco Gênesis)
 INSERT INTO cockpit.tenants (id, slug, name, plan_tier, status, isol_namespace)
 VALUES ('tnt_promptcore_default', 'promptcore-labs', 'PromptCore Labs Holding & AEOS', 'sovereign_core', 'ACTIVE', 'promptcore_sovereign')

@@ -290,6 +290,20 @@ export const squadService = {
 
     squads[squadIndex].agents.push(createdAgent);
     this.saveSquads(squads);
+
+    // Marco M4: Persistência real no PostgreSQL 17 (cockpit.custom_agents) + Vault em disco
+    if (typeof fetch === 'function') {
+      fetch('/api/aeos/agents/custom', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          squadId,
+          ...createdAgent
+        })
+      }).catch(() => {});
+    }
+
     return createdAgent;
   },
 

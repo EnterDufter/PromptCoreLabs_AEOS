@@ -29,18 +29,42 @@ export const ActionPreviewCard: React.FC<ActionPreviewCardProps> = ({
   const handleConfirm = () => {
     setConfirmed(true);
     if (typeof fetch === 'function') {
-      fetch('/api/aeos/audit/chain', {
+      const appLower = action.app.toLowerCase();
+      const connectorId = appLower.includes('hubspot')
+        ? 'hubspot'
+        : appLower.includes('jira') || appLower.includes('confluence')
+        ? 'atlassian-jira-confluence'
+        : appLower.includes('clickup')
+        ? 'clickup'
+        : appLower.includes('rd')
+        ? 'rd-station'
+        : appLower.includes('linkedin')
+        ? 'linkedin'
+        : appLower.includes('microsoft') || appLower.includes('teams') || appLower.includes('outlook')
+        ? 'microsoft-365'
+        : appLower.includes('github')
+        ? 'github'
+        : 'google-workspace';
+
+      const toolName = action.type === 'meeting'
+        ? 'create_calendar_event'
+        : action.type === 'task'
+        ? (connectorId === 'atlassian-jira-confluence' ? 'create_jira_issue' : 'create_clickup_task')
+        : 'send_email';
+
+      fetch('/api/aeos/mcp/streamable/call', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
         body: JSON.stringify({
-          eventType: 'MCP_M31_HITL_USER_CONFIRMED',
-          resourceTarget: `hitl.${action.app.toLowerCase()}.${action.type}`,
-          payloadJson: {
-            app: action.app,
-            type: action.type,
+          connectorId,
+          toolName,
+          hitlConfirmed: true,
+          arguments: {
+            to: action.recipientEmail || action.recipient,
             recipient: action.recipient,
-            subject
+            subject,
+            body
           }
         })
       }).catch(() => {});

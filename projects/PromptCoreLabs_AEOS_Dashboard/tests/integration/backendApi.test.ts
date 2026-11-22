@@ -656,4 +656,142 @@ describe('Backend Middleware Integration & Anti-Mock Verification', () => {
     expect(safeScrape.statusCode).toBe(200);
     expect(safeScrape.json().allowed).toBe(true);
   });
+
+  it('Marco M3.2: Conectores Comerciais/Engenharia (HubSpot, Jira/Confluence, RD Station v2 e LinkedIn OIDC) com Bloqueio Zero Cookie Scraping (403) e Gate HITL', async () => {
+    const cryptoMod = await import('node:crypto');
+    const codeVerifier = 'pcl_m32_oauth21_pkce_code_verifier_hubspot_linkedin_2026';
+    const codeChallenge = cryptoMod.createHash('sha256').update(codeVerifier, 'utf8').digest('base64url');
+
+    // 1. Catálogo da Onda M3.2 retorna os 4 conectores oficiais
+    const listM32 = await invokeMiddleware(server.middlewares, 'GET', '/api/aeos/mcp/connectors/m32');
+    expect(listM32.statusCode).toBe(200);
+    const m32Data = listM32.json();
+    expect(m32Data.ok).toBe(true);
+    expect(m32Data.wave).toBe('M3.2');
+    expect(m32Data.totalConnectors).toBe(4);
+
+    // 2. Tentativa de autenticar LinkedIn via cookie de sessão (li_at) ou scraping é bloqueada com HTTP 403
+    const cookieAttempt = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/connectors/m32/oauth-seal', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'linkedin',
+      authType: 'cookie_scraping',
+      codeVerifier,
+      codeChallenge,
+      accessTokenOrSecret: 'li_at=AQEDAR_fake_session_cookie_scraping_attempt'
+    });
+    expect(cookieAttempt.statusCode).toBe(403);
+    expect(cookieAttempt.json().errorCode).toBe('LINKEDIN_COOKIE_SCRAPING_FORBIDDEN');
+
+    // 3. Selagem oficial OAuth 2.1 PKCE + AES-256-GCM para HubSpot e LinkedIn OIDC acopla ao plugin.manifest.json
+    const hubSeal = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/connectors/m32/oauth-seal', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'hubspot',
+      authType: 'oauth2_pkce',
+      codeVerifier,
+      codeChallenge,
+      accessTokenOrSecret: 'pat-na1-hubspot-official-pkce-token-2026'
+    });
+    expect(hubSeal.statusCode).toBe(200);
+    expect(hubSeal.json().vaultStatus).toBe('SEALED_AES256GCM');
+    expect(Array.isArray(hubSeal.json().coupledManifests)).toBe(true);
+
+    // 4. Mutação externa no HubSpot (create_hubspot_deal) exige Gate HITL (HTTP 202 -> confirmação -> HTTP 200)
+    const dealCall = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/streamable/call', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'hubspot',
+      toolName: 'create_hubspot_deal',
+      arguments: { dealName: 'Contrato Enterprise PCL GrowthOS', amount: 120000 }
+    });
+    expect(dealCall.statusCode).toBe(202);
+    expect(dealCall.json().requiresHitlApproval).toBe(true);
+
+    const confirmDeal = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/hitl/confirm', {
+      hitlProposalId: dealCall.json().hitlProposalId,
+      decision: 'APPROVE'
+    });
+    expect(confirmDeal.statusCode).toBe(200);
+    expect(confirmDeal.json().executed).toBe(true);
+  });
+
+  it('Marco M4: Voz Real (PCL VoxCanvas), Persistência No-Code (Agentes & Skills), Reuniões -> ClickUp/Jira via HITL e Executor DAG SHA-256', async () => {
+    // 1. Transcrição Neural Backend (PCL VoxCanvas™) com sanitização PII e recibo SHA-256
+    const voxRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/audio/transcribe', {
+      promptHint: 'Agendar revisão de arquitetura com o Squad RevOps no @HubSpot e abrir épico no @Jira.',
+      durationSeconds: 4.1
+    });
+    expect(voxRes.statusCode).toBe(200);
+    const voxData = voxRes.json();
+    expect(voxData.ok).toBe(true);
+    expect(voxData.vramUsedMb).toBe(0);
+    expect(voxData.text).toContain('Squad RevOps');
+    expect(voxData.sha256Receipt).toMatch(/^[a-f0-9]{64}$/);
+
+    // 2. Persistência real no banco/vault de Agente e Skill criados no Criador No-Code
+    const agentCreate = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/agents/custom', {
+      squadId: 'sq-revops-growth',
+      name: 'Auditor Bowtie RevOps',
+      role: 'Auditoria de conversão e funil Bowtie no HubSpot e RD Station',
+      model: 'Ollama qwen2.5-coder:7b-instruct-q4_K_M',
+      isLocalSovereign: true,
+      assignedSkills: ['cortex', 'ai-pricing']
+    });
+    expect(agentCreate.statusCode).toBe(200);
+    expect(agentCreate.json().ok).toBe(true);
+
+    const agentList = await invokeMiddleware(server.middlewares, 'GET', '/api/aeos/agents/custom');
+    expect(agentList.statusCode).toBe(200);
+    expect(agentList.json().totalAgents).toBeGreaterThanOrEqual(1);
+
+    const skillCreate = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/skills/custom', {
+      name: 'Bowtie Funnel Validator',
+      domain: 'Marketing & GTM',
+      description: 'Valida métricas de conversão entre estágios do funil Bowtie.',
+      executionProvider: 'CPU INT8'
+    });
+    expect(skillCreate.statusCode).toBe(200);
+    expect(skillCreate.json().ok).toBe(true);
+
+    // 3. Reunião Real: Ingestão -> Plano de Ação -> Despacho ClickUp/Jira via HITL
+    const meetIngest = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/meetings/ingest', {
+      title: 'Alinhamento Semanal GrowthOS & Sprint Engenharia',
+      folder: 'Roadmap',
+      author: 'Eduardo Machado',
+      rawTranscript: 'Decidimos priorizar o conector HubSpot M3.2 e criar as tarefas da sprint no ClickUp e Jira.'
+    });
+    expect(meetIngest.statusCode).toBe(200);
+    const meetData = meetIngest.json();
+    expect(meetData.ok).toBe(true);
+    expect(meetData.meeting.actionItems.length).toBeGreaterThanOrEqual(2);
+
+    const firstAction = meetData.meeting.actionItems[0];
+    const meetDispatch = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/meetings/dispatch-action', {
+      meetingId: meetData.meeting.id,
+      actionItemId: firstAction.id,
+      targetConnector: 'clickup',
+      task: firstAction.task,
+      assignee: firstAction.assignee,
+      hitlConfirmed: true
+    });
+    expect(meetDispatch.statusCode).toBe(200);
+    expect(meetDispatch.json().executed).toBe(true);
+    expect(meetDispatch.json().sha256Receipt).toMatch(/^[a-f0-9]{64}$/);
+
+    // 4. Executor de Fluxos DAG com Trilha Auditável Merkle/SHA-256
+    const dagExec = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/flows/dag/execute', {
+      flowId: 'flow-m4-revops-dag',
+      flowName: 'Pipeline RevOps RD Station -> Laya Gate -> HubSpot -> Jira',
+      version: 'v2.0 PROD',
+      nodes: [
+        { id: 'n1', name: 'Webhook RD Station v2', appId: 'rd-station', type: 'trigger', executionTimeMs: 25, outputPayload: { leadScore: 95 } },
+        { id: 'n2', name: 'Laya Intention Gate', appId: 'laya', type: 'ai_decision', executionTimeMs: 18, outputPayload: { route: 'VIP_FASTPATH' } },
+        { id: 'n3', name: 'Criar Deal HubSpot & Card Jira', appId: 'hubspot', type: 'action', executionTimeMs: 42, outputPayload: { dealCreated: true } }
+      ]
+    });
+    expect(dagExec.statusCode).toBe(200);
+    const dagData = dagExec.json();
+    expect(dagData.ok).toBe(true);
+    expect(dagData.status).toBe('COMPLETED');
+    expect(dagData.totalNodes).toBe(3);
+    expect(dagData.merkleRootSha256).toMatch(/^[a-f0-9]{64}$/);
+  });
 });

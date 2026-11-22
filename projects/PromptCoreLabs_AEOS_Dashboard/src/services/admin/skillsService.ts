@@ -385,6 +385,17 @@ export const skillsService = {
     };
     skills.push(created);
     this.saveSkills(skills);
+
+    // Marco M4: Persistência real no PostgreSQL 17 (cockpit.custom_skills) + Vault em disco
+    if (typeof fetch === 'function') {
+      fetch('/api/aeos/skills/custom', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(created)
+      }).catch(() => {});
+    }
+
     return created;
   },
 

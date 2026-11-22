@@ -335,12 +335,24 @@ const CORPORATE_CONNECTORS: CorporateConnector[] = [
   {
     id: 'conn-rdstation',
     appId: 'rdstation',
-    name: 'RD Station Marketing',
+    name: 'RD Station Marketing Official Adapter (API v2 — M3.2)',
     category: 'Marketing & Vendas',
-    description: 'Webhook de conversão de leads inbound e qualificação automática de leads para agentes de vendas.',
-    protocol: 'RD Station API v2',
+    description: 'Adaptador REST oficial API v2 com OAuth 2.0/2.1, webhook de conversão de leads inbound e qualificação com Gate HITL.',
+    protocol: 'RD Station REST API v2 Oficial',
     requiredFields: [
-      { key: 'apiToken', label: 'Token de Autenticação RD', placeholder: 'rd_token_...', isSecret: true }
+      { key: 'apiToken', label: 'Token OAuth 2.0 RD Station v2', placeholder: 'rd_oauth2_token_...', isSecret: true }
+    ]
+  },
+  {
+    id: 'conn-linkedin-m32',
+    appId: 'linkedin',
+    name: 'LinkedIn Official B2B Connector (OpenID Connect + REST v2 — M3.2)',
+    category: 'Marketing & Vendas',
+    description: 'Integração estritamente via OpenID Connect + API REST v2 oficial com aprovação HITL e política Zero Cookie Scraping.',
+    protocol: 'LinkedIn OpenID Connect + REST v2 Oficial',
+    requiredFields: [
+      { key: 'organizationUrn', label: 'LinkedIn Organization URN', placeholder: 'urn:li:organization:9876543' },
+      { key: 'oidcAccessToken', label: 'OAuth 2.1 / OIDC Official Access Token', placeholder: 'AQV8...', isSecret: true }
     ]
   }
 ];
@@ -743,7 +755,11 @@ export const IntegrationsLibrary: React.FC = () => {
         'conn-gmail': 'google-workspace',
         'conn-m365': 'microsoft-365',
         'conn-clickup': 'clickup',
-        'conn-github-m31': 'github'
+        'conn-github-m31': 'github',
+        'conn-hubspot': 'hubspot',
+        'conn-jira': 'atlassian-jira-confluence',
+        'conn-rdstation': 'rd-station',
+        'conn-linkedin-m32': 'linkedin'
       };
       const connectorKey = m31KeyMap[activeConfigConnector.id] || activeConfigConnector.id;
       fetch('/api/aeos/vault/seal', {
