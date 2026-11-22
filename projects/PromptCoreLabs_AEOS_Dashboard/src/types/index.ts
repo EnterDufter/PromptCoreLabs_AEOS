@@ -295,4 +295,92 @@ export interface VectorDocumentChunkRecord {
   similarityScore?: number;
 }
 
+// ============================================================================
+// MARCO M3.1 & PCL GROWTHOS™ (PROAA-20 & PROAA-21) — CONECTORES MCP & HARDENING SAAS
+// ============================================================================
+
+export type OfficialMcpConnectorIdM31 = 'google-workspace' | 'microsoft-365' | 'clickup' | 'github';
+
+export interface OfficialMcpConnectorM31 {
+  id: OfficialMcpConnectorIdM31;
+  name: string;
+  provider: string;
+  wave: 'M3.1';
+  transport: 'streamable-http';
+  endpointUrl: string;
+  oauth21PkceSupported: boolean;
+  hitlEnforcedForWrites: boolean;
+  vaultStatus: 'SEALED_AES256GCM' | 'READY_TO_SEAL';
+  keyFingerprintSha256?: string | null;
+  readOnlyTools: string[];
+  hitlRequiredTools: string[];
+}
+
+export interface HitlActionProposal {
+  proposalId: string;
+  tenantId: string;
+  connectorId: OfficialMcpConnectorIdM31;
+  toolName: string;
+  arguments: Record<string, any>;
+  status: 'PENDING_HITL' | 'APPROVED_EXECUTED' | 'REJECTED';
+  createdAt: string;
+  executedAt?: string;
+  sha256Receipt?: string;
+}
+
+export interface GrowthOsPluginManifest {
+  id: string;
+  version: string;
+  vendor: string;
+  tier: PlanTier;
+  tenantId: string;
+  unifiedTenantGraph: {
+    tenantId: string;
+    isolNamespace: string;
+    memorySchema: 'memory';
+    cockpitSchema: 'cockpit';
+    pgvectorDimensions: 384;
+  };
+  requiredConnectors: string[];
+  layaSystemOnePrimitives: string[];
+  omnirouteGateway: {
+    endpoint: string;
+    fallbackLocalOllama: string;
+    vramCpuInvariantMb: 0;
+  };
+  quotaPolicy: {
+    trialDays: number;
+    trialLimitUnits: number;
+    exhaustionBehavior: 'DEGRADE_TO_LOCAL_LAYA_CPU';
+  };
+  capabilities: string[];
+  manifest_sha256: string;
+}
+
+export interface TenantQuotaPreFlightResult {
+  ok: boolean;
+  tenantId: string;
+  moduleKey: string;
+  allowed: boolean;
+  accessState: EntitlementAccessState;
+  quotaLimitUnits: number;
+  quotaUsedUnits: number;
+  quotaRemainingUnits: number;
+  quotaPercentUsed: number;
+  degradedToLocalLayaCpu: boolean;
+  executionEngine: 'omniroute-cloud-hybrid' | 'pcl-laya-cpu-int8';
+  vramAllocatedMb: 0;
+  marginalCostUsd: number;
+  upsellCta?: string;
+}
+
+export interface SsrfValidationResult {
+  ok: boolean;
+  allowed: boolean;
+  targetUrl: string;
+  hostname?: string;
+  errorCode?: string;
+  reason?: string;
+}
+
 

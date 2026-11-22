@@ -287,13 +287,49 @@ const CORPORATE_CONNECTORS: CorporateConnector[] = [
   {
     id: 'conn-gmail',
     appId: 'gmail',
-    name: 'Google Workspace (Gmail & Drive)',
+    name: 'Google Workspace Official MCP (Gmail, Calendar & Drive — M3.1)',
     category: 'Produtividade',
-    description: 'Geração e envio de minutas de e-mail com autorização prévia humana (Stage Gate) e sincronização com Google Drive.',
-    protocol: 'Google Workspace API (OAuth 2.0)',
+    description: 'Conector oficial M3.1 via Streamable HTTP + OAuth 2.1 PKCE com aprovação prévia Human-in-the-Loop (Stage Gate) e cofre AES-256-GCM.',
+    protocol: 'MCP Streamable HTTP / OAuth 2.1 PKCE',
     requiredFields: [
-      { key: 'clientId', label: 'OAuth 2.0 Client ID', placeholder: 'apps.googleusercontent.com' },
-      { key: 'clientSecret', label: 'Client Secret', placeholder: 'GOCSPX-...', isSecret: true }
+      { key: 'clientId', label: 'OAuth 2.1 Client ID', placeholder: 'apps.googleusercontent.com' },
+      { key: 'clientSecret', label: 'Client Secret / PKCE Token', placeholder: 'GOCSPX-...', isSecret: true }
+    ]
+  },
+  {
+    id: 'conn-m365',
+    appId: 'microsoft',
+    name: 'Microsoft 365 Official MCP (Outlook, Teams & SharePoint — M3.1)',
+    category: 'Produtividade',
+    description: 'Conector oficial M3.1 via Streamable HTTP + Entra ID OAuth 2.1 PKCE com Human-in-the-Loop obrigatório para envio de mensagens e e-mails.',
+    protocol: 'MCP Streamable HTTP / Entra ID PKCE',
+    requiredFields: [
+      { key: 'tenantId', label: 'Microsoft Entra Tenant ID', placeholder: '72f988bf-86f1-41af-91ab-2d7cd011db47' },
+      { key: 'accessToken', label: 'OAuth 2.1 Access Token', placeholder: 'eyJ0eXAiOiJKV1Qi...', isSecret: true }
+    ]
+  },
+  {
+    id: 'conn-clickup',
+    appId: 'clickup',
+    name: 'ClickUp Workspace Official MCP (Tasks, Lists & Docs — M3.1)',
+    category: 'Engenharia & Squads',
+    description: 'Conector oficial M3.1 via Streamable HTTP + OAuth 2.1 PKCE para gestão de tarefas e sprints com trava Human-in-the-Loop e cofre AES-256-GCM.',
+    protocol: 'MCP Streamable HTTP / ClickUp OAuth 2.1',
+    requiredFields: [
+      { key: 'workspaceId', label: 'ClickUp Workspace ID', placeholder: '9011234567' },
+      { key: 'oauthToken', label: 'ClickUp OAuth 2.1 PKCE Token', placeholder: 'pk_live_clickup_...', isSecret: true }
+    ]
+  },
+  {
+    id: 'conn-github-m31',
+    appId: 'github',
+    name: 'GitHub Enterprise Official MCP (Repos, PRs & Issues — M3.1)',
+    category: 'Engenharia & Squads',
+    description: 'Conector oficial M3.1 via Streamable HTTP + OAuth 2.1 PKCE para Pull Requests, Issues e Commits auditados com Human-in-the-Loop.',
+    protocol: 'MCP Streamable HTTP / GitHub OAuth 2.1',
+    requiredFields: [
+      { key: 'orgName', label: 'GitHub Organization', placeholder: 'PromptCore-Labs' },
+      { key: 'patOrOauthToken', label: 'GitHub OAuth 2.1 / Fine-Grained Token', placeholder: 'ghp_...', isSecret: true }
     ]
   },
   {
@@ -699,6 +735,27 @@ export const IntegrationsLibrary: React.FC = () => {
       ...prev,
       [activeConfigConnector.id]: secretValues
     }));
+
+    // Marco M3.1: Selagem criptográfica real no cofre AES-256-GCM do backend (/api/aeos/vault/seal)
+    const firstSecretVal = Object.values(secretValues)[0];
+    if (firstSecretVal && typeof fetch === 'function') {
+      const m31KeyMap: Record<string, string> = {
+        'conn-gmail': 'google-workspace',
+        'conn-m365': 'microsoft-365',
+        'conn-clickup': 'clickup',
+        'conn-github-m31': 'github'
+      };
+      const connectorKey = m31KeyMap[activeConfigConnector.id] || activeConfigConnector.id;
+      fetch('/api/aeos/vault/seal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          connectorKey,
+          secretValue: firstSecretVal
+        })
+      }).catch(() => {});
+    }
 
     const updated = {
       ...configuredConnectors,

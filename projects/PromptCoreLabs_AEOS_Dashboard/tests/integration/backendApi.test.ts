@@ -528,4 +528,132 @@ describe('Backend Middleware Integration & Anti-Mock Verification', () => {
       hardLockEnabled: true
     });
   });
+
+  it('Marco M3.1: Conectores MCP Oficiais (Google, M365, ClickUp, GitHub) com Cofre AES-256-GCM + OAuth 2.1 PKCE + Streamable HTTP & HITL Obrigatório', async () => {
+    const cryptoMod = await import('node:crypto');
+    const codeVerifier = 'pcl_m31_oauth21_pkce_code_verifier_clickup_official_2026';
+    const codeChallenge = cryptoMod.createHash('sha256').update(codeVerifier, 'utf8').digest('base64url');
+
+    // 1. Catálogo oficial da onda M3.1 lista os 4 conectores via streamable-http
+    const listRes = await invokeMiddleware(server.middlewares, 'GET', '/api/aeos/mcp/connectors/m31');
+    expect(listRes.statusCode).toBe(200);
+    const listData = listRes.json();
+    expect(listData.ok).toBe(true);
+    expect(listData.wave).toBe('M3.1');
+    expect(listData.totalConnectors).toBe(4);
+
+    // 2. Sela credencial OAuth 2.1 PKCE no cofre AES-256-GCM para ClickUp
+    const sealRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/connectors/m31/oauth-seal', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'clickup',
+      codeVerifier,
+      codeChallenge,
+      accessTokenOrSecret: 'pk_live_clickup_oauth21_secret_token_2026'
+    });
+    expect(sealRes.statusCode).toBe(200);
+    expect(sealRes.json().vaultStatus).toBe('SEALED_AES256GCM');
+    expect(sealRes.json().pkceVerified).toBe(true);
+
+    // 3. Ferramenta de leitura (list_tasks) executa diretamente via Streamable HTTP (HTTP 200)
+    const readCall = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/streamable/call', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'clickup',
+      toolName: 'list_tasks',
+      arguments: { spaceId: 'spc_revops' }
+    });
+    expect(readCall.statusCode).toBe(200);
+    expect(readCall.json().executed).toBe(true);
+    expect(readCall.json().vaultAes256GcmAuthenticated).toBe(true);
+
+    // 4. Ferramenta externa de escrita (create_clickup_task) sem aprovação humana é retida pelo Gate HITL (HTTP 202)
+    const writeCall = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/streamable/call', {
+      tenantId: 'tnt_promptcore_default',
+      connectorId: 'clickup',
+      toolName: 'create_clickup_task',
+      arguments: { title: 'Follow-up Lead High-Ticket', assignee: 'Scout Hunter' }
+    });
+    expect(writeCall.statusCode).toBe(202);
+    const writeData = writeCall.json();
+    expect(writeData.requiresHitlApproval).toBe(true);
+    expect(writeData.hitlProposalId).toMatch(/^hitl_m31_/);
+
+    // 5. Confirmação humana explícita no HITL despacha a ação e gera recibo SHA-256 (HTTP 200)
+    const confirmRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/mcp/hitl/confirm', {
+      hitlProposalId: writeData.hitlProposalId,
+      decision: 'APPROVE'
+    });
+    expect(confirmRes.statusCode).toBe(200);
+    expect(confirmRes.json().executed).toBe(true);
+    expect(confirmRes.json().status).toBe('APPROVED_EXECUTED');
+    expect(confirmRes.json().sha256Receipt).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('PROAA-20 & PROAA-21: Registro plugin.manifest.json no Grafo Unificado, RLS Cross-Tenant (403), Cota Pre-Flight 100% Trial -> Laya CPU (0 MB VRAM) e Bloqueio Anti-SSRF', async () => {
+    // 1. PROAA-20: Registra manifesto de módulo GrowthOS conectado ao grafo unificado do tenant_id
+    const regRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/manifests/register', {
+      tenantId: 'tnt_promptcore_default',
+      id: 'pcl-bowtie-revops',
+      version: '1.1.0',
+      vendor: 'PromptCore Labs',
+      tier: 'growth_os_pro',
+      requiredConnectors: ['google-workspace', 'microsoft-365', 'clickup', 'github'],
+      layaSystemOnePrimitives: ['laya_match_intent', 'laya_deduplicate_memory', 'laya_verify_policy', 'laya_lightning_council'],
+      capabilities: ['bowtie_funnel_sync', 'lead_scoring_laya']
+    });
+    expect(regRes.statusCode).toBe(200);
+    const regData = regRes.json();
+    expect(regData.ok).toBe(true);
+    expect(regData.unifiedTenantGraphLinked).toBe(true);
+    expect(regData.manifest.unifiedTenantGraph.tenantId).toBe('tnt_promptcore_default');
+    expect(regData.manifest.omnirouteGateway.vramCpuInvariantMb).toBe(0);
+
+    // 2. PROAA-21: Isolamento RLS bloqueia tentativa de acesso cruzado entre tenants distintos (HTTP 403)
+    const rlsViolation = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/rls/verify', {
+      sessionTenantId: 'tnt_tenant_alpha',
+      targetTenantId: 'tnt_tenant_beta'
+    });
+    expect(rlsViolation.statusCode).toBe(403);
+    expect(rlsViolation.json().errorCode).toBe('CROSS_TENANT_RLS_VIOLATION');
+
+    // 3. PROAA-21: Cota atômica pre-flight ao atingir 100% no trial_14d degrada graciosamente para Laya CPU local ($0.00 / 0 MB VRAM)
+    const quota100 = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/quota/consume', {
+      tenantId: 'tnt_promptcore_default',
+      moduleKey: 'pcl-growth-os',
+      setQuotaUsedUnits: 500
+    });
+    expect(quota100.statusCode).toBe(200);
+    const qData = quota100.json();
+    expect(qData.quotaPercentUsed).toBe(100);
+    expect(qData.degradedToLocalLayaCpu).toBe(true);
+    expect(qData.executionEngine).toBe('pcl-laya-cpu-int8');
+    expect(qData.vramAllocatedMb).toBe(0);
+    expect(qData.marginalCostUsd).toBe(0);
+
+    // Restaura cota do trial para 12 unidades após o teste
+    await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/quota/consume', {
+      tenantId: 'tnt_promptcore_default',
+      moduleKey: 'pcl-growth-os',
+      setQuotaUsedUnits: 12
+    });
+
+    // 4. PROAA-21: Bloqueio Anti-SSRF para ferramentas de Scrape URL (HTTP 403 para IPs internos/metadata e 200 para HTTPS público)
+    for (const maliciousUrl of [
+      'http://169.254.169.254/latest/meta-data/iam/security-credentials/',
+      'http://127.0.0.1:20140/health',
+      'http://192.168.1.15/admin',
+      'file:///etc/passwd'
+    ]) {
+      const ssrfRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/scrape-url/validate', {
+        url: maliciousUrl
+      });
+      expect(ssrfRes.statusCode).toBe(403);
+      expect(ssrfRes.json().errorCode).toBe('SSRF_TARGET_BLOCKED');
+    }
+
+    const safeScrape = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/growthos/scrape-url/validate', {
+      url: 'https://promptcorelabs.com/growth-os'
+    });
+    expect(safeScrape.statusCode).toBe(200);
+    expect(safeScrape.json().allowed).toBe(true);
+  });
 });

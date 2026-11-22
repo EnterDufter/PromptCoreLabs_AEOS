@@ -187,6 +187,53 @@ CREATE TABLE IF NOT EXISTS cockpit.finops_token_tax_ledger (
     CONSTRAINT uq_cockpit_token_tax_tenant UNIQUE (tenant_id)
 );
 
+-- 9D. PROAA-21 — Hardening SaaS Multi-Tenant (Row-Level Security RLS por tenant_id)
+ALTER TABLE cockpit.entitlements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.finops_budgets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.audit_chain_sha256 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.connector_vault_aes256 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.document_vectors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cockpit.finops_token_tax_ledger ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'entitlements' AND policyname = 'rls_tenant_isolation_entitlements') THEN
+        CREATE POLICY rls_tenant_isolation_entitlements ON cockpit.entitlements
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'users' AND policyname = 'rls_tenant_isolation_users') THEN
+        CREATE POLICY rls_tenant_isolation_users ON cockpit.users
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'sessions' AND policyname = 'rls_tenant_isolation_sessions') THEN
+        CREATE POLICY rls_tenant_isolation_sessions ON cockpit.sessions
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'finops_budgets' AND policyname = 'rls_tenant_isolation_finops_budgets') THEN
+        CREATE POLICY rls_tenant_isolation_finops_budgets ON cockpit.finops_budgets
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'audit_chain_sha256' AND policyname = 'rls_tenant_isolation_audit_chain') THEN
+        CREATE POLICY rls_tenant_isolation_audit_chain ON cockpit.audit_chain_sha256
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'connector_vault_aes256' AND policyname = 'rls_tenant_isolation_connector_vault') THEN
+        CREATE POLICY rls_tenant_isolation_connector_vault ON cockpit.connector_vault_aes256
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'document_vectors' AND policyname = 'rls_tenant_isolation_document_vectors') THEN
+        CREATE POLICY rls_tenant_isolation_document_vectors ON cockpit.document_vectors
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'cockpit' AND tablename = 'finops_token_tax_ledger' AND policyname = 'rls_tenant_isolation_token_tax') THEN
+        CREATE POLICY rls_tenant_isolation_token_tax ON cockpit.finops_token_tax_ledger
+            USING (tenant_id = COALESCE(NULLIF(current_setting('app.current_tenant_id', true), ''), 'tnt_promptcore_default'));
+    END IF;
+END
+$$;
+
 -- 10. Seed Inicial Idempotente (Tenant Soberano, Operador, Entitlements GrowthOS e Bloco Gênesis)
 INSERT INTO cockpit.tenants (id, slug, name, plan_tier, status, isol_namespace)
 VALUES ('tnt_promptcore_default', 'promptcore-labs', 'PromptCore Labs Holding & AEOS', 'sovereign_core', 'ACTIVE', 'promptcore_sovereign')

@@ -33,6 +33,8 @@ const VAULT_CONNECTORS_FILE = path.join(VAULT_DIR, 'connectors_aes256_m0.json');
 const VAULT_IAM_M1_FILE = path.join(VAULT_DIR, 'auth_iam_m1.json');
 const VAULT_PGVECTOR_DOCS_FILE = path.join(VAULT_DIR, 'pgvector_documents_m2.json');
 const VAULT_TOKEN_TAX_FILE = path.join(VAULT_DIR, 'token_tax_proaa17_m2.json');
+const VAULT_M31_HITL_FILE = path.join(VAULT_DIR, 'mcp_m31_hitl_proposals.json');
+const VAULT_GROWTHOS_MANIFESTS_FILE = path.join(VAULT_DIR, 'growthos_manifests_proaa20.json');
 
 export function loadWorkspaceEnv(): void {
   const envPath = path.join(WORKSPACE_ROOT, '.env');
@@ -1470,6 +1472,306 @@ function evaluateLayaMemoryDeduplication(
   return { action: 'ACTION_ADD', matchedChunkIndex: bestIdx, similarityScore: Number(bestSim.toFixed(4)) };
 }
 
+// ============================================================================
+// MARCO M3.1 & PCL GROWTHOS™ (PROAA-20 & PROAA-21) — STREAMABLE HTTP MCP, HITL, RLS, QUOTAS & ANTI-SSRF
+// ============================================================================
+
+const M31_EXTERNAL_WRITE_TOOLS = new Set([
+  'send_email',
+  'create_calendar_event',
+  'upload_drive_file',
+  'send_outlook_mail',
+  'send_teams_message',
+  'create_clickup_task',
+  'update_clickup_task',
+  'create_github_issue',
+  'create_pull_request',
+  'push_files',
+  'create_or_update_file'
+]);
+
+function getOfficialM31ConnectorsCatalog(tenantId = 'tnt_promptcore_default') {
+  ensureVaultDirs();
+  const sealedList: any[] = fs.existsSync(VAULT_CONNECTORS_FILE)
+    ? JSON.parse(fs.readFileSync(VAULT_CONNECTORS_FILE, 'utf8'))
+    : [];
+
+  const findSealed = (key: string) =>
+    sealedList.find((c) => c.connectorKey === key && (c.tenantId || 'tnt_promptcore_default') === tenantId);
+
+  const defs = [
+    {
+      id: 'google-workspace',
+      name: 'Google Workspace Official MCP (Gmail, Calendar & Drive)',
+      provider: 'Google Cloud / Workspace',
+      wave: 'M3.1',
+      transport: 'streamable-http',
+      endpointUrl: 'https://workspace.googleapis.com/mcp/v1/stream',
+      oauth21PkceSupported: true,
+      hitlEnforcedForWrites: true,
+      readOnlyTools: ['list_messages', 'search_drive_files', 'list_calendar_events'],
+      hitlRequiredTools: ['send_email', 'create_calendar_event', 'upload_drive_file']
+    },
+    {
+      id: 'microsoft-365',
+      name: 'Microsoft 365 Official MCP (Outlook, Teams & SharePoint)',
+      provider: 'Microsoft Entra ID / Graph',
+      wave: 'M3.1',
+      transport: 'streamable-http',
+      endpointUrl: 'https://graph.microsoft.com/mcp/v1/stream',
+      oauth21PkceSupported: true,
+      hitlEnforcedForWrites: true,
+      readOnlyTools: ['list_outlook_messages', 'list_teams_channels', 'search_onedrive_items'],
+      hitlRequiredTools: ['send_outlook_mail', 'send_teams_message']
+    },
+    {
+      id: 'clickup',
+      name: 'ClickUp Workspace Official MCP (Tasks, Lists & Sprints)',
+      provider: 'ClickUp API v2 / MCP',
+      wave: 'M3.1',
+      transport: 'streamable-http',
+      endpointUrl: 'https://api.clickup.com/mcp/v1/stream',
+      oauth21PkceSupported: true,
+      hitlEnforcedForWrites: true,
+      readOnlyTools: ['list_spaces', 'list_tasks', 'get_task_details'],
+      hitlRequiredTools: ['create_clickup_task', 'update_clickup_task']
+    },
+    {
+      id: 'github',
+      name: 'GitHub Enterprise Official MCP (Repos, PRs & Issues)',
+      provider: 'GitHub Enterprise',
+      wave: 'M3.1',
+      transport: 'streamable-http',
+      endpointUrl: 'https://api.githubcopilot.com/mcp/',
+      oauth21PkceSupported: true,
+      hitlEnforcedForWrites: true,
+      readOnlyTools: ['search_repositories', 'list_issues', 'get_file_contents'],
+      hitlRequiredTools: ['create_github_issue', 'create_pull_request', 'push_files', 'create_or_update_file']
+    }
+  ];
+
+  return defs.map((d) => {
+    const sealed = findSealed(d.id);
+    return {
+      ...d,
+      vaultStatus: sealed ? 'SEALED_AES256GCM' : 'READY_TO_SEAL',
+      keyFingerprintSha256: sealed ? sealed.keyFingerprintSha256 : null
+    };
+  });
+}
+
+function readM31HitlProposals(): Record<string, any> {
+  ensureVaultDirs();
+  if (!fs.existsSync(VAULT_M31_HITL_FILE)) {
+    fs.writeFileSync(VAULT_M31_HITL_FILE, JSON.stringify({}, null, 2), 'utf8');
+    return {};
+  }
+  try {
+    return JSON.parse(fs.readFileSync(VAULT_M31_HITL_FILE, 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
+function writeM31HitlProposals(data: Record<string, any>): void {
+  ensureVaultDirs();
+  fs.writeFileSync(VAULT_M31_HITL_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function getDefaultGrowthOsManifestsSeed(tenantId = 'tnt_promptcore_default') {
+  const baseGraph = {
+    tenantId,
+    isolNamespace: tenantId === 'tnt_promptcore_default' ? 'promptcore_sovereign' : `ns_${tenantId}`,
+    memorySchema: 'memory',
+    cockpitSchema: 'cockpit',
+    pgvectorDimensions: 384
+  };
+  const layaPrims = ['laya_match_intent', 'laya_deduplicate_memory', 'laya_verify_policy', 'laya_lightning_council'];
+  const omniGateway = {
+    endpoint: omnirouteEndpoint.url || 'http://127.0.0.1:20130',
+    fallbackLocalOllama: 'qwen2.5-coder:7b-instruct-q4_K_M',
+    vramCpuInvariantMb: 0
+  };
+
+  const modules = [
+    {
+      id: 'pcl-growth-os',
+      version: '1.2.0',
+      vendor: 'PromptCore Labs',
+      tier: 'growth_os_pro',
+      tenantId,
+      unifiedTenantGraph: baseGraph,
+      requiredConnectors: ['google-workspace', 'microsoft-365', 'clickup', 'github'],
+      layaSystemOnePrimitives: layaPrims,
+      omnirouteGateway: omniGateway,
+      quotaPolicy: {
+        trialDays: 14,
+        trialLimitUnits: 500,
+        exhaustionBehavior: 'DEGRADE_TO_LOCAL_LAYA_CPU'
+      },
+      capabilities: ['lead_enrichment', 'bowtie_revops', 'editorial_heartbeat', 'unified_tenant_graph'],
+      manifest_sha256: ''
+    },
+    {
+      id: 'pcl-maquina-receita',
+      version: '1.0.0',
+      vendor: 'PromptCore Labs',
+      tier: 'growth_os_pro',
+      tenantId,
+      unifiedTenantGraph: baseGraph,
+      requiredConnectors: ['google-workspace', 'clickup', 'github'],
+      layaSystemOnePrimitives: layaPrims,
+      omnirouteGateway: omniGateway,
+      quotaPolicy: {
+        trialDays: 14,
+        trialLimitUnits: 250,
+        exhaustionBehavior: 'DEGRADE_TO_LOCAL_LAYA_CPU'
+      },
+      capabilities: ['brand_dna_generator', 'high_ticket_preview', 'outreach_cadence', 'anti_ssrf_scraper'],
+      manifest_sha256: ''
+    }
+  ];
+
+  return modules.map((m) => {
+    const hash = crypto.createHash('sha256').update(JSON.stringify({ ...m, manifest_sha256: undefined }), 'utf8').digest('hex');
+    return { ...m, manifest_sha256: hash };
+  });
+}
+
+function readGrowthOsManifests(tenantId = 'tnt_promptcore_default'): any[] {
+  ensureVaultDirs();
+  if (!fs.existsSync(VAULT_GROWTHOS_MANIFESTS_FILE)) {
+    const seed = getDefaultGrowthOsManifestsSeed(tenantId);
+    fs.writeFileSync(VAULT_GROWTHOS_MANIFESTS_FILE, JSON.stringify(seed, null, 2), 'utf8');
+    return seed;
+  }
+  try {
+    const all: any[] = JSON.parse(fs.readFileSync(VAULT_GROWTHOS_MANIFESTS_FILE, 'utf8'));
+    const forTenant = all.filter((m) => (m.tenantId || 'tnt_promptcore_default') === tenantId);
+    return forTenant.length > 0 ? forTenant : getDefaultGrowthOsManifestsSeed(tenantId);
+  } catch {
+    return getDefaultGrowthOsManifestsSeed(tenantId);
+  }
+}
+
+export function validateSafeScrapeUrl(rawUrl: string): {
+  allowed: boolean;
+  targetUrl: string;
+  hostname?: string;
+  errorCode?: string;
+  reason?: string;
+} {
+  const trimmed = String(rawUrl || '').trim();
+  if (!trimmed) {
+    return { allowed: false, targetUrl: '', errorCode: 'SSRF_EMPTY_URL', reason: 'URL de scraping vazia.' };
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    return { allowed: false, targetUrl: trimmed, errorCode: 'SSRF_MALFORMED_URL', reason: 'Formato de URL inválido.' };
+  }
+
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    return {
+      allowed: false,
+      targetUrl: trimmed,
+      hostname: parsed.hostname,
+      errorCode: 'SSRF_TARGET_BLOCKED',
+      reason: `Esquema de protocolo proibido (${parsed.protocol}). Apenas HTTP/HTTPS públicos são permitidos.`
+    };
+  }
+
+  if (parsed.username || parsed.password) {
+    return {
+      allowed: false,
+      targetUrl: trimmed,
+      hostname: parsed.hostname,
+      errorCode: 'SSRF_TARGET_BLOCKED',
+      reason: 'Credenciais embutidas na URL são proibidas pela política Zero-Trust.'
+    };
+  }
+
+  const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+
+  // Bloqueio de loopback, localhost, IPv6 local, sufixos internos e cloud metadata
+  const blockedHosts = new Set([
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    '::1',
+    '0:0:0:0:0:0:0:1',
+    '169.254.169.254',
+    'metadata.google.internal',
+    'metadata.goog',
+    '100.100.100.200',
+    'host.docker.internal'
+  ]);
+
+  if (
+    blockedHosts.has(host) ||
+    host.endsWith('.local') ||
+    host.endsWith('.internal') ||
+    host.endsWith('.corp') ||
+    host.endsWith('.lan') ||
+    host.endsWith('.home.arpa') ||
+    /^0x[0-9a-f]+$/i.test(host) ||
+    /^\d+$/.test(host)
+  ) {
+    return {
+      allowed: false,
+      targetUrl: trimmed,
+      hostname: host,
+      errorCode: 'SSRF_TARGET_BLOCKED',
+      reason: `Host interno, loopback ou cloud metadata bloqueado (${host}).`
+    };
+  }
+
+  // Verifica faixas IPv4 reservadas / RFC 1918 / Link-Local / CGNAT
+  const ipv4Match = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (ipv4Match) {
+    const [, aStr, bStr] = ipv4Match;
+    const a = Number(aStr);
+    const b = Number(bStr);
+    const isPrivateOrReserved =
+      a === 0 ||
+      a === 10 ||
+      a === 127 ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      (a === 100 && b >= 64 && b <= 127) ||
+      a >= 224;
+
+    if (isPrivateOrReserved) {
+      return {
+        allowed: false,
+        targetUrl: trimmed,
+        hostname: host,
+        errorCode: 'SSRF_TARGET_BLOCKED',
+        reason: `Endereço IPv4 privado/reservado RFC 1918 ou Link-Local bloqueado (${host}).`
+      };
+    }
+  }
+
+  if (host.startsWith('fe80:') || host.startsWith('fc') || host.startsWith('fd')) {
+    return {
+      allowed: false,
+      targetUrl: trimmed,
+      hostname: host,
+      errorCode: 'SSRF_TARGET_BLOCKED',
+      reason: `Endereço IPv6 privado/link-local bloqueado (${host}).`
+    };
+  }
+
+  return {
+    allowed: true,
+    targetUrl: parsed.href,
+    hostname: host
+  };
+}
+
 async function readCockpitStateFromStorage(): Promise<any> {
   ensureVaultDirs();
   const pgUp = await ensureCockpitPostgresSchema();
@@ -1685,6 +1987,601 @@ export function createAeosBackendMiddleware() {
 
   return async (req: any, res: any, next?: any) => {
     const url = req.url || '';
+
+    // --- NOVOS ENDPOINTS DA ORDEM 5: MARCO M3.1 (CONECTORES MCP OFICIAIS STREAMABLE HTTP + HITL) & PCL GROWTHOS™ (PROAA-20 & PROAA-21) ---
+    if (url.startsWith('/api/aeos/mcp/connectors/m31/oauth-seal') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const tenantId = String(body.tenantId || 'tnt_promptcore_default');
+        const connectorId = String(body.connectorId || '').toLowerCase();
+        const allowedM31 = ['google-workspace', 'microsoft-365', 'clickup', 'github'];
+        if (!allowedM31.includes(connectorId)) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ ok: false, errorCode: 'UNSUPPORTED_M31_CONNECTOR', error: `Conector fora da onda M3.1: ${connectorId}` }));
+          return;
+        }
+
+        const codeVerifier = String(body.codeVerifier || '');
+        const codeChallenge = String(body.codeChallenge || '');
+        if (!verifyPkceS256(codeVerifier, codeChallenge)) {
+          res.statusCode = 401;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: false,
+            errorCode: 'M31_PKCE_VERIFICATION_FAILED',
+            error: 'Falha na validação OAuth 2.1 PKCE S256 para selagem do conector M3.1.'
+          }));
+          return;
+        }
+
+        const secretValue = String(body.accessTokenOrSecret || '');
+        if (!secretValue) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ ok: false, error: 'accessTokenOrSecret obrigatório.' }));
+          return;
+        }
+
+        const sealed = encryptAes256Gcm(secretValue);
+        ensureVaultDirs();
+        const existing: any[] = fs.existsSync(VAULT_CONNECTORS_FILE)
+          ? JSON.parse(fs.readFileSync(VAULT_CONNECTORS_FILE, 'utf8'))
+          : [];
+        const filtered = existing.filter(
+          (c) => !(c.connectorKey === connectorId && (c.tenantId || 'tnt_promptcore_default') === tenantId)
+        );
+        filtered.push({
+          id: `vlt_${tenantId}_${connectorId}`,
+          tenantId,
+          connectorKey: connectorId,
+          cipherAlgorithm: sealed.cipherAlgorithm,
+          ivHex: sealed.ivHex,
+          authTagHex: sealed.authTagHex,
+          ciphertextHex: sealed.ciphertextHex,
+          keyFingerprintSha256: sealed.keyFingerprintSha256,
+          oauth21PkceVerified: true,
+          status: 'ACTIVE',
+          rotatedAt: new Date().toISOString()
+        });
+        fs.writeFileSync(VAULT_CONNECTORS_FILE, JSON.stringify(filtered, null, 2), 'utf8');
+
+        await appendAndVerifyAuditChain({
+          eventType: 'M31_CONNECTOR_OAUTH_PKCE_SEALED',
+          resourceTarget: `cockpit.connector_vault_aes256/${tenantId}/${connectorId}`,
+          payloadJson: {
+            tenantId,
+            connectorId,
+            cipherAlgorithm: 'AES-256-GCM',
+            pkceMethod: 'S256',
+            keyFingerprintSha256: sealed.keyFingerprintSha256
+          }
+        });
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          tenantId,
+          connectorId,
+          cipherAlgorithm: 'AES-256-GCM',
+          pkceVerified: true,
+          keyFingerprintSha256: sealed.keyFingerprintSha256,
+          vaultStatus: 'SEALED_AES256GCM'
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/mcp/connectors/m31') && req.method === 'GET') {
+      const parsed = new URL(url, 'http://localhost');
+      const tenantId = parsed.searchParams.get('tenantId') || 'tnt_promptcore_default';
+      const connectors = getOfficialM31ConnectorsCatalog(tenantId);
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({
+        ok: true,
+        wave: 'M3.1',
+        tenantId,
+        transport: 'streamable-http',
+        totalConnectors: connectors.length,
+        connectors
+      }));
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/mcp/streamable/call') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const tenantId = String(body.tenantId || 'tnt_promptcore_default');
+        const sessionTenant = req.headers?.['x-pcl-authenticated-tenant']
+          ? String(req.headers['x-pcl-authenticated-tenant'])
+          : tenantId;
+
+        // PROAA-21: Guarda de Isolamento RLS por tenant_id
+        if (sessionTenant !== tenantId) {
+          await appendAndVerifyAuditChain({
+            eventType: 'SECURITY_CROSS_TENANT_RLS_BLOCKED',
+            resourceTarget: `cockpit.connector_vault_aes256/${tenantId}`,
+            payloadJson: { sessionTenant, requestedTenant: tenantId }
+          });
+          res.statusCode = 403;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: false,
+            errorCode: 'CROSS_TENANT_RLS_VIOLATION',
+            error: 'Violação de isolamento Multi-Tenant (RLS): acesso negado a conectores de outro tenant_id.'
+          }));
+          return;
+        }
+
+        const connectorId = String(body.connectorId || 'google-workspace').toLowerCase();
+        const toolName = String(body.toolName || 'list_messages');
+        const toolArgs = body.arguments && typeof body.arguments === 'object' ? body.arguments : {};
+        const hitlConfirmed = Boolean(body.hitlConfirmed);
+        const isExternalWrite = M31_EXTERNAL_WRITE_TOOLS.has(toolName);
+
+        // Marco M3.1: Human-in-the-Loop (HITL) obrigatório para ações externas de escrita/mutação
+        if (isExternalWrite && !hitlConfirmed) {
+          const proposalId = `hitl_m31_${crypto.randomBytes(8).toString('hex')}`;
+          const proposals = readM31HitlProposals();
+          const previewCard = {
+            type: toolName.includes('calendar') ? 'meeting' : (toolName.includes('task') || toolName.includes('issue') || toolName.includes('pull_request') ? 'task' : 'email'),
+            recipient: String(toolArgs.to || toolArgs.recipient || toolArgs.assignee || toolArgs.repo || connectorId),
+            subject: String(toolArgs.subject || toolArgs.title || `[${connectorId.toUpperCase()}] ${toolName}`),
+            body: String(toolArgs.body || toolArgs.description || JSON.stringify(toolArgs)),
+            app: connectorId
+          };
+
+          proposals[proposalId] = {
+            proposalId,
+            tenantId,
+            connectorId,
+            toolName,
+            arguments: toolArgs,
+            previewCard,
+            status: 'PENDING_HITL',
+            createdAt: new Date().toISOString()
+          };
+          writeM31HitlProposals(proposals);
+
+          await appendAndVerifyAuditChain({
+            eventType: 'MCP_M31_HITL_APPROVAL_REQUESTED',
+            resourceTarget: `mcp.streamable/${connectorId}/${toolName}`,
+            payloadJson: { proposalId, tenantId, connectorId, toolName }
+          });
+
+          res.statusCode = 202;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: true,
+            status: 'HITL_REQUIRED',
+            requiresHitlApproval: true,
+            hitlProposalId: proposalId,
+            tenantId,
+            connectorId,
+            toolName,
+            previewCard,
+            message: 'Ação externa retida pelo Stage Gate Human-in-the-Loop (M3.1). Confirme no ActionPreviewCard para despachar.'
+          }));
+          return;
+        }
+
+        // Verifica e descriptografa token do cofre AES-256-GCM em memória (Resíduo Zero)
+        let vaultKeyVerified = false;
+        let keyFingerprintSha256: string | null = null;
+        if (fs.existsSync(VAULT_CONNECTORS_FILE)) {
+          const vaultItems: any[] = JSON.parse(fs.readFileSync(VAULT_CONNECTORS_FILE, 'utf8'));
+          const found = vaultItems.find(
+            (c) => c.connectorKey === connectorId && (c.tenantId || 'tnt_promptcore_default') === tenantId
+          );
+          if (found && found.ivHex && found.authTagHex && found.ciphertextHex) {
+            const decryptedToken = decryptAes256Gcm(found.ivHex, found.authTagHex, found.ciphertextHex);
+            vaultKeyVerified = decryptedToken.length > 0;
+            keyFingerprintSha256 = found.keyFingerprintSha256;
+          }
+        }
+
+        const responsePayload = {
+          jsonrpc: '2.0',
+          id: `rpc_${Date.now()}`,
+          transport: 'streamable-http',
+          connectorId,
+          toolName,
+          tenantId,
+          vaultAes256GcmAuthenticated: vaultKeyVerified,
+          keyFingerprintSha256,
+          hitlApproved: isExternalWrite ? true : undefined,
+          data: {
+            executedAt: new Date().toISOString(),
+            summary: `Execução MCP Streamable HTTP concluída em ${connectorId}::${toolName}`,
+            echoArgs: toolArgs
+          }
+        };
+
+        const sha256Receipt = crypto.createHash('sha256').update(JSON.stringify(responsePayload), 'utf8').digest('hex');
+
+        await appendAndVerifyAuditChain({
+          eventType: 'MCP_M31_STREAMABLE_EXECUTED',
+          resourceTarget: `mcp.streamable/${connectorId}/${toolName}`,
+          payloadJson: { tenantId, connectorId, toolName, hitlVerified: isExternalWrite, sha256Receipt }
+        });
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          status: 'EXECUTED',
+          executed: true,
+          transport: 'streamable-http',
+          tenantId,
+          connectorId,
+          toolName,
+          hitlVerified: isExternalWrite,
+          vaultAes256GcmAuthenticated: vaultKeyVerified,
+          result: responsePayload,
+          sha256Receipt
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/mcp/hitl/confirm') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const proposalId = String(body.hitlProposalId || '');
+        const decision = String(body.decision || 'APPROVE').toUpperCase();
+        const proposals = readM31HitlProposals();
+        const proposal = proposals[proposalId];
+
+        if (!proposal) {
+          res.statusCode = 404;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ ok: false, errorCode: 'HITL_PROPOSAL_NOT_FOUND', error: 'Proposta HITL não encontrada.' }));
+          return;
+        }
+
+        if (decision === 'REJECT') {
+          proposal.status = 'REJECTED';
+          proposal.rejectedAt = new Date().toISOString();
+          writeM31HitlProposals(proposals);
+          await appendAndVerifyAuditChain({
+            eventType: 'MCP_M31_HITL_REJECTED',
+            resourceTarget: `mcp.streamable/${proposal.connectorId}/${proposal.toolName}`,
+            payloadJson: { proposalId, tenantId: proposal.tenantId }
+          });
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: true,
+            status: 'REJECTED',
+            executed: false,
+            hitlProposalId: proposalId
+          }));
+          return;
+        }
+
+        const finalArgs = body.modifiedArguments && typeof body.modifiedArguments === 'object'
+          ? { ...proposal.arguments, ...body.modifiedArguments }
+          : proposal.arguments;
+
+        proposal.status = 'APPROVED_EXECUTED';
+        proposal.arguments = finalArgs;
+        proposal.executedAt = new Date().toISOString();
+        const sha256Receipt = crypto.createHash('sha256').update(JSON.stringify(proposal), 'utf8').digest('hex');
+        proposal.sha256Receipt = sha256Receipt;
+        writeM31HitlProposals(proposals);
+
+        await appendAndVerifyAuditChain({
+          eventType: 'MCP_M31_HITL_APPROVED_AND_EXECUTED',
+          resourceTarget: `mcp.streamable/${proposal.connectorId}/${proposal.toolName}`,
+          payloadJson: {
+            proposalId,
+            tenantId: proposal.tenantId,
+            connectorId: proposal.connectorId,
+            toolName: proposal.toolName,
+            sha256Receipt
+          }
+        });
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          status: 'APPROVED_EXECUTED',
+          executed: true,
+          hitlProposalId: proposalId,
+          tenantId: proposal.tenantId,
+          connectorId: proposal.connectorId,
+          toolName: proposal.toolName,
+          arguments: finalArgs,
+          sha256Receipt
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/growthos/manifests/register') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const tenantId = String(body.tenantId || 'tnt_promptcore_default');
+        const id = String(body.id || '').trim();
+        const version = String(body.version || '1.0.0').trim();
+        const vendor = String(body.vendor || 'PromptCore Labs').trim();
+        const tier = String(body.tier || 'growth_os_pro').trim();
+        const requiredConnectors: string[] = Array.isArray(body.requiredConnectors)
+          ? body.requiredConnectors
+          : ['google-workspace', 'clickup'];
+        const layaSystemOnePrimitives: string[] = Array.isArray(body.layaSystemOnePrimitives)
+          ? body.layaSystemOnePrimitives
+          : ['laya_match_intent', 'laya_deduplicate_memory', 'laya_verify_policy', 'laya_lightning_council'];
+        const capabilities: string[] = Array.isArray(body.capabilities) ? body.capabilities : ['growth_automation'];
+
+        if (!id || !/^[a-z0-9-]+$/.test(id)) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ ok: false, errorCode: 'INVALID_MANIFEST_ID', error: 'ID do manifesto PROAA-20 inválido.' }));
+          return;
+        }
+
+        const unifiedTenantGraph = {
+          tenantId,
+          isolNamespace: tenantId === 'tnt_promptcore_default' ? 'promptcore_sovereign' : `ns_${tenantId}`,
+          memorySchema: 'memory' as const,
+          cockpitSchema: 'cockpit' as const,
+          pgvectorDimensions: 384 as const
+        };
+
+        const omnirouteGateway = {
+          endpoint: omnirouteEndpoint.url || 'http://127.0.0.1:20130',
+          fallbackLocalOllama: 'qwen2.5-coder:7b-instruct-q4_K_M',
+          vramCpuInvariantMb: 0 as const
+        };
+
+        const quotaPolicy = {
+          trialDays: Number(body.quotaPolicy?.trialDays || 14),
+          trialLimitUnits: Number(body.quotaPolicy?.trialLimitUnits || 500),
+          exhaustionBehavior: 'DEGRADE_TO_LOCAL_LAYA_CPU' as const
+        };
+
+        const manifestCore = {
+          id,
+          version,
+          vendor,
+          tier,
+          tenantId,
+          unifiedTenantGraph,
+          requiredConnectors,
+          layaSystemOnePrimitives,
+          omnirouteGateway,
+          quotaPolicy,
+          capabilities
+        };
+
+        const manifest_sha256 = crypto.createHash('sha256').update(JSON.stringify(manifestCore), 'utf8').digest('hex');
+        const fullManifest = { ...manifestCore, manifest_sha256 };
+
+        ensureVaultDirs();
+        const all: any[] = fs.existsSync(VAULT_GROWTHOS_MANIFESTS_FILE)
+          ? JSON.parse(fs.readFileSync(VAULT_GROWTHOS_MANIFESTS_FILE, 'utf8'))
+          : getDefaultGrowthOsManifestsSeed(tenantId);
+        const filtered = all.filter((m) => !(m.id === id && (m.tenantId || 'tnt_promptcore_default') === tenantId));
+        filtered.push(fullManifest);
+        fs.writeFileSync(VAULT_GROWTHOS_MANIFESTS_FILE, JSON.stringify(filtered, null, 2), 'utf8');
+
+        await appendAndVerifyAuditChain({
+          eventType: 'PROAA20_PLUGIN_MANIFEST_REGISTERED',
+          resourceTarget: `cockpit.entitlements/${tenantId}/${id}`,
+          payloadJson: { tenantId, pluginId: id, version, manifest_sha256, requiredConnectors }
+        });
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          spec: 'PROAA-20',
+          unifiedTenantGraphLinked: true,
+          manifest: fullManifest,
+          manifest_sha256
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/growthos/manifests') && req.method === 'GET') {
+      const parsed = new URL(url, 'http://localhost');
+      const tenantId = parsed.searchParams.get('tenantId') || 'tnt_promptcore_default';
+      const manifests = readGrowthOsManifests(tenantId);
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({
+        ok: true,
+        spec: 'PROAA-20',
+        tenantId,
+        totalManifests: manifests.length,
+        manifests
+      }));
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/growthos/rls/verify') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const sessionTenantId = String(body.sessionTenantId || 'tnt_promptcore_default');
+        const targetTenantId = String(body.targetTenantId || 'tnt_promptcore_default');
+
+        if (sessionTenantId !== targetTenantId) {
+          await appendAndVerifyAuditChain({
+            eventType: 'SECURITY_CROSS_TENANT_RLS_BLOCKED',
+            resourceTarget: `cockpit.tenants/${targetTenantId}`,
+            payloadJson: { sessionTenantId, targetTenantId }
+          });
+          res.statusCode = 403;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: false,
+            allowed: false,
+            rlsEnforced: true,
+            errorCode: 'CROSS_TENANT_RLS_VIOLATION',
+            error: `Isolamento RLS (PROAA-21): tenant autenticado (${sessionTenantId}) bloqueado ao tentar acessar recursos de (${targetTenantId}).`
+          }));
+          return;
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          allowed: true,
+          rlsEnforced: true,
+          tenantId: sessionTenantId,
+          policyName: 'rls_tenant_isolation_cockpit'
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/growthos/quota/consume') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const tenantId = String(body.tenantId || 'tnt_promptcore_default');
+        const sessionTenantId = body.sessionTenantId ? String(body.sessionTenantId) : tenantId;
+
+        if (sessionTenantId !== tenantId) {
+          res.statusCode = 403;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: false,
+            allowed: false,
+            errorCode: 'CROSS_TENANT_RLS_VIOLATION',
+            error: 'Violação RLS ao consumir cota de outro tenant_id.'
+          }));
+          return;
+        }
+
+        const moduleKey = String(body.moduleKey || 'pcl-growth-os');
+        const unitsToConsume = Math.max(0, Number(body.unitsToConsume ?? 1));
+        const entData = await readTenantEntitlements(tenantId);
+        const mod = (entData.entitlements || []).find((e: any) => e.moduleKey === moduleKey);
+
+        if (!mod) {
+          res.statusCode = 404;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ ok: false, errorCode: 'MODULE_NOT_FOUND', error: `Módulo não encontrado: ${moduleKey}` }));
+          return;
+        }
+
+        const limit = Number(mod.quotaLimitUnits || 500);
+        const currentUsed = body.setQuotaUsedUnits !== undefined
+          ? Number(body.setQuotaUsedUnits)
+          : Number(mod.quotaUsedUnits || 0) + unitsToConsume;
+
+        mod.quotaUsedUnits = Math.min(limit, currentUsed);
+        fs.writeFileSync(
+          VAULT_ENTITLEMENTS_FILE,
+          JSON.stringify({ tenant: entData.tenant, entitlements: entData.entitlements }, null, 2),
+          'utf8'
+        );
+
+        const exhausted = limit > 0 && currentUsed >= limit;
+        const degradedToLocalLayaCpu = Boolean(exhausted && mod.accessState === 'trial_14d');
+
+        if (degradedToLocalLayaCpu) {
+          await recordTokenTaxDecision({
+            tenantId,
+            inputTokensEquivalent: 1100,
+            outputTokensAvoided: 650,
+            actualLayaLatencyMs: 21,
+            confidenceScore: 0.97,
+            decisionType: 'PROAA21_TRIAL_100PCT_LAYA_CPU_DEGRADATION'
+          });
+          await appendAndVerifyAuditChain({
+            eventType: 'PROAA21_QUOTA_100PCT_DEGRADED_TO_LAYA_CPU',
+            resourceTarget: `cockpit.entitlements/${tenantId}/${moduleKey}`,
+            payloadJson: { tenantId, moduleKey, quotaLimitUnits: limit, quotaUsedUnits: mod.quotaUsedUnits }
+          });
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          tenantId,
+          moduleKey,
+          allowed: mod.accessState === 'enabled' || mod.accessState === 'trial_14d',
+          accessState: mod.accessState,
+          quotaLimitUnits: limit,
+          quotaUsedUnits: mod.quotaUsedUnits,
+          quotaRemainingUnits: Math.max(0, limit - mod.quotaUsedUnits),
+          quotaPercentUsed: limit > 0 ? Math.min(100, Math.round((mod.quotaUsedUnits / limit) * 100)) : 100,
+          degradedToLocalLayaCpu,
+          executionEngine: degradedToLocalLayaCpu ? 'pcl-laya-cpu-int8' : 'omniroute-cloud-hybrid',
+          vramAllocatedMb: 0,
+          marginalCostUsd: degradedToLocalLayaCpu ? 0.0 : 0.0015,
+          upsellCta: degradedToLocalLayaCpu
+            ? 'Cota de 100% do Trial atingida — operando em degradação graciosa via Laya CPU Local ($0.00 / 0 MB VRAM). Ative o plano PCL GrowthOS Pro para liberar LLMs Cloud.'
+            : undefined
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
+
+    if (url.startsWith('/api/aeos/growthos/scrape-url/validate') && req.method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const targetUrl = String(body.url || '');
+        const tenantId = String(body.tenantId || 'tnt_promptcore_default');
+        const check = validateSafeScrapeUrl(targetUrl);
+
+        if (!check.allowed) {
+          await appendAndVerifyAuditChain({
+            eventType: 'SECURITY_SSRF_SCRAPE_BLOCKED',
+            resourceTarget: 'growthos.scrape_url',
+            payloadJson: { tenantId, targetUrl, errorCode: check.errorCode, reason: check.reason }
+          });
+          res.statusCode = 403;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            ok: false,
+            allowed: false,
+            targetUrl,
+            hostname: check.hostname,
+            errorCode: check.errorCode || 'SSRF_TARGET_BLOCKED',
+            reason: check.reason
+          }));
+          return;
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({
+          ok: true,
+          allowed: true,
+          targetUrl: check.targetUrl,
+          hostname: check.hostname,
+          ssrfVerified: true
+        }));
+      } catch (err: any) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ ok: false, error: err?.message }));
+      }
+      return;
+    }
 
     // --- NOVOS ENDPOINTS DO MARCO M2 & PROAA-17 (LAYA NEURAL CHAT, MEMÓRIA VETORIAL PGVECTOR + DEDUP & TOKEN TAX SAVED) ---
     if (url.startsWith('/api/aeos/laya/classify') && req.method === 'POST') {

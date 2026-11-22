@@ -28,6 +28,23 @@ export const ActionPreviewCard: React.FC<ActionPreviewCardProps> = ({
 
   const handleConfirm = () => {
     setConfirmed(true);
+    if (typeof fetch === 'function') {
+      fetch('/api/aeos/audit/chain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          eventType: 'MCP_M31_HITL_USER_CONFIRMED',
+          resourceTarget: `hitl.${action.app.toLowerCase()}.${action.type}`,
+          payloadJson: {
+            app: action.app,
+            type: action.type,
+            recipient: action.recipient,
+            subject
+          }
+        })
+      }).catch(() => {});
+    }
     if (onConfirm) {
       onConfirm({ ...action, subject, body });
     }
