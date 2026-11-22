@@ -1,0 +1,32 @@
+version: "1.0.0"
+standard: "PCL FinOps & Cognitive Circuit Breaker"
+normative_ref: "PCL-AEOS-NORM-01"
+engine: "Cortex Reflex (PROAA-15)"
+fallback_mode: "FAIL_SAFE"
+laya_timeout_ms: 25
+
+thresholds:
+  default_max_steps: 15
+  max_consecutive_identical_hashes: 3
+  semantic_repetition_entailment_threshold: 0.80
+  force_downgrade_similarity_threshold: 0.68
+  step_history_window: 5
+  estimated_cost_saved_per_killed_loop_usd: 0.045
+
+rules:
+  - id: "REFLEX-LOOP-001"
+    category: "exact_tool_hash_loop"
+    action: "KILL_TASK"
+    description: "Três ou mais chamadas consecutivas com hash canônico idêntico (tool_name + args_canonical)."
+  - id: "REFLEX-LOOP-002"
+    category: "max_steps_exceeded"
+    action: "KILL_TASK"
+    description: "Limite máximo de passos da sessão atingido (disjuntor determinístico FinOps)."
+  - id: "REFLEX-SEM-001"
+    category: "semantic_paraphrase_loop"
+    action: "KILL_TASK"
+    description: "Loop semântico detectado via Laya System One entre step_N e passos anteriores (paráfrase sem progresso)."
+  - id: "REFLEX-SEM-002"
+    category: "semantic_drift_stagnation"
+    action: "FORCE_DOWNGRADE"
+    description: "Baixa progressão informacional detectada; recomenda downgrade para modelo econômico/local."

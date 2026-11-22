@@ -13,6 +13,8 @@ const __dirname = path.dirname(__filename);
 const DASHBOARD_ROOT = path.resolve(__dirname, '../..');
 const WORKSPACE_ROOT = path.resolve(DASHBOARD_ROOT, '../..');
 const VAULT_CATALOG = path.join(WORKSPACE_ROOT, 'data', 'cockpit-vault', 'catalog.json');
+const VAULT_IAM_M1 = path.join(WORKSPACE_ROOT, 'data', 'cockpit-vault', 'auth_iam_m1.json');
+const VAULT_ENTITLEMENTS_M0 = path.join(WORKSPACE_ROOT, 'data', 'cockpit-vault', 'entitlements_m0.json');
 
 interface MiddlewareResponse {
   statusCode: number;
@@ -310,5 +312,104 @@ describe('Backend Middleware Integration & Anti-Mock Verification', () => {
     expect(chainData.chainIntegrityValid).toBe(true);
     expect(chainData.totalRecords).toBeGreaterThanOrEqual(2);
     expect(chainData.headHashSha256).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('Marco M1: OAuth2 PKCE S256 (Google/Microsoft/GitHub/LinkedIn) rejeita code_verifier adulterado (401) e bloqueia 3º dispositivo (409)', async () => {
+    if (fs.existsSync(VAULT_IAM_M1)) fs.unlinkSync(VAULT_IAM_M1);
+
+    const cryptoMod = await import('node:crypto');
+    const codeVerifier = 'pcl_aeos_pkce_code_verifier_rfc7636_sovereign_test_2026';
+    const codeChallenge = cryptoMod.createHash('sha256').update(codeVerifier, 'utf8').digest('base64url');
+
+    // 1. Inicia handshake PKCE S256 para Google
+    const initRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/oauth/pkce-init', {
+      provider: 'google',
+      codeChallenge,
+      codeChallengeMethod: 'S256',
+      deviceName: 'MacBook Pro M3 (3rd Device)',
+      deviceFingerprint: 'fp_macbook_m3_third_device'
+    });
+    expect(initRes.statusCode).toBe(200);
+    const initData = initRes.json();
+    expect(initData.ok).toBe(true);
+    expect(initData.codeChallengeMethod).toBe('S256');
+
+    // 2. Testa rejeição com code_verifier adulterado -> HTTP 401
+    const badExchange = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/oauth/exchange', {
+      provider: 'google',
+      state: initData.state,
+      authorizationCode: initData.authorizationCode,
+      codeVerifier: 'tampered_wrong_code_verifier_that_must_fail_s256_check'
+    });
+    expect(badExchange.statusCode).toBe(401);
+    expect(badExchange.json().errorCode).toBe('PKCE_VERIFICATION_FAILED');
+
+    // 3. Novo handshake PKCE válido com 2 sessões já ativas -> Bloqueio físico do 3º dispositivo (HTTP 409)
+    const initRes2 = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/oauth/pkce-init', {
+      provider: 'github',
+      codeChallenge,
+      codeChallengeMethod: 'S256',
+      deviceName: 'MacBook Pro M3 (3rd Device)',
+      deviceFingerprint: 'fp_macbook_m3_third_device'
+    });
+    const initData2 = initRes2.json();
+
+    const conflictExchange = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/oauth/exchange', {
+      provider: 'github',
+      state: initData2.state,
+      authorizationCode: initData2.authorizationCode,
+      codeVerifier,
+      deviceName: 'MacBook Pro M3 (3rd Device)',
+      deviceFingerprint: 'fp_macbook_m3_third_device'
+    });
+    expect(conflictExchange.statusCode).toBe(409);
+    const conflictData = conflictExchange.json();
+    expect(conflictData.requiresDeviceLimitResolution).toBe(true);
+    expect(conflictData.activeSessions.length).toBe(2);
+
+    // 4. Revoga 1 sessão em tempo real via /api/aeos/auth/sessions/resolve-conflict e emite cookie HttpOnly
+    const resolveRes = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/sessions/resolve-conflict', {
+      revokeSessionId: 'sess_mobile_backup',
+      pendingSessionAttempt: conflictData.pendingSessionAttempt
+    });
+    expect(resolveRes.statusCode).toBe(200);
+    expect(resolveRes.headers['set-cookie']).toContain('pcl_cockpit_session=');
+    expect(resolveRes.headers['set-cookie']).toContain('HttpOnly');
+    expect(resolveRes.json().activeSessions.length).toBe(2);
+  });
+
+  it('Marco M1: Login Scrypt + Cookie HttpOnly e Trava Anti-Trial-Hopping (HTTP 403)', async () => {
+    if (fs.existsSync(VAULT_IAM_M1)) fs.unlinkSync(VAULT_IAM_M1);
+    if (fs.existsSync(VAULT_ENTITLEMENTS_M0)) fs.unlinkSync(VAULT_ENTITLEMENTS_M0);
+
+    // 1. Senha incorreta é rejeitada pelo verificador Scrypt com HTTP 401
+    const badLogin = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/login', {
+      email: 'eduardo@promptcorelabs.com',
+      password: 'WrongPassword123!',
+      deviceFingerprint: 'fp_workstation_win11_chrome'
+    });
+    expect(badLogin.statusCode).toBe(401);
+    expect(badLogin.json().errorCode).toBe('INVALID_CREDENTIALS');
+
+    // 2. Senha correta no dispositivo já registrado autentica com Scrypt e emite Set-Cookie HttpOnly
+    const okLogin = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/auth/login', {
+      email: 'eduardo@promptcorelabs.com',
+      password: 'PCL-Sovereign-2026!',
+      deviceFingerprint: 'fp_workstation_win11_chrome'
+    });
+    expect(okLogin.statusCode).toBe(200);
+    expect(okLogin.headers['set-cookie']).toContain('HttpOnly');
+    expect(okLogin.json().ok).toBe(true);
+
+    // 3. Anti-Trial-Hopping: tentativa de reiniciar trial de pcl-growth-os já ativado é bloqueada com HTTP 403
+    const hopAttempt = await invokeMiddleware(server.middlewares, 'POST', '/api/aeos/entitlements/start-trial', {
+      tenantId: 'tnt_promptcore_default',
+      moduleKey: 'pcl-growth-os',
+      email: 'novo.usuario@promptcorelabs.com',
+      deviceFingerprint: 'fp_workstation_win11_chrome'
+    });
+    expect(hopAttempt.statusCode).toBe(403);
+    expect(hopAttempt.json().errorCode).toBe('ANTI_TRIAL_HOPPING_LOCK');
+    expect(hopAttempt.json().accessState).toBe('locked_upsell');
   });
 });

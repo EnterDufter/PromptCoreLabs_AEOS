@@ -111,6 +111,25 @@ services:
     networks:
       - aeos-net
 
+  laya-gatekeeper:
+    build:
+      context: ./services/laya-gatekeeper
+      dockerfile: Dockerfile
+    image: pcl-laya-gatekeeper:latest
+    container_name: pcl-laya-gatekeeper
+    restart: always
+    ports:
+      - "${GATEKEEPER_BIND_ADDRESS:-127.0.0.1}:${GATEKEEPER_PORT:-20160}:20160"
+    environment:
+      - GATEKEEPER_PORT=20160
+      - ONNXRUNTIME_EXECUTION_PROVIDERS=CPUExecutionProvider
+      - LAYA_URL=http://pcl-laya:20140
+    depends_on:
+      laya:
+        condition: service_healthy
+    networks:
+      - aeos-net
+
   cockpit:
     build:
       context: ./projects/PromptCoreLabs_AEOS_Dashboard
